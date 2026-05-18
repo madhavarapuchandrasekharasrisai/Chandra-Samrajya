@@ -1,0 +1,97 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Income {
+  id          String   @id @default(cuid())
+  amount      Float
+  source      String   // Social Media Websites, AI Automation, Retainer Clients, International Freelance
+  clientName  String?
+  description String?
+  date        DateTime
+  status      String   @default("received") // received, pending, overdue
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Expense {
+  id            String   @id @default(cuid())
+  amount        Float
+  category      String   // Personal, Savings, Business, Skills, Fun
+  description   String
+  paymentMethod String?  // UPI, Card, Cash, Bank Transfer
+  date          DateTime
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Client {
+  id            String   @id @default(cuid())
+  name          String
+  business      String?
+  email         String?
+  phone         String?
+  projectValue  Float    @default(0)
+  pipelineStage String   @default("prospect") // prospect, contacted, scheduled, proposal, active, retainer, completed
+  lastContact   DateTime?
+  urgencyLevel  String   @default("normal") // low, normal, high, critical
+  notes         String?
+  closeProbability Float  @default(0)
+  followups     Followup[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Followup {
+  id       String   @id @default(cuid())
+  clientId String
+  client   Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  type     String   // call, email, dm, meeting
+  note     String?
+  dueDate  DateTime
+  status   String   @default("pending") // pending, completed, overdue
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model OutreachLog {
+  id        String   @id @default(cuid())
+  type      String   // dm, call, proposal, meeting, close
+  count     Int      @default(0)
+  date      DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model MonthlyTarget {
+  id        String   @id @default(cuid())
+  month     String   // "2025-01"
+  income    Float    @default(100000)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model BudgetConfig {
+  id                String   @id @default(cuid())
+  personalPercent   Float    @default(40)
+  savingsPercent    Float    @default(25)
+  businessPercent   Float    @default(15)
+  skillsPercent     Float    @default(10)
+  funPercent        Float    @default(10)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model DisciplineLog {
+  id        String   @id @default(cuid())
+  score     Int      @default(0)
+  date      DateTime
+  metrics   String   @default("{}") // JSON string of metrics
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
