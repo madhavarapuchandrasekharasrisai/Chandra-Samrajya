@@ -1,7 +1,7 @@
 'use client'
 
 import { useAppStore } from '@/store/use-app-store'
-import { cn } from '@/lib/utils'
+import { cn, formatIndianCommas } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -12,8 +12,6 @@ import { motion } from 'framer-motion'
 import { useState, useMemo } from 'react'
 import { toast } from 'sonner'
 
-// ─── Types & Constants ──────────────────────────────────────────────────────
-
 const CATEGORIES = [
   { key: 'Personal', label: 'Personal', color: '#d4a849', icon: Wallet, tailwind: 'amber' },
   { key: 'Savings', label: 'Savings', color: '#10b981', icon: PiggyBank, tailwind: 'emerald' },
@@ -21,6 +19,11 @@ const CATEGORIES = [
   { key: 'Skills', label: 'Skills', color: '#a855f7', icon: GraduationCap, tailwind: 'purple' },
   { key: 'Fun', label: 'Fun', color: '#f43f5e', icon: Gamepad2, tailwind: 'rose' },
 ] as const
+
+const ALL_CATEGORIES = [
+  ...CATEGORIES,
+  { key: 'External', label: "Household Duties", color: '#14b8a6', icon: ArrowDownRight, tailwind: 'teal' },
+]
 
 const PAYMENT_METHODS = ['UPI', 'Card', 'Cash', 'Bank Transfer'] as const
 
@@ -89,7 +92,7 @@ function BudgetRing({
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.5, delay }}
       className={cn(
-        'bg-white/[0.03] backdrop-blur-xl border rounded-2xl p-5 flex flex-col items-center relative overflow-hidden group hover:border-white/[0.1] transition-all duration-300',
+        'bg-[#0e0e11] lg:bg-white/[0.03] lg:backdrop-blur-xl border rounded-2xl p-5 flex flex-col items-center relative overflow-hidden group hover:border-white/[0.1] transition-all duration-300',
         isDanger
           ? 'border-red-500/30 budget-danger'
           : isWarning
@@ -216,7 +219,7 @@ function SpendingEntryForm({ onAdded }: { onAdded: () => void }) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    if (!form.amount || parseFloat(form.amount) <= 0) {
+    if (!form.amount || parseFloat(form.amount.replace(/,/g, '')) <= 0) {
       toast.error('Please enter a valid amount')
       return
     }
@@ -238,7 +241,7 @@ function SpendingEntryForm({ onAdded }: { onAdded: () => void }) {
       const res = await fetch('/api/expenses', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...form, amount: parseFloat(form.amount) }),
+        body: JSON.stringify({ ...form, amount: parseFloat(form.amount.replace(/,/g, '')) }),
       })
 
       if (!res.ok) {
@@ -272,7 +275,7 @@ function SpendingEntryForm({ onAdded }: { onAdded: () => void }) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.4 }}
-      className="bg-white/[0.03] backdrop-blur-xl border border-white/[0.06] rounded-2xl p-5"
+      className="bg-[#0e0e11] lg:bg-white/[0.03] lg:backdrop-blur-xl border border-white/[0.06] rounded-2xl p-5"
     >
       <div className="flex items-center gap-2 mb-5">
         <div className="p-1.5 rounded-lg bg-amber-400/10 border border-amber-400/20">
@@ -289,12 +292,10 @@ function SpendingEntryForm({ onAdded }: { onAdded: () => void }) {
             <div className="relative">
               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-amber-400/50 text-sm">₹</span>
               <Input
-                type="number"
-                min="0"
-                step="0.01"
+                type="text"
                 placeholder="0"
                 value={form.amount}
-                onChange={(e) => setForm(prev => ({ ...prev, amount: e.target.value }))}
+                onChange={(e) => setForm(prev => ({ ...prev, amount: formatIndianCommas(e.target.value) }))}
                 className="pl-9 bg-white/[0.04] border-white/[0.08] text-white/90 placeholder:text-white/20 focus:border-amber-500/30 focus:ring-amber-500/20"
               />
             </div>
@@ -308,7 +309,7 @@ function SpendingEntryForm({ onAdded }: { onAdded: () => void }) {
                 <SelectValue placeholder="Select category" />
               </SelectTrigger>
               <SelectContent className="bg-[#1a1a1e] border-white/[0.08]">
-                {CATEGORIES.map(cat => {
+                {ALL_CATEGORIES.map(cat => {
                   const Icon = cat.icon
                   return (
                     <SelectItem key={cat.key} value={cat.key} className="text-white/80 focus:bg-white/[0.06] focus:text-white">
@@ -403,7 +404,7 @@ function RecentExpenses() {
 
   const categoryConfig = useMemo(() => {
     const map: Record<string, { icon: typeof Wallet; color: string; bgClass: string; textClass: string; borderClass: string }> = {}
-    CATEGORIES.forEach(cat => {
+    ALL_CATEGORIES.forEach(cat => {
       map[cat.key] = {
         icon: cat.icon,
         color: cat.color,
@@ -425,7 +426,7 @@ function RecentExpenses() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.5 }}
-      className="bg-white/[0.03] backdrop-blur-xl border border-white/[0.06] rounded-2xl p-5"
+      className="bg-[#0e0e11] lg:bg-white/[0.03] lg:backdrop-blur-xl border border-white/[0.06] rounded-2xl p-5"
     >
       <div className="flex items-center gap-2 mb-4">
         <Wallet className="w-4 h-4 text-amber-400" />
@@ -440,7 +441,7 @@ function RecentExpenses() {
           <p className="text-white/15 text-xs mt-1">Add your first expense above</p>
         </div>
       ) : (
-        <div className="max-h-96 overflow-y-auto space-y-2 pr-1">
+        <div className="max-h-96 overflow-y-auto space-y-2 pr-1 scrollbar-thin scrollbar-thumb-white/5 scrollbar-track-transparent">
           {sortedExpenses.map((expense) => {
             const config = categoryConfig[expense.category] || {
               icon: Wallet,
@@ -705,7 +706,7 @@ function KarnaInsights() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.6 }}
-      className="bg-white/[0.03] backdrop-blur-xl border border-white/[0.06] rounded-2xl p-5"
+      className="bg-[#0e0e11] lg:bg-white/[0.03] lg:backdrop-blur-xl border border-white/[0.06] rounded-2xl p-5"
     >
       <div className="flex items-center gap-2 mb-4">
         <div className="p-1.5 rounded-lg bg-amber-400/10 border border-amber-400/20">
@@ -772,7 +773,7 @@ function BudgetDistributionChart() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.3 }}
-      className="bg-white/[0.03] backdrop-blur-xl border border-white/[0.06] rounded-2xl p-5"
+      className="bg-[#0e0e11] lg:bg-white/[0.03] lg:backdrop-blur-xl border border-white/[0.06] rounded-2xl p-5"
     >
       <div className="flex items-center justify-between mb-4">
         <div>
@@ -888,6 +889,12 @@ export function BudgetIntelligence() {
   const totalRemaining = totalBudget - totalSpent
   const overallPercent = totalBudget > 0 ? (totalSpent / totalBudget) * 100 : 0
 
+  const totalExternalSpent = useMemo(() => {
+    return expenses
+      .filter(e => e.category === 'External')
+      .reduce((s, e) => s + e.amount, 0)
+  }, [expenses])
+
   return (
     <div className="space-y-6">
       {/* ═══════════════════════════════════════════════════════════════════════
@@ -940,12 +947,12 @@ export function BudgetIntelligence() {
           </div>
 
           {/* Summary Bar */}
-          <div className="mt-6 grid grid-cols-3 gap-4">
-            <div className="bg-white/[0.03] backdrop-blur-sm border border-white/[0.06] rounded-xl p-3">
+          <div className="mt-6 grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="bg-[#0a0a0c] lg:bg-white/[0.03] lg:backdrop-blur-sm border border-white/[0.06] rounded-xl p-3">
               <p className="text-white/30 text-[10px] uppercase tracking-wider">Total Budget</p>
               <p className="gold-text text-xl font-bold">{formatINR(totalBudget)}</p>
             </div>
-            <div className="bg-white/[0.03] backdrop-blur-sm border border-white/[0.06] rounded-xl p-3">
+            <div className="bg-[#0a0a0c] lg:bg-white/[0.03] lg:backdrop-blur-sm border border-white/[0.06] rounded-xl p-3">
               <p className="text-white/30 text-[10px] uppercase tracking-wider">Total Spent</p>
               <p className={cn(
                 'text-xl font-bold',
@@ -954,7 +961,7 @@ export function BudgetIntelligence() {
                 {formatINR(totalSpent)}
               </p>
             </div>
-            <div className="bg-white/[0.03] backdrop-blur-sm border border-white/[0.06] rounded-xl p-3">
+            <div className="bg-[#0a0a0c] lg:bg-white/[0.03] lg:backdrop-blur-sm border border-white/[0.06] rounded-xl p-3">
               <p className="text-white/30 text-[10px] uppercase tracking-wider">Remaining</p>
               <p className={cn(
                 'text-xl font-bold',
@@ -963,6 +970,11 @@ export function BudgetIntelligence() {
                 {formatINR(Math.abs(totalRemaining))}
                 {totalRemaining < 0 && <span className="text-xs ml-1">over</span>}
               </p>
+            </div>
+            <div className="bg-[#0a0a0c] lg:bg-white/[0.03] lg:backdrop-blur-sm border border-teal-500/10 rounded-xl p-3 relative overflow-hidden group">
+              <div className="absolute inset-0 bg-teal-500/[0.02] pointer-events-none group-hover:bg-teal-500/[0.04] transition-colors" />
+              <p className="text-teal-400/70 text-[10px] uppercase tracking-wider font-semibold">Household Duties</p>
+              <p className="text-teal-400 text-xl font-bold">{formatINR(totalExternalSpent)}</p>
             </div>
           </div>
 

@@ -362,7 +362,32 @@ function KanbanPipeline({
 }: {
   onSelectClient: (client: ClientEntry) => void
 }) {
-  const { clients } = useAppStore()
+  const { clients, updateClient } = useAppStore()
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault()
+  }
+
+  const handleDrop = async (e: React.DragEvent, targetStage: string) => {
+    e.preventDefault()
+    const clientId = e.dataTransfer.getData('clientId')
+    if (!clientId) return
+    
+    const client = clients.find(c => c.id === clientId)
+    if (client && client.pipelineStage !== targetStage) {
+      updateClient(clientId, { pipelineStage: targetStage })
+      try {
+        await fetch('/api/clients', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: clientId, pipelineStage: targetStage }),
+        })
+        toast.success(`Moved to ${pipelineStages.find(s => s.key === targetStage)?.label}`)
+      } catch {
+        toast.error('Failed to move client')
+      }
+    }
+  }
 
   // Group clients by pipeline stage
   const clientsByStage = useMemo(() => {
@@ -390,7 +415,7 @@ function KanbanPipeline({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
-      className="bg-white/[0.03] backdrop-blur-xl border border-white/[0.06] rounded-2xl p-5"
+      className="bg-[#0e0e11] lg:bg-white/[0.03] lg:backdrop-blur-xl border border-white/[0.06] rounded-2xl p-5"
     >
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-2">
@@ -418,6 +443,8 @@ function KanbanPipeline({
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: stageIndex * 0.06 }}
                 className="flex-shrink-0 w-[250px] flex flex-col"
+                onDragOver={handleDragOver}
+                onDrop={(e) => handleDrop(e, stage.key)}
               >
                 {/* Column header */}
                 <div className={cn(
@@ -448,12 +475,20 @@ function KanbanPipeline({
                     </div>
                   ) : (
                     stageClients.map((client, clientIndex) => (
-                      <ClientCard
+                      <div
                         key={client.id}
-                        client={client}
-                        onClick={() => onSelectClient(client)}
-                        delay={0.1 + stageIndex * 0.06 + clientIndex * 0.03}
-                      />
+                        draggable
+                        onDragStart={(e) => {
+                          e.dataTransfer.setData('clientId', client.id)
+                        }}
+                        className="cursor-grab active:cursor-grabbing"
+                      >
+                        <ClientCard
+                          client={client}
+                          onClick={() => onSelectClient(client)}
+                          delay={0.1 + stageIndex * 0.06 + clientIndex * 0.03}
+                        />
+                      </div>
                     ))
                   )}
                 </div>
@@ -608,7 +643,7 @@ function FollowupEngine() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: 0.3 }}
-      className="bg-white/[0.03] backdrop-blur-xl border border-white/[0.06] rounded-2xl p-5"
+      className="bg-[#0e0e11] lg:bg-white/[0.03] lg:backdrop-blur-xl border border-white/[0.06] rounded-2xl p-5"
     >
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-2">
@@ -731,23 +766,23 @@ export function ClientEmpire() {
 
           {/* Quick Stats */}
           <div className="mt-5 grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div className="bg-white/[0.03] backdrop-blur-sm border border-white/[0.06] rounded-xl p-3">
+            <div className="bg-[#0a0a0c] lg:bg-white/[0.03] lg:backdrop-blur-sm border border-white/[0.06] rounded-xl p-3">
               <p className="text-white/30 text-[9px] uppercase tracking-wider">Total Clients</p>
               <p className="text-white/80 text-xl font-bold">{clients.length}</p>
             </div>
-            <div className="bg-white/[0.03] backdrop-blur-sm border border-white/[0.06] rounded-xl p-3">
+            <div className="bg-[#0a0a0c] lg:bg-white/[0.03] lg:backdrop-blur-sm border border-white/[0.06] rounded-xl p-3">
               <p className="text-white/30 text-[9px] uppercase tracking-wider">Active Pipeline</p>
               <p className="text-white/80 text-xl font-bold">
                 {clients.filter(c => !['completed', 'prospect'].includes(c.pipelineStage)).length}
               </p>
             </div>
-            <div className="bg-white/[0.03] backdrop-blur-sm border border-white/[0.06] rounded-xl p-3">
+            <div className="bg-[#0a0a0c] lg:bg-white/[0.03] lg:backdrop-blur-sm border border-white/[0.06] rounded-xl p-3">
               <p className="text-white/30 text-[9px] uppercase tracking-wider">Retainers</p>
               <p className="text-amber-400 text-xl font-bold">
                 {clients.filter(c => c.pipelineStage === 'retainer').length}
               </p>
             </div>
-            <div className="bg-white/[0.03] backdrop-blur-sm border border-white/[0.06] rounded-xl p-3">
+            <div className="bg-[#0a0a0c] lg:bg-white/[0.03] lg:backdrop-blur-sm border border-white/[0.06] rounded-xl p-3">
               <p className="text-white/30 text-[9px] uppercase tracking-wider">Pipeline Value</p>
               <p className="gold-text text-xl font-bold">
                 {formatINR(clients.filter(c => c.pipelineStage !== 'completed').reduce((s, c) => s + c.projectValue, 0))}

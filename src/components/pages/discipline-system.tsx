@@ -1,13 +1,14 @@
 'use client'
 
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useAppStore } from '@/store/use-app-store'
 import { cn } from '@/lib/utils'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import {
   Shield, Flame, Target, Zap, TrendingUp, TrendingDown,
   CheckCircle2, AlertTriangle, XCircle, ArrowUpRight,
-  ArrowDownRight, Minus, Calendar, Award,
+  ArrowDownRight, Minus, Calendar, Award, Info, HelpCircle,
+  ChevronDown, ChevronUp, Sparkles, Check,
 } from 'lucide-react'
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
@@ -108,13 +109,20 @@ function ScoreComponentBar({
   maxScore,
   color,
   delay,
+  explanation,
+  tips,
+  formula,
 }: {
   label: string
   score: number
   maxScore: number
   color: string
   delay: number
+  explanation: string
+  tips: string[]
+  formula: string
 }) {
+  const [expanded, setExpanded] = useState(false)
   const percent = maxScore > 0 ? (score / maxScore) * 100 : 0
 
   return (
@@ -122,24 +130,68 @@ function ScoreComponentBar({
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.5, delay }}
-      className="space-y-2"
+      className={cn(
+        "bg-white/[0.02] border border-white/[0.04] hover:bg-white/[0.04] transition-all duration-300 rounded-xl p-4 cursor-pointer",
+        expanded && "bg-white/[0.05] border-white/[0.08] shadow-lg shadow-black/40"
+      )}
+      onClick={() => setExpanded(!expanded)}
     >
-      <div className="flex items-center justify-between">
-        <span className="text-white/60 text-sm font-medium">{label}</span>
-        <div className="flex items-center gap-2">
-          <span className="text-white/80 text-sm font-bold" style={{ color }}>{score.toFixed(1)}</span>
-          <span className="text-white/25 text-xs">/ {maxScore}</span>
+      <div className="space-y-2">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="text-white/80 text-sm font-semibold">{label}</span>
+            <HelpCircle className="w-3.5 h-3.5 text-white/30 hover:text-white/60 transition-colors" />
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-white/95 text-base font-bold" style={{ color }}>{score.toFixed(1)}</span>
+            <span className="text-white/25 text-xs">/ {maxScore} pts</span>
+            {expanded ? <ChevronUp className="w-4 h-4 text-white/40 ml-1" /> : <ChevronDown className="w-4 h-4 text-white/40 ml-1" />}
+          </div>
+        </div>
+        <div className="w-full h-2 bg-white/5 rounded-full overflow-hidden relative">
+          <motion.div
+            initial={{ width: 0 }}
+            animate={{ width: `${Math.min(100, percent)}%` }}
+            transition={{ duration: 1, ease: 'easeOut', delay: delay + 0.2 }}
+            className="h-full rounded-full"
+            style={{ backgroundColor: color }}
+          />
         </div>
       </div>
-      <div className="w-full h-2.5 bg-white/5 rounded-full overflow-hidden">
-        <motion.div
-          initial={{ width: 0 }}
-          animate={{ width: `${Math.min(100, percent)}%` }}
-          transition={{ duration: 1, ease: 'easeOut', delay: delay + 0.2 }}
-          className="h-full rounded-full"
-          style={{ backgroundColor: color }}
-        />
-      </div>
+
+      <AnimatePresence>
+        {expanded && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="overflow-hidden"
+          >
+            <div className="border-t border-white/[0.06] mt-4 pt-3 space-y-3 text-xs leading-relaxed text-white/60">
+              <div>
+                <span className="text-white/30 uppercase tracking-wider text-[9px] block mb-1">How it's Calculated</span>
+                <p className="text-white/80">{explanation}</p>
+              </div>
+              <div className="bg-black/30 border border-white/[0.03] rounded-lg p-2.5">
+                <span className="text-amber-400/80 font-mono text-[10px] block mb-1">📐 Formula:</span>
+                <code className="text-white/90 font-mono text-[10px] break-all">{formula}</code>
+              </div>
+              <div>
+                <span className="text-white/30 uppercase tracking-wider text-[9px] block mb-1">👑 Strategies for Perfect Score</span>
+                <ul className="list-inside space-y-1 text-white/70">
+                  {tips.map((tip, i) => (
+                    <li key={i} className="flex items-start gap-1.5 mt-1">
+                      <span className="text-amber-400 mt-0.5">•</span>
+                      <span>{tip}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   )
 }
@@ -233,7 +285,7 @@ function DayCell({
 // ─── Main Component ─────────────────────────────────────────────────────────
 
 export function DisciplineSystem() {
-  const { incomes, expenses, monthlyIncome, monthlyTarget, budgetAllocation, clients, followups } = useAppStore()
+  const { incomes, expenses, monthlyIncome, monthlyTarget, budgetAllocation, clients, followups, outreachRecords } = useAppStore()
   const now = new Date()
   const currentMonth = now.getMonth()
   const currentYear = now.getFullYear()
@@ -267,11 +319,11 @@ export function DisciplineSystem() {
 
   // 3. Outreach Consistency (30 pts)
   const outreachConsistency = useMemo(() => {
-    const activeFollowups = followups.filter(f => f.status !== 'completed').length
+    const totalOutreachActions = outreachRecords.length
     const completedFollowups = followups.filter(f => f.status === 'completed').length
-    const totalActive = activeFollowups + completedFollowups
-    return Math.min(30, (totalActive / 10) * 30)
-  }, [followups])
+    const totalActions = totalOutreachActions + completedFollowups
+    return Math.min(30, (totalActions / 15) * 30)
+  }, [outreachRecords, followups])
 
   const totalScore = Math.round(spendingDiscipline + savingsConsistency + outreachConsistency)
   const ratingLabel = getRatingLabel(totalScore)
@@ -385,8 +437,10 @@ export function DisciplineSystem() {
         ? 'warning'
         : 'bad'
 
-      const dayFollowups = followups.filter(f => f.dueDate === dayDate.toISOString().split('T')[0] && f.status === 'completed')
-      const outreachDone = dayFollowups.length > 0
+      const dateKey = dayDate.toISOString().split('T')[0]
+      const dayFollowups = followups.filter(f => f.dueDate === dateKey && f.status === 'completed')
+      const dayOutreach = outreachRecords.filter(r => new Date(r.date).toISOString().split('T')[0] === dateKey)
+      const outreachDone = dayFollowups.length > 0 || dayOutreach.length > 0
 
       const savingsContrib = dayExpenses.filter(e => e.category === 'Savings').reduce((s, e) => s + e.amount, 0)
 
@@ -398,7 +452,7 @@ export function DisciplineSystem() {
         isToday: idx === todayIdx,
       }
     })
-  }, [expenses, followups, monthlyIncome, now])
+  }, [expenses, followups, outreachRecords, monthlyIncome, now])
 
   // Streak counter
   const streak = useMemo(() => {
@@ -449,7 +503,7 @@ export function DisciplineSystem() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.1 }}
-        className="bg-white/[0.03] backdrop-blur-xl border border-white/[0.06] rounded-2xl p-8 relative overflow-hidden"
+        className="bg-[#0e0e11] lg:bg-white/[0.03] lg:backdrop-blur-xl border border-white/[0.06] rounded-2xl p-8 relative overflow-hidden"
       >
         {/* Ambient glow */}
         <div
@@ -484,7 +538,7 @@ export function DisciplineSystem() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.2 }}
-        className="bg-white/[0.03] backdrop-blur-xl border border-white/[0.06] rounded-2xl p-6"
+        className="bg-[#0e0e11] lg:bg-white/[0.03] lg:backdrop-blur-xl border border-white/[0.06] rounded-2xl p-6"
       >
         <div className="flex items-center gap-2 mb-6">
           <div className="p-1.5 rounded-lg bg-amber-400/10 border border-amber-400/20">
@@ -497,13 +551,20 @@ export function DisciplineSystem() {
         </div>
 
         {/* Three main components */}
-        <div className="space-y-6 mb-8">
+        <div className="space-y-4 mb-8">
           <ScoreComponentBar
             label="Spending Discipline"
             score={spendingDiscipline}
             maxScore={30}
             color="#d4a849"
             delay={0.3}
+            explanation="Measures your ability to stay within your predefined category budgets (Personal, Savings, Business, Skills, Fun). You get maximum points if your spending stays strictly under budget."
+            formula="avgCategoryAdherence * 30 pts"
+            tips={[
+              "Set realistic category budgets inside the Finance dashboard.",
+              "Track discretionary categories like 'Fun' or 'Personal' regularly to avoid early overspending.",
+              "If you overspend in one category, reduce budgets in other categories to balance it out."
+            ]}
           />
           <ScoreComponentBar
             label="Savings Consistency"
@@ -511,6 +572,13 @@ export function DisciplineSystem() {
             maxScore={40}
             color="#10b981"
             delay={0.35}
+            explanation="Measures your savings rate relative to your income. Allocating 25% or more of your total monthly income to Savings guarantees you a perfect 40/40 score."
+            formula="Math.min(40, ((Savings Spent / Monthly Income) / 0.25) * 40) pts"
+            tips={[
+              "Treat savings as an absolute priority. Save first, spend what remains.",
+              "Aim to hit or exceed the royal target of 25% savings rate.",
+              "Automate transfers to your savings/vault on payday."
+            ]}
           />
           <ScoreComponentBar
             label="Outreach Consistency"
@@ -518,6 +586,13 @@ export function DisciplineSystem() {
             maxScore={30}
             color="#3b82f6"
             delay={0.4}
+            explanation="Measures your sales and outreach activity. Points are dynamically calculated based on client outreach records (DMs, Calls, Meetings, etc.) and followups marked 'completed' in the database. 15 cumulative monthly actions secure the full 30 points."
+            formula="Math.min(30, ((Database Outreach Logs + Completed Followups) / 15) * 30) pts"
+            tips={[
+              "Use the execution deck on the Executive Overview page to quickly log Calls/DMs on the fly.",
+              "Consistently mark followups as completed in your War Room dashboard.",
+              "Maintain a steady daily activity flow to keep the momentum high."
+            ]}
           />
         </div>
 
@@ -548,13 +623,161 @@ export function DisciplineSystem() {
       </motion.div>
 
       {/* ═══════════════════════════════════════════════════════════════════════
+          SECTION 2.5 — Imperial Score Optimizer & Advisor
+          ═══════════════════════════════════════════════════════════════════════ */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.25 }}
+        className="bg-gradient-to-br from-amber-500/[0.04] via-[#0f0f12] to-black border border-amber-500/15 rounded-2xl p-6 relative overflow-hidden"
+      >
+        <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 rounded-full blur-2xl pointer-events-none" />
+        <div className="flex items-center gap-2.5 mb-5 relative z-10">
+          <div className="p-1.5 rounded-lg bg-amber-500/10 border border-amber-500/20">
+            <Sparkles className="w-4 h-4 text-amber-400 animate-pulse" />
+          </div>
+          <div>
+            <h3 className="text-white font-bold tracking-tight text-sm flex items-center gap-2">
+              👑 Imperial Discipline Advisor & Score Optimizer
+            </h3>
+            <p className="text-white/30 text-[10px]">Your customized royal road map to a perfect 100/100 score</p>
+          </div>
+        </div>
+
+        <div className="space-y-3.5 relative z-10">
+          {/* Outreach Task */}
+          <div className={cn(
+            "border rounded-xl p-4 transition-all duration-300 flex flex-col md:flex-row md:items-center justify-between gap-3",
+            (outreachRecords.filter(r => new Date(r.date).toISOString().split('T')[0] === new Date().toISOString().split('T')[0]).length > 0) ? "bg-emerald-500/[0.02] border-emerald-500/20" : "bg-amber-500/[0.02] border-amber-500/20"
+          )}>
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <span className={cn(
+                  "px-2 py-0.5 rounded text-[9px] uppercase tracking-wider font-bold",
+                  (outreachRecords.filter(r => new Date(r.date).toISOString().split('T')[0] === new Date().toISOString().split('T')[0]).length > 0) ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" : "bg-amber-500/10 text-amber-400 border border-amber-500/20"
+                )}>
+                  {(outreachRecords.filter(r => new Date(r.date).toISOString().split('T')[0] === new Date().toISOString().split('T')[0]).length > 0) ? "Completed" : "Action Needed"}
+                </span>
+                <span className="text-white/80 text-xs font-semibold">Outreach Consistency Pillar</span>
+              </div>
+              <p className="text-white/50 text-[11px]">
+                {(outreachRecords.filter(r => new Date(r.date).toISOString().split('T')[0] === new Date().toISOString().split('T')[0]).length > 0) 
+                  ? "Outstanding! You have successfully logged active outreach today, keeping your momentum and score safe." 
+                  : "Daily sales activity is crucial. Log 1 client Call or DM today using the Executive overview panel to keep your daily flame streak alive."}
+              </p>
+            </div>
+            <div className="flex items-center gap-2 self-start md:self-center">
+              <span className="text-[10px] text-white/40 font-mono">Weight: 30 pts</span>
+              <div className={cn(
+                "px-3 py-1 rounded-lg text-xs font-bold flex items-center gap-1.5",
+                (outreachRecords.filter(r => new Date(r.date).toISOString().split('T')[0] === new Date().toISOString().split('T')[0]).length > 0) ? "bg-emerald-500/10 text-emerald-400" : "bg-amber-500/10 text-amber-400"
+              )}>
+                {(outreachRecords.filter(r => new Date(r.date).toISOString().split('T')[0] === new Date().toISOString().split('T')[0]).length > 0) ? <Check className="w-3.5 h-3.5" /> : <Flame className="w-3.5 h-3.5" />}
+                {(outreachRecords.filter(r => new Date(r.date).toISOString().split('T')[0] === new Date().toISOString().split('T')[0]).length > 0) ? "Optimal (+30 pts)" : "Gain points (+15 pts)"}
+              </div>
+            </div>
+          </div>
+
+          {/* Savings Task */}
+          <div className={cn(
+            "border rounded-xl p-4 transition-all duration-300 flex flex-col md:flex-row md:items-center justify-between gap-3",
+            ((monthlyIncome > 0 ? (budgetAllocation.savings.spent / monthlyIncome) * 100 : 0) >= 25) ? "bg-emerald-500/[0.02] border-emerald-500/20" : "bg-red-500/[0.02] border-red-500/20"
+          )}>
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <span className={cn(
+                  "px-2 py-0.5 rounded text-[9px] uppercase tracking-wider font-bold",
+                  ((monthlyIncome > 0 ? (budgetAllocation.savings.spent / monthlyIncome) * 100 : 0) >= 25) ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" : "bg-red-500/10 text-red-400 border border-red-500/20"
+                )}>
+                  {((monthlyIncome > 0 ? (budgetAllocation.savings.spent / monthlyIncome) * 100 : 0) >= 25) ? "Optimal" : "Needs Work"}
+                </span>
+                <span className="text-white/80 text-xs font-semibold">Savings Consistency Pillar</span>
+              </div>
+              <p className="text-white/50 text-[11px]">
+                {((monthlyIncome > 0 ? (budgetAllocation.savings.spent / monthlyIncome) * 100 : 0) >= 25) 
+                  ? `Your current savings rate is ${(monthlyIncome > 0 ? (budgetAllocation.savings.spent / monthlyIncome) * 100 : 0).toFixed(1)}%, which exceeds the 25% royal target. Excellent financial buffer!`
+                  : `Your current savings rate is ${(monthlyIncome > 0 ? (budgetAllocation.savings.spent / monthlyIncome) * 100 : 0).toFixed(1)}%. Allocate savings entries to hit the 25% target and reclaim your lost points.`}
+              </p>
+            </div>
+            <div className="flex items-center gap-2 self-start md:self-center">
+              <span className="text-[10px] text-white/40 font-mono">Weight: 40 pts</span>
+              <div className={cn(
+                "px-3 py-1 rounded-lg text-xs font-bold flex items-center gap-1.5",
+                ((monthlyIncome > 0 ? (budgetAllocation.savings.spent / monthlyIncome) * 100 : 0) >= 25) ? "bg-emerald-500/10 text-emerald-400" : "bg-red-500/10 text-red-400"
+              )}>
+                {((monthlyIncome > 0 ? (budgetAllocation.savings.spent / monthlyIncome) * 100 : 0) >= 25) ? <Check className="w-3.5 h-3.5" /> : <AlertTriangle className="w-3.5 h-3.5" />}
+                {((monthlyIncome > 0 ? (budgetAllocation.savings.spent / monthlyIncome) * 100 : 0) >= 25) ? "Optimal (+40 pts)" : "Gain points (+40 pts)"}
+              </div>
+            </div>
+          </div>
+
+          {/* Spending Task */}
+          <div className={cn(
+            "border rounded-xl p-4 transition-all duration-300 flex flex-col md:flex-row md:items-center justify-between gap-3",
+            (CATEGORIES.filter(cat => {
+              const alloc = budgetAllocation[cat.key as keyof typeof budgetAllocation]
+              return alloc.budget > 0 && alloc.spent > alloc.budget
+            }).length === 0) ? "bg-emerald-500/[0.02] border-emerald-500/20" : "bg-red-500/[0.02] border-red-500/20"
+          )}>
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <span className={cn(
+                  "px-2 py-0.5 rounded text-[9px] uppercase tracking-wider font-bold",
+                  (CATEGORIES.filter(cat => {
+                    const alloc = budgetAllocation[cat.key as keyof typeof budgetAllocation]
+                    return alloc.budget > 0 && alloc.spent > alloc.budget
+                  }).length === 0) ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" : "bg-red-500/10 text-red-400 border border-red-500/20"
+                )}>
+                  {(CATEGORIES.filter(cat => {
+                    const alloc = budgetAllocation[cat.key as keyof typeof budgetAllocation]
+                    return alloc.budget > 0 && alloc.spent > alloc.budget
+                  }).length === 0) ? "Perfect" : "Overspent"}
+                </span>
+                <span className="text-white/80 text-xs font-semibold">Spending Discipline Pillar</span>
+              </div>
+              <p className="text-white/50 text-[11px]">
+                {(CATEGORIES.filter(cat => {
+                  const alloc = budgetAllocation[cat.key as keyof typeof budgetAllocation]
+                  return alloc.budget > 0 && alloc.spent > alloc.budget
+                }).length === 0) 
+                  ? "All discretionary budget categories are successfully under limit! You are showing exceptional budget control."
+                  : `Your budgets for [${CATEGORIES.filter(cat => {
+                      const alloc = budgetAllocation[cat.key as keyof typeof budgetAllocation]
+                      return alloc.budget > 0 && alloc.spent > alloc.budget
+                    }).map(c => c.label).join(', ')}] are currently overspent. Transfer surplus allocations or reduce other discretionary expenses to balance your score.`}
+              </p>
+            </div>
+            <div className="flex items-center gap-2 self-start md:self-center">
+              <span className="text-[10px] text-white/40 font-mono">Weight: 30 pts</span>
+              <div className={cn(
+                "px-3 py-1 rounded-lg text-xs font-bold flex items-center gap-1.5",
+                (CATEGORIES.filter(cat => {
+                  const alloc = budgetAllocation[cat.key as keyof typeof budgetAllocation]
+                  return alloc.budget > 0 && alloc.spent > alloc.budget
+                }).length === 0) ? "bg-emerald-500/10 text-emerald-400" : "bg-red-500/10 text-red-400"
+              )}>
+                {(CATEGORIES.filter(cat => {
+                  const alloc = budgetAllocation[cat.key as keyof typeof budgetAllocation]
+                  return alloc.budget > 0 && alloc.spent > alloc.budget
+                }).length === 0) ? <Check className="w-3.5 h-3.5" /> : <AlertTriangle className="w-3.5 h-3.5" />}
+                {(CATEGORIES.filter(cat => {
+                  const alloc = budgetAllocation[cat.key as keyof typeof budgetAllocation]
+                  return alloc.budget > 0 && alloc.spent > alloc.budget
+                }).length === 0) ? "Perfect (+30 pts)" : "Gain points (+20 pts)"}
+              </div>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* ═══════════════════════════════════════════════════════════════════════
           SECTION 3 — Behavioral Analysis
           ═══════════════════════════════════════════════════════════════════════ */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.3 }}
-        className="bg-white/[0.03] backdrop-blur-xl border border-white/[0.06] rounded-2xl p-6"
+        className="bg-[#0e0e11] lg:bg-white/[0.03] lg:backdrop-blur-xl border border-white/[0.06] rounded-2xl p-6"
       >
         <div className="flex items-center gap-2 mb-5">
           <div className="p-1.5 rounded-lg bg-amber-400/10 border border-amber-400/20">
@@ -586,7 +809,7 @@ export function DisciplineSystem() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.4 }}
-        className="bg-white/[0.03] backdrop-blur-xl border border-white/[0.06] rounded-2xl p-6"
+        className="bg-[#0e0e11] lg:bg-white/[0.03] lg:backdrop-blur-xl border border-white/[0.06] rounded-2xl p-6"
       >
         <div className="flex items-center justify-between mb-5">
           <div className="flex items-center gap-2">

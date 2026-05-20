@@ -4,6 +4,7 @@ import React, { useState, useEffect, useMemo, useCallback, useReducer } from 're
 import { useAppStore, type FollowupEntry } from '@/store/use-app-store'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Target,
@@ -28,6 +29,9 @@ import {
   CircleDot,
   Flag,
   Milestone,
+  X,
+  History,
+  Trash2,
 } from 'lucide-react'
 import { toast } from 'sonner'
 
@@ -214,7 +218,7 @@ function MissionTracker() {
               <span className="text-[11px] text-amber-400/70 uppercase tracking-widest font-medium">Mission Control</span>
             </div>
             <h1 className="gold-text text-3xl lg:text-4xl font-bold tracking-tight">
-              ₹1 Lakh Mission
+              {formatINR(monthlyTarget)} Mission
             </h1>
             <p className="text-white/30 text-sm mt-1">Revenue growth headquarters — every rupee counts</p>
           </div>
@@ -240,7 +244,7 @@ function MissionTracker() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.15 }}
-            className="bg-white/[0.03] backdrop-blur-sm border border-white/[0.06] rounded-xl p-4"
+            className="bg-[#0a0a0c] lg:bg-white/[0.03] lg:backdrop-blur-sm border border-white/[0.06] rounded-xl p-4"
           >
             <p className="text-white/30 text-[10px] uppercase tracking-wider mb-1">Earned This Month</p>
             <p className="gold-text text-2xl font-bold">{formatINR(monthlyIncome)}</p>
@@ -250,7 +254,7 @@ function MissionTracker() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="bg-white/[0.03] backdrop-blur-sm border border-white/[0.06] rounded-xl p-4"
+            className="bg-[#0a0a0c] lg:bg-white/[0.03] lg:backdrop-blur-sm border border-white/[0.06] rounded-xl p-4"
           >
             <p className="text-white/30 text-[10px] uppercase tracking-wider mb-1">Target</p>
             <p className="text-white/80 text-2xl font-bold">{formatINR(monthlyTarget)}</p>
@@ -260,7 +264,7 @@ function MissionTracker() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.25 }}
-            className="bg-white/[0.03] backdrop-blur-sm border border-white/[0.06] rounded-xl p-4"
+            className="bg-[#0a0a0c] lg:bg-white/[0.03] lg:backdrop-blur-sm border border-white/[0.06] rounded-xl p-4"
           >
             <p className="text-white/30 text-[10px] uppercase tracking-wider mb-1">Remaining</p>
             <p className={cn(
@@ -275,7 +279,7 @@ function MissionTracker() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="bg-white/[0.03] backdrop-blur-sm border border-white/[0.06] rounded-xl p-4"
+            className="bg-[#0a0a0c] lg:bg-white/[0.03] lg:backdrop-blur-sm border border-white/[0.06] rounded-xl p-4"
           >
             <p className="text-white/30 text-[10px] uppercase tracking-wider mb-1">Required / Day</p>
             <p className={cn(
@@ -345,66 +349,142 @@ function MissionTracker() {
 // ─── Section 2: Outreach Tracker ────────────────────────────────────────────
 
 function OutreachTracker() {
-  const { followups, clients } = useAppStore()
-  const [outreachCounts, setOutreachCounts] = useState<Record<string, number>>({
-    dm: 0,
-    call: 0,
-    proposal: 0,
-    meeting: 0,
-    close: 0,
-  })
+  const { followups, clients, outreachRecords, removeOutreachRecord } = useAppStore()
   const [loading, setLoading] = useState<Record<string, boolean>>({})
 
-  // Calculate current counts from followups + clients data
-  useEffect(() => {
-    const now = new Date()
+  // Modal State
+  const [modalOpen, setModalOpen] = useState(false)
+  const [logType, setLogType] = useState('')
+  const [contactName, setContactName] = useState('')
+  const [phoneNumber, setPhoneNumber] = useState('')
+  const [logNotes, setLogNotes] = useState('')
+  
+  // History Inspect Modal State
+  const [inspectCategory, setInspectCategory] = useState<string | null>(null)
+
+  const openLogModal = (type: string) => {
+    setLogType(type)
+    setContactName('')
+    setPhoneNumber('')
+    setLogNotes('')
+    setModalOpen(true)
+  }
+
+  const handleModalSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!contactName.trim()) return
+
+    try {
+      const res = await fetch('/api/outreach-records', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contactName: contactName.trim(),
+          phoneNumber: phoneNumber.trim() || undefined,
+          platform: 'direct',
+          type: logType,
+          status: 'completed',
+          notes: logNotes.trim() || undefined,
+          date: new Date().toISOString(),
+          projectValue: 0
+        }),
+      })
+
+      if (res.ok) {
+        const newLog = await res.json()
+        useAppStore.getState().addOutreachRecord(newLog)
+        setModalOpen(false)
+        toast.success(`Logged ${logType}!`)
+      } else {
+        throw new Error('Failed to log outreach record')
+      }
+    } catch (error) {
+      console.error(error)
+      toast.error('Failed to log outreach record')
+    }
+  }
+
+  // Calculate counts from actual outreach records (this week)
+  const outreachCounts = useMemo(() => {
     const weekAgo = new Date()
     weekAgo.setDate(weekAgo.getDate() - 7)
 
-    const todayStr = getTodayStr()
-
-    const thisWeekFollowups = followups.filter(f => {
-      const d = new Date(f.dueDate)
+    const thisWeekRecords = outreachRecords.filter(r => {
+      const d = new Date(r.date)
       return d >= weekAgo
     })
 
-    const todayFollowups = followups.filter(f => f.dueDate === todayStr)
-
-    setOutreachCounts({
-      dm: thisWeekFollowups.filter(f => f.type === 'dm').length,
-      call: thisWeekFollowups.filter(f => f.type === 'call').length,
-      proposal: clients.filter(c => c.pipelineStage === 'proposal').length,
-      meeting: thisWeekFollowups.filter(f => f.type === 'meeting').length,
+    return {
+      dm: thisWeekRecords.filter(r => r.type === 'dm').length,
+      call: thisWeekRecords.filter(r => r.type === 'call').length,
+      proposal: thisWeekRecords.filter(r => r.type === 'proposal').length +
+        clients.filter(c => c.pipelineStage === 'proposal').length,
+      meeting: thisWeekRecords.filter(r => r.type === 'meeting').length,
       close: clients.filter(c => c.pipelineStage === 'completed').length,
-    })
-  }, [followups, clients])
-
-  const handleIncrement = useCallback(async (metricKey: string) => {
-    setLoading(prev => ({ ...prev, [metricKey]: true }))
-    try {
-      await fetch('/api/outreach', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ type: metricKey, date: getTodayStr(), count: 1 }),
-      })
-      setOutreachCounts(prev => ({
-        ...prev,
-        [metricKey]: (prev[metricKey] || 0) + 1,
-      }))
-      toast.success(`${metricKey.charAt(0).toUpperCase() + metricKey.slice(1)} logged!`)
-    } catch {
-      toast.error('Failed to log outreach')
-    } finally {
-      setLoading(prev => ({ ...prev, [metricKey]: false }))
     }
-  }, [])
+  }, [outreachRecords, clients])
+
+  // ── Weekly Outreach Streak Calculation ──
+  // Count how many consecutive weeks (ending this week or last week) the user logged outreach records
+  const weeklyStreak = useMemo(() => {
+    if (outreachRecords.length === 0) return 0
+
+    // Group records into 7-day weekly buckets starting from today
+    // Week 0: 0-6 days ago, Week 1: 7-13 days ago, etc.
+    const recordsByWeek: Record<number, number> = {}
+    const now = new Date()
+
+    outreachRecords.forEach(r => {
+      const recordDate = new Date(r.date)
+      const diffTime = Math.abs(now.getTime() - recordDate.getTime())
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+      const weekIndex = Math.floor((diffDays - 1) / 7)
+      recordsByWeek[weekIndex] = (recordsByWeek[weekIndex] || 0) + 1
+    })
+
+    // If no outreach in both Week 0 and Week 1, streak is 0
+    if ((recordsByWeek[0] || 0) === 0 && (recordsByWeek[1] || 0) === 0) {
+      return 0
+    }
+
+    // Start checking from Week 0 if they have activity this week, otherwise Week 1
+    let currentStreak = 0
+    const startWeek = (recordsByWeek[0] || 0) > 0 ? 0 : 1
+
+    for (let w = startWeek; w < 52; w++) {
+      if ((recordsByWeek[w] || 0) > 0) {
+        currentStreak++
+      } else {
+        break
+      }
+    }
+
+    return currentStreak
+  }, [outreachRecords])
+
+  const handleDeleteLog = async (id: string) => {
+    try {
+      const res = await fetch(`/api/outreach-records?id=${id}`, {
+        method: 'DELETE',
+      })
+      if (res.ok) {
+        removeOutreachRecord(id)
+        toast.success('Log removed')
+      } else {
+        throw new Error('Failed to delete')
+      }
+    } catch (error) {
+      console.error(error)
+      toast.error('Failed to delete log')
+    }
+  }
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: 0.3 }}
-      className="bg-white/[0.03] backdrop-blur-xl border border-white/[0.06] rounded-2xl p-5"
+      className="bg-[#0e0e11] lg:bg-white/[0.03] lg:backdrop-blur-xl border border-white/[0.06] rounded-2xl p-5"
     >
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-2">
@@ -416,16 +496,21 @@ function OutreachTracker() {
             <p className="text-white/30 text-[10px]">Daily & weekly execution metrics</p>
           </div>
         </div>
-        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-500/5 border border-amber-500/10">
-          <span className="text-[10px] text-amber-400/70 uppercase tracking-wider">This Week</span>
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-orange-500/10 border border-orange-500/20 text-orange-400">
+            <Flame className="w-3.5 h-3.5" />
+            <span className="text-[10px] font-bold">{weeklyStreak} Wk Streak</span>
+          </div>
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-500/5 border border-amber-500/10">
+            <span className="text-[10px] text-amber-400/70 uppercase tracking-wider">This Week</span>
+          </div>
         </div>
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
         {outreachMetrics.map((metric, index) => {
-          const count = outreachCounts[metric.key] || 0
+          const count = outreachCounts[metric.key as keyof typeof outreachCounts] || 0
           const weeklyProgress = metric.weeklyTarget > 0 ? Math.min(100, (count / metric.weeklyTarget) * 100) : 0
-          const dailyProgress = metric.dailyTarget > 0 ? Math.min(100, (count / metric.dailyTarget) * 100) : 0
           const isHittingDaily = metric.dailyTarget > 0 && count >= metric.dailyTarget
           const isHittingWeekly = count >= metric.weeklyTarget
           const isLoading = loading[metric.key] || false
@@ -437,7 +522,7 @@ function OutreachTracker() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.35 + index * 0.06 }}
               className={cn(
-                'bg-white/[0.02] border rounded-xl p-4 hover:border-white/[0.1] transition-all duration-300 relative overflow-hidden group',
+                'bg-[#0a0a0c] lg:bg-white/[0.02] border rounded-xl p-4 hover:border-white/[0.1] transition-all duration-300 relative overflow-hidden group',
                 isHittingWeekly ? 'border-amber-500/30' : 'border-white/[0.04]'
               )}
             >
@@ -446,78 +531,242 @@ function OutreachTracker() {
                 <div className="absolute top-0 right-0 w-20 h-20 rounded-full blur-3xl opacity-10 bg-amber-500" />
               )}
 
-              <div className="relative z-10">
-                {/* Icon + Label */}
-                <div className="flex items-center justify-between mb-3">
-                  <div className={cn('p-2 rounded-lg', metric.bgColor, metric.borderColor)} style={{ border: `1px solid` }}>
-                    <span className={metric.color}>{metric.icon}</span>
-                  </div>
-                  {isHittingDaily && (
-                    <span className="text-sm">🔥</span>
-                  )}
-                </div>
-
-                {/* Count */}
-                <div className="flex items-baseline gap-1.5 mb-1">
-                  <span className="text-white/90 text-2xl font-bold">{count}</span>
-                  <span className="text-white/30 text-xs">/ {metric.weeklyTarget}</span>
-                </div>
-                <p className={cn('text-xs font-medium uppercase tracking-wider', metric.color)}>
-                  {metric.label}
-                </p>
-
-                {/* Progress bar */}
-                <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden mt-3">
-                  <motion.div
-                    initial={{ width: 0 }}
-                    animate={{ width: `${weeklyProgress}%` }}
-                    transition={{ duration: 0.8, ease: 'easeOut' }}
-                    className={cn(
-                      'h-full rounded-full budget-progress',
-                      isHittingWeekly
-                        ? 'bg-gradient-to-r from-amber-500 to-amber-300'
-                        : 'bg-gradient-to-r from-white/20 to-white/10'
+              <div className="relative z-10 flex flex-col h-full justify-between">
+                <div>
+                  {/* Icon + Label */}
+                  <div className="flex items-center justify-between mb-3">
+                    <div className={cn('p-2 rounded-lg', metric.bgColor, metric.borderColor)} style={{ border: `1px solid` }}>
+                      <span className={metric.color}>{metric.icon}</span>
+                    </div>
+                    {isHittingDaily && (
+                      <span className="text-sm">🔥</span>
                     )}
-                  />
+                  </div>
+
+                  {/* Count */}
+                  <div className="flex items-baseline gap-1.5 mb-1">
+                    <span className="text-white/90 text-2xl font-bold">{count}</span>
+                    <span className="text-white/30 text-xs">/ {metric.weeklyTarget}</span>
+                  </div>
+                  <p className={cn('text-xs font-medium uppercase tracking-wider', metric.color)}>
+                    {metric.label}
+                  </p>
+
+                  {/* Progress bar */}
+                  <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden mt-3">
+                    <motion.div
+                      initial={{ width: 0 }}
+                      animate={{ width: `${weeklyProgress}%` }}
+                      transition={{ duration: 0.8, ease: 'easeOut' }}
+                      className={cn(
+                        'h-full rounded-full budget-progress',
+                        isHittingWeekly
+                          ? 'bg-gradient-to-r from-amber-500 to-amber-300'
+                          : 'bg-gradient-to-r from-white/20 to-white/10'
+                      )}
+                    />
+                  </div>
+
+                  {/* Daily target info */}
+                  {metric.dailyTarget > 0 && (
+                    <p className="text-white/20 text-[9px] mt-1.5">
+                      Daily: {metric.dailyTarget} · Weekly: {metric.weeklyTarget}
+                    </p>
+                  )}
+                  {metric.dailyTarget === 0 && (
+                    <p className="text-white/20 text-[9px] mt-1.5">
+                      Weekly target: {metric.weeklyTarget}
+                    </p>
+                  )}
                 </div>
 
-                {/* Daily target info */}
-                {metric.dailyTarget > 0 && (
-                  <p className="text-white/20 text-[9px] mt-1.5">
-                    Daily: {metric.dailyTarget} · Weekly: {metric.weeklyTarget}
-                  </p>
-                )}
-                {metric.dailyTarget === 0 && (
-                  <p className="text-white/20 text-[9px] mt-1.5">
-                    Weekly target: {metric.weeklyTarget}
-                  </p>
-                )}
-
-                {/* Increment Button */}
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => handleIncrement(metric.key)}
-                  disabled={isLoading}
-                  className="w-full mt-3 h-7 text-[11px] text-white/40 hover:text-amber-400 hover:bg-amber-500/10 border border-white/[0.04] hover:border-amber-500/20 transition-all"
-                >
-                  {isLoading ? (
-                    <span className="w-3 h-3 border-2 border-white/20 border-t-amber-400 rounded-full animate-spin" />
-                  ) : (
-                    <>
-                      <Plus className="w-3 h-3 mr-1" />
-                      Log {metric.label}
-                    </>
-                  )}
-                </Button>
+                {/* Card Control Buttons */}
+                <div className="grid grid-cols-2 gap-2 mt-4">
+                  <Button
+                    variant="ghost"
+                    onClick={() => openLogModal(metric.key)}
+                    disabled={isLoading}
+                    className="h-8 text-[10px] text-white/50 hover:text-amber-400 hover:bg-amber-500/10 border border-white/[0.04] hover:border-amber-500/20 transition-all flex items-center justify-center gap-1"
+                  >
+                    <Plus className="w-3.5 h-3.5" /> Log
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    onClick={() => setInspectCategory(metric.key)}
+                    className="h-8 text-[10px] text-white/50 hover:text-amber-400 hover:bg-amber-500/10 border border-white/[0.04] hover:border-amber-500/20 transition-all flex items-center justify-center gap-1"
+                  >
+                    <History className="w-3.5 h-3.5" /> History
+                  </Button>
+                </div>
               </div>
             </motion.div>
           )
         })}
       </div>
+
+      {/* Log Entry Modal */}
+      <AnimatePresence>
+        {modalOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              className="bg-[#111113] border border-white/10 rounded-2xl p-6 w-full max-w-md shadow-2xl relative overflow-hidden"
+            >
+              <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/10 blur-[50px] rounded-full pointer-events-none" />
+              
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-xl font-bold text-white tracking-tight">Log {logType.toUpperCase()}</h3>
+                <Button variant="ghost" size="icon" onClick={() => setModalOpen(false)} className="w-8 h-8 rounded-full text-white/40 hover:text-white hover:bg-white/5">
+                  <X className="w-4 h-4" />
+                </Button>
+              </div>
+
+              <form onSubmit={handleModalSubmit} className="space-y-4">
+                <div className="space-y-1.5">
+                  <label className="text-xs text-white/40 ml-1">Contact Name</label>
+                  <Input 
+                    required 
+                    value={contactName} 
+                    onChange={e => setContactName(e.target.value)} 
+                    placeholder="Enter name..." 
+                    className="bg-white/5 border-white/10 text-white" 
+                  />
+                </div>
+
+                {logType === 'call' && (
+                  <div className="space-y-1.5">
+                    <label className="text-xs text-white/40 ml-1">Phone Number</label>
+                    <Input 
+                      type="tel" 
+                      value={phoneNumber} 
+                      onChange={e => setPhoneNumber(e.target.value)} 
+                      placeholder="Enter phone number..." 
+                      className="bg-white/5 border-white/10 text-white" 
+                    />
+                  </div>
+                )}
+
+                <div className="space-y-1.5">
+                  <label className="text-xs text-white/40 ml-1">Notes (Optional)</label>
+                  <Input 
+                    value={logNotes} 
+                    onChange={e => setLogNotes(e.target.value)} 
+                    placeholder="Any quick notes..." 
+                    className="bg-white/5 border-white/10 text-white" 
+                  />
+                </div>
+
+                <div className="pt-2">
+                  <Button type="submit" className="w-full bg-amber-500 hover:bg-amber-600 text-black font-semibold h-10">
+                    Save Record
+                  </Button>
+                </div>
+              </form>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Metric History Inspect Modal */}
+      <AnimatePresence>
+        {inspectCategory && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              className="bg-[#111113] border border-white/10 rounded-2xl p-6 w-full max-w-lg shadow-2xl relative overflow-hidden"
+            >
+              <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/10 blur-[50px] rounded-full pointer-events-none" />
+              
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <h3 className="text-xl font-bold text-white tracking-tight capitalize">{inspectCategory} Outreach History</h3>
+                  <p className="text-white/40 text-xs">All registered {inspectCategory} outreach attempts</p>
+                </div>
+                <Button variant="ghost" size="icon" onClick={() => setInspectCategory(null)} className="w-8 h-8 rounded-full text-white/40 hover:text-white hover:bg-white/5">
+                  <X className="w-4 h-4" />
+                </Button>
+              </div>
+
+              <div className="space-y-2 max-h-[400px] overflow-y-auto pr-1">
+                {outreachRecords.filter(r => r.type === inspectCategory).length === 0 ? (
+                  <div className="py-12 text-center text-white/30 text-sm">
+                    <History className="w-10 h-10 mx-auto mb-2 opacity-20" />
+                    No logs found for {inspectCategory}.
+                  </div>
+                ) : (
+                  outreachRecords
+                    .filter(r => r.type === inspectCategory)
+                    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+                    .map((log) => (
+                      <div
+                        key={log.id}
+                        className="flex items-center justify-between gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.04] hover:bg-white/[0.04] transition-all group"
+                      >
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-2">
+                            <span className="text-white/80 text-sm font-semibold truncate">{log.contactName}</span>
+                            {log.phoneNumber && (
+                              <span className="text-white/40 text-xs truncate">({log.phoneNumber})</span>
+                            )}
+                          </div>
+                          {log.notes && (
+                            <p className="text-white/40 text-xs mt-1 truncate">{log.notes}</p>
+                          )}
+                          <p className="text-[10px] text-white/20 mt-1">
+                            {new Date(log.date).toLocaleDateString('en-IN', {
+                              day: '2-digit',
+                              month: 'short',
+                              year: 'numeric',
+                              hour: '2-digit',
+                              minute: '2-digit'
+                            })}
+                          </p>
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => handleDeleteLog(log.id)}
+                          className="w-8 h-8 text-white/20 hover:text-red-400 hover:bg-red-400/10 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    ))
+                )}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   )
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 // ─── Section 3: Business Roadmap ────────────────────────────────────────────
 
@@ -539,7 +788,7 @@ function BusinessRoadmap() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: 0.5 }}
-      className="bg-white/[0.03] backdrop-blur-xl border border-white/[0.06] rounded-2xl p-5"
+      className="bg-[#0e0e11] lg:bg-white/[0.03] lg:backdrop-blur-xl border border-white/[0.06] rounded-2xl p-5"
     >
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-2">
@@ -602,7 +851,7 @@ function BusinessRoadmap() {
 
                 {/* Card */}
                 <div className={cn(
-                  'bg-white/[0.02] border rounded-2xl p-4 transition-all duration-300 hover:bg-white/[0.04]',
+                  'bg-[#0a0a0c] lg:bg-white/[0.02] border rounded-2xl p-4 transition-all duration-300 hover:bg-white/[0.04]',
                   isCurrentMonth
                     ? 'border-amber-500/30 shadow-[0_0_30px_rgba(212,168,73,0.08)]'
                     : 'border-white/[0.04] hover:border-white/[0.08]'

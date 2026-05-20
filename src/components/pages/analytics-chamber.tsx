@@ -20,6 +20,18 @@ function formatINR(n: number): string {
   return '₹' + n.toLocaleString('en-IN')
 }
 
+function EmptyStateOverlay({ message = "Awaiting transaction logs..." }: { message?: string }) {
+  return (
+    <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/65 backdrop-blur-[5px] rounded-2xl border border-white/[0.04] z-10 p-4">
+      <div className="p-3 rounded-full bg-amber-500/5 border border-amber-500/10 mb-2">
+        <Activity className="w-5 h-5 text-amber-500/50 animate-pulse" />
+      </div>
+      <p className="text-white/60 text-xs font-semibold tracking-wide">{message}</p>
+      <p className="text-white/25 text-[10px] mt-1 text-center max-w-[200px]">Add entries via the Quick Add Dialog to populate real-time analytics</p>
+    </div>
+  )
+}
+
 const CATEGORIES = [
   { key: 'Personal', color: '#d4a849' },
   { key: 'Savings', color: '#10b981' },
@@ -29,62 +41,6 @@ const CATEGORIES = [
 ] as const
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-
-function generateMockMonthlyData(months: number = 6) {
-  const now = new Date()
-  const data = []
-  for (let i = months - 1; i >= 0; i--) {
-    const d = new Date(now.getFullYear(), now.getMonth() - i, 1)
-    const income = 60000 + Math.random() * 40000
-    const expenses = 30000 + Math.random() * 20000
-    data.push({
-      month: MONTHS[d.getMonth()],
-      income: Math.round(income),
-      expenses: Math.round(expenses),
-      savings: Math.round(income - expenses),
-      savingsRate: Math.round(((income - expenses) / income) * 100),
-    })
-  }
-  return data
-}
-
-function generateMockStreamData() {
-  return [
-    { source: 'Freelance', actual: 45000, target: 50000 },
-    { source: 'Consulting', actual: 25000, target: 30000 },
-    { source: 'Products', actual: 15000, target: 20000 },
-    { source: 'Passive', actual: 8000, target: 15000 },
-    { source: 'Services', actual: 12000, target: 10000 },
-  ]
-}
-
-function generateMockForecastData() {
-  const now = new Date()
-  const data = []
-  for (let i = 5; i >= 0; i--) {
-    const d = new Date(now.getFullYear(), now.getMonth() - i, 1)
-    data.push({
-      month: MONTHS[d.getMonth()],
-      actual: Math.round(60000 + Math.random() * 40000),
-      target: 100000,
-      upper: Math.round(90000 + Math.random() * 30000),
-      lower: Math.round(50000 + Math.random() * 20000),
-    })
-  }
-  // Future months
-  for (let i = 1; i <= 3; i++) {
-    const d = new Date(now.getFullYear(), now.getMonth() + i, 1)
-    const projected = Math.round(75000 + Math.random() * 30000 * (1 + i * 0.1))
-    data.push({
-      month: MONTHS[d.getMonth()],
-      actual: projected,
-      target: 100000,
-      upper: Math.round(projected * 1.2),
-      lower: Math.round(projected * 0.7),
-    })
-  }
-  return data
-}
 
 // ─── Custom Tooltip ──────────────────────────────────────────────────────────
 
@@ -126,7 +82,7 @@ function SummaryMetric({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay }}
-      className="bg-white/[0.03] backdrop-blur-xl border border-white/[0.06] rounded-2xl p-5 relative overflow-hidden group hover:border-amber-500/15 transition-all duration-300"
+      className="bg-[#0e0e11] lg:bg-white/[0.03] lg:backdrop-blur-xl border border-white/[0.06] rounded-2xl p-5 relative overflow-hidden group hover:border-amber-500/15 transition-all duration-300"
     >
       <div className="absolute top-0 left-1/4 right-1/4 h-px bg-gradient-to-r from-transparent via-amber-500/15 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
       <div className="flex items-center gap-2 mb-3">
@@ -164,7 +120,7 @@ function ChartCard({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay }}
-      className="bg-white/[0.02] backdrop-blur-xl border border-white/[0.06] rounded-2xl p-5 relative overflow-hidden"
+      className="bg-[#0e0e11] lg:bg-white/[0.02] lg:backdrop-blur-xl border border-white/[0.06] rounded-2xl p-5 relative overflow-hidden"
     >
       <div className="flex items-center gap-2 mb-4">
         <div className="text-white/30">{icon}</div>
@@ -207,7 +163,7 @@ export function AnalyticsChamber() {
     return expenses
       .filter(e => {
         const d = new Date(e.date)
-        return d.getMonth() === currentMonth && d.getFullYear() === currentYear
+        return d.getMonth() === currentMonth && d.getFullYear() === currentYear && e.category !== 'External'
       })
       .reduce((s, e) => s + e.amount, 0)
   }, [expenses, currentMonth, currentYear])
@@ -221,7 +177,7 @@ export function AnalyticsChamber() {
     expenses
       .filter(e => {
         const d = new Date(e.date)
-        return d.getMonth() === currentMonth && d.getFullYear() === currentYear
+        return d.getMonth() === currentMonth && d.getFullYear() === currentYear && e.category !== 'External'
       })
       .forEach(e => {
         catTotals[e.category] = (catTotals[e.category] || 0) + e.amount
@@ -229,6 +185,15 @@ export function AnalyticsChamber() {
     const entries = Object.entries(catTotals)
     if (entries.length === 0) return { category: 'No data', amount: 0 }
     return entries.reduce((max, [cat, amt]) => amt > max.amount ? { category: cat, amount: amt } : max, { category: '', amount: 0 })
+  }, [expenses, currentMonth, currentYear])
+
+  const totalExternalSupport = useMemo(() => {
+    return expenses
+      .filter(e => {
+        const d = new Date(e.date)
+        return d.getMonth() === currentMonth && d.getFullYear() === currentYear && e.category === 'External'
+      })
+      .reduce((s, e) => s + e.amount, 0)
   }, [expenses, currentMonth, currentYear])
 
   // Last month income for growth
@@ -247,15 +212,25 @@ export function AnalyticsChamber() {
     ? ((monthlyIncome - lastMonthIncome) / lastMonthIncome) * 100
     : 0
 
-  // Monthly data for charts (use real data or mock)
+  // Monthly data for charts (use real database values)
   const monthlyData = useMemo(() => {
     const data: Array<{ month: string; income: number; expenses: number; savings: number; savingsRate: number }> = []
     for (let i = 5; i >= 0; i--) {
       const d = new Date(currentYear, currentMonth - i, 1)
       const m = d.getMonth()
       const y = d.getFullYear()
-      const mIncome = incomes.filter(inc => { const dd = new Date(inc.date); return dd.getMonth() === m && dd.getFullYear() === y }).reduce((s, inc) => s + inc.amount, 0)
-      const mExpenses = expenses.filter(exp => { const dd = new Date(exp.date); return dd.getMonth() === m && dd.getFullYear() === y }).reduce((s, exp) => s + exp.amount, 0)
+      const mIncome = incomes
+        .filter(inc => {
+          const dd = new Date(inc.date)
+          return dd.getMonth() === m && dd.getFullYear() === y
+        })
+        .reduce((s, inc) => s + inc.amount, 0)
+      const mExpenses = expenses
+        .filter(exp => {
+          const dd = new Date(exp.date)
+          return dd.getMonth() === m && dd.getFullYear() === y && exp.category !== 'External'
+        })
+        .reduce((s, exp) => s + exp.amount, 0)
       data.push({
         month: MONTHS[m],
         income: mIncome,
@@ -264,9 +239,6 @@ export function AnalyticsChamber() {
         savingsRate: mIncome > 0 ? Math.round(((mIncome - mExpenses) / mIncome) * 100) : 0,
       })
     }
-    // If no real data, use mock
-    const hasRealData = data.some(d => d.income > 0 || d.expenses > 0)
-    if (!hasRealData) return generateMockMonthlyData()
     return data
   }, [incomes, expenses, currentMonth, currentYear])
 
@@ -282,24 +254,11 @@ export function AnalyticsChamber() {
         catTotals[e.category] = (catTotals[e.category] || 0) + e.amount
       })
 
-    const data = CATEGORIES.map(cat => ({
+    return CATEGORIES.map(cat => ({
       name: cat.key,
       value: catTotals[cat.key] || 0,
       color: cat.color,
     }))
-
-    // If no data, generate mock
-    const hasData = data.some(d => d.value > 0)
-    if (!hasData) {
-      return [
-        { name: 'Personal', value: 18000, color: '#d4a849' },
-        { name: 'Savings', value: 12000, color: '#10b981' },
-        { name: 'Business', value: 8000, color: '#3b82f6' },
-        { name: 'Skills', value: 5000, color: '#a855f7' },
-        { name: 'Fun', value: 6000, color: '#f43f5e' },
-      ]
-    }
-    return data
   }, [expenses, currentMonth, currentYear])
 
   const totalPieValue = categoryPieData.reduce((s, d) => s + d.value, 0)
@@ -311,7 +270,6 @@ export function AnalyticsChamber() {
       sourceMap[i.source] = (sourceMap[i.source] || 0) + i.amount
     })
     const entries = Object.entries(sourceMap)
-    if (entries.length === 0) return generateMockStreamData()
     return entries.map(([source, actual]) => ({
       source,
       actual,
@@ -321,27 +279,33 @@ export function AnalyticsChamber() {
 
   // Forecast data
   const forecastData = useMemo(() => {
-    const hasData = monthlyData.some(d => d.income > 0)
-    if (!hasData) return generateMockForecastData()
-    // Build from real + project
+    // Build from real monthly data
     const data = monthlyData.map(d => ({
-      ...d,
-      target: monthlyTarget,
-      upper: Math.round(d.income * 1.15),
-      lower: Math.round(d.income * 0.85),
+      month: d.month,
       actual: d.income,
+      target: monthlyTarget,
+      upper: Math.round(d.income * 1.1),
+      lower: Math.round(d.income * 0.9),
+      income: d.income,
+      expenses: d.expenses,
+      savings: d.savings,
+      savingsRate: d.savingsRate,
     }))
-    // Add 3 projection months
-    const lastIncome = monthlyData[monthlyData.length - 1]?.income || monthlyTarget * 0.7
+    
+    // Add 3 projection months with linear trend from real monthData
+    const lastIncome = monthlyData[monthlyData.length - 1]?.income || 0
+    const secondLastIncome = monthlyData[monthlyData.length - 2]?.income || 0
+    const trend = lastIncome - secondLastIncome // simple trend estimate
+
     for (let i = 1; i <= 3; i++) {
       const d = new Date(currentYear, currentMonth + i, 1)
-      const projected = Math.round(lastIncome * (1 + i * 0.05))
+      const projected = Math.max(0, Math.round(lastIncome + trend * i * 0.5))
       data.push({
         month: MONTHS[d.getMonth()],
         actual: projected,
         target: monthlyTarget,
-        upper: Math.round(projected * 1.2),
-        lower: Math.round(projected * 0.75),
+        upper: Math.round(projected * 1.15),
+        lower: Math.round(projected * 0.85),
         income: projected,
         expenses: 0,
         savings: 0,
@@ -369,16 +333,29 @@ export function AnalyticsChamber() {
       }
     })
 
-    // If no data, generate mock
-    const hasData = Object.values(catExpenses).some(arr => arr.some(v => v > 0))
-    if (!hasData) {
-      CATEGORIES.forEach(cat => {
-        catExpenses[cat.key] = days.map(() => Math.round(Math.random() * 5000))
-      })
-    }
-
     return { days, catExpenses }
   }, [expenses])
+
+  // Checking data completeness flags for premium Empty State Overlays
+  const hasRealMonthlyData = useMemo(() => {
+    return monthlyData.some(d => d.income > 0 || d.expenses > 0)
+  }, [monthlyData])
+
+  const hasPieData = useMemo(() => {
+    return categoryPieData.some(d => d.value > 0)
+  }, [categoryPieData])
+
+  const hasStreamData = useMemo(() => {
+    return streamData.length > 0 && streamData.some(d => d.actual > 0)
+  }, [streamData])
+
+  const hasForecastData = useMemo(() => {
+    return monthlyData.some(d => d.income > 0)
+  }, [monthlyData])
+
+  const hasHeatmapData = useMemo(() => {
+    return Object.values(heatmapData.catExpenses).some(arr => arr.some(v => v > 0))
+  }, [heatmapData])
 
   // Find max for heatmap
   const heatmapMax = useMemo(() => {
@@ -386,7 +363,7 @@ export function AnalyticsChamber() {
     Object.values(heatmapData.catExpenses).forEach(arr => {
       arr.forEach(v => { if (v > max) max = v })
     })
-    return max
+    return max || 1000
   }, [heatmapData])
 
   return (
@@ -411,7 +388,7 @@ export function AnalyticsChamber() {
       {/* ═══════════════════════════════════════════════════════════════════════
           SECTION 1 — Summary Dashboard
           ═══════════════════════════════════════════════════════════════════════ */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4">
         <SummaryMetric
           label="Income vs Expenses"
           value={formatINR(monthlyIncome - totalExpenses)}
@@ -444,6 +421,20 @@ export function AnalyticsChamber() {
           icon={<TrendingUp className="w-4 h-4" />}
           delay={0.25}
         />
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="bg-white/[0.03] backdrop-blur-xl border border-teal-500/10 rounded-2xl p-5 relative overflow-hidden group hover:border-teal-500/25 transition-all duration-300"
+        >
+          <div className="absolute top-0 left-1/4 right-1/4 h-px bg-gradient-to-r from-transparent via-teal-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+          <div className="flex items-center gap-2 mb-3">
+            <div className="text-teal-400/50"><Zap className="w-4 h-4" /></div>
+            <span className="text-teal-400/70 text-[11px] uppercase tracking-wider font-semibold">Household Duties</span>
+          </div>
+          <div className="text-2xl font-bold text-teal-400">{formatINR(totalExternalSupport)}</div>
+          <p className="text-teal-400/40 text-xs mt-1">Isolated from budget distributions</p>
+        </motion.div>
       </div>
 
       {/* ═══════════════════════════════════════════════════════════════════════
@@ -452,7 +443,8 @@ export function AnalyticsChamber() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Chart 1: Income vs Expenses */}
         <ChartCard title="Income vs Expenses" subtitle="6-month trend" icon={<Activity className="w-4 h-4" />} delay={0.3}>
-          <div className="h-64">
+          <div className="h-64 relative">
+            {!hasRealMonthlyData && <EmptyStateOverlay message="Awaiting historical records..." />}
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={monthlyData} margin={{ top: 5, right: 5, left: -20, bottom: 0 }}>
                 <defs>
@@ -477,7 +469,8 @@ export function AnalyticsChamber() {
 
         {/* Chart 2: Savings Trend */}
         <ChartCard title="Savings Trend" subtitle="Monthly savings rate" icon={<Target className="w-4 h-4" />} delay={0.35}>
-          <div className="h-64">
+          <div className="h-64 relative">
+            {!hasRealMonthlyData && <EmptyStateOverlay message="Awaiting savings records..." />}
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={monthlyData} margin={{ top: 5, right: 5, left: -20, bottom: 0 }}>
                 <defs>
@@ -503,7 +496,8 @@ export function AnalyticsChamber() {
 
         {/* Chart 3: Spending Behavior (Donut) */}
         <ChartCard title="Spending Behavior" subtitle="Category breakdown" icon={<PieIcon className="w-4 h-4" />} delay={0.4}>
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-6 relative">
+            {!hasPieData && <EmptyStateOverlay message="Awaiting recorded expenses..." />}
             <div className="h-56 w-56 flex-shrink-0 relative">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
@@ -531,7 +525,7 @@ export function AnalyticsChamber() {
               </div>
             </div>
             {/* Legend */}
-            <div className="flex-1 space-y-2.5">
+            <div className="flex-1 space-y-2.5 font-sans">
               {categoryPieData.map((item) => {
                 const percent = totalPieValue > 0 ? ((item.value / totalPieValue) * 100).toFixed(0) : '0'
                 return (
@@ -549,7 +543,8 @@ export function AnalyticsChamber() {
 
         {/* Chart 4: Stream Performance */}
         <ChartCard title="Stream Performance" subtitle="Revenue by source vs target" icon={<BarChart3 className="w-4 h-4" />} delay={0.45}>
-          <div className="h-64">
+          <div className="h-64 relative">
+            {!hasStreamData && <EmptyStateOverlay message="Awaiting stream revenue..." />}
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={streamData} margin={{ top: 5, right: 5, left: -20, bottom: 0 }} barGap={4}>
                 <XAxis dataKey="source" axisLine={false} tickLine={false} tick={{ fill: 'rgba(255,255,255,0.3)', fontSize: 10 }} />
@@ -565,7 +560,8 @@ export function AnalyticsChamber() {
 
       {/* Chart 5: Revenue Forecast (Full Width) */}
       <ChartCard title="Revenue Forecast" subtitle="Projected income trajectory with confidence band" icon={<Zap className="w-4 h-4" />} delay={0.5}>
-        <div className="h-64">
+        <div className="h-64 relative">
+          {!hasForecastData && <EmptyStateOverlay message="Awaiting historical trajectory..." />}
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={forecastData} margin={{ top: 5, right: 5, left: -20, bottom: 0 }}>
               <defs>
@@ -623,7 +619,8 @@ export function AnalyticsChamber() {
           </div>
         </div>
 
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto relative">
+          {!hasHeatmapData && <EmptyStateOverlay message="Awaiting weekly spending logs..." />}
           <div className="min-w-[400px]">
             {/* Header row */}
             <div className="grid gap-2 mb-2" style={{ gridTemplateColumns: '100px repeat(7, 1fr)' }}>

@@ -88,8 +88,9 @@
   * {
     @apply border-border outline-ring/50;
   }
-  body {
+  html, body {
     @apply bg-background text-foreground;
+    background-color: #08080a !important;
   }
 }
 
@@ -111,12 +112,17 @@
 
 /* Glass card styling */
 .glass-card {
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: #0e0e11;
   border: 1px solid rgba(212, 168, 73, 0.1);
   border-radius: 16px;
   transition: all 0.3s ease;
+}
+@media (min-width: 1024px) {
+  .glass-card {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
 }
 .glass-card:hover {
   border-color: rgba(212, 168, 73, 0.2);
@@ -267,3 +273,252 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* Solo Leveling Custom Awakening Animations */
+@keyframes sweepShine {
+  0% {
+    transform: translate(-150%, -150%) rotate(45deg);
+  }
+  15% {
+    transform: translate(150%, 150%) rotate(45deg);
+  }
+  100% {
+    transform: translate(150%, 150%) rotate(45deg);
+  }
+}
+
+.animate-sweep-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.animate-sweep-shine::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    rgba(212, 168, 73, 0) 30%,
+    rgba(212, 168, 73, 0.2) 45%,
+    rgba(255, 255, 255, 0.45) 50%,
+    rgba(212, 168, 73, 0.2) 55%,
+    rgba(212, 168, 73, 0) 70%
+  );
+  animation: sweepShine 10s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  pointer-events: none;
+}
+
+@keyframes resonanceGlow {
+  0%, 100% {
+    text-shadow: 0 0 6px rgba(0, 245, 212, 0.35), 0 0 12px rgba(157, 78, 221, 0.15);
+    filter: drop-shadow(0 0 1.5px rgba(0, 245, 212, 0.1));
+  }
+  50% {
+    text-shadow: 0 0 12px rgba(0, 245, 212, 0.6), 0 0 20px rgba(157, 78, 221, 0.3);
+    filter: drop-shadow(0 0 4px rgba(0, 245, 212, 0.25));
+  }
+}
+
+.text-resonance-glow {
+  animation: resonanceGlow 4s ease-in-out infinite;
+  background: linear-gradient(135deg, #ffffff, #00f5d4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Animated gradient border card for the ultimate billion-dollar aesthetic */
+@keyframes borderGlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.premium-rank-card {
+  position: relative;
+  border-radius: 16px;
+  background: #020205; /* Pitch-black night sky */
+  border: 1px solid rgba(0, 245, 212, 0.12); /* Subtle electric cyan hint border */
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7), inset 0 0 20px rgba(0, 245, 212, 0.02);
+  transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+  overflow: hidden;
+}
+
+.premium-rank-card:hover {
+  transform: translateY(-4px) scale(1.01);
+  border-color: rgba(0, 245, 212, 0.35);
+  box-shadow: 0 20px 50px rgba(0, 245, 212, 0.12), 0 0 30px rgba(157, 78, 221, 0.08), inset 0 0 30px rgba(0, 245, 212, 0.05);
+}
+
+/* Electric/purple neon glow border overlay instead of purely gold */
+.premium-rank-card::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, #00f5d4, #00bbf9, #9d4edd, #00f5d4, #9d4edd, #00f5d4);
+  background-size: 400% 400%;
+  z-index: -1;
+  border-radius: 18px;
+  opacity: 0.12;
+  transition: opacity 0.5s ease;
+  animation: borderGlow 12s linear infinite;
+}
+
+.premium-rank-card:hover::before {
+  opacity: 0.4;
+  filter: blur(6px);
+}
+
+/* Thunder-sky background & lightning overlays */
+.thunder-sky-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: 
+    radial-gradient(circle at 50% 0%, rgba(0, 245, 212, 0.02) 0%, transparent 60%),
+    radial-gradient(circle at 100% 100%, rgba(157, 78, 221, 0.02) 0%, transparent 60%);
+}
+
+.thunder-sky-flash {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  mix-blend-mode: screen;
+  opacity: 0;
+  animation: thunderFlash 8s ease-in-out infinite;
+}
+
+@keyframes thunderFlash {
+  0%, 12%, 15%, 17%, 19%, 40%, 52%, 55%, 57%, 59%, 80%, 92%, 95%, 97%, 99%, 100% {
+    opacity: 0;
+    background: transparent;
+  }
+  /* Strike A */
+  13%, 18% {
+    opacity: 0.65;
+    background: radial-gradient(circle at 45% 10%, rgba(0, 245, 212, 0.25) 0%, rgba(157, 78, 221, 0.1) 40%, transparent 85%);
+  }
+  14% {
+    opacity: 0.25;
+    background: radial-gradient(circle at 45% 10%, rgba(0, 245, 212, 0.1) 0%, transparent 60%);
+  }
+  /* Strike B */
+  53%, 58% {
+    opacity: 0.8;
+    background: radial-gradient(circle at 65% 15%, rgba(255, 255, 255, 0.65) 0%, rgba(0, 245, 212, 0.35) 15%, rgba(157, 78, 221, 0.15) 50%, transparent 85%);
+  }
+  54% {
+    opacity: 0.25;
+    background: radial-gradient(circle at 65% 15%, rgba(0, 245, 212, 0.12) 0%, transparent 60%);
+  }
+  /* Strike C */
+  93%, 98% {
+    opacity: 0.85;
+    background: radial-gradient(circle at 35% 5%, rgba(255, 255, 255, 0.8) 0%, rgba(0, 245, 212, 0.38) 15%, rgba(157, 78, 221, 0.18) 45%, transparent 80%);
+  }
+  94% {
+    opacity: 0.3;
+    background: radial-gradient(circle at 35% 5%, rgba(0, 245, 212, 0.15) 0%, transparent 60%);
+  }
+}
+
+/* Lightning Bolt Path Animations - Highly Dynamic 3-strike cycle */
+@keyframes boltFlash1 {
+  0%, 12%, 15%, 17%, 19%, 40%, 52%, 55%, 57%, 59%, 80%, 92%, 95%, 97%, 99%, 100% {
+    opacity: 0;
+  }
+  13%, 93% {
+    opacity: 0.9;
+  }
+  14%, 94% {
+    opacity: 0.25;
+  }
+  18%, 98% {
+    opacity: 0.8;
+  }
+  53% {
+    opacity: 0.6;
+  }
+}
+
+@keyframes boltFlash2 {
+  0%, 9%, 11%, 13%, 15%, 35%, 49%, 51%, 53%, 55%, 75%, 89%, 91%, 93%, 95%, 100% {
+    opacity: 0;
+  }
+  10%, 90% {
+    opacity: 0.8;
+  }
+  12%, 92% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 0.85;
+  }
+  52% {
+    opacity: 0.25;
+  }
+}
+
+.animate-lightning-bolt-1 {
+  animation: boltFlash1 8s ease-in-out infinite;
+}
+
+.animate-lightning-bolt-2 {
+  animation: boltFlash2 8s ease-in-out infinite;
+  animation-delay: 1.2s;
+}
+
+.animate-lightning-bolt-3 {
+  animation: boltFlash1 8s ease-in-out infinite;
+  animation-delay: 2.8s;
+}
+
+.animate-lightning-bolt-4 {
+  animation: boltFlash2 8s ease-in-out infinite;
+  animation-delay: 4.5s;
+}
+
+
+/* Shimmering Scanline effect */
+@keyframes scanline {
+  0% { transform: translateY(-100%); opacity: 0; }
+  10% { opacity: 0.5; }
+  90% { opacity: 0.5; }
+  100% { transform: translateY(100%); opacity: 0; }
+}
+
+.premium-scanline {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.4), transparent);
+  animation: scanline 6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Neon rank glow animation for text */
+@keyframes rankTextGlow {
+  0%, 100% {
+    text-shadow: 0 0 8px rgba(157, 78, 221, 0.4), 0 0 15px rgba(157, 78, 221, 0.2);
+  }
+  50% {
+    text-shadow: 0 0 20px rgba(157, 78, 221, 0.8), 0 0 30px rgba(157, 78, 221, 0.4), 0 0 40px rgba(157, 78, 221, 0.2);
+  }
+}
+
+.premium-rank-text {
+  animation: rankTextGlow 4s ease-in-out infinite;
+}
+
+

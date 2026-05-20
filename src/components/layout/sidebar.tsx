@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { useAppStore, type PageType } from '@/store/use-app-store'
 import { cn } from '@/lib/utils'
 import {
@@ -14,14 +15,21 @@ import {
   Bot,
   ChevronLeft,
   ChevronRight,
-  Trophy,
   Calendar,
+  LogOut,
+  Briefcase,
+  Flame,
 } from 'lucide-react'
 import { motion } from 'framer-motion'
+import { useRouter } from 'next/navigation'
+import { createClient } from '@/lib/supabase/client'
 
 const navItems: { id: PageType; label: string; icon: React.ReactNode }[] = [
   { id: 'overview', label: 'Executive Overview', icon: <Home className="w-4 h-4" /> },
+  { id: 'sololeveling', label: '⚔️ SOLO LEVELING', icon: <Flame className="w-4 h-4 text-orange-500 animate-pulse" /> },
   { id: 'wealth', label: 'Wealth Engine', icon: <Gem className="w-4 h-4" /> },
+  { id: 'calendar', label: 'Imperial Calendar', icon: <Calendar className="w-4 h-4" /> },
+  { id: 'jobs', label: 'Job Search', icon: <Briefcase className="w-4 h-4" /> },
   { id: 'budget', label: 'Budget Intelligence', icon: <CircleDot className="w-4 h-4" /> },
   { id: 'business', label: 'Business Operations', icon: <Zap className="w-4 h-4" /> },
   { id: 'clients', label: 'Client Empire', icon: <Target className="w-4 h-4" /> },
@@ -40,124 +48,154 @@ const navSymbols: Record<PageType, string> = {
   analytics: '⬡',
   discipline: '✦',
   warroom: '⚔',
+  calendar: '📅',
   karna: '★',
+  jobs: '💼',
+  sololeveling: '⚔',
 }
 
 export function Sidebar() {
-  const { currentPage, setCurrentPage, sidebarCollapsed, setSidebarCollapsed, monthlyTarget, monthlyIncome } = useAppStore()
+  const router = useRouter()
+  const supabase = createClient()
 
-  const disciplineScore = monthlyTarget > 0 ? Math.min(100, Math.round((monthlyIncome / monthlyTarget) * 70 + 30)) : 30
-  const now = new Date()
-  const monthStr = now.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+  const { 
+    currentPage, 
+    setCurrentPage, 
+    sidebarCollapsed, 
+    setSidebarCollapsed, 
+    mobileMenuOpen,
+    setMobileMenuOpen 
+  } = useAppStore()
+
+  const [isMobile, setIsMobile] = useState(false)
+
+  const handleLogout = async () => {
+    try {
+      await supabase.auth.signOut()
+      router.push('/login')
+      router.refresh()
+    } catch (err) {
+      console.error('Failed to log out:', err)
+    }
+  }
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 1024)
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+
+  // Define animations based on responsive state
+  const animateState = isMobile
+    ? { x: mobileMenuOpen ? 0 : -280, width: 280 }
+    : { x: 0, width: sidebarCollapsed ? 72 : 260 }
 
   return (
-    <motion.aside
-      initial={false}
-      animate={{ width: sidebarCollapsed ? 72 : 260 }}
-      transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-      className="glass-sidebar fixed left-0 top-0 h-full z-50 flex flex-col"
-    >
-      {/* Logo */}
-      <div className="p-4 flex items-center gap-3 border-b border-white/5">
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500/20 to-amber-700/20 border border-amber-500/20 flex items-center justify-center flex-shrink-0">
-          <span className="text-amber-400 font-bold text-lg">D</span>
-        </div>
-        {!sidebarCollapsed && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-          >
-            <h1 className="gold-text font-bold text-sm tracking-wider">DHANAVI</h1>
-            <p className="text-[10px] text-white/30 tracking-widest uppercase">Samrajya</p>
-          </motion.div>
-        )}
-      </div>
+    <>
+      {/* Mobile Overlay Backdrop */}
+      {isMobile && mobileMenuOpen && (
+        <div
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[45] lg:hidden"
+          onClick={() => setMobileMenuOpen(false)}
+        />
+      )}
 
-      {/* Navigation */}
-      <nav className="flex-1 py-4 px-2 space-y-1 overflow-y-auto no-scrollbar">
-        {navItems.map((item) => {
-          const isActive = currentPage === item.id
-          return (
-            <button
-              key={item.id}
-              onClick={() => setCurrentPage(item.id)}
-              className={cn(
-                'nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all',
-                isActive
-                  ? 'active bg-amber-500/10 text-amber-400 border-l-2 border-amber-400'
-                  : 'text-white/50 hover:text-white/80 hover:bg-white/5 border-l-2 border-transparent'
-              )}
-            >
-              <span className={cn('flex-shrink-0', isActive ? 'text-amber-400' : 'text-white/40')}>
-                {sidebarCollapsed ? <span className="text-base">{navSymbols[item.id]}</span> : item.icon}
-              </span>
-              {!sidebarCollapsed && (
-                <motion.span
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="truncate text-[13px]"
-                >
-                  {item.label}
-                </motion.span>
-              )}
-            </button>
-          )
-        })}
-      </nav>
-
-      {/* Bottom Info */}
-      <div className="p-3 space-y-3 border-t border-white/5">
-        {/* Discipline Score */}
-        <div className={cn('rounded-xl p-3', sidebarCollapsed ? 'bg-amber-500/5' : 'bg-amber-500/5 border border-amber-500/10')}>
-          {sidebarCollapsed ? (
-            <div className="flex flex-col items-center gap-1">
-              <Trophy className="w-4 h-4 text-amber-400" />
-              <span className="text-amber-400 text-xs font-bold">{disciplineScore}</span>
+      <motion.aside
+        initial={false}
+        animate={animateState}
+        transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+        className="glass-sidebar fixed left-0 top-0 h-full z-50 flex flex-col"
+      >
+        {/* Logo */}
+        <div className="p-4 flex items-center justify-between gap-3 border-b border-white/5">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500/20 to-amber-700/20 border border-amber-500/20 flex items-center justify-center flex-shrink-0">
+              <span className="text-amber-400 font-bold text-lg">D</span>
             </div>
-          ) : (
-            <>
-              <div className="flex items-center justify-between mb-1.5">
-                <span className="text-[11px] text-amber-400/70 uppercase tracking-wider">Discipline</span>
-                <span className="text-amber-400 font-bold text-sm">{disciplineScore}</span>
-              </div>
-              <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-gradient-to-r from-amber-500 to-amber-300 rounded-full budget-progress"
-                  style={{ width: `${disciplineScore}%` }}
-                />
-              </div>
-            </>
+            {(!sidebarCollapsed || isMobile) && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                <h1 className="gold-text font-bold text-sm tracking-wider">DHANAVI</h1>
+                <p className="text-[10px] text-white/30 tracking-widest uppercase">Samrajya</p>
+              </motion.div>
+            )}
+          </div>
+          
+          {/* Close button for Mobile Menu */}
+          {isMobile && (
+            <button
+              onClick={() => setMobileMenuOpen(false)}
+              className="p-2 rounded-lg text-white/40 hover:text-white/70 hover:bg-white/5 transition-all lg:hidden"
+            >
+              <ChevronLeft className="w-5 h-5 text-amber-400" />
+            </button>
           )}
         </div>
 
-        {/* Monthly Target */}
-        {!sidebarCollapsed && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="rounded-xl p-3 bg-white/[0.02] border border-white/5"
-          >
-            <div className="flex items-center gap-2 mb-1">
-              <Calendar className="w-3 h-3 text-white/30" />
-              <span className="text-[11px] text-white/30 uppercase tracking-wider">{monthStr}</span>
-            </div>
-            <div className="text-white/60 text-xs">
-              Target: <span className="text-amber-400/80">₹{monthlyTarget.toLocaleString('en-IN')}</span>
-            </div>
-          </motion.div>
-        )}
+        {/* Navigation */}
+        <nav className="flex-1 py-4 px-2 space-y-1 overflow-y-auto no-scrollbar">
+          {navItems.map((item) => {
+            const isActive = currentPage === item.id
+            return (
+              <button
+                key={item.id}
+                onClick={() => {
+                  setCurrentPage(item.id)
+                  if (isMobile) setMobileMenuOpen(false)
+                }}
+                className={cn(
+                  'nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all',
+                  isActive
+                    ? 'active bg-amber-500/10 text-amber-400 border-l-2 border-amber-400'
+                    : 'text-white/50 hover:text-white/80 hover:bg-white/5 border-l-2 border-transparent'
+                )}
+              >
+                <span className={cn('flex-shrink-0', isActive ? 'text-amber-400' : 'text-white/40')}>
+                  {(sidebarCollapsed && !isMobile) ? <span className="text-base">{navSymbols[item.id]}</span> : item.icon}
+                </span>
+                {(!sidebarCollapsed || isMobile) && (
+                  <motion.span
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="truncate text-[13px]"
+                  >
+                    {item.label}
+                  </motion.span>
+                )}
+              </button>
+            )
+          })}
+        </nav>
 
-        {/* Collapse Toggle */}
-        <button
-          onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-          className="w-full flex items-center justify-center gap-2 py-2 rounded-lg text-white/20 hover:text-white/50 hover:bg-white/5 transition-all"
-        >
-          {sidebarCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
-          {!sidebarCollapsed && <span className="text-xs">Collapse</span>}
-        </button>
-      </div>
-    </motion.aside>
+        {/* Bottom Info */}
+        <div className="p-3 space-y-3 border-t border-white/5">
+          {/* Logout Button */}
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-red-500/5 hover:bg-red-500/10 border border-red-500/10 hover:border-red-500/20 text-red-400/85 hover:text-red-400 text-xs transition-all font-medium"
+            title="Logout Session"
+          >
+            <LogOut className="w-3.5 h-3.5" />
+            {(!sidebarCollapsed || isMobile) && <span>Logout Session</span>}
+          </button>
+
+          {/* Collapse Toggle */}
+          {!isMobile && (
+            <button
+              onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+              className="w-full flex items-center justify-center gap-2 py-2 rounded-lg text-white/20 hover:text-white/50 hover:bg-white/5 transition-all"
+            >
+              {sidebarCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
+              {!sidebarCollapsed && <span className="text-xs">Collapse</span>}
+            </button>
+          )}
+        </div>
+      </motion.aside>
+    </>
   )
 }

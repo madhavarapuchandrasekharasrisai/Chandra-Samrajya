@@ -27,7 +27,7 @@ const suggestedPrompts = [
 ]
 
 export function KarnaAI() {
-  const { incomes, expenses, monthlyIncome, monthlyTarget, budgetAllocation, clients, followups } = useAppStore()
+  const { incomes, expenses, monthlyIncome, monthlyTarget, budgetAllocation, clients, followups, todos } = useAppStore()
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -44,6 +44,35 @@ export function KarnaAI() {
   // Build context for Karna AI
   const buildContext = () => {
     const cat = budgetAllocation
+    const clientDetails = clients.map(client => {
+      const clientIncomes = incomes.filter(i => 
+        (i.clientName && i.clientName.toLowerCase() === client.name.toLowerCase()) || 
+        (i.source && i.source.toLowerCase() === client.name.toLowerCase())
+      )
+      const totalEarned = clientIncomes.reduce((sum, i) => sum + i.amount, 0)
+      return `- Client: ${client.name} | Business: ${client.business || 'N/A'} | Stage: ${client.pipelineStage} | Project Value: ₹${client.projectValue.toLocaleString('en-IN')} | Total Revenue Received: ₹${totalEarned.toLocaleString('en-IN')} | Close Prob: ${client.closeProbability}%`
+    }).join('\n')
+
+    const currentMonthExpenses = expenses.filter(e => {
+      const d = new Date(e.date)
+      return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear()
+    })
+    const expenseDetails = currentMonthExpenses.map(e => 
+      `- ₹${e.amount.toLocaleString('en-IN')} | Category: ${e.category} | Description: ${e.description || 'N/A'} | Date: ${e.date}`
+    ).join('\n')
+
+    // Filter todos for today's focus checklist
+    const today = new Date()
+    const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate())
+    const todayTodos = todos.filter(t => {
+      const todoDate = new Date(t.date)
+      const isCreatedToday = todoDate >= startOfToday
+      return t.completed === 0 || isCreatedToday
+    })
+    const todoDetails = todayTodos.map(t => 
+      `- [${t.completed === 1 ? 'x' : ' '}] ${t.task}`
+    ).join('\n')
+
     return `
 CURRENT FINANCIAL STATUS:
 - Monthly Income: ₹${monthlyIncome.toLocaleString('en-IN')}
@@ -64,16 +93,25 @@ ${incomes.length > 0
       .map(([source, amount]) => `- ${source}: ₹${amount.toLocaleString('en-IN')}`).join('\n')
   : '- No income recorded yet'}
 
-CLIENTS:
+CLIENTS OVERVIEW:
 - Total Clients: ${clients.length}
-- Pipeline: ${Object.entries(clients.reduce((acc, c) => { acc[c.pipelineStage] = (acc[c.pipelineStage] || 0) + 1; return acc; }, {} as Record<string, number>))
+- Pipeline Stages: ${Object.entries(clients.reduce((acc, c) => { acc[c.pipelineStage] = (acc[c.pipelineStage] || 0) + 1; return acc; }, {} as Record<string, number>))
     .map(([stage, count]) => `${stage}: ${count}`).join(', ')}
 - Total Pipeline Value: ₹${clients.reduce((s, c) => s + c.projectValue, 0).toLocaleString('en-IN')}
+
+CLIENT INDIVIDUAL DETAILS & REVENUE RECEIVED:
+${clientDetails || '- No individual clients registered yet'}
+
+EXPENSE INDIVIDUAL DETAILS:
+${expenseDetails || '- No expenses recorded yet'}
 
 FOLLOWUPS:
 - Pending: ${followups.filter(f => f.status === 'pending').length}
 - Overdue: ${followups.filter(f => f.status === 'pending' && new Date(f.dueDate) < new Date()).length}
 - Completed: ${followups.filter(f => f.status === 'completed').length}
+
+TODAY'S FOCUS CHECKLIST:
+${todoDetails || '- No active tasks focus scheduled today.'}
 `.trim()
   }
 

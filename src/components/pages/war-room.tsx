@@ -1,15 +1,16 @@
 'use client'
 
-import React, { useMemo } from 'react'
+import React, { useMemo, useState, useCallback } from 'react'
 import { useAppStore } from '@/store/use-app-store'
 import { cn } from '@/lib/utils'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import {
   Target, AlertTriangle, Clock, Zap, ChevronRight,
   IndianRupee, Flame, XCircle, Shield, Crosshair,
-  Skull, ArrowUpRight, Users, Send, Phone,
+  Skull, ArrowUpRight, Users, Send, Phone, Plus, X, Trash2,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { toast } from 'sonner'
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
@@ -253,7 +254,70 @@ function RiskCard({
 // ─── Main Component ─────────────────────────────────────────────────────────
 
 export function WarRoom() {
-  const { incomes, expenses, monthlyIncome, monthlyTarget, budgetAllocation, clients, followups } = useAppStore()
+  const { incomes, expenses, monthlyIncome, monthlyTarget, budgetAllocation, clients, followups, warRoomActions, warRoomOpportunities, addWarRoomAction, removeWarRoomAction, addWarRoomOpportunity, removeWarRoomOpportunity } = useAppStore()
+  const [showAddAction, setShowAddAction] = useState(false)
+  const [showAddOpp, setShowAddOpp] = useState(false)
+  const [actionTitle, setActionTitle] = useState('')
+  const [actionSubtitle, setActionSubtitle] = useState('')
+  const [actionUrgency, setActionUrgency] = useState('high-urgency')
+  const [oppName, setOppName] = useState('')
+  const [oppValue, setOppValue] = useState('')
+  const [oppProb, setOppProb] = useState('')
+  const [submitting, setSubmitting] = useState(false)
+
+  const handleAddAction = useCallback(async () => {
+    if (!actionTitle.trim()) return
+    setSubmitting(true)
+    try {
+      const res = await fetch('/api/warroom/actions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title: actionTitle, subtitle: actionSubtitle, urgency: actionUrgency }),
+      })
+      if (res.ok) {
+        const data = await res.json()
+        addWarRoomAction(data)
+        setActionTitle(''); setActionSubtitle(''); setShowAddAction(false)
+        toast.success('Urgent action added!')
+      }
+    } catch { toast.error('Failed to add action') }
+    finally { setSubmitting(false) }
+  }, [actionTitle, actionSubtitle, actionUrgency, addWarRoomAction])
+
+  const handleDeleteAction = useCallback(async (id: string) => {
+    try {
+      await fetch(`/api/warroom/actions?id=${id}`, { method: 'DELETE' })
+      removeWarRoomAction(id)
+      toast.success('Action removed')
+    } catch { toast.error('Failed to remove') }
+  }, [removeWarRoomAction])
+
+  const handleAddOpp = useCallback(async () => {
+    if (!oppName.trim()) return
+    setSubmitting(true)
+    try {
+      const res = await fetch('/api/warroom/opportunities', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: oppName, projectValue: oppValue, closeProbability: oppProb }),
+      })
+      if (res.ok) {
+        const data = await res.json()
+        addWarRoomOpportunity(data)
+        setOppName(''); setOppValue(''); setOppProb(''); setShowAddOpp(false)
+        toast.success('Opportunity added!')
+      }
+    } catch { toast.error('Failed to add opportunity') }
+    finally { setSubmitting(false) }
+  }, [oppName, oppValue, oppProb, addWarRoomOpportunity])
+
+  const handleDeleteOpp = useCallback(async (id: string) => {
+    try {
+      await fetch(`/api/warroom/opportunities?id=${id}`, { method: 'DELETE' })
+      removeWarRoomOpportunity(id)
+      toast.success('Opportunity removed')
+    } catch { toast.error('Failed to remove') }
+  }, [removeWarRoomOpportunity])
   const now = new Date()
   const daysLeft = daysLeftInMonth()
   const targetRemaining = Math.max(0, monthlyTarget - monthlyIncome)
@@ -486,10 +550,35 @@ export function WarRoom() {
             <Flame className="w-4 h-4 text-red-400" />
           </div>
           <h3 className="text-white/80 text-sm font-semibold">Urgent Actions</h3>
-          <span className="text-red-400/60 text-[10px] uppercase tracking-wider ml-auto">
-            {urgentActions.length} critical
+          <span className="text-red-400/60 text-[10px] uppercase tracking-wider ml-auto mr-2">
+            {urgentActions.length + warRoomActions.filter(a => a.status !== 'completed').length} critical
           </span>
+          <Button variant="ghost" size="sm" onClick={() => setShowAddAction(!showAddAction)} className="text-red-400/60 hover:text-red-400 hover:bg-red-500/10 h-7 w-7 p-0 border border-red-500/15">
+            <Plus className="w-3.5 h-3.5" />
+          </Button>
         </div>
+
+        {/* Add Action Form */}
+        <AnimatePresence>
+          {showAddAction && (
+            <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden mb-3">
+              <div className="bg-red-500/5 border border-red-500/15 rounded-xl p-4 space-y-3">
+                <input value={actionTitle} onChange={e => setActionTitle(e.target.value)} placeholder="Action title..." className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-sm text-white/80 placeholder:text-white/20 focus:outline-none focus:border-red-500/30" />
+                <input value={actionSubtitle} onChange={e => setActionSubtitle(e.target.value)} placeholder="Details (optional)" className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-sm text-white/80 placeholder:text-white/20 focus:outline-none focus:border-red-500/30" />
+                <select value={actionUrgency} onChange={e => setActionUrgency(e.target.value)} className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-sm text-white/80 focus:outline-none">
+                  <option value="overdue">Overdue</option>
+                  <option value="high-urgency">High Urgency</option>
+                  <option value="over-budget">Over Budget</option>
+                  <option value="expiring">Expiring</option>
+                </select>
+                <div className="flex gap-2">
+                  <Button onClick={handleAddAction} disabled={submitting || !actionTitle.trim()} className="flex-1 bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/20 text-xs h-8">{submitting ? 'Adding...' : 'Add Action'}</Button>
+                  <Button variant="ghost" onClick={() => setShowAddAction(false)} className="text-white/30 hover:text-white/60 h-8 w-8 p-0"><X className="w-3.5 h-3.5" /></Button>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {urgentActions.length > 0 ? (
           <div className="space-y-2 max-h-96 overflow-y-auto">
@@ -504,10 +593,28 @@ export function WarRoom() {
               />
             ))}
           </div>
-        ) : (
+        ) : warRoomActions.filter(a => a.status !== 'completed').length === 0 ? (
           <div className="text-center py-8">
             <Shield className="w-8 h-8 text-emerald-400/20 mx-auto mb-2" />
             <p className="text-white/30 text-sm">All clear — no urgent actions</p>
+          </div>
+        ) : null}
+
+        {/* Custom DB Actions */}
+        {warRoomActions.filter(a => a.status !== 'completed').length > 0 && (
+          <div className={urgentActions.length > 0 ? 'space-y-2 mt-3 pt-3 border-t border-white/[0.04]' : 'space-y-2'}>
+            <p className="text-white/20 text-[9px] uppercase tracking-widest mb-2">Custom Actions</p>
+            {warRoomActions.filter(a => a.status !== 'completed').map((action, idx) => (
+              <div key={action.id} className="flex items-center gap-3 bg-black/60 border border-red-500/15 rounded-xl p-4 group">
+                <div className="w-2.5 h-2.5 rounded-full bg-amber-400 flex-shrink-0" />
+                <AlertTriangle className="w-4 h-4 text-amber-400 flex-shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <p className="text-white/80 text-sm font-medium truncate">{action.title}</p>
+                  {action.subtitle && <p className="text-white/25 text-xs truncate">{action.subtitle}</p>}
+                </div>
+                <Button variant="ghost" size="sm" onClick={() => handleDeleteAction(action.id)} className="text-white/15 hover:text-red-400 hover:bg-red-500/10 h-7 w-7 p-0 opacity-0 group-hover:opacity-100 transition-opacity"><Trash2 className="w-3 h-3" /></Button>
+              </div>
+            ))}
           </div>
         )}
       </motion.div>
@@ -525,11 +632,33 @@ export function WarRoom() {
           <div className="p-1.5 rounded-lg bg-amber-500/10 border border-amber-500/20">
             <Target className="w-4 h-4 text-amber-400" />
           </div>
-          <div>
+          <div className="flex-1">
             <h3 className="text-white/80 text-sm font-semibold">High-Value Opportunities</h3>
-            <p className="text-white/20 text-[10px]">Top 5 clients by project value — not yet closed</p>
+            <p className="text-white/20 text-[10px]">Top clients + custom opportunities</p>
           </div>
+          <Button variant="ghost" size="sm" onClick={() => setShowAddOpp(!showAddOpp)} className="text-amber-400/60 hover:text-amber-400 hover:bg-amber-500/10 h-7 w-7 p-0 border border-amber-500/15">
+            <Plus className="w-3.5 h-3.5" />
+          </Button>
         </div>
+
+        {/* Add Opportunity Form */}
+        <AnimatePresence>
+          {showAddOpp && (
+            <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden mb-3">
+              <div className="bg-amber-500/5 border border-amber-500/15 rounded-xl p-4 space-y-3">
+                <input value={oppName} onChange={e => setOppName(e.target.value)} placeholder="Opportunity name..." className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-sm text-white/80 placeholder:text-white/20 focus:outline-none focus:border-amber-500/30" />
+                <div className="grid grid-cols-2 gap-3">
+                  <input value={oppValue} onChange={e => setOppValue(e.target.value)} placeholder="Value (₹)" type="number" className="bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-sm text-white/80 placeholder:text-white/20 focus:outline-none" />
+                  <input value={oppProb} onChange={e => setOppProb(e.target.value)} placeholder="Close %" type="number" className="bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-sm text-white/80 placeholder:text-white/20 focus:outline-none" />
+                </div>
+                <div className="flex gap-2">
+                  <Button onClick={handleAddOpp} disabled={submitting || !oppName.trim()} className="flex-1 bg-amber-500/20 hover:bg-amber-500/30 text-amber-400 border border-amber-500/20 text-xs h-8">{submitting ? 'Adding...' : 'Add Opportunity'}</Button>
+                  <Button variant="ghost" onClick={() => setShowAddOpp(false)} className="text-white/30 hover:text-white/60 h-8 w-8 p-0"><X className="w-3.5 h-3.5" /></Button>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {topOpportunities.length > 0 ? (
           <div className="space-y-3">
@@ -544,11 +673,44 @@ export function WarRoom() {
               />
             ))}
           </div>
-        ) : (
+        ) : warRoomOpportunities.filter(o => o.status === 'active').length === 0 ? (
           <div className="text-center py-8">
             <Users className="w-8 h-8 text-white/10 mx-auto mb-2" />
             <p className="text-white/30 text-sm">No active opportunities in pipeline</p>
-            <p className="text-white/15 text-xs mt-1">Add clients to start tracking high-value deals</p>
+            <p className="text-white/15 text-xs mt-1">Click + to add custom opportunities</p>
+          </div>
+        ) : null}
+
+        {/* Custom DB Opportunities */}
+        {warRoomOpportunities.filter(o => o.status === 'active').length > 0 && (
+          <div className={topOpportunities.length > 0 ? 'space-y-3 mt-3 pt-3 border-t border-white/[0.04]' : 'space-y-3'}>
+            <p className="text-white/20 text-[9px] uppercase tracking-widest mb-2">Custom Opportunities</p>
+            {warRoomOpportunities.filter(o => o.status === 'active').map((opp, idx) => (
+              <div key={opp.id} className="bg-black/60 border border-white/[0.04] rounded-xl p-4 hover:border-amber-500/15 transition-all group">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-lg bg-amber-500/5 border border-amber-500/10 flex items-center justify-center">
+                      <Target className="w-3.5 h-3.5 text-amber-400" />
+                    </div>
+                    <div>
+                      <p className="text-white/80 text-sm font-semibold">{opp.name}</p>
+                      <p className="text-white/25 text-[10px] uppercase tracking-wider">{opp.pipelineStage}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="gold-text text-lg font-bold">{formatINR(opp.projectValue)}</span>
+                    <Button variant="ghost" size="sm" onClick={() => handleDeleteOpp(opp.id)} className="text-white/15 hover:text-red-400 hover:bg-red-500/10 h-7 w-7 p-0 opacity-0 group-hover:opacity-100 transition-opacity"><Trash2 className="w-3 h-3" /></Button>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-white/20 text-[10px] uppercase tracking-wider">Close Probability</span>
+                  <span className={cn('text-sm font-bold', opp.closeProbability >= 60 ? 'text-emerald-400' : opp.closeProbability >= 30 ? 'text-amber-400' : 'text-red-400')}>{opp.closeProbability}%</span>
+                </div>
+                <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden mt-2">
+                  <div className={cn('h-full rounded-full', opp.closeProbability >= 60 ? 'bg-emerald-400' : opp.closeProbability >= 30 ? 'bg-amber-400' : 'bg-red-400')} style={{ width: `${opp.closeProbability}%` }} />
+                </div>
+              </div>
+            ))}
           </div>
         )}
       </motion.div>

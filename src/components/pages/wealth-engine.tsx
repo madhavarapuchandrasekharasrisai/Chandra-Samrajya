@@ -1,7 +1,7 @@
 'use client'
 
 import { useAppStore, type IncomeEntry } from '@/store/use-app-store'
-import { cn } from '@/lib/utils'
+import { cn, formatIndianCommas } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -53,7 +53,7 @@ function getMonthLabel(monthKey: string): string {
   return d.toLocaleDateString('en-IN', { month: 'short', year: '2-digit' })
 }
 
-/** Generate mock monthly data for previous months (for charts) */
+/** Generate real monthly data for previous months (for charts) */
 function generateMockMonthlyData(incomes: IncomeEntry[]) {
   const now = new Date()
   const months: { month: string; revenue: number }[] = []
@@ -67,17 +67,7 @@ function generateMockMonthlyData(incomes: IncomeEntry[]) {
       return incDate.getFullYear() === d.getFullYear() && incDate.getMonth() === d.getMonth()
     })
     const realRevenue = monthIncomes.reduce((s, inc) => s + inc.amount, 0)
-
-    // For current month, use real data; for past months with no data, use mock
-    if (i === 0) {
-      months.push({ month: key, revenue: realRevenue })
-    } else if (realRevenue > 0) {
-      months.push({ month: key, revenue: realRevenue })
-    } else {
-      // Generate plausible mock data
-      const mockRevenue = Math.round(30000 + Math.random() * 70000)
-      months.push({ month: key, revenue: mockRevenue })
-    }
+    months.push({ month: key, revenue: realRevenue })
   }
   return months
 }
@@ -107,16 +97,6 @@ function generateDailyTrend(incomes: IncomeEntry[], source: string) {
     })
   }
 
-  // If no real data, generate some mock trend
-  if (result.every(r => r.value === 0)) {
-    const base = INCOME_SOURCES.find(s => s.key === source)?.target || 10000
-    const dailyAvg = base / 30
-    return result.map((r, idx) => ({
-      ...r,
-      value: Math.round(dailyAvg * (0.3 + Math.random() * 1.4) * ((idx + 1) / result.length)),
-    }))
-  }
-
   return result
 }
 
@@ -143,16 +123,6 @@ function generateCumulativeDaily(incomes: IncomeEntry[]) {
     result.push({ day: String(d), cumulative })
   }
 
-  // Mock if no data
-  if (cumulative === 0) {
-    const mockTotal = 45000 + Math.random() * 55000
-    const days = Math.min(now.getDate(), daysInMonth)
-    return result.map((r, idx) => ({
-      ...r,
-      cumulative: Math.round((mockTotal / days) * (idx + 1) * (0.8 + Math.random() * 0.4)),
-    }))
-  }
-
   return result
 }
 
@@ -164,17 +134,33 @@ function generateStreamComparison(incomes: IncomeEntry[]) {
     return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear()
   })
 
-  return INCOME_SOURCES.map(src => {
+  const state = useAppStore.getState()
+  const getSourceLabel = (key: string) => {
+    if (key === 'Social Media Websites') return state.nameSocialMedia || 'Social Media Websites'
+    if (key === 'AI Automation') return state.nameAIAutomation || 'AI Automation'
+    if (key === 'Retainer Clients') return state.nameRetainer || 'Retainer Clients'
+    if (key === 'International Freelance') return state.nameFreelance || 'International Freelance'
+    return key
+  }
+
+  const dynamicSources = [
+    { key: 'Social Media Websites', label: getSourceLabel('Social Media Websites'), icon: Globe, color: 'sky-400', hex: '#38bdf8', target: state.targetSocialMedia },
+    { key: 'AI Automation', label: getSourceLabel('AI Automation'), icon: Bot, color: 'amber-400', hex: '#fbbf24', target: state.targetAIAutomation },
+    { key: 'Retainer Clients', label: getSourceLabel('Retainer Clients'), icon: Users, color: 'emerald-400', hex: '#34d399', target: state.targetRetainer },
+    { key: 'International Freelance', label: getSourceLabel('International Freelance'), icon: Briefcase, color: 'purple-400', hex: '#c084fc', target: state.targetFreelance },
+  ]
+
+  return dynamicSources.map(src => {
     const revenue = monthIncomes
       .filter(i => i.source === src.key)
       .reduce((s, i) => s + i.amount, 0)
 
-    // Mock if zero
-    const mockRevenue = revenue > 0 ? revenue : Math.round(src.target * (0.3 + Math.random() * 0.5))
+    // Truncate name if too long for chart label
+    const displayName = src.label.length > 15 ? src.label.slice(0, 15) + '...' : src.label;
 
     return {
-      source: src.key.split(' ').slice(0, 2).join(' '),
-      revenue: revenue > 0 ? revenue : mockRevenue,
+      source: displayName,
+      revenue: revenue,
       target: src.target,
       fill: src.hex,
     }
@@ -288,11 +274,38 @@ function IncomeStreamCard({
   source,
   incomes,
   delay,
+  onTargetChange,
+  onNameChange,
 }: {
   source: typeof INCOME_SOURCES[number]
   incomes: IncomeEntry[]
   delay: number
+  onTargetChange?: (key: string, value: number) => void
+  onNameChange?: (key: string, value: string) => void
 }) {
+  const {
+    targetSocialMedia, targetAIAutomation, targetRetainer, targetFreelance,
+    nameSocialMedia, nameAIAutomation, nameRetainer, nameFreelance
+  } = useAppStore()
+
+  const target = useMemo(() => {
+    if (source.key === 'Social Media Websites') return targetSocialMedia
+    if (source.key === 'AI Automation') return targetAIAutomation
+    if (source.key === 'Retainer Clients') return targetRetainer
+    if (source.key === 'International Freelance') return targetFreelance
+    return (source as any).target
+  }, [source.key, targetSocialMedia, targetAIAutomation, targetRetainer, targetFreelance])
+
+  const label = useMemo(() => {
+    const labels: Record<(typeof INCOME_SOURCES)[number]['key'], string> = {
+      'Social Media Websites': nameSocialMedia || 'Social Media Websites',
+      'AI Automation': nameAIAutomation || 'AI Automation',
+      'Retainer Clients': nameRetainer || 'Retainer Clients',
+      'International Freelance': nameFreelance || 'International Freelance',
+    }
+    return labels[source.key]
+  }, [source.key, nameSocialMedia, nameAIAutomation, nameRetainer, nameFreelance])
+
   const now = new Date()
   const prevMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1)
 
@@ -335,7 +348,7 @@ function IncomeStreamCard({
 
   const dailyTrend = useMemo(() => generateDailyTrend(incomes, source.key), [incomes, source.key])
 
-  const progressPercent = source.target > 0 ? Math.min(100, (currentRevenue / source.target) * 100) : 0
+  const progressPercent = target > 0 ? Math.min(100, (currentRevenue / target) * 100) : 0
 
   const Icon = source.icon
 
@@ -365,7 +378,7 @@ function IncomeStreamCard({
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.5, delay }}
       className={cn(
-        'bg-white/[0.03] backdrop-blur-xl border border-white/[0.06] border-t-2 rounded-2xl p-5 relative overflow-hidden group hover:border-white/[0.1] transition-all duration-300',
+        'bg-[#0e0e11] lg:bg-white/[0.03] lg:backdrop-blur-xl border border-white/[0.06] border-t-2 rounded-2xl p-5 relative overflow-hidden group hover:border-white/[0.1] transition-all duration-300',
         borderColorMap[source.color]
       )}
     >
@@ -374,18 +387,38 @@ function IncomeStreamCard({
 
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2.5">
-          <div className={cn('p-2 rounded-lg', iconBgMap[source.color])}>
+        <div className="flex items-center gap-2.5 z-10 w-full min-w-0">
+          <div className={cn('p-2 rounded-lg shrink-0', iconBgMap[source.color])}>
             <Icon className="w-4 h-4" />
           </div>
-          <div>
-            <h3 className="text-white/90 text-sm font-semibold">{source.label}</h3>
-            <p className="text-white/30 text-[10px] uppercase tracking-wider">Target: {formatINR(source.target)}</p>
+          <div className="flex-1 min-w-0 pr-2">
+            <input
+              type="text"
+              value={label}
+              onChange={(e) => {
+                onNameChange?.(source.key, e.target.value)
+              }}
+              placeholder="Stream Name"
+              className="bg-transparent font-semibold text-white/90 hover:border-b hover:border-white/20 focus:border-b focus:border-amber-400/50 text-sm outline-none w-full transition-all border-b border-transparent truncate"
+            />
+            <div className="flex items-center gap-1 mt-0.5" onClick={(e) => e.stopPropagation()}>
+              <span className="text-white/30 text-[10px] uppercase tracking-wider">Target: ₹</span>
+              <input
+                type="text"
+                value={target === 0 ? '' : target.toLocaleString('en-IN')}
+                onChange={(e) => {
+                  const rawVal = e.target.value.replace(/[^0-9]/g, '')
+                  const numVal = rawVal ? parseInt(rawVal) : 0
+                  onTargetChange?.(source.key, numVal)
+                }}
+                className="bg-transparent border-b border-white/5 hover:border-white/20 focus:border-b focus:border-amber-400/50 text-[10px] font-semibold text-white/50 focus:text-white outline-none w-16 px-0.5 transition-all"
+              />
+            </div>
           </div>
         </div>
         {growthPercent !== null && (
           <div className={cn(
-            'flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-medium',
+            'flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-medium shrink-0',
             growthPercent >= 0
               ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
               : 'bg-red-500/10 text-red-400 border border-red-500/20'
@@ -457,6 +490,15 @@ function IncomeStreamCard({
 // ─── Section 3: Add Income Panel ───────────────────────────────────────────
 
 function AddIncomePanel({ onAdded }: { onAdded: (income: IncomeEntry) => void }) {
+  const { nameSocialMedia, nameAIAutomation, nameRetainer, nameFreelance } = useAppStore()
+  const getSourceLabel = (key: string) => {
+    if (key === 'Social Media Websites') return nameSocialMedia || 'Social Media Websites'
+    if (key === 'AI Automation') return nameAIAutomation || 'AI Automation'
+    if (key === 'Retainer Clients') return nameRetainer || 'Retainer Clients'
+    if (key === 'International Freelance') return nameFreelance || 'International Freelance'
+    return key
+  }
+
   const [form, setForm] = useState({
     amount: '',
     source: '',
@@ -471,7 +513,7 @@ function AddIncomePanel({ onAdded }: { onAdded: (income: IncomeEntry) => void })
     e.preventDefault()
 
     // Validation
-    if (!form.amount || parseFloat(form.amount) <= 0) {
+    if (!form.amount || parseFloat(form.amount.replace(/,/g, '')) <= 0) {
       toast.error('Please enter a valid amount')
       return
     }
@@ -489,7 +531,7 @@ function AddIncomePanel({ onAdded }: { onAdded: (income: IncomeEntry) => void })
       const res = await fetch('/api/income', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...form, amount: parseFloat(form.amount) }),
+        body: JSON.stringify({ ...form, amount: parseFloat(form.amount.replace(/,/g, '')) }),
       })
 
       if (!res.ok) {
@@ -522,7 +564,7 @@ function AddIncomePanel({ onAdded }: { onAdded: (income: IncomeEntry) => void })
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.4 }}
-      className="bg-white/[0.03] backdrop-blur-xl border border-white/[0.06] rounded-2xl p-5"
+      className="bg-[#0e0e11] lg:bg-white/[0.03] lg:backdrop-blur-xl border border-white/[0.06] rounded-2xl p-5"
     >
       <div className="flex items-center gap-2 mb-5">
         <div className="p-1.5 rounded-lg bg-amber-400/10 border border-amber-400/20">
@@ -539,12 +581,10 @@ function AddIncomePanel({ onAdded }: { onAdded: (income: IncomeEntry) => void })
             <div className="relative">
               <IndianRupee className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-amber-400/50" />
               <Input
-                type="number"
-                min="0"
-                step="0.01"
+                type="text"
                 placeholder="0"
                 value={form.amount}
-                onChange={(e) => setForm(prev => ({ ...prev, amount: e.target.value }))}
+                onChange={(e) => setForm(prev => ({ ...prev, amount: formatIndianCommas(e.target.value) }))}
                 className="pl-9 bg-white/[0.04] border-white/[0.08] text-white/90 placeholder:text-white/20 focus:border-amber-500/30 focus:ring-amber-500/20"
               />
             </div>
@@ -560,7 +600,7 @@ function AddIncomePanel({ onAdded }: { onAdded: (income: IncomeEntry) => void })
               <SelectContent className="bg-[#1a1a1e] border-white/[0.08]">
                 {INCOME_SOURCES.map(src => (
                   <SelectItem key={src.key} value={src.key} className="text-white/80 focus:bg-white/[0.06] focus:text-white">
-                    {src.label}
+                    {getSourceLabel(src.key)}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -648,6 +688,15 @@ function IncomeTable({
   incomes: IncomeEntry[]
   onDelete: (id: string) => void
 }) {
+  const { nameSocialMedia, nameAIAutomation, nameRetainer, nameFreelance } = useAppStore()
+  const getSourceLabel = (key: string) => {
+    if (key === 'Social Media Websites') return nameSocialMedia || 'Social Media Websites'
+    if (key === 'AI Automation') return nameAIAutomation || 'AI Automation'
+    if (key === 'Retainer Clients') return nameRetainer || 'Retainer Clients'
+    if (key === 'International Freelance') return nameFreelance || 'International Freelance'
+    return key
+  }
+
   const [searchSource, setSearchSource] = useState<string>('all')
   const [sortField, setSortField] = useState<SortField>('date')
   const [sortDir, setSortDir] = useState<SortDir>('desc')
@@ -691,7 +740,7 @@ function IncomeTable({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.5 }}
-      className="bg-white/[0.03] backdrop-blur-xl border border-white/[0.06] rounded-2xl p-5"
+      className="bg-[#0e0e11] lg:bg-white/[0.03] lg:backdrop-blur-xl border border-white/[0.06] rounded-2xl p-5"
     >
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
@@ -708,7 +757,7 @@ function IncomeTable({
             <SelectContent className="bg-[#1a1a1e] border-white/[0.08]">
               <SelectItem value="all" className="text-white/80 focus:bg-white/[0.06]">All Sources</SelectItem>
               {INCOME_SOURCES.map(src => (
-                <SelectItem key={src.key} value={src.key} className="text-white/80 focus:bg-white/[0.06]">{src.label}</SelectItem>
+                <SelectItem key={src.key} value={src.key} className="text-white/80 focus:bg-white/[0.06]">{getSourceLabel(src.key)}</SelectItem>
               ))}
             </SelectContent>
           </Select>
@@ -724,7 +773,7 @@ function IncomeTable({
         </div>
       ) : (
         <>
-          <div className="overflow-x-auto -mx-5 px-5">
+          <div className="overflow-x-auto -mx-5 px-5 max-h-[350px] overflow-y-auto scrollbar-thin scrollbar-thumb-white/5 scrollbar-track-transparent pr-1">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-white/[0.06]">
@@ -767,7 +816,7 @@ function IncomeTable({
                           sourceConfig?.color === 'purple-400' && 'bg-purple-400/10 text-purple-400 border-purple-400/20',
                           !sourceConfig && 'bg-white/5 text-white/50 border-white/10',
                         )}>
-                          {income.source}
+                          {getSourceLabel(income.source)}
                         </span>
                       </td>
                       <td className="py-3 px-2 text-white/50 text-xs max-w-[120px] truncate">
@@ -877,7 +926,7 @@ function RevenueAnalytics({ incomes, monthlyIncome }: { incomes: IncomeEntry[]; 
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Monthly Growth Area Chart */}
-        <div className="bg-white/[0.03] backdrop-blur-xl border border-white/[0.06] rounded-2xl p-5">
+        <div className="bg-[#0e0e11] lg:bg-white/[0.03] lg:backdrop-blur-xl border border-white/[0.06] rounded-2xl p-5">
           <div className="flex items-center justify-between mb-4">
             <div>
               <p className="text-white/60 text-xs font-medium">Monthly Growth</p>
@@ -921,7 +970,7 @@ function RevenueAnalytics({ incomes, monthlyIncome }: { incomes: IncomeEntry[]; 
         </div>
 
         {/* Stream Comparison Bar Chart */}
-        <div className="bg-white/[0.03] backdrop-blur-xl border border-white/[0.06] rounded-2xl p-5">
+        <div className="bg-[#0e0e11] lg:bg-white/[0.03] lg:backdrop-blur-xl border border-white/[0.06] rounded-2xl p-5">
           <div className="flex items-center justify-between mb-4">
             <div>
               <p className="text-white/60 text-xs font-medium">Stream Comparison</p>
@@ -960,7 +1009,7 @@ function RevenueAnalytics({ incomes, monthlyIncome }: { incomes: IncomeEntry[]; 
         </div>
 
         {/* Income Velocity — full width */}
-        <div className="bg-white/[0.03] backdrop-blur-xl border border-white/[0.06] rounded-2xl p-5 lg:col-span-2">
+        <div className="bg-[#0e0e11] lg:bg-white/[0.03] lg:backdrop-blur-xl border border-white/[0.06] rounded-2xl p-5 lg:col-span-2">
           <div className="flex items-center justify-between mb-4">
             <div>
               <p className="text-white/60 text-xs font-medium">Income Velocity</p>
@@ -1013,7 +1062,26 @@ function RevenueAnalytics({ incomes, monthlyIncome }: { incomes: IncomeEntry[]; 
 // ─── Main Component ─────────────────────────────────────────────────────────
 
 export function WealthEngine() {
-  const { incomes, monthlyIncome, monthlyTarget, addIncome, removeIncome, setIncomes } = useAppStore()
+  const {
+    incomes,
+    monthlyIncome,
+    monthlyTarget,
+    targetSocialMedia,
+    targetAIAutomation,
+    targetRetainer,
+    targetFreelance,
+    setTargetSocialMedia,
+    setTargetAIAutomation,
+    setTargetRetainer,
+    setTargetFreelance,
+    setNameSocialMedia,
+    setNameAIAutomation,
+    setNameRetainer,
+    setNameFreelance,
+    addIncome,
+    removeIncome,
+    setIncomes
+  } = useAppStore()
 
   const handleAddIncome = (income: IncomeEntry) => {
     addIncome(income)
@@ -1026,6 +1094,62 @@ export function WealthEngine() {
       toast.success('Income record deleted')
     } catch {
       toast.error('Failed to delete income')
+    }
+  }
+
+  const handleTargetChange = async (key: string, value: number) => {
+    if (key === 'Social Media Websites') setTargetSocialMedia(value)
+    else if (key === 'AI Automation') setTargetAIAutomation(value)
+    else if (key === 'Retainer Clients') setTargetRetainer(value)
+    else if (key === 'International Freelance') setTargetFreelance(value)
+
+    try {
+      const now = new Date()
+      const monthStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`
+
+      const payload: Record<string, any> = { month: monthStr }
+      if (key === 'Social Media Websites') payload.targetSocialMedia = value
+      else if (key === 'AI Automation') payload.targetAIAutomation = value
+      else if (key === 'Retainer Clients') payload.targetRetainer = value
+      else if (key === 'International Freelance') payload.targetFreelance = value
+
+      await fetch('/api/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          monthlyTarget: payload
+        })
+      })
+    } catch (err) {
+      console.error('Failed to save dynamic stream target:', err)
+    }
+  }
+
+  const handleNameChange = async (key: string, name: string) => {
+    if (key === 'Social Media Websites') setNameSocialMedia(name)
+    else if (key === 'AI Automation') setNameAIAutomation(name)
+    else if (key === 'Retainer Clients') setNameRetainer(name)
+    else if (key === 'International Freelance') setNameFreelance(name)
+
+    try {
+      const now = new Date()
+      const monthStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`
+
+      const payload: Record<string, any> = { month: monthStr }
+      if (key === 'Social Media Websites') payload.nameSocialMedia = name
+      else if (key === 'AI Automation') payload.nameAIAutomation = name
+      else if (key === 'Retainer Clients') payload.nameRetainer = name
+      else if (key === 'International Freelance') payload.nameFreelance = name
+
+      await fetch('/api/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          monthlyTarget: payload
+        })
+      })
+    } catch (err) {
+      console.error('Failed to save dynamic stream name:', err)
     }
   }
 
@@ -1042,6 +1166,8 @@ export function WealthEngine() {
             source={source}
             incomes={incomes}
             delay={0.1 + idx * 0.08}
+            onTargetChange={handleTargetChange}
+            onNameChange={handleNameChange}
           />
         ))}
       </div>
