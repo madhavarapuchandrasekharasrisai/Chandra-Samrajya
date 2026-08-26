@@ -200,7 +200,7 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-[#08080a] relative">
+    <div className="min-h-screen bg-background relative">
       {/* Ambient background gradient */}
       <div className="fixed inset-0 ambient-gradient pointer-events-none" />
       
@@ -215,7 +215,7 @@ export default function Home() {
             <div className="flex items-center justify-center min-h-[60vh]">
               <div className="text-center">
                 <Loader2 className="w-8 h-8 text-amber-400 animate-spin mx-auto mb-4" />
-                <p className="text-white/30 text-sm">Loading DHANAVI SAMRAJYA...</p>
+                <p className="text-white/30 text-sm">Loading GOD SYSTEM...</p>
               </div>
             </div>
           ) : (

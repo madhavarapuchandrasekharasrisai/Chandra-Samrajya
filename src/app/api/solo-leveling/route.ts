@@ -3,8 +3,9 @@ import { soloLevelingStats, soloLevelingDailyLogs } from '@/db/schema';
 import { eq, and, gte, lt } from 'drizzle-orm';
 import { NextResponse } from 'next/server';
 import { calculateCurrentStats } from '@/lib/solo-leveling-calc';
+import { getClientDayBoundaries, evaluateDailyProtocols } from '@/lib/solo-leveling-server';
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
     // 1. Retrieve or initialize soloLevelingStats (baseline base stats)
     let statsList = await db.select().from(soloLevelingStats).limit(1);
@@ -43,10 +44,14 @@ export async function GET() {
       stats = statsList[0];
     }
 
-    // 2. Retrieve or initialize today's daily log (timezone-safe, beginning of day)
-    const now = new Date();
-    const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
-    const todayEnd = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0, 0);
+    // 2. Retrieve or initialize today's daily log (timezone-safe, aligned with client timezone)
+    const { todayStart, todayEnd } = getClientDayBoundaries(request);
+
+    // 3. Auto-evaluate all un-evaluated past daily logs before today start
+    const evaluatedStats = await evaluateDailyProtocols(todayStart);
+    if (evaluatedStats) {
+      stats = evaluatedStats;
+    }
 
     let dailyLogsList = await db.select()
       .from(soloLevelingDailyLogs)

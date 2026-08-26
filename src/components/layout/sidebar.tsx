@@ -19,10 +19,13 @@ import {
   LogOut,
   Briefcase,
   Flame,
+  Sun,
+  Moon,
 } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
+import { useTheme } from 'next-themes'
 
 const navItems: { id: PageType; label: string; icon: React.ReactNode }[] = [
   { id: 'overview', label: 'Executive Overview', icon: <Home className="w-4 h-4" /> },
@@ -57,6 +60,8 @@ const navSymbols: Record<PageType, string> = {
 export function Sidebar() {
   const router = useRouter()
   const supabase = createClient()
+  const { theme, setTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
 
   const { 
     currentPage, 
@@ -80,6 +85,7 @@ export function Sidebar() {
   }
 
   useEffect(() => {
+    setMounted(true)
     const checkMobile = () => setIsMobile(window.innerWidth < 1024)
     checkMobile()
     window.addEventListener('resize', checkMobile)
@@ -108,11 +114,13 @@ export function Sidebar() {
         className="glass-sidebar fixed left-0 top-0 h-full z-50 flex flex-col"
       >
         {/* Logo */}
-        <div className="p-4 flex items-center justify-between gap-3 border-b border-white/5">
+        <div className="p-4 flex items-center justify-between gap-3 border-b border-border/40">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500/20 to-amber-700/20 border border-amber-500/20 flex items-center justify-center flex-shrink-0">
-              <span className="text-amber-400 font-bold text-lg">D</span>
-            </div>
+            <img 
+              src="/logo.jpg" 
+              alt="God System Logo" 
+              className="w-10 h-10 rounded-xl object-cover border border-amber-500/30 flex-shrink-0"
+            />
             {(!sidebarCollapsed || isMobile) && (
               <motion.div
                 initial={{ opacity: 0 }}
@@ -120,8 +128,8 @@ export function Sidebar() {
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.2 }}
               >
-                <h1 className="gold-text font-bold text-sm tracking-wider">DHANAVI</h1>
-                <p className="text-[10px] text-white/30 tracking-widest uppercase">Samrajya</p>
+                <h1 className="gold-text font-bold text-sm tracking-wider">GOD SYSTEM</h1>
+                <p className="text-[10px] dark:text-white/30 text-slate-500 tracking-widest uppercase">Sovereign OS</p>
               </motion.div>
             )}
           </div>
@@ -130,9 +138,9 @@ export function Sidebar() {
           {isMobile && (
             <button
               onClick={() => setMobileMenuOpen(false)}
-              className="p-2 rounded-lg text-white/40 hover:text-white/70 hover:bg-white/5 transition-all lg:hidden"
+              className="p-2 rounded-lg dark:text-white/40 text-slate-500 hover:text-slate-900 dark:hover:text-white/70 hover:bg-slate-100 dark:hover:bg-white/5 transition-all lg:hidden"
             >
-              <ChevronLeft className="w-5 h-5 text-amber-400" />
+              <ChevronLeft className="w-5 h-5 text-amber-500 dark:text-amber-400" />
             </button>
           )}
         </div>
@@ -151,11 +159,11 @@ export function Sidebar() {
                 className={cn(
                   'nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all',
                   isActive
-                    ? 'active bg-amber-500/10 text-amber-400 border-l-2 border-amber-400'
-                    : 'text-white/50 hover:text-white/80 hover:bg-white/5 border-l-2 border-transparent'
+                    ? 'active bg-amber-500/10 text-amber-600 dark:text-amber-400 border-l-2 border-amber-500 dark:border-amber-400'
+                    : 'text-slate-600 dark:text-white/50 hover:text-slate-950 dark:hover:text-white/80 hover:bg-slate-100 dark:hover:bg-white/5 border-l-2 border-transparent'
                 )}
               >
-                <span className={cn('flex-shrink-0', isActive ? 'text-amber-400' : 'text-white/40')}>
+                <span className={cn('flex-shrink-0', isActive ? 'text-amber-600 dark:text-amber-400' : 'text-slate-400 dark:text-white/40')}>
                   {(sidebarCollapsed && !isMobile) ? <span className="text-base">{navSymbols[item.id]}</span> : item.icon}
                 </span>
                 {(!sidebarCollapsed || isMobile) && (
@@ -173,11 +181,32 @@ export function Sidebar() {
         </nav>
 
         {/* Bottom Info */}
-        <div className="p-3 space-y-3 border-t border-white/5">
+        <div className="p-3 space-y-2 border-t border-border/40">
+          {/* Morning / Night Toggle */}
+          {mounted && (
+            <button
+              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+              className="w-full flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-amber-500/5 dark:bg-amber-500/5 hover:bg-amber-500/10 border border-amber-500/10 hover:border-amber-500/20 text-amber-600 dark:text-amber-400 text-xs transition-all font-medium"
+              title={theme === 'dark' ? "Switch to Morning" : "Switch to Night"}
+            >
+              {theme === 'dark' ? (
+                <>
+                  <Sun className="w-3.5 h-3.5" />
+                  {(!sidebarCollapsed || isMobile) && <span>Morning Mode</span>}
+                </>
+              ) : (
+                <>
+                  <Moon className="w-3.5 h-3.5" />
+                  {(!sidebarCollapsed || isMobile) && <span>Night Mode</span>}
+                </>
+              )}
+            </button>
+          )}
+
           {/* Logout Button */}
           <button
             onClick={handleLogout}
-            className="w-full flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-red-500/5 hover:bg-red-500/10 border border-red-500/10 hover:border-red-500/20 text-red-400/85 hover:text-red-400 text-xs transition-all font-medium"
+            className="w-full flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-red-500/5 hover:bg-red-500/10 border border-red-500/10 hover:border-red-500/20 text-red-500 hover:text-red-400 text-xs transition-all font-medium"
             title="Logout Session"
           >
             <LogOut className="w-3.5 h-3.5" />
@@ -188,7 +217,7 @@ export function Sidebar() {
           {!isMobile && (
             <button
               onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-              className="w-full flex items-center justify-center gap-2 py-2 rounded-lg text-white/20 hover:text-white/50 hover:bg-white/5 transition-all"
+              className="w-full flex items-center justify-center gap-2 py-2 rounded-lg dark:text-white/20 text-slate-400 hover:text-white/50 hover:bg-white/5 transition-all"
             >
               {sidebarCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
               {!sidebarCollapsed && <span className="text-xs">Collapse</span>}

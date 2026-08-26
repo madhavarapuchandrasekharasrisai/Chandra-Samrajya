@@ -25,6 +25,12 @@ interface SoloLevelingState {
   fetchHistory: () => Promise<void>;
 }
 
+const getHeaders = (extra: Record<string, string> = {}) => ({
+  'x-client-date': new Date().toISOString(),
+  'x-timezone-offset': String(new Date().getTimezoneOffset()),
+  ...extra,
+});
+
 export const useSoloLevelingStore = create<SoloLevelingState>((set, get) => ({
   stats: null,
   baseStats: null,
@@ -35,7 +41,9 @@ export const useSoloLevelingStore = create<SoloLevelingState>((set, get) => ({
   fetchStats: async () => {
     set({ isLoading: true });
     try {
-      const res = await fetch('/api/solo-leveling');
+      const res = await fetch('/api/solo-leveling', {
+        headers: getHeaders(),
+      });
       if (res.ok) {
         const data = await res.json();
         set({
@@ -75,7 +83,7 @@ export const useSoloLevelingStore = create<SoloLevelingState>((set, get) => ({
     try {
       const res = await fetch('/api/solo-leveling/task', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify({ taskId, isCompleted }),
       });
       if (res.ok) {
@@ -111,7 +119,10 @@ export const useSoloLevelingStore = create<SoloLevelingState>((set, get) => ({
 
   resetDaily: async () => {
     try {
-      const res = await fetch('/api/solo-leveling/reset', { method: 'POST' });
+      const res = await fetch('/api/solo-leveling/reset', {
+        method: 'POST',
+        headers: getHeaders(),
+      });
       if (res.ok) {
         const result = await res.json();
         set({

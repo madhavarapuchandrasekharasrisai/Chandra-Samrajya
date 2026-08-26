@@ -97,6 +97,7 @@ export function SoloLeveling() {
   const [consoleLogs, setConsoleLogs] = useState<string[]>([])
   const [timeLeft, setTimeLeft] = useState('')
   const [claimingQuestId, setClaimingQuestId] = useState<string | null>(null)
+  const [showDiagnostic, setShowDiagnostic] = useState(false)
 
   const handlePurge = () => {
     if (window.confirm('⚠️ WARNING: This will completely purge all biometrics, streaks, milestones, and daily logs. Are you sure you want to reset your system to a Civilian state (start from zero)?')) {
@@ -159,6 +160,10 @@ export function SoloLeveling() {
       }
     }, 250)
 
+    const diagTimeout = setTimeout(() => {
+      setShowDiagnostic(true)
+    }, 4000)
+
     const progressInterval = setInterval(() => {
       setBootProgress(prev => {
         const currentStats = useSoloLevelingStore.getState().stats
@@ -178,6 +183,7 @@ export function SoloLeveling() {
     return () => {
       clearInterval(logInterval)
       clearInterval(progressInterval)
+      clearTimeout(diagTimeout)
     }
   }, [fetchStats])
 
@@ -407,7 +413,7 @@ export function SoloLeveling() {
             <div className="max-w-md w-full space-y-6">
               <div className="flex items-center justify-center gap-3">
                 <Flame className="w-10 h-10 text-orange-500 animate-pulse" />
-                <h1 className="text-2xl font-black text-white tracking-widest font-mono">SAMRAJYA</h1>
+                <h1 className="text-2xl font-black text-white tracking-widest font-mono">GOD SYSTEM</h1>
               </div>
               <div className="border border-white/10 rounded-xl p-4 bg-black/60 font-mono text-[10px] space-y-1.5 text-white/50 h-36 overflow-hidden">
                 {consoleLogs.map((log, i) => (
@@ -426,6 +432,33 @@ export function SoloLeveling() {
                   <span>{bootProgress}%</span>
                 </div>
               </div>
+
+              {showDiagnostic && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mt-6 border border-yellow-500/20 bg-yellow-950/10 rounded-xl p-4 space-y-3 text-center"
+                >
+                  <div className="flex items-center justify-center gap-2 text-yellow-500 font-mono text-[10px] font-bold">
+                    <AlertTriangle className="w-4 h-4 animate-bounce text-yellow-500" />
+                    <span>DATABASE SYNCHRONIZATION DELAYED</span>
+                  </div>
+                  <p className="text-[9px] text-white/50 font-mono leading-relaxed max-w-sm mx-auto">
+                    The system is waiting for database synchronization. If you just deployed, make sure to add your database environment variables (DATABASE_URL, NEXT_PUBLIC_SUPABASE_URL, and NEXT_PUBLIC_SUPABASE_ANON_KEY) in your Vercel project settings and redeploy.
+                  </p>
+                  <button
+                    onClick={() => {
+                      setSystemBooting(false);
+                      toast.info("Offline System Mode loaded. Showing biometrics baseline.", {
+                        description: "Establish a database connection to sync live statistics.",
+                      });
+                    }}
+                    className="w-full py-1.5 px-3 border border-orange-500/30 hover:border-orange-500/60 bg-orange-950/20 text-orange-400 hover:text-orange-300 font-mono text-[9px] font-bold rounded-lg transition-all"
+                  >
+                    ⚡ BYPASS SYNC & ENTER OFFLINE PROTOCOL
+                  </button>
+                </motion.div>
+              )}
             </div>
           </motion.div>
         )}
@@ -490,8 +523,8 @@ export function SoloLeveling() {
               )}
             </h1>
             
-            <p className="text-white/40 text-xs mt-2.5 max-w-xl font-medium leading-relaxed">
-              Dhanavi Samrajya RPG Engine. Keep core streaks intact to secure massive multipliers. Faltering triggers combat degradation and accelerated stat decay.
+            <p className="text-slate-500 dark:text-white/40 text-xs mt-2.5 max-w-xl font-medium leading-relaxed">
+              God System RPG Engine. Keep core streaks intact to secure massive multipliers. Faltering triggers combat degradation and accelerated stat decay.
             </p>
           </div>
 
@@ -633,7 +666,7 @@ export function SoloLeveling() {
             <>
               <div className="thunder-sky-overlay" />
               <div className="thunder-sky-flash" />
-              <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-20 z-0" viewBox="0 0 100 100" preserveAspectRatio="none">
+              <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-40 z-0" viewBox="0 0 100 100" preserveAspectRatio="none">
                 <defs>
                   <linearGradient id="lightningGrad" x1="0%" y1="0%" x2="0%" y2="100%">
                     <stop offset="0%" stopColor="#00f5d4" />
@@ -674,18 +707,44 @@ export function SoloLeveling() {
                   className="animate-lightning-bolt-1" 
                 />
                 <path 
-                  d="M 75 0 L 72 12 L 78 24 L 69 40 L 74 54 L 66 72" 
+                  d="M 75 0 L 72 12 L 78 24 L 69 40 L 74 54 L 66 72 L 70 85 L 65 100" 
                   stroke="url(#lightningGrad)" 
                   strokeWidth="0.25" 
                   fill="none" 
                   filter="url(#lightningGlow)" 
                   className="animate-lightning-bolt-2" 
                 />
+                {/* Extra Central Dynamic Bolt */}
+                <path 
+                  d="M 20 0 L 25 15 L 18 35 L 28 50 L 22 75 L 30 100" 
+                  stroke="url(#lightningGrad)" 
+                  strokeWidth="0.28" 
+                  fill="none" 
+                  filter="url(#lightningGlow)" 
+                  className="animate-lightning-bolt-5" 
+                />
+                <path 
+                  d="M 55 0 L 52 20 L 60 42 L 53 65 L 58 82 L 50 100" 
+                  stroke="url(#lightningGrad)" 
+                  strokeWidth="0.3" 
+                  fill="none" 
+                  filter="url(#lightningGlow)" 
+                  className="animate-lightning-bolt-6" 
+                />
                 {/* Top-left corner bolt */}
                 <path 
                   d="M 0 8 L 12 15 L 8 22 L 22 32 L 18 40 L 35 52 L 30 58" 
                   stroke="url(#lightningGradTL)" 
                   strokeWidth="0.3" 
+                  fill="none" 
+                  filter="url(#lightningGlow)" 
+                  className="animate-lightning-bolt-3" 
+                />
+                {/* Fork on top-left corner bolt */}
+                <path 
+                  d="M 12 15 L 20 12 L 28 22" 
+                  stroke="url(#lightningGradTL)" 
+                  strokeWidth="0.2" 
                   fill="none" 
                   filter="url(#lightningGlow)" 
                   className="animate-lightning-bolt-3" 
@@ -708,6 +767,15 @@ export function SoloLeveling() {
                   filter="url(#lightningGlow)" 
                   className="animate-lightning-bolt-3" 
                 />
+                {/* Extra Bottom-left bolt */}
+                <path 
+                  d="M 0 70 L 10 75 L 8 85 L 18 90" 
+                  stroke="url(#lightningGradBL)" 
+                  strokeWidth="0.2" 
+                  fill="none" 
+                  filter="url(#lightningGlow)" 
+                  className="animate-lightning-bolt-5" 
+                />
                 {/* Bottom-right corner bolt */}
                 <path 
                   d="M 95 100 L 86 90 L 92 82 L 80 72 L 85 65 L 72 55" 
@@ -716,6 +784,15 @@ export function SoloLeveling() {
                   fill="none" 
                   filter="url(#lightningGlow)" 
                   className="animate-lightning-bolt-4" 
+                />
+                {/* Extra Bottom-right bolt */}
+                <path 
+                  d="M 100 75 L 90 80 L 93 90" 
+                  stroke="url(#lightningGradBR)" 
+                  strokeWidth="0.2" 
+                  fill="none" 
+                  filter="url(#lightningGlow)" 
+                  className="animate-lightning-bolt-6" 
                 />
               </svg>
             </>
@@ -826,7 +903,7 @@ export function SoloLeveling() {
             <div className="absolute inset-0 z-0 pointer-events-none">
               <div className="thunder-sky-overlay" />
               <div className="thunder-sky-flash" />
-              <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-20 z-0" viewBox="0 0 100 100" preserveAspectRatio="none">
+              <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-40 z-0" viewBox="0 0 100 100" preserveAspectRatio="none">
                 <defs>
                   <linearGradient id="lightningGradB" x1="0%" y1="0%" x2="0%" y2="100%">
                     <stop offset="0%" stopColor="#00f5d4" />
@@ -867,18 +944,44 @@ export function SoloLeveling() {
                   className="animate-lightning-bolt-1" 
                 />
                 <path 
-                  d="M 75 0 L 72 12 L 78 24 L 69 40 L 74 54 L 66 72" 
+                  d="M 75 0 L 72 12 L 78 24 L 69 40 L 74 54 L 66 72 L 70 85 L 65 100" 
                   stroke="url(#lightningGradB)" 
                   strokeWidth="0.25" 
                   fill="none" 
                   filter="url(#lightningGlowB)" 
                   className="animate-lightning-bolt-2" 
                 />
+                {/* Extra Central Dynamic Bolt */}
+                <path 
+                  d="M 20 0 L 25 15 L 18 35 L 28 50 L 22 75 L 30 100" 
+                  stroke="url(#lightningGradB)" 
+                  strokeWidth="0.28" 
+                  fill="none" 
+                  filter="url(#lightningGlowB)" 
+                  className="animate-lightning-bolt-5" 
+                />
+                <path 
+                  d="M 55 0 L 52 20 L 60 42 L 53 65 L 58 82 L 50 100" 
+                  stroke="url(#lightningGradB)" 
+                  strokeWidth="0.3" 
+                  fill="none" 
+                  filter="url(#lightningGlowB)" 
+                  className="animate-lightning-bolt-6" 
+                />
                 {/* Top-left corner bolt */}
                 <path 
                   d="M 0 8 L 12 15 L 8 22 L 22 32 L 18 40 L 35 52 L 30 58" 
                   stroke="url(#lightningGradTLB)" 
                   strokeWidth="0.3" 
+                  fill="none" 
+                  filter="url(#lightningGlowB)" 
+                  className="animate-lightning-bolt-3" 
+                />
+                {/* Fork on top-left corner bolt */}
+                <path 
+                  d="M 12 15 L 20 12 L 28 22" 
+                  stroke="url(#lightningGradTLB)" 
+                  strokeWidth="0.2" 
                   fill="none" 
                   filter="url(#lightningGlowB)" 
                   className="animate-lightning-bolt-3" 
@@ -901,6 +1004,15 @@ export function SoloLeveling() {
                   filter="url(#lightningGlowB)" 
                   className="animate-lightning-bolt-3" 
                 />
+                {/* Extra Bottom-left bolt */}
+                <path 
+                  d="M 0 70 L 10 75 L 8 85 L 18 90" 
+                  stroke="url(#lightningGradBLB)" 
+                  strokeWidth="0.2" 
+                  fill="none" 
+                  filter="url(#lightningGlowB)" 
+                  className="animate-lightning-bolt-5" 
+                />
                 {/* Bottom-right corner bolt */}
                 <path 
                   d="M 95 100 L 86 90 L 92 82 L 80 72 L 85 65 L 72 55" 
@@ -909,6 +1021,15 @@ export function SoloLeveling() {
                   fill="none" 
                   filter="url(#lightningGlowB)" 
                   className="animate-lightning-bolt-4" 
+                />
+                {/* Extra Bottom-right bolt */}
+                <path 
+                  d="M 100 75 L 90 80 L 93 90" 
+                  stroke="url(#lightningGradBRB)" 
+                  strokeWidth="0.2" 
+                  fill="none" 
+                  filter="url(#lightningGlowB)" 
+                  className="animate-lightning-bolt-6" 
                 />
               </svg>
               <div className="premium-scanline" />

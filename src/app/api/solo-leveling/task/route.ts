@@ -3,6 +3,7 @@ import { soloLevelingStats, soloLevelingDailyLogs } from '@/db/schema';
 import { eq, and, gte, lt } from 'drizzle-orm';
 import { NextRequest, NextResponse } from 'next/server';
 import { DAILY_CORE_PROTOCOLS, calculateCurrentStats } from '@/lib/solo-leveling-calc';
+import { getClientDayBoundaries } from '@/lib/solo-leveling-server';
 
 export async function POST(request: NextRequest) {
   try {
@@ -21,9 +22,7 @@ export async function POST(request: NextRequest) {
     const stats = statsList[0];
 
     // 2. Find today's daily log timezone-safely
-    const now = new Date();
-    const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
-    const todayEnd = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0, 0);
+    const { todayStart, todayEnd } = getClientDayBoundaries(request);
 
     let dailyLogsList = await db.select()
       .from(soloLevelingDailyLogs)

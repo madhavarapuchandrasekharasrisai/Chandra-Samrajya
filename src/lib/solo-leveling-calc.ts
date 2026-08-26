@@ -465,6 +465,23 @@ export function calculateCurrentStats(baseStats: SoloLevelingStats, completedTas
     }
   }
 
+  // Dynamic streak and failure state projection when all core tasks are completed today
+  const completedCoreTasks = sortedTaskIds.filter(id => DAILY_CORE_PROTOCOLS.some(ct => ct.id === id)).length;
+  const isPerfectToday = completedCoreTasks === DAILY_CORE_PROTOCOLS.length;
+
+  let perfectStreak = baseStats.perfectStreak;
+  let weeklyStreak = baseStats.weeklyStreak;
+  let failureState = baseStats.failureState;
+
+  if (isPerfectToday) {
+    failureState = 0;
+    perfectStreak += 1;
+    if (perfectStreak > 0 && perfectStreak % 7 === 0) {
+      weeklyStreak += 1;
+      xpMultiplier = Math.min(3.0, Number((xpMultiplier + 0.1).toFixed(2)));
+    }
+  }
+
   // Enforce min/max boundaries
   strength = Math.max(10, Math.min(999, strength));
   agility = Math.max(10, Math.min(999, agility));
@@ -502,7 +519,7 @@ export function calculateCurrentStats(baseStats: SoloLevelingStats, completedTas
   ) * finalXpMultiplier;
 
   // Apply failure state reduction
-  const powerLevel = baseStats.failureState === 1 ? Math.floor(rawPowerLevel * 0.8) : Math.floor(rawPowerLevel);
+  const powerLevel = failureState === 1 ? Math.floor(rawPowerLevel * 0.8) : Math.floor(rawPowerLevel);
 
   // Ranks
   let currentRank = 'Civilian';
@@ -535,5 +552,8 @@ export function calculateCurrentStats(baseStats: SoloLevelingStats, completedTas
     xpMultiplier: finalXpMultiplier,
     currentRank,
     level: getLevelFromPower(powerLevel),
+    perfectStreak,
+    weeklyStreak,
+    failureState,
   };
 }

@@ -43,7 +43,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#08080a] flex items-center justify-center px-4 relative overflow-hidden select-none">
+    <div className="min-h-screen bg-background flex items-center justify-center px-4 relative overflow-hidden select-none">
       {/* Ambient glowing backgrounds */}
       <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-[#d4a849]/5 blur-[120px] pointer-events-none" />
       <div className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full bg-[#b8860b]/5 blur-[120px] pointer-events-none" />
@@ -57,9 +57,9 @@ export default function LoginPage() {
             <ShieldCheck className="w-9 h-9 text-[#08080a] stroke-[1.8]" />
           </div>
           <h1 className="gold-text text-2xl sm:text-3xl font-extrabold tracking-wider uppercase font-serif mb-2">
-            SAMRAJYA
+            GOD SYSTEM
           </h1>
-          <p className="text-white/40 text-[10px] sm:text-xs font-medium tracking-[0.2em] uppercase">
+          <p className="dark:text-white/40 text-slate-500 text-[10px] sm:text-xs font-medium tracking-[0.2em] uppercase">
             Sovereign OS Access Key
           </p>
         </div>
@@ -77,8 +77,8 @@ export default function LoginPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="chandra@samrajya.co"
-                className="w-full pl-11 pr-5 py-3.5 bg-black/40 border border-[#d4a849]/20 rounded-xl text-sm text-white placeholder-white/20 focus:outline-none focus:ring-1 focus:ring-[#d4a849]/50 focus:border-[#d4a849]/60 transition-all duration-300"
+                placeholder="chandra@godsystem.co"
+                className="w-full pl-11 pr-5 py-3.5 bg-black/40 border border-[#d4a849]/20 rounded-xl text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-white/20 focus:outline-none focus:ring-1 focus:ring-[#d4a849]/50 focus:border-[#d4a849]/60 transition-all duration-300"
               />
             </div>
           </div>
@@ -117,10 +117,10 @@ export default function LoginPage() {
         </form>
 
         {/* Footer */}
-        <div className="mt-10 pt-6 border-t border-white/[0.03] text-center">
+        <div className="mt-10 pt-6 border-t border-border/40 text-center">
           <p className="text-[9px] text-[#d4a849]/60 font-semibold uppercase tracking-[0.15em] leading-relaxed">
             Secure Handshake Protocol • Active Guard<br />
-            Dhanavi Samrajya v0.2.0
+            God System v0.2.0
           </p>
         </div>
       </div>
