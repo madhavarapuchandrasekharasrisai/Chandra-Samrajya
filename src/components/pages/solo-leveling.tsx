@@ -1206,25 +1206,25 @@ export function SoloLeveling() {
             
             <div className="grid grid-cols-2 gap-2 text-[10px] font-mono">
               {[
-                { label: 'Strength ⚔️', value: stats.strength, color: 'text-red-400 bg-red-950/10 border-red-500/5' },
-                { label: 'Agility ⚡', value: stats.agility, color: 'text-orange-400 bg-orange-950/10 border-orange-500/5' },
-                { label: 'Intelligence 🧠', value: stats.intelligence, color: 'text-purple-400 bg-purple-950/10 border-purple-500/5' },
-                { label: 'Memory 💾', value: stats.memory, color: 'text-indigo-400 bg-indigo-950/10 border-indigo-500/5' },
-                { label: 'Discipline 🛡️', value: stats.discipline, color: 'text-pink-400 bg-pink-950/10 border-pink-500/5' },
-                { label: 'Focus 🎯', value: stats.focus, color: 'text-amber-400 bg-amber-950/10 border-amber-500/5' },
-                { label: 'Communication 🗣️', value: stats.communication, color: 'text-cyan-400 bg-cyan-950/10 border-cyan-500/5' },
-                { label: 'Confidence 👑', value: stats.confidence, color: 'text-yellow-400 bg-yellow-950/10 border-yellow-500/5' },
-                { label: 'Stability ☯️', value: stats.stability, color: 'text-emerald-400 bg-emerald-950/10 border-emerald-500/5' },
-                { label: 'Career XP 💼', value: stats.careerXp, color: 'text-blue-400 bg-blue-950/10 border-blue-500/5' },
+                { label: 'Strength ⚔️', value: stats.strength, color: 'text-red-700 bg-red-50/70 border-red-100 dark:text-red-400 dark:bg-red-950/10 dark:border-red-500/5' },
+                { label: 'Agility ⚡', value: stats.agility, color: 'text-orange-700 bg-orange-50/70 border-orange-100 dark:text-orange-400 dark:bg-orange-950/10 dark:border-orange-500/5' },
+                { label: 'Intelligence 🧠', value: stats.intelligence, color: 'text-purple-700 bg-purple-50/70 border-purple-100 dark:text-purple-400 dark:bg-purple-950/10 dark:border-purple-500/5' },
+                { label: 'Memory 💾', value: stats.memory, color: 'text-indigo-700 bg-indigo-50/70 border-indigo-100 dark:text-indigo-400 dark:bg-indigo-950/10 dark:border-indigo-500/5' },
+                { label: 'Discipline 🛡️', value: stats.discipline, color: 'text-pink-700 bg-pink-50/70 border-pink-100 dark:text-pink-400 dark:bg-pink-950/10 dark:border-pink-500/5' },
+                { label: 'Focus 🎯', value: stats.focus, color: 'text-amber-700 bg-amber-50/70 border-amber-100 dark:text-amber-400 dark:bg-amber-950/10 dark:border-amber-500/5' },
+                { label: 'Communication 🗣️', value: stats.communication, color: 'text-cyan-700 bg-cyan-50/70 border-cyan-100 dark:text-cyan-400 dark:bg-cyan-950/10 dark:border-cyan-500/5' },
+                { label: 'Confidence 👑', value: stats.confidence, color: 'text-yellow-800 bg-yellow-50/70 border-yellow-100 dark:text-yellow-400 dark:bg-yellow-950/10 dark:border-yellow-500/5' },
+                { label: 'Stability ☯️', value: stats.stability, color: 'text-emerald-700 bg-emerald-50/70 border-emerald-100 dark:text-emerald-400 dark:bg-emerald-950/10 dark:border-emerald-500/5' },
+                { label: 'Career XP 💼', value: stats.careerXp, color: 'text-blue-700 bg-blue-50/70 border-blue-100 dark:text-blue-400 dark:bg-blue-950/10 dark:border-blue-500/5' },
               ].map((stat, i) => (
                 <div 
                   key={i} 
                   className={cn(
-                    "flex items-center justify-between p-1.5 md:p-2 rounded-xl border transition-all duration-300 hover:bg-white/[0.04] select-none",
-                    stats.failureState === 1 ? "bg-red-950/5 border-red-500/5 hover:bg-red-950/10" : stat.color
+                    "flex items-center justify-between p-1.5 md:p-2 rounded-xl border transition-all duration-300 hover:opacity-90 select-none",
+                    stats.failureState === 1 ? "bg-red-950/5 border-red-500/5" : stat.color
                   )}
                 >
-                  <span className="text-white/50">{stat.label}</span>
+                  <span className="text-inherit opacity-75">{stat.label}</span>
                   <span className="font-black text-xs">
                     <AnimateNumber value={stat.value} />
                   </span>
@@ -1263,21 +1263,21 @@ export function SoloLeveling() {
                     className={cn(
                       "flex items-start justify-between p-3 rounded-xl border transition-all duration-300 cursor-pointer select-none gap-3",
                       isDone 
-                        ? "bg-orange-500/10 border-orange-500/35 text-white" 
-                        : "bg-white/[0.01] border-white/[0.04] text-white/50 hover:bg-white/[0.03] hover:border-white/[0.08]"
+                        ? "bg-orange-50 border-orange-200 text-orange-950 dark:bg-orange-500/10 dark:border-orange-500/35 dark:text-white" 
+                        : "bg-white dark:bg-white/[0.01] border-gray-100 dark:border-white/[0.04] text-gray-700 dark:text-white/50 hover:bg-gray-50 dark:hover:bg-white/[0.03] hover:border-gray-200 dark:hover:border-white/[0.08]"
                     )}
                   >
                     <div className="flex items-start gap-2.5 min-w-0 pr-1">
                       <div className={cn(
                         "w-4.5 h-4.5 rounded border flex items-center justify-center flex-shrink-0 transition-all mt-0.5",
-                        isDone ? "border-orange-500 bg-orange-500" : "border-white/20"
+                        isDone ? "border-orange-500 bg-orange-500" : "border-gray-300 dark:border-white/20"
                       )}>
-                        {isDone && <CheckCircle className="w-3.5 h-3.5 text-black stroke-[3]" />}
+                        {isDone && <CheckCircle className="w-3.5 h-3.5 text-white dark:text-black stroke-[3]" />}
                       </div>
                       <span className="text-[11px] font-semibold tracking-wide text-left leading-relaxed whitespace-normal break-words">{task.label}</span>
                     </div>
                     
-                    <div className="text-[8px] sm:text-[9px] font-mono font-semibold px-2 py-0.5 rounded bg-[#f97316]/5 border border-[#f97316]/10 text-orange-400 flex-shrink-0 mt-0.5">
+                    <div className="text-[8px] sm:text-[9px] font-mono font-semibold px-2 py-0.5 rounded bg-orange-100/50 border border-orange-200 text-orange-700 dark:bg-[#f97316]/5 dark:border-[#f97316]/10 dark:text-orange-400 flex-shrink-0 mt-0.5">
                       {Object.entries(task.rewards).map(([stat, val]) => `+${val.toFixed(1)} ${getShortStatName(stat)}`).join(' ')}
                     </div>
                   </div>
@@ -1323,21 +1323,21 @@ export function SoloLeveling() {
                       className={cn(
                         "flex items-start justify-between p-3 rounded-xl border transition-all duration-300 cursor-pointer select-none gap-3",
                         isDone 
-                          ? "bg-orange-500/10 border-orange-500/35 text-white" 
-                          : "bg-white/[0.01] border-white/[0.04] text-white/50 hover:bg-white/[0.03] hover:border-white/[0.08]"
+                          ? "bg-orange-50 border-orange-200 text-orange-950 dark:bg-orange-500/10 dark:border-orange-500/35 dark:text-white" 
+                          : "bg-white dark:bg-white/[0.01] border-gray-100 dark:border-white/[0.04] text-gray-700 dark:text-white/50 hover:bg-gray-50 dark:hover:bg-white/[0.03] hover:border-gray-200 dark:hover:border-white/[0.08]"
                       )}
                     >
                       <div className="flex items-start gap-2.5 min-w-0 pr-1">
                         <div className={cn(
                           "w-4.5 h-4.5 rounded border flex items-center justify-center flex-shrink-0 transition-all mt-0.5",
-                          isDone ? "border-orange-500 bg-orange-500" : "border-white/20"
+                          isDone ? "border-orange-500 bg-orange-500" : "border-gray-300 dark:border-white/20"
                         )}>
-                          {isDone && <CheckCircle className="w-3.5 h-3.5 text-black stroke-[3]" />}
+                          {isDone && <CheckCircle className="w-3.5 h-3.5 text-white dark:text-black stroke-[3]" />}
                         </div>
                         <span className="text-[11px] font-semibold tracking-wide text-left leading-relaxed whitespace-normal break-words">{task.label}</span>
                       </div>
                       
-                      <div className="text-[8px] sm:text-[9px] font-mono font-semibold px-2 py-0.5 rounded bg-[#f97316]/5 border border-[#f97316]/10 text-orange-400 flex-shrink-0 mt-0.5">
+                      <div className="text-[8px] sm:text-[9px] font-mono font-semibold px-2 py-0.5 rounded bg-orange-100/50 border border-orange-200 text-orange-700 dark:bg-[#f97316]/5 dark:border-[#f97316]/10 dark:text-orange-400 flex-shrink-0 mt-0.5">
                         {Object.entries(task.rewards).map(([stat, val]) => `+${val.toFixed(1)} ${getShortStatName(stat)}`).join(' ')}
                       </div>
                     </div>

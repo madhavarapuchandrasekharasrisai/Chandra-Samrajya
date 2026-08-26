@@ -912,11 +912,11 @@ export function ExecutiveOverview() {
                 </div>
                 <Button
                   onClick={() => setCurrentPage('calendar')}
-                  variant="outline"
+                  variant="ghost"
                   size="sm"
-                  className="relative overflow-hidden bg-gradient-to-r from-amber-500/15 via-amber-600/10 to-amber-500/15 hover:from-amber-500/25 hover:via-amber-600/20 hover:to-amber-500/25 border-amber-500/40 hover:border-amber-500/70 text-amber-400 text-xs font-semibold gap-2 rounded-xl h-9 px-4 transition-all duration-300 transform hover:-translate-y-0.5 hover:shadow-[0_0_20px_rgba(245,158,11,0.3)] shadow-[0_0_12px_rgba(245,158,11,0.12)]"
+                  className="imperial-calendar-btn gap-2 rounded-xl h-9 px-4 shadow-sm"
                 >
-                  <CalendarClock className="w-4 h-4 text-amber-400" />
+                  <CalendarClock className="w-4 h-4 text-inherit" />
                   <span>Imperial Calendar</span>
                   <span className="relative flex h-1.5 w-1.5 ml-0.5">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
@@ -928,13 +928,13 @@ export function ExecutiveOverview() {
               {/* Key Stats Grid - adapted to 2 columns for beautiful spacing inside the split */}
               <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-4">
                 {/* Revenue This Month */}
-                <div className="bg-[#0a0a0c] lg:bg-white/[0.02] lg:backdrop-blur-sm border border-white/[0.05] rounded-xl p-3 sm:p-4 min-w-0">
+                <div className="premium-stats-card rounded-xl p-3 sm:p-4 min-w-0">
                   <p className="text-white/30 text-[9px] sm:text-[10px] uppercase tracking-wider mb-1 truncate">Revenue This Month</p>
                   <p className="gold-text text-sm sm:text-xl font-bold truncate">{formatINR(monthlyIncome)}</p>
                 </div>
 
                 {/* Remaining to Target */}
-                <div className="bg-[#0a0a0c] lg:bg-white/[0.02] lg:backdrop-blur-sm border border-white/[0.05] rounded-xl p-3 sm:p-4 min-w-0">
+                <div className="premium-stats-card rounded-xl p-3 sm:p-4 min-w-0">
                   <p className="text-white/30 text-[9px] sm:text-[10px] uppercase tracking-wider mb-1 truncate">Remaining to Target</p>
                   <p className={cn(
                     'text-sm sm:text-xl font-bold truncate',
@@ -945,14 +945,14 @@ export function ExecutiveOverview() {
                 </div>
 
                 {/* Strongest Stream */}
-                <div className="bg-[#0a0a0c] lg:bg-white/[0.02] lg:backdrop-blur-sm border border-white/[0.05] rounded-xl p-3 sm:p-4 min-w-0">
+                <div className="premium-stats-card rounded-xl p-3 sm:p-4 min-w-0">
                   <p className="text-white/30 text-[9px] sm:text-[10px] uppercase tracking-wider mb-1 truncate">Strongest Stream</p>
                   <p className="text-emerald-400 text-xs sm:text-sm font-semibold truncate">{strongestStream.source}</p>
                   <p className="text-white/40 text-[10px] sm:text-xs truncate">{formatINR(strongestStream.amount)}</p>
                 </div>
 
                 {/* Weakest Stream */}
-                <div className="bg-[#0a0a0c] lg:bg-white/[0.02] lg:backdrop-blur-sm border border-white/[0.05] rounded-xl p-3 sm:p-4 min-w-0">
+                <div className="premium-stats-card rounded-xl p-3 sm:p-4 min-w-0">
                   <p className="text-white/30 text-[9px] sm:text-[10px] uppercase tracking-wider mb-1 truncate">Weakest Stream</p>
                   <p className="text-amber-400/70 text-xs sm:text-sm font-semibold truncate">{weakestStream.source}</p>
                   <p className="text-white/40 text-[10px] sm:text-xs truncate">{formatINR(weakestStream.amount)}</p>

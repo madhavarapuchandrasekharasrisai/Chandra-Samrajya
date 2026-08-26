@@ -802,5 +802,68 @@
   color: rgba(0, 0, 0, 0.8) !important;
 }
 
+/* Premium Metric & Stats Card Overrides for Morning/Light Mode */
+:root:not(.dark) .premium-stats-card {
+  background-color: #ffffff !important;
+  background-image: linear-gradient(135deg, #ffffff, rgba(212, 168, 73, 0.02)) !important;
+  border-color: rgba(212, 168, 73, 0.16) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02), 0 0 0 1px rgba(212, 168, 73, 0.04) !important;
+}
+
+:root:not(.dark) .premium-stats-card:hover {
+  background-color: #ffffff !important;
+  background-image: linear-gradient(135deg, #ffffff, rgba(212, 168, 73, 0.04)) !important;
+  border-color: rgba(212, 168, 73, 0.25) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 10px 30px rgba(212, 168, 73, 0.08), 0 1px 3px rgba(212, 168, 73, 0.04) !important;
+}
+
+/* Imperial Calendar Premium Button Styles */
+.imperial-calendar-btn {
+  background: linear-gradient(135deg, rgba(212, 168, 73, 0.08), rgba(212, 168, 73, 0.04)) !important;
+  border: 1px solid rgba(212, 168, 73, 0.3) !important;
+  color: #b45309 !important; /* Rich amber-700 in light mode */
+  font-weight: 600 !important;
+  transition: all 0.3s ease !important;
+}
+
+.imperial-calendar-btn:hover {
+  background: linear-gradient(135deg, rgba(212, 168, 73, 0.15), rgba(212, 168, 73, 0.08)) !important;
+  border-color: rgba(212, 168, 73, 0.5) !important;
+  box-shadow: 0 0 15px rgba(212, 168, 73, 0.2) !important;
+  transform: translateY(-1px) !important;
+}
+
+.dark .imperial-calendar-btn {
+  background: linear-gradient(135deg, rgba(212, 168, 73, 0.15), rgba(212, 168, 73, 0.1)) !important;
+  border: 1px solid rgba(212, 168, 73, 0.4) !important;
+  color: #fbbf24 !important; /* Amber-400 in dark mode */
+}
+
+.dark .imperial-calendar-btn:hover {
+  background: linear-gradient(135deg, rgba(212, 168, 73, 0.25), rgba(212, 168, 73, 0.15)) !important;
+  border-color: rgba(212, 168, 73, 0.7) !important;
+  box-shadow: 0 0 20px rgba(212, 168, 73, 0.3) !important;
+}
+
+/* Solo Leveling Rank and Resonance Light Mode Overrides */
+:root:not(.dark) .premium-rank-text {
+  animation: none !important; /* Stop purple glow animation in light mode */
+  text-shadow: none !important;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed) !important; /* Rich indigo-purple gradient */
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+}
+
+:root:not(.dark) .text-resonance-glow {
+  animation: none !important; /* Stop glowing cyan shadow animation in light mode */
+  text-shadow: none !important;
+  background: linear-gradient(135deg, #d97706, #b45309) !important; /* Rich gold-to-bronze gradient */
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+}
+
 
 
