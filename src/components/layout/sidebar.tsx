@@ -182,26 +182,6 @@ export function Sidebar() {
 
         {/* Bottom Info */}
         <div className="p-3 space-y-2 border-t border-border/40">
-          {/* Morning / Night Toggle */}
-          {mounted && (
-            <button
-              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-              className="w-full flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-amber-500/5 dark:bg-amber-500/5 hover:bg-amber-500/10 border border-amber-500/10 hover:border-amber-500/20 text-amber-600 dark:text-amber-400 text-xs transition-all font-medium"
-              title={theme === 'dark' ? "Switch to Morning" : "Switch to Night"}
-            >
-              {theme === 'dark' ? (
-                <>
-                  <Sun className="w-3.5 h-3.5" />
-                  {(!sidebarCollapsed || isMobile) && <span>Morning Mode</span>}
-                </>
-              ) : (
-                <>
-                  <Moon className="w-3.5 h-3.5" />
-                  {(!sidebarCollapsed || isMobile) && <span>Night Mode</span>}
-                </>
-              )}
-            </button>
-          )}
 
           {/* Logout Button */}
           <button

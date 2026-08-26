@@ -583,4 +583,176 @@
   animation: rankTextGlow 4s ease-in-out infinite;
 }
 
+/* ─────────────────────────────────────────────────────────────────────
+   LIGHT MODE (MORNING) ESTHETICS OVERRIDES
+   ───────────────────────────────────────────────────────────────────── */
+:root:not(.dark) {
+  --background: oklch(0.98 0.003 60); /* Clean warm off-white */
+  --foreground: oklch(0.15 0.01 60); /* High legibility charcoal */
+  --card: #ffffff;
+  --card-foreground: oklch(0.15 0.01 60);
+  --border: rgba(212, 168, 73, 0.18); /* Clean gold-tinted borders */
+  --muted: oklch(0.96 0.003 60);
+  --muted-foreground: oklch(0.45 0.01 60);
+  --popover: #ffffff;
+  --popover-foreground: oklch(0.15 0.01 60);
+}
+
+:root:not(.dark) html, 
+:root:not(.dark) body {
+  background-color: #fafafc !important;
+  color: #1a1a1e !important;
+}
+
+/* Force dark hardcoded background boxes to clean white cards */
+:root:not(.dark) [class*="bg-[#0e0e11]"],
+:root:not(.dark) [class*="bg-[#0e0e12]"],
+:root:not(.dark) [class*="bg-[#111116]"],
+:root:not(.dark) [class*="bg-[#0a0a0c]"],
+:root:not(.dark) [class*="bg-[#020205]"],
+:root:not(.dark) [class*="bg-[#060608]"],
+:root:not(.dark) [class*="bg-[#0a0a0e]"],
+:root:not(.dark) [class*="bg-[#111113]"],
+:root:not(.dark) [class*="bg-[#1a1a1e]"],
+:root:not(.dark) [class*="bg-[#111115]"],
+:root:not(.dark) [class*="bg-black/60"],
+:root:not(.dark) [class*="bg-black/40"],
+:root:not(.dark) [class*="bg-black/80"],
+:root:not(.dark) [class*="bg-zinc-900"],
+:root:not(.dark) [class*="bg-zinc-950"],
+:root:not(.dark) [class*="bg-slate-900"],
+:root:not(.dark) [class*="bg-slate-950"] {
+  background-color: #ffffff !important;
+  background-image: none !important;
+  border-color: rgba(212, 168, 73, 0.18) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02), 0 0 0 1px rgba(212, 168, 73, 0.04) !important;
+}
+
+/* Force desktop translucent bg overrides to white cards */
+@media (min-width: 1024px) {
+  :root:not(.dark) [class*="lg:bg-white/"],
+  :root:not(.dark) [class*="lg:bg-white/[0.0"] {
+    background-color: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-color: rgba(212, 168, 73, 0.18) !important;
+  }
+}
+
+/* Adjust overlay and modal backgrounds in light mode */
+:root:not(.dark) [class*="bg-[#0e0e11]/95"],
+:root:not(.dark) [class*="bg-[#0e0e11]/90"],
+:root:not(.dark) [class*="bg-[#0e0e11]/85"],
+:root:not(.dark) [class*="bg-[#0e0e11]/80"] {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(30px);
+}
+
+/* Hardcoded white text transparency overrides to darker shades in light mode */
+:root:not(.dark) .text-white,
+:root:not(.dark) [class*="text-white"],
+:root:not(.dark) .text-white\/95,
+:root:not(.dark) .text-white\/90,
+:root:not(.dark) .text-white\/85,
+:root:not(.dark) .text-white\/80 {
+  color: #1a1a1e !important;
+}
+
+:root:not(.dark) .text-white\/75,
+:root:not(.dark) .text-white\/70,
+:root:not(.dark) .text-white\/60,
+:root:not(.dark) .text-white\/50,
+:root:not(.dark) .text-white\/45,
+:root:not(.dark) .text-white\/40 {
+  color: #4b5563 !important;
+}
+
+:root:not(.dark) .text-white\/35,
+:root:not(.dark) .text-white\/30,
+:root:not(.dark) .text-white\/25,
+:root:not(.dark) .text-white\/20,
+:root:not(.dark) .text-white\/15,
+:root:not(.dark) .text-white\/10 {
+  color: #888888 !important;
+}
+
+/* Ensure color codes from charts/budgets/indicators are high-contrast on light background */
+:root:not(.dark) .text-amber-500 { color: #d97706 !important; }
+:root:not(.dark) .text-amber-400 { color: #b45309 !important; }
+:root:not(.dark) .text-emerald-500 { color: #059669 !important; }
+:root:not(.dark) .text-emerald-400 { color: #047857 !important; }
+:root:not(.dark) .text-red-500 { color: #dc2626 !important; }
+:root:not(.dark) .text-red-400 { color: #b91c1c !important; }
+:root:not(.dark) .text-sky-500 { color: #0284c7 !important; }
+:root:not(.dark) .text-teal-500 { color: #0d9488 !important; }
+:root:not(.dark) .text-orange-500 { color: #ea580c !important; }
+:root:not(.dark) .text-orange-400 { color: #c2410c !important; }
+:root:not(.dark) .gold-text { color: #b45309 !important; }
+
+/* Override borders */
+:root:not(.dark) [class*="border-white/"],
+:root:not(.dark) [class*="border-white/[0.0"],
+:root:not(.dark) [class*="border-zinc-"] {
+  border-color: rgba(212, 168, 73, 0.18) !important;
+}
+
+/* Fix forms, inputs and buttons for light mode */
+:root:not(.dark) input,
+:root:not(.dark) select,
+:root:not(.dark) textarea {
+  background-color: #ffffff !important;
+  color: #1a1a1e !important;
+  border-color: rgba(212, 168, 73, 0.25) !important;
+}
+:root:not(.dark) input::placeholder {
+  color: #9ca3af !important;
+}
+
+/* Keep primary action buttons and badges dark or distinct with white text */
+:root:not(.dark) button.bg-gradient-to-r,
+:root:not(.dark) button.bg-amber-500,
+:root:not(.dark) button.bg-amber-600,
+:root:not(.dark) button.bg-orange-500,
+:root:not(.dark) button.bg-red-500,
+:root:not(.dark) button.bg-red-600,
+:root:not(.dark) button.bg-emerald-500,
+:root:not(.dark) button.bg-primary,
+:root:not(.dark) .bg-amber-500,
+:root:not(.dark) .bg-emerald-500,
+:root:not(.dark) .bg-red-500,
+:root:not(.dark) .bg-orange-500,
+:root:not(.dark) .bg-amber-600,
+:root:not(.dark) .bg-red-600 {
+  color: #ffffff !important;
+}
+:root:not(.dark) button.bg-gradient-to-r *,
+:root:not(.dark) button.bg-amber-500 *,
+:root:not(.dark) button.bg-amber-600 *,
+:root:not(.dark) button.bg-red-500 *,
+:root:not(.dark) button.bg-emerald-500 * {
+  color: #ffffff !important;
+}
+
+/* Radar & Cartesian charts styling in light mode */
+:root:not(.dark) .recharts-cartesian-grid-horizontal line,
+:root:not(.dark) .recharts-cartesian-grid-vertical line {
+  stroke: rgba(0, 0, 0, 0.08) !important;
+}
+:root:not(.dark) .recharts-polar-grid-concentric path,
+:root:not(.dark) .recharts-polar-grid-concentric circle,
+:root:not(.dark) .recharts-polar-grid-angle line {
+  stroke: rgba(0, 0, 0, 0.12) !important;
+}
+:root:not(.dark) .recharts-polar-angle-axis-text text,
+:root:not(.dark) .recharts-polar-angle-axis-text tspan {
+  fill: rgba(0, 0, 0, 0.7) !important;
+}
+:root:not(.dark) .recharts-text {
+  fill: rgba(0, 0, 0, 0.6) !important;
+}
+:root:not(.dark) .recharts-legend-item-text {
+  color: rgba(0, 0, 0, 0.8) !important;
+}
+
+
 

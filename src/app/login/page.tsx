@@ -95,7 +95,7 @@ export default function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full pl-11 pr-5 py-3.5 bg-black/40 border border-[#d4a849]/20 rounded-xl text-sm text-white placeholder-white/20 focus:outline-none focus:ring-1 focus:ring-[#d4a849]/50 focus:border-[#d4a849]/60 transition-all duration-300"
+                className="w-full pl-11 pr-5 py-3.5 bg-black/40 border border-[#d4a849]/20 rounded-xl text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-white/20 focus:outline-none focus:ring-1 focus:ring-[#d4a849]/50 focus:border-[#d4a849]/60 transition-all duration-300"
               />
             </div>
           </div>
