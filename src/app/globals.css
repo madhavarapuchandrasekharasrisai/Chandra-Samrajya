@@ -615,6 +615,10 @@
 :root:not(.dark) [class*="bg-[#111113]"],
 :root:not(.dark) [class*="bg-[#1a1a1e]"],
 :root:not(.dark) [class*="bg-[#111115]"],
+:root:not(.dark) [class*="bg-[#0d0d0f]"],
+:root:not(.dark) [class*="bg-[#121214]"],
+:root:not(.dark) [class*="bg-[#050506]"],
+:root:not(.dark) [class*="bg-[#030712]"],
 :root:not(.dark) [class*="bg-black/60"],
 :root:not(.dark) [class*="bg-black/40"],
 :root:not(.dark) [class*="bg-black/80"],
@@ -626,6 +630,20 @@
   background-image: none !important;
   border-color: rgba(212, 168, 73, 0.18) !important;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02), 0 0 0 1px rgba(212, 168, 73, 0.04) !important;
+}
+
+/* Force dark gradient headers (like in War Room & Solo Leveling) to light cream-white gradients */
+:root:not(.dark) [class*="bg-gradient-to-br"][class*="to-black"],
+:root:not(.dark) [class*="bg-gradient-to-br"][class*="to-[#0"],
+:root:not(.dark) [class*="bg-gradient-to-br"][class*="to-slate-"],
+:root:not(.dark) [class*="bg-gradient-to-br"][class*="via-black"],
+:root:not(.dark) [class*="bg-gradient-to-r"][class*="to-black"],
+:root:not(.dark) [class*="bg-gradient-to-br"][class*="from-[#0c0d12]"],
+:root:not(.dark) [class*="bg-gradient-to-br"][class*="from-[#1a0505]"],
+:root:not(.dark) [class*="bg-gradient-to-br"][class*="from-[#1c0808]"] {
+  background-image: linear-gradient(to bottom right, rgba(212, 168, 73, 0.06), #ffffff, #fafafc) !important;
+  border-color: rgba(212, 168, 73, 0.2) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02) !important;
 }
 
 /* Force desktop translucent bg overrides to white cards */
@@ -643,9 +661,28 @@
 :root:not(.dark) [class*="bg-[#0e0e11]/95"],
 :root:not(.dark) [class*="bg-[#0e0e11]/90"],
 :root:not(.dark) [class*="bg-[#0e0e11]/85"],
-:root:not(.dark) [class*="bg-[#0e0e11]/80"] {
-  background-color: rgba(255, 255, 255, 0.95) !important;
+:root:not(.dark) [class*="bg-[#0e0e11]/80"],
+:root:not(.dark) [class*="bg-[#0d0d0f]/95"] {
+  background-color: rgba(255, 255, 255, 0.96) !important;
   backdrop-filter: blur(30px);
+}
+
+/* Override premium rank card containers (Panel A & Panel B) */
+:root:not(.dark) .premium-rank-card {
+  background: #ffffff !important;
+  border-color: rgba(212, 168, 73, 0.25) !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.02), inset 0 0 20px rgba(212, 168, 73, 0.02) !important;
+}
+:root:not(.dark) .premium-rank-card::before {
+  background: linear-gradient(45deg, #e8c97a, #d4a849, #b8860b, #e8c97a) !important;
+  opacity: 0.18 !important;
+}
+
+/* Scanner and scanner overlay tweaks in light mode */
+:root:not(.dark) .thunder-sky-overlay {
+  background: 
+    radial-gradient(circle at 50% 0%, rgba(212, 168, 73, 0.08) 0%, transparent 60%),
+    radial-gradient(circle at 100% 100%, rgba(212, 168, 73, 0.04) 0%, transparent 60%) !important;
 }
 
 /* Hardcoded white text transparency overrides to darker shades in light mode */
@@ -696,15 +733,26 @@
   border-color: rgba(212, 168, 73, 0.18) !important;
 }
 
-/* Fix forms, inputs and buttons for light mode */
+/* Fix forms, inputs, selects and textareas (including dialog modals) for light mode */
 :root:not(.dark) input,
 :root:not(.dark) select,
-:root:not(.dark) textarea {
-  background-color: #ffffff !important;
+:root:not(.dark) textarea,
+:root:not(.dark) [class*="bg-white/[0.03]"],
+:root:not(.dark) [class*="bg-white/[0.02]"],
+:root:not(.dark) [class*="bg-white/[0.04]"],
+:root:not(.dark) [class*="bg-white/[0.05]"],
+:root:not(.dark) [class*="bg-white/5"],
+:root:not(.dark) [class*="bg-white/10"],
+:root:not(.dark) [class*="hover:bg-white/"],
+:root:not(.dark) [class*="focus:bg-white/"] {
+  background-color: #f3f4f6 !important;
   color: #1a1a1e !important;
-  border-color: rgba(212, 168, 73, 0.25) !important;
+  border-color: rgba(212, 168, 73, 0.22) !important;
 }
-:root:not(.dark) input::placeholder {
+
+:root:not(.dark) input::placeholder,
+:root:not(.dark) textarea::placeholder,
+:root:not(.dark) [class*="placeholder:text-white/20"] {
   color: #9ca3af !important;
 }
 
