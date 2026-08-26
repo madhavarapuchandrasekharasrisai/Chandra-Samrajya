@@ -309,7 +309,7 @@ ${expenseDetails || '- No expenses recorded yet'}
                     )}
                   >
                     {msg.role === 'assistant' ? (
-                      <div className="prose prose-invert prose-xs max-w-none [&>p]:text-white/80 [&>p]:mb-1 [&>ul]:text-white/70 [&>ol]:text-white/70 [&>strong]:text-amber-400/90 [&>h1]:text-amber-400 [&>h2]:text-amber-400">
+                      <div className="prose dark:prose-invert prose-xs max-w-none dark:[&>p]:text-white/80 [&>p]:text-zinc-800 [&>p]:mb-1 dark:[&>ul]:text-white/70 [&>ul]:text-zinc-700 dark:[&>ol]:text-white/70 [&>ol]:text-zinc-700 dark:[&>strong]:text-amber-400/90 [&>strong]:text-amber-700 dark:[&>h1]:text-amber-400 [&>h1]:text-amber-700 dark:[&>h2]:text-amber-400 [&>h2]:text-amber-700">
                         <ReactMarkdown>{msg.content}</ReactMarkdown>
                       </div>
                     ) : (
