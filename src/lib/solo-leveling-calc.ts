@@ -349,7 +349,7 @@ export const WEEKLY_SPECIALIZATIONS: Record<number, RPGTask[]> = {
   // Monday: Agility + Memory
   1: [
     { id: 'special-mon-jumprope', label: 'Jump Rope 15 mins', rewards: { agility: 1.0 }, isCore: false, weekday: 1 },
-    { id: 'special-mon-sprints', label: 'Sprint Intervals', rewards: { agility: 1.2 }, isCore: false, weekday: 1 },
+    { id: 'special-mon-agility', label: 'Agility Ladder Drills', rewards: { agility: 1.0 }, isCore: false, weekday: 1 },
     { id: 'special-mon-memorize', label: 'Memorize 10 Concepts', rewards: { memory: 1.2 }, isCore: false, weekday: 1 },
     { id: 'special-mon-recall', label: 'Recall Without Notes', rewards: { memory: 1.0 }, isCore: false, weekday: 1 },
   ],
@@ -364,11 +364,11 @@ export const WEEKLY_SPECIALIZATIONS: Record<number, RPGTask[]> = {
   3: [
     { id: 'special-wed-speak', label: 'Speak English 20 mins aloud', rewards: { communication: 1.2 }, isCore: false, weekday: 3 },
     { id: 'special-wed-podcast', label: 'Watch English Interview/Podcast', rewards: { communication: 0.8 }, isCore: false, weekday: 3 },
-    { id: 'special-wed-meditate', label: 'Meditation 20 mins', rewards: { stability: 1.0 }, isCore: false, weekday: 3 },
+    { id: 'special-wed-journaling', label: 'Reflective Journaling', rewards: { stability: 1.0 }, isCore: false, weekday: 3 },
   ],
   // Thursday: Agility + Intelligence
   4: [
-    { id: 'special-thu-sprints', label: 'Sprint Intervals', rewards: { agility: 1.2 }, isCore: false, weekday: 4 },
+    { id: 'special-thu-agility', label: 'Agility Ladder Drills', rewards: { agility: 1.0 }, isCore: false, weekday: 4 },
     { id: 'special-thu-techreading', label: 'Technical Reading 20 mins', rewards: { intelligence: 1.0 }, isCore: false, weekday: 4 },
     { id: 'special-thu-buildfeature', label: 'Build Small Project Feature', rewards: { careerXp: 1.5 }, isCore: false, weekday: 4 },
   ],
@@ -433,8 +433,8 @@ export function calculateCurrentStats(baseStats: SoloLevelingStats, completedTas
 
     if (!task) continue;
 
-    // Failure state drops rewards by 70%
-    const mult = baseStats.failureState === 1 ? xpMultiplier * 0.3 : xpMultiplier;
+    // Failure state drops rewards by 40%
+    const mult = baseStats.failureState === 1 ? xpMultiplier * 0.6 : xpMultiplier;
 
     if (task.rewards.strength) strength += task.rewards.strength * getScale(strength) * mult;
     if (task.rewards.agility) agility += task.rewards.agility * getScale(agility) * mult;
@@ -519,7 +519,7 @@ export function calculateCurrentStats(baseStats: SoloLevelingStats, completedTas
   ) * finalXpMultiplier;
 
   // Apply failure state reduction
-  const powerLevel = failureState === 1 ? Math.floor(rawPowerLevel * 0.8) : Math.floor(rawPowerLevel);
+  const powerLevel = failureState === 1 ? Math.floor(rawPowerLevel * 0.9) : Math.floor(rawPowerLevel);
 
   // Ranks
   let currentRank = 'Civilian';

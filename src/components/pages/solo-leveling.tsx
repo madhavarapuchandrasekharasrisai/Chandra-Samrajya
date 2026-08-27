@@ -246,9 +246,9 @@ export function SoloLeveling() {
         return {
           title: 'SHADOW MONARCH',
           badgeText: '👑 THE APEX SOVEREIGN',
-          color: 'text-[#9d4edd] border-[#7b2cbf]/40 bg-purple-950/15',
-          glow: 'shadow-[0_0_35px_rgba(157,78,221,0.5)] border-[#9d4edd]/50',
-          auraClass: 'bg-gradient-to-r from-purple-600/20 via-black to-indigo-600/20 shadow-purple-500/25 animate-pulse',
+          color: 'text-purple-700 border-purple-200 bg-purple-50 dark:text-[#9d4edd] dark:border-[#7b2cbf]/40 dark:bg-purple-950/15',
+          glow: 'shadow-[0_4px_20px_rgba(157,78,221,0.12)] border-purple-200/60 dark:shadow-[0_0_35px_rgba(157,78,221,0.5)] dark:border-[#9d4edd]/50',
+          auraClass: 'bg-gradient-to-r from-purple-500/10 via-white to-indigo-500/10 dark:from-purple-600/20 dark:via-black dark:to-indigo-600/20 shadow-purple-500/5 dark:shadow-purple-500/25 animate-pulse',
           description: 'Monarch of the Absolute Void. Your discipline stands absolute, ruling over shadows and mortal boundaries.',
           requiredLevel: '15001+',
           particleColor: 'bg-purple-500',
@@ -257,9 +257,9 @@ export function SoloLeveling() {
         return {
           title: 'SOVEREIGN MONARCH',
           badgeText: '⚔️ MONARCH CLASS',
-          color: 'text-[#c77dff] border-[#b5179e]/30 bg-purple-900/10',
-          glow: 'shadow-[0_0_25px_rgba(199,125,255,0.3)] border-[#c77dff]/35',
-          auraClass: 'bg-purple-900/10 shadow-indigo-500/15',
+          color: 'text-indigo-700 border-indigo-200 bg-indigo-50 dark:text-[#c77dff] dark:border-[#b5179e]/30 dark:bg-purple-900/10',
+          glow: 'shadow-[0_4px_20px_rgba(199,125,255,0.08)] border-indigo-200/50 dark:shadow-[0_0_25px_rgba(199,125,255,0.3)] dark:border-[#c77dff]/35',
+          auraClass: 'bg-purple-50/50 dark:bg-purple-900/10 shadow-indigo-500/5 dark:shadow-indigo-500/15',
           description: 'Awakened ruler of the System. Extreme mental consistency and focus allow you to manifest reality at will.',
           requiredLevel: '9001 - 15000',
           particleColor: 'bg-indigo-400',
@@ -268,9 +268,9 @@ export function SoloLeveling() {
         return {
           title: 'IMPERIAL COMMANDER',
           badgeText: '🎖️ COMMANDER CLASS',
-          color: 'text-[#e63946] border-[#d90429]/30 bg-red-950/10',
-          glow: 'shadow-[0_0_20px_rgba(230,57,70,0.3)] border-[#e63946]/35',
-          auraClass: 'bg-red-950/10 shadow-red-500/15',
+          color: 'text-red-700 border-red-200 bg-red-50 dark:text-[#e63946] dark:border-[#d90429]/30 dark:bg-red-950/10',
+          glow: 'shadow-[0_4px_20px_rgba(230,57,70,0.08)] border-red-200/50 dark:shadow-[0_0_20px_rgba(230,57,70,0.3)] dark:border-[#e63946]/35',
+          auraClass: 'bg-red-50/50 dark:bg-red-950/10 shadow-red-500/5 dark:shadow-red-500/15',
           description: 'Military tactician. Your stats dictate the execution of massive projects and absolute strategic mastery.',
           requiredLevel: '5001 - 9000',
           particleColor: 'bg-red-500',
@@ -279,9 +279,9 @@ export function SoloLeveling() {
         return {
           title: 'ELITE VANGUARD',
           badgeText: '🔥 ELITE CLASS',
-          color: 'text-[#ffb703] border-[#fb8500]/30 bg-amber-950/10',
-          glow: 'shadow-[0_0_20px_rgba(255,183,3,0.25)] border-[#ffb703]/35',
-          auraClass: 'bg-amber-950/10 shadow-amber-500/15',
+          color: 'text-amber-700 border-amber-200 bg-amber-50 dark:text-[#ffb703] dark:border-[#fb8500]/30 dark:bg-amber-950/10',
+          glow: 'shadow-[0_4px_20px_rgba(255,183,3,0.08)] border-amber-200/50 dark:shadow-[0_0_20px_rgba(255,183,3,0.25)] dark:border-[#ffb703]/35',
+          auraClass: 'bg-amber-50/50 dark:bg-amber-950/10 shadow-amber-500/5 dark:shadow-amber-500/15',
           description: 'A relentless powerhouse of focus. Consistently crushing limits and ascending above standard benchmarks.',
           requiredLevel: '2501 - 5000',
           particleColor: 'bg-amber-400',
@@ -290,9 +290,9 @@ export function SoloLeveling() {
         return {
           title: 'SOVEREIGN WARRIOR',
           badgeText: '⚔️ WARRIOR CLASS',
-          color: 'text-[#00f5d4] border-[#00bbf9]/30 bg-teal-950/10',
-          glow: 'shadow-[0_0_15px_rgba(0,245,212,0.2)] border-[#00f5d4]/35',
-          auraClass: 'bg-teal-950/5 shadow-teal-500/10',
+          color: 'text-teal-700 border-teal-200 bg-teal-50 dark:text-[#00f5d4] dark:border-[#00bbf9]/30 dark:bg-teal-950/10',
+          glow: 'shadow-[0_4px_20px_rgba(0,245,212,0.06)] border-teal-200/50 dark:shadow-[0_0_15px_rgba(0,245,212,0.2)] dark:border-[#00f5d4]/35',
+          auraClass: 'bg-teal-50/30 dark:bg-teal-950/5 shadow-teal-500/5 dark:shadow-teal-500/10',
           description: 'Highly trained fighter. Base physical and intellectual parameters are fully integrated into daily habits.',
           requiredLevel: '1201 - 2500',
           particleColor: 'bg-teal-400',
@@ -301,9 +301,9 @@ export function SoloLeveling() {
         return {
           title: 'SYSTEM ASPIRANT',
           badgeText: '⚡ ASPIRANT CLASS',
-          color: 'text-[#55a630] border-[#38b000]/20 bg-emerald-950/10',
-          glow: 'shadow-[0_0_12px_rgba(85,166,48,0.15)] border-[#55a630]/25',
-          auraClass: 'bg-emerald-950/5 shadow-emerald-500/5',
+          color: 'text-emerald-700 border-emerald-200 bg-emerald-50 dark:text-[#55a630] dark:border-[#38b000]/20 dark:bg-emerald-950/10',
+          glow: 'shadow-[0_4px_20px_rgba(85,166,48,0.05)] border-emerald-200/50 dark:shadow-[0_0_12px_rgba(85,166,48,0.15)] dark:border-[#55a630]/25',
+          auraClass: 'bg-emerald-50/30 dark:bg-emerald-950/5 shadow-emerald-500/5 dark:shadow-emerald-500/5',
           description: 'Potential awakened. The system is beginning to synchronize with your focus cycles. Keep grinding.',
           requiredLevel: '501 - 1200',
           particleColor: 'bg-emerald-400',
@@ -312,9 +312,9 @@ export function SoloLeveling() {
         return {
           title: 'UNRANKED CIVILIAN',
           badgeText: '💀 CIVILIAN CLASS',
-          color: 'text-white/40 border-white/10 bg-white/5',
-          glow: 'shadow-none border-white/10',
-          auraClass: 'bg-white/5 shadow-transparent',
+          color: 'text-slate-500 border-slate-200 bg-slate-50 dark:text-white/40 dark:border-white/10 dark:bg-white/5',
+          glow: 'shadow-none border-slate-200 dark:border-white/10',
+          auraClass: 'bg-slate-50/40 dark:bg-white/5 shadow-transparent',
           description: 'Biometrics inactive. Awaken your inner Monarch by completing base protocols and breaking limit values.',
           requiredLevel: '0 - 500',
           particleColor: 'bg-white',
@@ -546,7 +546,7 @@ export function SoloLeveling() {
                 stats.failureState === 1 ? "text-red-500" : "text-orange-400"
               )}>
                 {stats.failureState === 1 
-                  ? `${(stats.xpMultiplier * 0.3).toFixed(2)}x` 
+                  ? `${(stats.xpMultiplier * 0.6).toFixed(2)}x` 
                   : `${stats.xpMultiplier.toFixed(2)}x`}
               </span>
             </div>
@@ -587,24 +587,24 @@ export function SoloLeveling() {
                     <div className="p-2.5 rounded-xl bg-red-950/15 border border-red-500/10 space-y-1">
                       <div className="flex justify-between text-red-400 font-bold uppercase">
                         <span>📉 POWER RESTRICTION</span>
-                        <span>-20% Applied</span>
+                        <span>-10% Applied</span>
                       </div>
                       <div className="text-white/60 space-y-0.5">
-                        <p>Estimated Raw Power: <span className="text-white font-extrabold">{Math.floor(stats.powerLevel / 0.8)}</span></p>
+                        <p>Estimated Raw Power: <span className="text-white font-extrabold">{Math.floor(stats.powerLevel / 0.9)}</span></p>
                         <p>Debuffed Display Power: <span className="text-red-500 font-extrabold">{stats.powerLevel}</span></p>
-                        <p className="text-red-400/80">Penalty Loss: -{Math.floor(stats.powerLevel / 0.8) - stats.powerLevel} points</p>
+                        <p className="text-red-400/80">Penalty Loss: -{Math.floor(stats.powerLevel / 0.9) - stats.powerLevel} points</p>
                       </div>
                     </div>
                     
                     <div className="p-2.5 rounded-xl bg-red-950/15 border border-red-500/10 space-y-1">
                       <div className="flex justify-between text-red-400 font-bold uppercase">
                         <span>🧪 REWARD DEGRADATION</span>
-                        <span>-70% Yield</span>
+                        <span>-40% Yield</span>
                       </div>
                       <div className="text-white/60 space-y-0.5">
-                        <p>Active Multiplier: <span className="text-red-400 font-extrabold">{(stats.xpMultiplier * 0.3).toFixed(2)}x</span></p>
+                        <p>Active Multiplier: <span className="text-red-400 font-extrabold">{(stats.xpMultiplier * 0.6).toFixed(2)}x</span></p>
                         <p>Standard Multiplier: <span className="text-white font-extrabold">{stats.xpMultiplier.toFixed(2)}x</span></p>
-                        <p className="text-red-400/80">Rewards scaled back by 70% during failure</p>
+                        <p className="text-red-400/80">Rewards scaled back by 40% during failure</p>
                       </div>
                     </div>
 
@@ -614,8 +614,8 @@ export function SoloLeveling() {
                         <span>Applied At Reset</span>
                       </div>
                       <div className="text-white/60 space-y-0.5">
-                        <p>Mental & Discipline Stats: <span className="text-red-400 font-extrabold">-15% / -20%</span> decay</p>
-                        <p>All Other Base Biometrics: <span className="text-red-400 font-extrabold">-5%</span> decay</p>
+                        <p>Mental & Discipline Stats: <span className="text-red-400 font-extrabold">-8% / -12%</span> decay</p>
+                        <p>All Other Base Biometrics: <span className="text-red-400 font-extrabold">-2%</span> decay</p>
                         <p className="text-red-400/80">Triggered by missing 3+ core protocols</p>
                       </div>
                     </div>
@@ -1068,8 +1068,8 @@ export function SoloLeveling() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.15 }}
             className={cn(
-              "bg-[#0e0e12] border rounded-2xl p-4 md:p-5 transition-all duration-500 relative overflow-hidden shadow-[0_1px_10px_rgba(255,255,255,0.02)] hover:translate-y-[-1px] hover:shadow-[0_2px_15px_rgba(255,255,255,0.05)]",
-              stats.failureState === 1 ? "border-red-500/15" : "border-white/12 hover:border-white/20"
+              "bg-white dark:bg-[#0e0e12] border rounded-2xl p-4 md:p-5 transition-all duration-500 relative overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] dark:shadow-[0_1px_10px_rgba(255,255,255,0.02)] hover:translate-y-[-1px] hover:shadow-[0_10px_30px_rgba(0,0,0,0.04)] dark:hover:shadow-[0_2px_15px_rgba(255,255,255,0.05)]",
+              stats.failureState === 1 ? "border-red-200 dark:border-red-500/15" : "border-slate-100 dark:border-white/12 hover:border-slate-200 dark:hover:border-white/20"
             )}
           >
             <div className="absolute top-0 right-0 w-60 h-40 bg-orange-500/[0.01] rounded-full filter blur-[60px] pointer-events-none" />
@@ -1198,8 +1198,8 @@ export function SoloLeveling() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.05 }}
             className={cn(
-              "bg-[#0e0e12] border rounded-2xl p-4 md:p-5 space-y-3 md:space-y-4 overflow-y-auto max-h-[280px] lg:max-h-[240px] no-scrollbar transition-all duration-500 flex-shrink-0 shadow-[0_1px_10px_rgba(255,255,255,0.02)] hover:translate-y-[-1px] hover:shadow-[0_2px_15px_rgba(255,255,255,0.05)]",
-              stats.failureState === 1 ? "border-red-500/15" : "border-white/12 hover:border-white/20"
+              "bg-white dark:bg-[#0e0e12] border rounded-2xl p-4 md:p-5 space-y-3 md:space-y-4 overflow-y-auto max-h-[280px] lg:max-h-[240px] no-scrollbar transition-all duration-500 flex-shrink-0 shadow-[0_4px_20px_rgba(0,0,0,0.02)] dark:shadow-[0_1px_10px_rgba(255,255,255,0.02)] hover:translate-y-[-1px] hover:shadow-[0_10px_30px_rgba(0,0,0,0.04)] dark:hover:shadow-[0_2px_15px_rgba(255,255,255,0.05)]",
+              stats.failureState === 1 ? "border-red-200 dark:border-red-500/15" : "border-slate-100 dark:border-white/12 hover:border-slate-200 dark:hover:border-white/20"
             )}
           >
             <span className="text-white/40 text-[10px] uppercase tracking-widest font-bold font-mono block">Biometrics Summary</span>
@@ -1239,8 +1239,8 @@ export function SoloLeveling() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
             className={cn(
-              "bg-[#0e0e12] border rounded-2xl p-4 md:p-5 transition-all duration-500 flex-shrink-0 shadow-[0_1px_10px_rgba(255,255,255,0.02)] hover:translate-y-[-1px] hover:shadow-[0_2px_15px_rgba(255,255,255,0.05)]",
-              stats.failureState === 1 ? "border-red-500/15" : "border-white/12 hover:border-white/20"
+              "bg-white dark:bg-[#0e0e12] border rounded-2xl p-4 md:p-5 transition-all duration-500 flex-shrink-0 shadow-[0_4px_20px_rgba(0,0,0,0.02)] dark:shadow-[0_1px_10px_rgba(255,255,255,0.02)] hover:translate-y-[-1px] hover:shadow-[0_10px_30px_rgba(0,0,0,0.04)] dark:hover:shadow-[0_2px_15px_rgba(255,255,255,0.05)]",
+              stats.failureState === 1 ? "border-red-200 dark:border-red-500/15" : "border-slate-100 dark:border-white/12 hover:border-slate-200 dark:hover:border-white/20"
             )}
           >
             <div className="flex items-center justify-between mb-4">
@@ -1292,8 +1292,8 @@ export function SoloLeveling() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.25 }}
             className={cn(
-              "bg-[#0e0e12] border rounded-2xl p-4 md:p-5 transition-all duration-500 flex-shrink-0 shadow-[0_1px_10px_rgba(255,255,255,0.02)] hover:translate-y-[-1px] hover:shadow-[0_2px_15px_rgba(255,255,255,0.05)]",
-              stats.failureState === 1 ? "border-red-500/15" : "border-white/12 hover:border-white/20"
+              "bg-white dark:bg-[#0e0e12] border rounded-2xl p-4 md:p-5 transition-all duration-500 flex-shrink-0 shadow-[0_4px_20px_rgba(0,0,0,0.02)] dark:shadow-[0_1px_10px_rgba(255,255,255,0.02)] hover:translate-y-[-1px] hover:shadow-[0_10px_30px_rgba(0,0,0,0.04)] dark:hover:shadow-[0_2px_15px_rgba(255,255,255,0.05)]",
+              stats.failureState === 1 ? "border-red-200 dark:border-red-500/15" : "border-slate-100 dark:border-white/12 hover:border-slate-200 dark:hover:border-white/20"
             )}
           >
             <div className="flex items-center justify-between mb-4">
@@ -1418,8 +1418,8 @@ export function SoloLeveling() {
             <div 
               key={i}
               className={cn(
-                "bg-[#0e0e12] border rounded-xl p-3 md:p-4 flex flex-col justify-between items-center text-center relative overflow-hidden transition-all duration-300 hover:translate-y-[-2px] shadow-[0_1px_10px_rgba(255,255,255,0.02)]",
-                stats.failureState === 1 ? "border-red-500/15 shadow-none" : "border-white/12 hover:border-white/20"
+                "bg-white dark:bg-[#0e0e12] border rounded-xl p-3 md:p-4 flex flex-col justify-between items-center text-center relative overflow-hidden transition-all duration-300 hover:translate-y-[-2px] shadow-[0_4px_20px_rgba(0,0,0,0.02)] dark:shadow-[0_1px_10px_rgba(255,255,255,0.02)]",
+                stats.failureState === 1 ? "border-red-200 dark:border-red-500/15 shadow-none" : "border-slate-100 dark:border-white/12 hover:border-slate-200 dark:hover:border-white/20"
               )}
             >
               {/* Top info */}
@@ -1475,8 +1475,8 @@ export function SoloLeveling() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.18 }}
         className={cn(
-          "bg-[#0e0e12] border rounded-2xl p-4 md:p-5 transition-all duration-500 relative overflow-hidden shadow-[0_1px_10px_rgba(255,255,255,0.02)] hover:translate-y-[-1px] hover:shadow-[0_2px_15px_rgba(255,255,255,0.05)]",
-          stats.failureState === 1 ? "border-red-500/15" : "border-white/12 hover:border-white/20"
+          "bg-white dark:bg-[#0e0e12] border rounded-2xl p-4 md:p-5 transition-all duration-500 relative overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] dark:shadow-[0_1px_10px_rgba(255,255,255,0.02)] hover:translate-y-[-1px] hover:shadow-[0_10px_30px_rgba(0,0,0,0.04)] dark:hover:shadow-[0_2px_15px_rgba(255,255,255,0.05)]",
+          stats.failureState === 1 ? "border-red-200 dark:border-red-500/15" : "border-slate-100 dark:border-white/12 hover:border-slate-200 dark:hover:border-white/20"
         )}
       >
         <div className="absolute top-0 right-0 w-60 h-60 bg-amber-500/[0.01] rounded-full filter blur-[60px] pointer-events-none" />
@@ -1491,25 +1491,25 @@ export function SoloLeveling() {
             </p>
           </div>
           <span className="text-[11px] font-mono text-orange-400 font-bold bg-orange-500/5 border border-orange-500/10 px-2.5 py-0.5 rounded-lg">
-            Active Multiplier: {stats.failureState === 1 ? `${(stats.xpMultiplier * 0.3).toFixed(2)}x (Debuffed)` : `${stats.xpMultiplier.toFixed(2)}x`}
+            Active Multiplier: {stats.failureState === 1 ? `${(stats.xpMultiplier * 0.6).toFixed(2)}x (Debuffed)` : `${stats.xpMultiplier.toFixed(2)}x`}
           </span>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
           {/* Left formula graphic display */}
-          <div className="lg:col-span-5 p-4 rounded-xl bg-[#111116] border border-white/[0.06] space-y-4 flex flex-col justify-center min-h-[160px]">
+          <div className="lg:col-span-5 p-4 rounded-xl bg-slate-50/50 dark:bg-[#111116] border border-slate-100 dark:border-white/[0.06] space-y-4 flex flex-col justify-center min-h-[160px]">
             <h4 className="text-[10px] font-mono text-white/30 uppercase tracking-wider font-bold">Calculation Algorithm</h4>
             
             {/* The weighted formula equation block */}
             <div className="space-y-2 font-mono text-[11px] select-none text-left">
-              <div className="p-3 rounded-lg bg-[#0a0a0e] border border-white/[0.06] font-semibold text-white/95 leading-relaxed space-y-1.5">
+              <div className="p-3 rounded-lg bg-white dark:bg-[#0a0a0e] border border-slate-200/60 dark:border-white/[0.06] font-semibold text-slate-800 dark:text-white/95 leading-relaxed space-y-1.5">
                 <p className="text-orange-400 font-extrabold uppercase text-[9px] tracking-widest">weighted resonance equation</p>
                 <p className="text-xs md:text-sm text-center py-2 font-black tracking-wide text-white">
                   Power = <span className="text-orange-400">Σ (Stat × Coeff)</span> × <span className="text-amber-300">Multiplier</span>
                 </p>
                 {stats.failureState === 1 && (
                   <p className="text-red-500 font-bold text-center text-[10px] uppercase">
-                    ❌ SYSTEM FAULT DETECTED: × 0.8 debuff factor applied!
+                    ❌ SYSTEM FAULT DETECTED: × 0.9 debuff factor applied!
                   </p>
                 )}
               </div>
@@ -1540,7 +1540,7 @@ export function SoloLeveling() {
             ].map((s, idx) => {
               const contribution = s.val * s.mult
               return (
-                <div key={idx} className="p-2 rounded-xl bg-[#111116] border border-white/[0.06] flex flex-col justify-between space-y-1.5 hover:border-white/[0.1] transition-all">
+                <div key={idx} className="p-2 rounded-xl bg-slate-50/55 dark:bg-[#111116] border border-slate-100 dark:border-white/[0.06] flex flex-col justify-between space-y-1.5 hover:border-slate-200/80 dark:hover:border-white/[0.1] transition-all">
                   <div className="flex justify-between items-center">
                     <span className="text-white/40 font-bold uppercase text-[8px] truncate">{s.name}</span>
                     <span className={cn("text-[7px] font-bold px-1 rounded bg-white/5", s.color)}>{s.tag}</span>
@@ -1571,8 +1571,8 @@ export function SoloLeveling() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
         className={cn(
-          "bg-[#0e0e12] border rounded-2xl p-4 md:p-5 transition-all duration-500 shadow-[0_1px_10px_rgba(255,255,255,0.02)] hover:translate-y-[-1px] hover:shadow-[0_2px_15px_rgba(255,255,255,0.05)]",
-          stats.failureState === 1 ? "border-red-500/15" : "border-white/12 hover:border-white/20"
+          "bg-white dark:bg-[#0e0e12] border rounded-2xl p-4 md:p-5 transition-all duration-500 shadow-[0_4px_20px_rgba(0,0,0,0.02)] dark:shadow-[0_1px_10px_rgba(255,255,255,0.02)] hover:translate-y-[-1px] hover:shadow-[0_10px_30px_rgba(0,0,0,0.04)] dark:hover:shadow-[0_2px_15px_rgba(255,255,255,0.05)]",
+          stats.failureState === 1 ? "border-red-200 dark:border-red-500/15" : "border-slate-100 dark:border-white/12 hover:border-slate-200 dark:hover:border-white/20"
         )}
       >
         <div className="flex items-center justify-between mb-4">
@@ -1660,8 +1660,8 @@ export function SoloLeveling() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.25 }}
         className={cn(
-          "bg-[#0e0e12] border rounded-2xl p-4 md:p-5 transition-all duration-500 relative overflow-hidden shadow-[0_1px_10px_rgba(255,255,255,0.02)] hover:translate-y-[-1px] hover:shadow-[0_2px_15px_rgba(255,255,255,0.05)]",
-          stats.failureState === 1 ? "border-red-500/15" : "border-white/12 hover:border-white/20"
+          "bg-white dark:bg-[#0e0e12] border rounded-2xl p-4 md:p-5 transition-all duration-500 relative overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] dark:shadow-[0_1px_10px_rgba(255,255,255,0.02)] hover:translate-y-[-1px] hover:shadow-[0_10px_30px_rgba(0,0,0,0.04)] dark:hover:shadow-[0_2px_15px_rgba(255,255,255,0.05)]",
+          stats.failureState === 1 ? "border-red-200 dark:border-red-500/15" : "border-slate-100 dark:border-white/12 hover:border-slate-200 dark:hover:border-white/20"
         )}
       >
         <div className="absolute top-0 right-0 w-72 h-48 bg-purple-500/[0.015] rounded-full filter blur-[80px] pointer-events-none" />

@@ -118,20 +118,20 @@ export async function evaluateDailyProtocols(todayStart: Date) {
       if (unlockedMilestonesArray.includes('Tactical Genius')) baseMultiplier += 0.10;
       xpMultiplier = Number(baseMultiplier.toFixed(2));
 
-      // Accelerated Decay: Mental & Discipline stats decay by 15% (20% if already in failure state)
-      const decayFactor = currentStats.failureState === 1 ? 0.80 : 0.85;
+      // Accelerated Decay: Mental & Discipline stats decay by 8% (12% if already in failure state)
+      const decayFactor = currentStats.failureState === 1 ? 0.88 : 0.92;
       discipline = Math.max(10, Math.floor(discipline * decayFactor));
       focus = Math.max(10, Math.floor(focus * decayFactor));
       stability = Math.max(10, Math.floor(stability * decayFactor));
 
-      // Decay ALL other attributes by 5%
-      strength = Math.max(10, Math.floor(strength * 0.95));
-      agility = Math.max(10, Math.floor(agility * 0.95));
-      intelligence = Math.max(10, Math.floor(intelligence * 0.95));
-      memory = Math.max(10, Math.floor(memory * 0.95));
-      communication = Math.max(10, Math.floor(communication * 0.95));
-      confidence = Math.max(10, Math.floor(confidence * 0.95));
-      careerXp = Math.max(10, Math.floor(careerXp * 0.95));
+      // Decay ALL other attributes by 2%
+      strength = Math.max(10, Math.floor(strength * 0.98));
+      agility = Math.max(10, Math.floor(agility * 0.98));
+      intelligence = Math.max(10, Math.floor(intelligence * 0.98));
+      memory = Math.max(10, Math.floor(memory * 0.98));
+      communication = Math.max(10, Math.floor(communication * 0.98));
+      confidence = Math.max(10, Math.floor(confidence * 0.98));
+      careerXp = Math.max(10, Math.floor(careerXp * 0.98));
     } else if (missedCore > 0) {
       // Minor Penalty: Break streak but don't enter failure state
       perfectStreak = 0;
@@ -166,8 +166,8 @@ export async function evaluateDailyProtocols(todayStart: Date) {
       careerXp * 1.4
     ) * xpMultiplier;
 
-    // Temporary Failure State debuff: 20% power level reduction
-    const finalPowerLevel = isFailure === 1 ? Math.floor(rawPowerLevel * 0.8) : Math.floor(rawPowerLevel);
+    // Temporary Failure State debuff: 10% power level reduction
+    const finalPowerLevel = isFailure === 1 ? Math.floor(rawPowerLevel * 0.9) : Math.floor(rawPowerLevel);
 
     // Re-evaluate Ranks
     let newRank = 'Civilian';
