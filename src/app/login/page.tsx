@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
 import { Loader2, Lock, Mail, ShieldCheck } from "lucide-react"
 import { toast } from "sonner"
+import { motion } from "framer-motion"
 
 export default function LoginPage() {
   const router = useRouter()
@@ -31,7 +32,7 @@ export default function LoginPage() {
       if (error) {
         toast.error(error.message || "Authentication failed. Please verify your credentials.")
       } else {
-        toast.success("Sovereign session established successfully.")
+        toast.success("System access granted. Initializing workspace...")
         router.push("/")
         router.refresh()
       }
@@ -44,58 +45,87 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center px-4 relative overflow-hidden select-none">
-      {/* Ambient glowing backgrounds */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-[#d4a849]/5 blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full bg-[#b8860b]/5 blur-[120px] pointer-events-none" />
+      {/* System ambient background effects */}
+      <div className="absolute inset-0">
+        <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] rounded-full bg-primary/[0.03] blur-[120px] pointer-events-none" />
+        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] rounded-full bg-purple-500/[0.03] blur-[120px] pointer-events-none" />
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
+      </div>
 
-      {/* Glass card panel */}
-      <div className="w-full max-w-md glass-card p-8 sm:p-10 relative z-10 overflow-hidden shadow-2xl border border-[rgba(212,168,73,0.1)]">
+      {/* Login Panel — System Access Window */}
+      <motion.div
+        initial={{ opacity: 0, y: 20, scale: 0.97 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        className="w-full max-w-md system-panel p-8 sm:p-10 relative z-10 overflow-hidden"
+      >
+        {/* System scanline effect */}
+        <div className="system-scanline" />
         
-        {/* Visual Brand Identity */}
-        <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-gradient-to-br from-[#e8c97a] via-[#d4a849] to-[#b8860b] rounded-2xl flex items-center justify-center mx-auto mb-5 rotate-3 shadow-xl shadow-[#d4a849]/10">
-            <ShieldCheck className="w-9 h-9 text-[#08080a] stroke-[1.8]" />
+        {/* Top edge glow */}
+        <div className="absolute top-0 left-[15%] right-[15%] h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
+        
+        {/* Brand Identity */}
+        <motion.div 
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.5 }}
+          className="text-center mb-8"
+        >
+          <div className="w-16 h-16 bg-gradient-to-br from-primary/20 via-primary/10 to-purple-500/10 rounded-xl flex items-center justify-center mx-auto mb-5 border border-primary/20 relative">
+            <ShieldCheck className="w-8 h-8 text-primary stroke-[1.5]" />
+            {/* Corner accents */}
+            <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-primary/40 rounded-tl" />
+            <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-primary/40 rounded-tr" />
+            <div className="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-primary/40 rounded-bl" />
+            <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-primary/40 rounded-br" />
           </div>
-          <h1 className="gold-text text-2xl sm:text-3xl font-extrabold tracking-wider uppercase font-serif mb-2">
+          <h1 className="gold-text text-2xl sm:text-3xl font-display font-bold tracking-[0.2em] uppercase mb-2">
             GOD SYSTEM
           </h1>
-          <p className="dark:text-white/40 text-slate-500 text-[10px] sm:text-xs font-medium tracking-[0.2em] uppercase">
-            Sovereign OS Access Key
+          <p className="text-muted-foreground text-[10px] sm:text-xs font-mono tracking-[0.15em] uppercase">
+            Sovereign OS — Access Terminal
           </p>
-        </div>
+        </motion.div>
 
         {/* Credentials Form */}
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <motion.form 
+          onSubmit={handleSubmit} 
+          className="space-y-5"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3, duration: 0.5 }}
+        >
           <div className="space-y-2">
-            <label className="text-[10px] font-bold text-[#e8c97a] uppercase tracking-[0.2em] block pl-1">
-              Command Email
+            <label className="text-[10px] font-bold text-primary/80 uppercase tracking-[0.2em] block pl-1 font-mono">
+              System ID
             </label>
             <div className="relative group">
-              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30 group-focus-within:text-[#d4a849] transition-colors" />
+              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/40 group-focus-within:text-primary transition-colors" />
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="chandra@godsystem.co"
-                className="w-full pl-11 pr-5 py-3.5 bg-black/40 border border-[#d4a849]/20 rounded-xl text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-white/20 focus:outline-none focus:ring-1 focus:ring-[#d4a849]/50 focus:border-[#d4a849]/60 transition-all duration-300"
+                placeholder="hunter@godsystem.co"
+                className="w-full pl-11 pr-5 py-3.5 bg-secondary/50 border border-border rounded-lg text-sm text-foreground placeholder-muted-foreground/40 focus:outline-none focus:ring-1 focus:ring-primary/50 focus:border-primary/40 transition-all duration-300 font-mono"
               />
             </div>
           </div>
 
           <div className="space-y-2">
-            <label className="text-[10px] font-bold text-[#e8c97a] uppercase tracking-[0.2em] block pl-1">
-              Access Secret
+            <label className="text-[10px] font-bold text-primary/80 uppercase tracking-[0.2em] block pl-1 font-mono">
+              Access Key
             </label>
             <div className="relative group">
-              <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30 group-focus-within:text-[#d4a849] transition-colors" />
+              <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/40 group-focus-within:text-primary transition-colors" />
               <input
                 type="password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full pl-11 pr-5 py-3.5 bg-black/40 border border-[#d4a849]/20 rounded-xl text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-white/20 focus:outline-none focus:ring-1 focus:ring-[#d4a849]/50 focus:border-[#d4a849]/60 transition-all duration-300"
+                className="w-full pl-11 pr-5 py-3.5 bg-secondary/50 border border-border rounded-lg text-sm text-foreground placeholder-muted-foreground/40 focus:outline-none focus:ring-1 focus:ring-primary/50 focus:border-primary/40 transition-all duration-300 font-mono"
               />
             </div>
           </div>
@@ -103,27 +133,27 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full py-4 bg-gradient-to-r from-[#e8c97a] via-[#d4a849] to-[#b8860b] hover:brightness-110 active:scale-[0.99] text-[#08080a] font-bold text-xs uppercase tracking-[0.2em] rounded-xl transition-all duration-300 shadow-lg shadow-[#d4a849]/10 disabled:opacity-50 disabled:pointer-events-none mt-2"
+            className="w-full py-4 bg-primary hover:bg-primary/90 active:scale-[0.99] text-primary-foreground font-display font-bold text-xs uppercase tracking-[0.2em] rounded-lg transition-all duration-300 shadow-lg shadow-primary/10 disabled:opacity-50 disabled:pointer-events-none mt-2 relative overflow-hidden"
           >
             {isLoading ? (
               <span className="flex items-center justify-center gap-2.5">
-                <Loader2 className="w-4 h-4 animate-spin text-[#08080a]" />
+                <Loader2 className="w-4 h-4 animate-spin" />
                 Establishing Session...
               </span>
             ) : (
-              "Decrypt Workspace"
+              "Initialize System"
             )}
           </button>
-        </form>
+        </motion.form>
 
         {/* Footer */}
-        <div className="mt-10 pt-6 border-t border-border/40 text-center">
-          <p className="text-[9px] text-[#d4a849]/60 font-semibold uppercase tracking-[0.15em] leading-relaxed">
-            Secure Handshake Protocol • Active Guard<br />
+        <div className="mt-10 pt-5 border-t border-border text-center">
+          <p className="text-[9px] text-muted-foreground/50 font-mono uppercase tracking-[0.12em] leading-relaxed">
+            Encrypted Protocol • System Active<br />
             God System v0.2.0
           </p>
         </div>
-      </div>
+      </motion.div>
     </div>
   )
 }

@@ -92,12 +92,12 @@ function BudgetRing({
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.5, delay }}
       className={cn(
-        'bg-[#0e0e11] lg:bg-white/[0.03] lg:backdrop-blur-xl border rounded-2xl p-5 flex flex-col items-center relative overflow-hidden group hover:border-white/[0.1] transition-all duration-300',
+        'bg-card lg:bg-card/80 lg:backdrop-blur-xl border rounded-2xl p-5 flex flex-col items-center relative overflow-hidden group hover:border-border transition-all duration-300',
         isDanger
           ? 'border-red-500/30 budget-danger'
           : isWarning
-          ? 'border-amber-500/20 budget-warning'
-          : 'border-white/[0.06]'
+          ? 'border-primary/20 budget-warning'
+          : 'border-border'
       )}
     >
       {/* Ambient glow */}
@@ -149,12 +149,12 @@ function BudgetRing({
       </div>
 
       {/* Category label */}
-      <h4 className="text-white/80 text-sm font-semibold mb-3">{category.label}</h4>
+      <h4 className="text-foreground/80 text-sm font-semibold mb-3">{category.label}</h4>
 
       {/* Stats */}
       <div className="w-full space-y-2">
         <div className="flex items-center justify-between">
-          <span className="text-white/30 text-[10px] uppercase tracking-wider">Remaining</span>
+          <span className="text-muted-foreground/60 font-mono text-[10px] uppercase tracking-wider">Remaining</span>
           <span className={cn(
             'text-xs font-semibold',
             remaining < 0 ? 'text-red-400' : 'text-emerald-400'
@@ -164,7 +164,7 @@ function BudgetRing({
           </span>
         </div>
         <div className="flex items-center justify-between">
-          <span className="text-white/30 text-[10px] uppercase tracking-wider">Safe Daily</span>
+          <span className="text-muted-foreground/60 font-mono text-[10px] uppercase tracking-wider">Safe Daily</span>
           <span className={cn(
             'text-xs font-semibold',
             safeDailySpend <= 0 ? 'text-red-400' : 'text-amber-400/80'
@@ -174,7 +174,7 @@ function BudgetRing({
         </div>
         {projectedOverspend > 0 && (
           <div className="flex items-center justify-between">
-            <span className="text-white/30 text-[10px] uppercase tracking-wider">Projected Over</span>
+            <span className="text-muted-foreground/60 font-mono text-[10px] uppercase tracking-wider">Projected Over</span>
             <span className="text-red-400 text-xs font-semibold">
               {formatINR(Math.round(projectedOverspend))}
             </span>
@@ -183,16 +183,16 @@ function BudgetRing({
       </div>
 
       {/* Budget / Spent summary */}
-      <div className="w-full mt-3 pt-3 border-t border-white/[0.04] flex items-center justify-between">
+      <div className="w-full mt-3 pt-3 border-t border-border flex items-center justify-between">
         <div>
-          <p className="text-white/25 text-[10px] uppercase tracking-wider">Budget</p>
-          <p className="text-white/70 text-xs font-semibold">{formatINR(budget)}</p>
+          <p className="text-muted-foreground/50 font-mono text-[10px] uppercase tracking-wider">Budget</p>
+          <p className="text-foreground/70 text-xs font-semibold">{formatINR(budget)}</p>
         </div>
         <div className="text-right">
-          <p className="text-white/25 text-[10px] uppercase tracking-wider">Spent</p>
+          <p className="text-muted-foreground/50 font-mono text-[10px] uppercase tracking-wider">Spent</p>
           <p className={cn(
             'text-xs font-semibold',
-            isDanger ? 'text-red-400' : isWarning ? 'text-amber-400' : 'text-white/70'
+            isDanger ? 'text-red-400' : isWarning ? 'text-amber-400' : 'text-foreground/70'
           )}>
             {formatINR(spent)}
           </p>
@@ -275,20 +275,20 @@ function SpendingEntryForm({ onAdded }: { onAdded: () => void }) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.4 }}
-      className="bg-[#0e0e11] lg:bg-white/[0.03] lg:backdrop-blur-xl border border-white/[0.06] rounded-2xl p-5"
+      className="bg-card lg:bg-card/80 lg:backdrop-blur-xl border border-border rounded-2xl p-5"
     >
       <div className="flex items-center gap-2 mb-5">
-        <div className="p-1.5 rounded-lg bg-amber-400/10 border border-amber-400/20">
+        <div className="p-1.5 rounded-lg bg-primary/10 border border-primary/20">
           <ShoppingBag className="w-4 h-4 text-amber-400" />
         </div>
-        <h3 className="text-white/90 text-sm font-semibold">Add Expense</h3>
+        <h3 className="text-foreground text-sm font-semibold">Add Expense</h3>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {/* Amount */}
           <div className="space-y-1.5">
-            <Label className="text-white/40 text-xs uppercase tracking-wider">Amount (₹)</Label>
+            <Label className="text-muted-foreground text-xs uppercase tracking-wider">Amount (₹)</Label>
             <div className="relative">
               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-amber-400/50 text-sm">₹</span>
               <Input
@@ -296,23 +296,23 @@ function SpendingEntryForm({ onAdded }: { onAdded: () => void }) {
                 placeholder="0"
                 value={form.amount}
                 onChange={(e) => setForm(prev => ({ ...prev, amount: formatIndianCommas(e.target.value) }))}
-                className="pl-9 bg-white/[0.04] border-white/[0.08] text-white/90 placeholder:text-white/20 focus:border-amber-500/30 focus:ring-amber-500/20"
+                className="pl-9 bg-secondary/60 border-border text-foreground placeholder:text-muted-foreground/40 focus:border-primary/30 focus:ring-amber-500/20"
               />
             </div>
           </div>
 
           {/* Category */}
           <div className="space-y-1.5">
-            <Label className="text-white/40 text-xs uppercase tracking-wider">Category</Label>
+            <Label className="text-muted-foreground text-xs uppercase tracking-wider">Category</Label>
             <Select value={form.category} onValueChange={(val) => setForm(prev => ({ ...prev, category: val }))}>
-              <SelectTrigger className="bg-white/[0.04] border-white/[0.08] text-white/90 focus:ring-amber-500/20">
+              <SelectTrigger className="bg-secondary/60 border-border text-foreground focus:ring-amber-500/20">
                 <SelectValue placeholder="Select category" />
               </SelectTrigger>
-              <SelectContent className="bg-[#1a1a1e] border-white/[0.08]">
+              <SelectContent className="bg-accent border-border">
                 {ALL_CATEGORIES.map(cat => {
                   const Icon = cat.icon
                   return (
-                    <SelectItem key={cat.key} value={cat.key} className="text-white/80 focus:bg-white/[0.06] focus:text-white">
+                    <SelectItem key={cat.key} value={cat.key} className="text-foreground/80 focus:bg-white/[0.06] focus:text-foreground">
                       <span className="flex items-center gap-2">
                         <Icon className="w-3.5 h-3.5" style={{ color: cat.color }} />
                         {cat.label}
@@ -326,25 +326,25 @@ function SpendingEntryForm({ onAdded }: { onAdded: () => void }) {
 
           {/* Description */}
           <div className="space-y-1.5">
-            <Label className="text-white/40 text-xs uppercase tracking-wider">Description</Label>
+            <Label className="text-muted-foreground text-xs uppercase tracking-wider">Description</Label>
             <Input
               placeholder="What was this expense for?"
               value={form.description}
               onChange={(e) => setForm(prev => ({ ...prev, description: e.target.value }))}
-              className="bg-white/[0.04] border-white/[0.08] text-white/90 placeholder:text-white/20 focus:border-amber-500/30 focus:ring-amber-500/20"
+              className="bg-secondary/60 border-border text-foreground placeholder:text-muted-foreground/40 focus:border-primary/30 focus:ring-amber-500/20"
             />
           </div>
 
           {/* Payment Method */}
           <div className="space-y-1.5">
-            <Label className="text-white/40 text-xs uppercase tracking-wider">Payment Method</Label>
+            <Label className="text-muted-foreground text-xs uppercase tracking-wider">Payment Method</Label>
             <Select value={form.paymentMethod} onValueChange={(val) => setForm(prev => ({ ...prev, paymentMethod: val }))}>
-              <SelectTrigger className="bg-white/[0.04] border-white/[0.08] text-white/90 focus:ring-amber-500/20">
+              <SelectTrigger className="bg-secondary/60 border-border text-foreground focus:ring-amber-500/20">
                 <SelectValue placeholder="Select method" />
               </SelectTrigger>
-              <SelectContent className="bg-[#1a1a1e] border-white/[0.08]">
+              <SelectContent className="bg-accent border-border">
                 {PAYMENT_METHODS.map(method => (
-                  <SelectItem key={method} value={method} className="text-white/80 focus:bg-white/[0.06] focus:text-white">
+                  <SelectItem key={method} value={method} className="text-foreground/80 focus:bg-white/[0.06] focus:text-foreground">
                     {method}
                   </SelectItem>
                 ))}
@@ -354,12 +354,12 @@ function SpendingEntryForm({ onAdded }: { onAdded: () => void }) {
 
           {/* Date */}
           <div className="space-y-1.5 sm:col-span-2">
-            <Label className="text-white/40 text-xs uppercase tracking-wider">Date</Label>
+            <Label className="text-muted-foreground text-xs uppercase tracking-wider">Date</Label>
             <Input
               type="date"
               value={form.date}
               onChange={(e) => setForm(prev => ({ ...prev, date: e.target.value }))}
-              className="bg-white/[0.04] border-white/[0.08] text-white/90 focus:border-amber-500/30 focus:ring-amber-500/20"
+              className="bg-secondary/60 border-border text-foreground focus:border-primary/30 focus:ring-amber-500/20"
             />
           </div>
         </div>
@@ -426,19 +426,19 @@ function RecentExpenses() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.5 }}
-      className="bg-[#0e0e11] lg:bg-white/[0.03] lg:backdrop-blur-xl border border-white/[0.06] rounded-2xl p-5"
+      className="bg-card lg:bg-card/80 lg:backdrop-blur-xl border border-border rounded-2xl p-5"
     >
       <div className="flex items-center gap-2 mb-4">
         <Wallet className="w-4 h-4 text-amber-400" />
-        <h3 className="text-white/90 text-sm font-semibold">Recent Expenses</h3>
-        <span className="text-white/20 text-xs">({expenses.length})</span>
+        <h3 className="text-foreground text-sm font-semibold">Recent Expenses</h3>
+        <span className="text-muted-foreground/40 text-xs">({expenses.length})</span>
       </div>
 
       {sortedExpenses.length === 0 ? (
         <div className="text-center py-12">
-          <ShoppingBag className="w-10 h-10 text-white/10 mx-auto mb-3" />
-          <p className="text-white/30 text-sm">No expenses recorded yet</p>
-          <p className="text-white/15 text-xs mt-1">Add your first expense above</p>
+          <ShoppingBag className="w-10 h-10 text-muted-foreground/20 mx-auto mb-3" />
+          <p className="text-muted-foreground/60 text-sm">No expenses recorded yet</p>
+          <p className="text-muted-foreground/30 text-xs mt-1">Add your first expense above</p>
         </div>
       ) : (
         <div className="max-h-96 overflow-y-auto space-y-2 pr-1 scrollbar-thin scrollbar-thumb-white/5 scrollbar-track-transparent">
@@ -446,9 +446,9 @@ function RecentExpenses() {
             const config = categoryConfig[expense.category] || {
               icon: Wallet,
               color: '#d4a849',
-              bgClass: 'bg-white/5',
-              textClass: 'text-white/50',
-              borderClass: 'border-white/10',
+              bgClass: 'bg-secondary/50',
+              textClass: 'text-muted-foreground',
+              borderClass: 'border-border',
             }
             const Icon = config.icon
 
@@ -457,7 +457,7 @@ function RecentExpenses() {
                 key={expense.id}
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
-                className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.04] hover:border-white/[0.08] transition-all group"
+                className="flex items-center gap-3 p-3 rounded-xl bg-secondary/30 border border-border hover:border-border transition-all group"
               >
                 {/* Category Icon */}
                 <div
@@ -470,7 +470,7 @@ function RecentExpenses() {
                 {/* Details */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-0.5">
-                    <span className="text-white/80 text-sm font-medium truncate">{expense.description}</span>
+                    <span className="text-foreground/80 text-sm font-medium truncate">{expense.description}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <span
@@ -484,7 +484,7 @@ function RecentExpenses() {
                       {expense.category}
                     </span>
                     {expense.paymentMethod && (
-                      <span className="text-white/25 text-[10px]">{expense.paymentMethod}</span>
+                      <span className="text-muted-foreground/50 text-[10px]">{expense.paymentMethod}</span>
                     )}
                   </div>
                 </div>
@@ -492,7 +492,7 @@ function RecentExpenses() {
                 {/* Amount & Date */}
                 <div className="text-right flex-shrink-0">
                   <p className="text-amber-400 text-sm font-semibold">{formatINR(expense.amount)}</p>
-                  <p className="text-white/25 text-[10px]">
+                  <p className="text-muted-foreground/50 text-[10px]">
                     {new Date(expense.date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}
                   </p>
                 </div>
@@ -502,7 +502,7 @@ function RecentExpenses() {
                   variant="ghost"
                   size="sm"
                   onClick={() => handleDelete(expense.id)}
-                  className="h-8 w-8 p-0 text-white/20 hover:text-red-400 hover:bg-red-500/10 opacity-0 group-hover:opacity-100 transition-all flex-shrink-0"
+                  className="h-8 w-8 p-0 text-muted-foreground/40 hover:text-red-400 hover:bg-red-500/10 opacity-0 group-hover:opacity-100 transition-all flex-shrink-0"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M3 6h18" /><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" /><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
@@ -706,14 +706,14 @@ function KarnaInsights() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.6 }}
-      className="bg-[#0e0e11] lg:bg-white/[0.03] lg:backdrop-blur-xl border border-white/[0.06] rounded-2xl p-5"
+      className="bg-card lg:bg-card/80 lg:backdrop-blur-xl border border-border rounded-2xl p-5"
     >
       <div className="flex items-center gap-2 mb-4">
-        <div className="p-1.5 rounded-lg bg-amber-400/10 border border-amber-400/20">
+        <div className="p-1.5 rounded-lg bg-primary/10 border border-primary/20">
           <TrendingUp className="w-4 h-4 text-amber-400" />
         </div>
-        <h3 className="text-white/90 text-sm font-semibold">Karna Spending Insights</h3>
-        <span className="text-white/20 text-[10px] uppercase tracking-wider ml-auto">AI-Generated</span>
+        <h3 className="text-foreground text-sm font-semibold">Karna Spending Insights</h3>
+        <span className="text-muted-foreground/40 font-mono text-[10px] uppercase tracking-wider ml-auto">AI-Generated</span>
       </div>
 
       <div className="space-y-3">
@@ -726,17 +726,17 @@ function KarnaInsights() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.3, delay: 0.7 + idx * 0.08 }}
               className={cn(
-                'bg-white/[0.02] border border-white/[0.04] border-l-2 rounded-xl p-4 hover:bg-white/[0.03] transition-all',
+                'bg-secondary/30 border border-border border-l-2 rounded-xl p-4 hover:bg-secondary/50 transition-all',
                 borderColorMap[insight.type]
               )}
             >
               <div className="flex items-start gap-3">
                 <Icon className={cn('w-4 h-4 mt-0.5 flex-shrink-0', iconColorMap[insight.type])} />
                 <div>
-                  <span className={cn('text-[10px] uppercase tracking-wider font-medium', labelColorMap[insight.type])}>
+                  <span className={cn('font-mono text-[10px] uppercase tracking-wider font-medium', labelColorMap[insight.type])}>
                     {labelMap[insight.type]}
                   </span>
-                  <p className="text-white/70 text-sm mt-0.5 leading-relaxed">{insight.message}</p>
+                  <p className="text-foreground/70 text-sm mt-0.5 leading-relaxed">{insight.message}</p>
                 </div>
               </div>
             </motion.div>
@@ -773,15 +773,15 @@ function BudgetDistributionChart() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.3 }}
-      className="bg-[#0e0e11] lg:bg-white/[0.03] lg:backdrop-blur-xl border border-white/[0.06] rounded-2xl p-5"
+      className="bg-card lg:bg-card/80 lg:backdrop-blur-xl border border-border rounded-2xl p-5"
     >
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h3 className="text-white/90 text-sm font-semibold">Budget Distribution</h3>
-          <p className="text-white/30 text-[10px] mt-0.5">Allocation vs Spending</p>
+          <h3 className="text-foreground text-sm font-semibold">Budget Distribution</h3>
+          <p className="text-muted-foreground/60 text-[10px] mt-0.5">Allocation vs Spending</p>
         </div>
-        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-500/5 border border-amber-500/10">
-          <span className="text-[10px] text-amber-400/70 uppercase tracking-wider">This Month</span>
+        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-primary/5 border border-primary/10">
+          <span className="text-[10px] text-primary/70 uppercase tracking-wider">This Month</span>
         </div>
       </div>
 
@@ -828,9 +828,9 @@ function BudgetDistributionChart() {
                   className="w-2.5 h-2.5 rounded-full flex-shrink-0"
                   style={{ backgroundColor: item.color }}
                 />
-                <span className="text-white/60 text-xs flex-1">{item.name}</span>
-                <span className="text-white/40 text-[10px]">{percent.toFixed(0)}%</span>
-                <span className="text-white/70 text-xs font-medium">{formatINR(item.value)}</span>
+                <span className="text-muted-foreground text-xs flex-1">{item.name}</span>
+                <span className="text-muted-foreground text-[10px]">{percent.toFixed(0)}%</span>
+                <span className="text-foreground/70 text-xs font-medium">{formatINR(item.value)}</span>
               </div>
             )
           })}
@@ -838,16 +838,16 @@ function BudgetDistributionChart() {
       </div>
 
       {/* Total Summary */}
-      <div className="mt-4 pt-4 border-t border-white/[0.04] flex items-center justify-between">
+      <div className="mt-4 pt-4 border-t border-border flex items-center justify-between">
         <div>
-          <p className="text-white/30 text-[10px] uppercase tracking-wider">Total Budget</p>
+          <p className="text-muted-foreground/60 font-mono text-[10px] uppercase tracking-wider">Total Budget</p>
           <p className="gold-text text-lg font-bold">{formatINR(totalBudget)}</p>
         </div>
         <div className="text-right">
-          <p className="text-white/30 text-[10px] uppercase tracking-wider">Total Spent</p>
+          <p className="text-muted-foreground/60 font-mono text-[10px] uppercase tracking-wider">Total Spent</p>
           <p className={cn(
             'text-lg font-bold',
-            totalSpent > totalBudget ? 'text-red-400' : 'text-white/80'
+            totalSpent > totalBudget ? 'text-red-400' : 'text-foreground/80'
           )}>
             {formatINR(totalSpent)}
           </p>
@@ -904,7 +904,7 @@ export function BudgetIntelligence() {
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="relative overflow-hidden bg-gradient-to-br from-amber-500/[0.08] via-black/40 to-black/60 border border-amber-500/10 rounded-2xl p-6 lg:p-8"
+        className="relative overflow-hidden bg-gradient-to-br from-amber-500/[0.08] via-background/40 to-background/60 border border-primary/10 rounded-2xl p-6 lg:p-8"
       >
         {/* Ambient gradient overlay */}
         <div className="absolute inset-0 ambient-gradient pointer-events-none" />
@@ -917,11 +917,11 @@ export function BudgetIntelligence() {
         <div className="relative z-10">
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
             <div>
-              <p className="text-white/40 text-xs uppercase tracking-widest mb-2">Budget Intelligence</p>
-              <h1 className="gold-text text-3xl lg:text-4xl font-bold tracking-tight">
+              <p className="text-muted-foreground text-xs uppercase tracking-widest mb-2">Budget Intelligence</p>
+              <h1 className="gold-text text-3xl lg:font-display text-4xl font-bold tracking-tight">
                 Budget Control Center
               </h1>
-              <p className="text-white/30 text-sm mt-1">Track, control, and optimize every rupee</p>
+              <p className="text-muted-foreground/60 text-sm mt-1">Track, control, and optimize every rupee</p>
             </div>
             <div className="flex items-center gap-4">
               {/* Overall Budget Health */}
@@ -930,7 +930,7 @@ export function BudgetIntelligence() {
                 overallPercent > 90
                   ? 'bg-red-500/10 border-red-500/20 text-red-400'
                   : overallPercent >= 70
-                  ? 'bg-amber-500/10 border-amber-500/20 text-amber-400'
+                  ? 'bg-primary/10 border-primary/20 text-amber-400'
                   : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
               )}>
                 {overallPercent > 90 ? (
@@ -948,21 +948,21 @@ export function BudgetIntelligence() {
 
           {/* Summary Bar */}
           <div className="mt-6 grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="bg-[#0a0a0c] lg:bg-white/[0.03] lg:backdrop-blur-sm border border-white/[0.06] rounded-xl p-3">
-              <p className="text-white/30 text-[10px] uppercase tracking-wider">Total Budget</p>
+            <div className="bg-card lg:bg-card/80 lg:backdrop-blur-sm border border-border rounded-xl p-3">
+              <p className="text-muted-foreground/60 font-mono text-[10px] uppercase tracking-wider">Total Budget</p>
               <p className="gold-text text-xl font-bold">{formatINR(totalBudget)}</p>
             </div>
-            <div className="bg-[#0a0a0c] lg:bg-white/[0.03] lg:backdrop-blur-sm border border-white/[0.06] rounded-xl p-3">
-              <p className="text-white/30 text-[10px] uppercase tracking-wider">Total Spent</p>
+            <div className="bg-card lg:bg-card/80 lg:backdrop-blur-sm border border-border rounded-xl p-3">
+              <p className="text-muted-foreground/60 font-mono text-[10px] uppercase tracking-wider">Total Spent</p>
               <p className={cn(
                 'text-xl font-bold',
-                totalSpent > totalBudget ? 'text-red-400' : 'text-white/80'
+                totalSpent > totalBudget ? 'text-red-400' : 'text-foreground/80'
               )}>
                 {formatINR(totalSpent)}
               </p>
             </div>
-            <div className="bg-[#0a0a0c] lg:bg-white/[0.03] lg:backdrop-blur-sm border border-white/[0.06] rounded-xl p-3">
-              <p className="text-white/30 text-[10px] uppercase tracking-wider">Remaining</p>
+            <div className="bg-card lg:bg-card/80 lg:backdrop-blur-sm border border-border rounded-xl p-3">
+              <p className="text-muted-foreground/60 font-mono text-[10px] uppercase tracking-wider">Remaining</p>
               <p className={cn(
                 'text-xl font-bold',
                 totalRemaining < 0 ? 'text-red-400' : 'text-emerald-400'
@@ -971,16 +971,16 @@ export function BudgetIntelligence() {
                 {totalRemaining < 0 && <span className="text-xs ml-1">over</span>}
               </p>
             </div>
-            <div className="bg-[#0a0a0c] lg:bg-white/[0.03] lg:backdrop-blur-sm border border-teal-500/10 rounded-xl p-3 relative overflow-hidden group">
+            <div className="bg-card lg:bg-card/80 lg:backdrop-blur-sm border border-teal-500/10 rounded-xl p-3 relative overflow-hidden group">
               <div className="absolute inset-0 bg-teal-500/[0.02] pointer-events-none group-hover:bg-teal-500/[0.04] transition-colors" />
-              <p className="text-teal-400/70 text-[10px] uppercase tracking-wider font-semibold">Household Duties</p>
+              <p className="text-teal-400/70 font-mono text-[10px] uppercase tracking-wider font-semibold">Household Duties</p>
               <p className="text-teal-400 text-xl font-bold">{formatINR(totalExternalSpent)}</p>
             </div>
           </div>
 
           {/* Overall Progress Bar */}
           <div className="mt-4">
-            <div className="w-full h-2 bg-white/5 rounded-full overflow-hidden">
+            <div className="w-full h-2 bg-secondary/50 rounded-full overflow-hidden">
               <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: `${Math.min(100, overallPercent)}%` }}
@@ -996,8 +996,8 @@ export function BudgetIntelligence() {
               />
             </div>
             <div className="flex items-center justify-between mt-1.5">
-              <span className="text-white/30 text-[10px]">{daysLeft} days left in month</span>
-              <span className="text-white/30 text-[10px]">{overallPercent.toFixed(1)}% utilized</span>
+              <span className="text-muted-foreground/60 text-[10px]">{daysLeft} days left in month</span>
+              <span className="text-muted-foreground/60 text-[10px]">{overallPercent.toFixed(1)}% utilized</span>
             </div>
           </div>
         </div>
@@ -1008,12 +1008,12 @@ export function BudgetIntelligence() {
           ═══════════════════════════════════════════════════════════════════════ */}
       <div>
         <div className="flex items-center gap-2 mb-4">
-          <div className="p-1.5 rounded-lg bg-amber-400/10 border border-amber-400/20">
+          <div className="p-1.5 rounded-lg bg-primary/10 border border-primary/20">
             <Wallet className="w-4 h-4 text-amber-400" />
           </div>
           <div>
             <h2 className="gold-text text-lg font-bold">Budget Rings</h2>
-            <p className="text-white/30 text-[10px]">Real-time category utilization</p>
+            <p className="text-muted-foreground/60 text-[10px]">Real-time category utilization</p>
           </div>
         </div>
 

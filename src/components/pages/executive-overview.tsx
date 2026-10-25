@@ -145,15 +145,15 @@ function MetricCard({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay }}
-      className="metric-card bg-[#0e0e11] lg:bg-white/[0.03] lg:backdrop-blur-xl border border-white/[0.06] rounded-2xl p-3 sm:p-4 relative overflow-hidden group"
+      className="metric-card bg-card lg:bg-card/80 lg:backdrop-blur-xl border border-border rounded-2xl p-3 sm:p-4 relative overflow-hidden group"
     >
       {/* Subtle top border glow */}
-      <div className="absolute top-0 left-1/4 right-1/4 h-px bg-gradient-to-r from-transparent via-amber-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+      <div className="absolute top-0 left-1/4 right-1/4 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
 
       <div className="flex items-start justify-between mb-2">
         <div className="flex items-center gap-1.5 min-w-0">
-          <div className="text-white/30 flex-shrink-0">{icon}</div>
-          <span className="text-white/40 text-[9px] sm:text-[11px] uppercase tracking-wider font-semibold truncate">{label}</span>
+          <div className="text-muted-foreground/60 flex-shrink-0">{icon}</div>
+          <span className="text-muted-foreground text-[9px] sm:text-[11px] uppercase tracking-wider font-semibold truncate">{label}</span>
         </div>
         {trend !== 'neutral' && (
           <div className={cn('flex items-center gap-0.5 text-[10px] sm:text-xs flex-shrink-0', trend === 'up' ? 'text-emerald-400' : 'text-red-400')}>
@@ -163,7 +163,7 @@ function MetricCard({
         )}
       </div>
 
-      <div className="text-base sm:text-2xl font-bold text-white/95 tracking-tight truncate mb-1 sm:mb-2">{value}</div>
+      <div className="text-base sm:font-display text-2xl font-bold text-foreground tracking-tight truncate mb-1 sm:mb-2">{value}</div>
 
       <div className="mt-1 opacity-70 group-hover:opacity-100 transition-opacity">
         <MicroSparkline data={sparkData} color={sparkColor} height={22} />
@@ -206,7 +206,7 @@ function BudgetCategoryCard({
   }
 
   const bgMap: Record<string, string> = {
-    'amber-400': 'bg-amber-400/10 border-amber-400/20',
+    'amber-400': 'bg-primary/10 border-primary/20',
     'emerald-400': 'bg-emerald-400/10 border-emerald-400/20',
     'blue-400': 'bg-blue-400/10 border-blue-400/20',
     'purple-400': 'bg-purple-400/10 border-purple-400/20',
@@ -227,12 +227,12 @@ function BudgetCategoryCard({
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.5, delay }}
       className={cn(
-        'bg-[#0e0e11] lg:bg-white/[0.03] lg:backdrop-blur-xl border rounded-2xl p-4 sm:p-5 transition-all duration-300 relative overflow-hidden',
+        'bg-card lg:bg-card/80 lg:backdrop-blur-xl border rounded-2xl p-4 sm:p-5 transition-all duration-300 relative overflow-hidden',
         isDanger
           ? 'border-red-500/30 budget-danger'
           : isWarning
-          ? 'border-amber-500/20 budget-warning'
-          : 'border-white/[0.06]',
+          ? 'border-primary/20 budget-warning'
+          : 'border-border',
         isDanger && 'shadow-[0_0_24px_rgba(239,68,68,0.08)]'
       )}
     >
@@ -252,14 +252,14 @@ function BudgetCategoryCard({
           <div className={cn('p-1.5 rounded-lg border flex-shrink-0', bgMap[category.color])}>
             <span className={colorMap[category.color]}>{category.icon}</span>
           </div>
-          <span className="text-white/80 text-[10px] sm:text-xs font-semibold uppercase tracking-wider truncate max-w-[120px] xs:max-w-none">{category.label}</span>
+          <span className="text-foreground/80 text-[10px] sm:text-xs font-semibold uppercase tracking-wider truncate max-w-[120px] xs:max-w-none">{category.label}</span>
         </div>
         <span className={cn(
           'text-[9px] sm:text-[11px] font-bold px-2 py-0.5 rounded-full flex-shrink-0',
           isDanger
             ? 'bg-red-500/10 text-red-400 border border-red-500/20'
             : isWarning
-            ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
+            ? 'bg-primary/10 text-amber-400 border border-primary/20'
             : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
         )}>
           {percentUsed.toFixed(0)}%
@@ -269,17 +269,17 @@ function BudgetCategoryCard({
       {/* Budget / Spent / Remaining */}
       <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-3 sm:mb-4">
         <div>
-          <p className="text-white/30 text-[8px] sm:text-[10px] uppercase tracking-wider mb-0.5">Budget</p>
-          <p className="text-white/85 text-xs sm:text-sm font-semibold truncate">{formatINR(budget)}</p>
+          <p className="text-muted-foreground/60 text-[8px] sm:font-mono text-[10px] uppercase tracking-wider mb-0.5">Budget</p>
+          <p className="text-foreground text-xs sm:text-sm font-semibold truncate">{formatINR(budget)}</p>
         </div>
         <div>
-          <p className="text-white/30 text-[8px] sm:text-[10px] uppercase tracking-wider mb-0.5">Spent</p>
-          <p className={cn('text-xs sm:text-sm font-semibold truncate', isDanger ? 'text-red-400' : isWarning ? 'text-amber-400' : 'text-white/85')}>
+          <p className="text-muted-foreground/60 text-[8px] sm:font-mono text-[10px] uppercase tracking-wider mb-0.5">Spent</p>
+          <p className={cn('text-xs sm:text-sm font-semibold truncate', isDanger ? 'text-red-400' : isWarning ? 'text-amber-400' : 'text-foreground')}>
             {formatINR(spent)}
           </p>
         </div>
         <div>
-          <p className="text-white/30 text-[8px] sm:text-[10px] uppercase tracking-wider mb-0.5">Remaining</p>
+          <p className="text-muted-foreground/60 text-[8px] sm:font-mono text-[10px] uppercase tracking-wider mb-0.5">Remaining</p>
           <p className={cn('text-xs sm:text-sm font-semibold truncate', remaining < 0 ? 'text-red-400' : 'text-emerald-400')}>
             {formatINR(remaining)}
           </p>
@@ -287,7 +287,7 @@ function BudgetCategoryCard({
       </div>
 
       {/* Progress Bar */}
-      <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden mb-3">
+      <div className="w-full h-1.5 bg-secondary/50 rounded-full overflow-hidden mb-3">
         <motion.div
           initial={{ width: 0 }}
           animate={{ width: `${Math.min(100, percentUsed)}%` }}
@@ -305,7 +305,7 @@ function BudgetCategoryCard({
 
       {/* Safe Daily Spending */}
       <div className="flex items-center justify-between mb-3 sm:mb-4 text-[10px] sm:text-xs">
-        <span className="text-white/30">Safe daily spending</span>
+        <span className="text-muted-foreground/60">Safe daily spending</span>
         <span className={cn(
           'font-semibold',
           safeDailySpend <= 0 ? 'text-red-400' : 'text-amber-400/85'
@@ -316,13 +316,13 @@ function BudgetCategoryCard({
 
       {/* Recent Expenses */}
       {recentExpenses.length > 0 && (
-        <div className="border-t border-white/5 pt-2.5">
-          <p className="text-white/25 text-[8px] sm:text-[10px] uppercase tracking-wider mb-1.5">Recent Expenses</p>
+        <div className="border-t border-border pt-2.5">
+          <p className="text-muted-foreground/50 text-[8px] sm:font-mono text-[10px] uppercase tracking-wider mb-1.5">Recent Expenses</p>
           <div className="space-y-1">
             {recentExpenses.slice(0, 3).map((exp) => (
               <div key={exp.id} className="flex items-center justify-between text-[10px] sm:text-xs">
-                <span className="text-white/50 truncate max-w-[65%]">{exp.description}</span>
-                <span className="text-white/40 font-medium flex-shrink-0">{formatINR(exp.amount)}</span>
+                <span className="text-muted-foreground truncate max-w-[65%]">{exp.description}</span>
+                <span className="text-muted-foreground font-medium flex-shrink-0">{formatINR(exp.amount)}</span>
               </div>
             ))}
           </div>
@@ -351,7 +351,7 @@ function OperationItem({
 }) {
   const priorityConfig = {
     critical: { bg: 'bg-red-500/10 text-red-400 border-red-500/20', dot: 'bg-red-400' },
-    high: { bg: 'bg-amber-500/10 text-amber-400 border-amber-500/20', dot: 'bg-amber-400' },
+    high: { bg: 'bg-primary/10 text-amber-400 border-primary/20', dot: 'bg-amber-400' },
     normal: { bg: 'bg-blue-500/10 text-blue-400 border-blue-500/20', dot: 'bg-blue-400' },
   }
   const config = priorityConfig[priority]
@@ -361,13 +361,13 @@ function OperationItem({
       initial={{ opacity: 0, x: -10 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.3, delay }}
-      className="flex items-center justify-between gap-2 p-2.5 sm:p-3 rounded-xl bg-white/[0.02] border border-white/[0.04] hover:border-white/[0.08] transition-all group"
+      className="flex items-center justify-between gap-2 p-2.5 sm:p-3 rounded-xl bg-secondary/30 border border-border hover:border-border transition-all group"
     >
       <div className="flex items-center gap-2 min-w-0 flex-1">
         <div className={cn('w-1.5 h-1.5 rounded-full flex-shrink-0', config.dot)} />
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-1.5 flex-wrap">
-            <span className="text-white/85 text-xs sm:text-sm font-medium truncate max-w-[100px] xs:max-w-none">{label}</span>
+            <span className="text-foreground text-xs sm:text-sm font-medium truncate max-w-[100px] xs:max-w-none">{label}</span>
             <span className={cn('text-[8px] sm:text-[10px] px-1.5 py-0.2 sm:py-0.5 rounded-full border leading-none font-medium', config.bg)}>
               {priority}
             </span>
@@ -377,13 +377,13 @@ function OperationItem({
               </span>
             )}
           </div>
-          <p className="text-white/35 text-[10px] sm:text-xs truncate mt-0.5">{subtitle}</p>
+          <p className="text-muted-foreground/70 text-[10px] sm:text-xs truncate mt-0.5">{subtitle}</p>
         </div>
       </div>
       <Button
         variant="ghost"
         size="sm"
-        className="text-white/40 hover:text-amber-400 text-[10px] sm:text-xs h-6 sm:h-7 px-1.5 sm:px-2 flex-shrink-0 hover:bg-white/5"
+        className="text-muted-foreground hover:text-amber-400 text-[10px] sm:text-xs h-6 sm:h-7 px-1.5 sm:px-2 flex-shrink-0 hover:bg-secondary/50"
       >
         <span className="hidden xs:inline">{actionLabel}</span>
         <ChevronRight className="w-3 h-3 sm:ml-0.5" />
@@ -887,7 +887,7 @@ export function ExecutiveOverview() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="relative overflow-hidden bg-gradient-to-br from-amber-500/[0.06] via-black/40 to-black/60 border border-amber-500/10 rounded-2xl p-4 sm:p-6"
+        className="relative overflow-hidden bg-gradient-to-br from-amber-500/[0.06] via-background/40 to-background/60 border border-primary/10 rounded-2xl p-4 sm:p-6"
       >
         {/* Ambient gradient overlay */}
         <div className="absolute inset-0 ambient-gradient pointer-events-none" />
@@ -906,8 +906,8 @@ export function ExecutiveOverview() {
                 <div className="flex items-center gap-2.5">
                   <div className="flex-shrink-0">{getGreetingIcon()}</div>
                   <div className="min-w-0">
-                    <h2 className="text-white/95 text-base sm:text-lg font-semibold tracking-tight truncate">{getGreeting()}, Chandra.</h2>
-                    <p className="text-white/40 text-[10px] sm:text-xs truncate">Here&apos;s your executive briefing for today</p>
+                    <h2 className="text-foreground text-base sm:text-lg font-semibold tracking-tight truncate">{getGreeting()}, Chandra.</h2>
+                    <p className="text-muted-foreground text-[10px] sm:text-xs truncate">Here&apos;s your executive briefing for today</p>
                   </div>
                 </div>
                 <Button
@@ -929,13 +929,13 @@ export function ExecutiveOverview() {
               <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-4">
                 {/* Revenue This Month */}
                 <div className="premium-stats-card rounded-xl p-3 sm:p-4 min-w-0">
-                  <p className="text-white/30 text-[9px] sm:text-[10px] uppercase tracking-wider mb-1 truncate">Revenue This Month</p>
+                  <p className="text-muted-foreground/60 text-[9px] sm:font-mono text-[10px] uppercase tracking-wider mb-1 truncate">Revenue This Month</p>
                   <p className="gold-text text-sm sm:text-xl font-bold truncate">{formatINR(monthlyIncome)}</p>
                 </div>
 
                 {/* Remaining to Target */}
                 <div className="premium-stats-card rounded-xl p-3 sm:p-4 min-w-0">
-                  <p className="text-white/30 text-[9px] sm:text-[10px] uppercase tracking-wider mb-1 truncate">Remaining to Target</p>
+                  <p className="text-muted-foreground/60 text-[9px] sm:font-mono text-[10px] uppercase tracking-wider mb-1 truncate">Remaining to Target</p>
                   <p className={cn(
                     'text-sm sm:text-xl font-bold truncate',
                     remainingToTarget > 0 ? 'text-amber-400' : 'text-emerald-400'
@@ -946,16 +946,16 @@ export function ExecutiveOverview() {
 
                 {/* Strongest Stream */}
                 <div className="premium-stats-card rounded-xl p-3 sm:p-4 min-w-0">
-                  <p className="text-white/30 text-[9px] sm:text-[10px] uppercase tracking-wider mb-1 truncate">Strongest Stream</p>
+                  <p className="text-muted-foreground/60 text-[9px] sm:font-mono text-[10px] uppercase tracking-wider mb-1 truncate">Strongest Stream</p>
                   <p className="text-emerald-400 text-xs sm:text-sm font-semibold truncate">{strongestStream.source}</p>
-                  <p className="text-white/40 text-[10px] sm:text-xs truncate">{formatINR(strongestStream.amount)}</p>
+                  <p className="text-muted-foreground text-[10px] sm:text-xs truncate">{formatINR(strongestStream.amount)}</p>
                 </div>
 
                 {/* Weakest Stream */}
                 <div className="premium-stats-card rounded-xl p-3 sm:p-4 min-w-0">
-                  <p className="text-white/30 text-[9px] sm:text-[10px] uppercase tracking-wider mb-1 truncate">Weakest Stream</p>
-                  <p className="text-amber-400/70 text-xs sm:text-sm font-semibold truncate">{weakestStream.source}</p>
-                  <p className="text-white/40 text-[10px] sm:text-xs truncate">{formatINR(weakestStream.amount)}</p>
+                  <p className="text-muted-foreground/60 text-[9px] sm:font-mono text-[10px] uppercase tracking-wider mb-1 truncate">Weakest Stream</p>
+                  <p className="text-primary/70 text-xs sm:text-sm font-semibold truncate">{weakestStream.source}</p>
+                  <p className="text-muted-foreground text-[10px] sm:text-xs truncate">{formatINR(weakestStream.amount)}</p>
                 </div>
               </div>
             </div>
@@ -971,9 +971,9 @@ export function ExecutiveOverview() {
               )}
 
               {/* Target Progress */}
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/[0.02] border border-white/5">
-                <Target className="w-3 h-3 text-white/30" />
-                <span className="text-white/40 text-xs">
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-secondary/30 border border-border">
+                <Target className="w-3 h-3 text-muted-foreground/60" />
+                <span className="text-muted-foreground text-xs">
                   {monthlyTarget > 0 ? `${((monthlyIncome / monthlyTarget) * 100).toFixed(1)}% of target` : 'No target set'}
                 </span>
               </div>
@@ -982,15 +982,15 @@ export function ExecutiveOverview() {
 
           {/* Right Daily Focus Checklist Panel (2 columns out of 5) */}
           <div className="lg:col-span-2 flex flex-col h-full">
-            <div className="bg-[#0e0e11] lg:bg-white/[0.02] lg:backdrop-blur-md border border-white/[0.08] rounded-xl p-4 flex flex-col h-full justify-between relative overflow-hidden">
+            <div className="bg-card lg:bg-card/60 lg:backdrop-blur-md border border-border rounded-xl p-4 flex flex-col h-full justify-between relative overflow-hidden">
               <div>
                 {/* Header */}
-                <div className="flex items-center justify-between mb-3 border-b border-white/[0.05] pb-2">
+                <div className="flex items-center justify-between mb-3 border-b border-border pb-2">
                   <div className="flex items-center gap-2">
                     <CheckCircle2 className="w-4 h-4 text-amber-400" />
-                    <h3 className="text-white/95 text-xs sm:text-sm font-bold tracking-wide">Today&apos;s Focus Checklist</h3>
+                    <h3 className="text-foreground text-xs sm:text-sm font-bold tracking-wide">Today&apos;s Focus Checklist</h3>
                   </div>
-                  <span className="text-[10px] text-white/30 uppercase tracking-wider font-semibold">
+                  <span className="text-[10px] text-muted-foreground/60 uppercase tracking-wider font-semibold">
                     {todayTodos.filter(t => t.completed === 1).length} / {todayTodos.length} Done
                   </span>
                 </div>
@@ -1003,12 +1003,12 @@ export function ExecutiveOverview() {
                     onChange={(e) => setNewTodoText(e.target.value)}
                     placeholder="Add dynamic focus task..."
                     disabled={isAddingTodo}
-                    className="flex-1 min-w-0 bg-white/[0.03] border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-white placeholder-white/20 focus:outline-none focus:border-amber-500/40 focus:ring-1 focus:ring-amber-500/15 transition-all"
+                    className="flex-1 min-w-0 bg-secondary/50 border border-border rounded-lg px-2.5 py-1.5 text-xs text-foreground placeholder-muted-foreground/40 focus:outline-none focus:border-amber-500/40 focus:ring-1 focus:ring-amber-500/15 transition-all"
                   />
                   <button
                     type="submit"
                     disabled={isAddingTodo || !newTodoText.trim()}
-                    className="bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 text-amber-400/90 hover:text-amber-400 px-3 rounded-lg text-xs font-semibold transition-all flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="bg-primary/15 hover:bg-amber-500/25 border border-primary/30 text-amber-400/90 hover:text-amber-400 px-3 rounded-lg text-xs font-semibold transition-all flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <Plus className="w-3.5 h-3.5" />
                   </button>
@@ -1017,16 +1017,16 @@ export function ExecutiveOverview() {
                 {/* Checklist Scrollable Container */}
                 <div className="space-y-1.5 max-h-40 overflow-y-auto pr-1 select-none">
                   {todayTodos.length === 0 ? (
-                    <div className="text-center py-6 border border-dashed border-white/[0.04] rounded-lg">
-                      <Sparkles className="w-5 h-5 text-white/15 mx-auto mb-1.5" />
-                      <p className="text-white/30 text-[10px]">No active tasks focus scheduled today.</p>
-                      <p className="text-white/15 text-[9px] mt-0.5">Use the input above to add key goals</p>
+                    <div className="text-center py-6 border border-dashed border-border rounded-lg">
+                      <Sparkles className="w-5 h-5 text-muted-foreground/30 mx-auto mb-1.5" />
+                      <p className="text-muted-foreground/60 text-[10px]">No active tasks focus scheduled today.</p>
+                      <p className="text-muted-foreground/30 text-[9px] mt-0.5">Use the input above to add key goals</p>
                     </div>
                   ) : (
                     todayTodos.map((todo) => (
                       <div
                         key={todo.id}
-                        className="group flex items-center justify-between gap-3 bg-white/[0.01] hover:bg-white/[0.03] border border-white/[0.03] hover:border-amber-500/10 rounded-lg p-2 transition-all duration-200"
+                        className="group flex items-center justify-between gap-3 bg-white/[0.01] hover:bg-secondary/50 border border-white/[0.03] hover:border-primary/10 rounded-lg p-2 transition-all duration-200"
                       >
                         <div 
                           onClick={() => handleToggleTodo(todo.id, todo.completed)}
@@ -1044,8 +1044,8 @@ export function ExecutiveOverview() {
                           <span className={cn(
                             'text-xs transition-all leading-tight',
                             todo.completed === 1 
-                              ? 'text-white/30 line-through' 
-                              : 'text-white/80 group-hover:text-white/95'
+                              ? 'text-muted-foreground/60 line-through' 
+                              : 'text-foreground/80 group-hover:text-foreground'
                           )}>
                             {todo.task}
                           </span>
@@ -1053,7 +1053,7 @@ export function ExecutiveOverview() {
 
                         <button
                           onClick={() => handleDeleteTodo(todo.id)}
-                          className="text-white/20 hover:text-red-400 p-0.5 rounded transition-all opacity-0 group-hover:opacity-100 flex-shrink-0"
+                          className="text-muted-foreground/40 hover:text-red-400 p-0.5 rounded transition-all opacity-0 group-hover:opacity-100 flex-shrink-0"
                           title="Delete task"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
@@ -1147,21 +1147,21 @@ export function ExecutiveOverview() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5">
           <div>
             <h2 className="gold-text text-lg sm:text-xl font-bold">Wealth Distribution Engine</h2>
-            <p className="text-white/30 text-[11px] sm:text-xs mt-0.5">Your income, automatically allocated across 5 wealth pillars</p>
+            <p className="text-muted-foreground/60 text-[11px] sm:text-xs mt-0.5">Your income, automatically allocated across 5 wealth pillars</p>
           </div>
 
           {/* Inputs Row (Income & Target) */}
           <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
             {/* Monthly Income Input */}
             <div className="flex items-center justify-between sm:justify-start gap-2.5 w-full sm:w-auto">
-              <label className="text-white/40 text-[10px] sm:text-xs uppercase tracking-wider whitespace-nowrap">Monthly Income</label>
+              <label className="text-muted-foreground text-[10px] sm:text-xs uppercase tracking-wider whitespace-nowrap">Monthly Income</label>
               <div className="relative">
                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-amber-400/60 text-xs sm:text-sm">₹</span>
                 <input
                   type="text"
                   value={incomeInput}
                   onChange={(e) => handleIncomeChange(e.target.value)}
-                  className="w-28 sm:w-36 h-9 pl-7 pr-2.5 rounded-xl bg-white/[0.04] border border-amber-500/15 text-white/90 text-xs sm:text-sm font-semibold focus:outline-none focus:border-amber-500/40 focus:ring-1 focus:ring-amber-500/20 transition-all placeholder:text-white/20"
+                  className="w-28 sm:w-36 h-9 pl-7 pr-2.5 rounded-xl bg-secondary/60 border border-primary/15 text-foreground text-xs sm:text-sm font-semibold focus:outline-none focus:border-amber-500/40 focus:ring-1 focus:ring-amber-500/20 transition-all placeholder:text-muted-foreground/40"
                   placeholder="Enter income"
                 />
               </div>
@@ -1169,14 +1169,14 @@ export function ExecutiveOverview() {
 
             {/* Monthly Target Input */}
             <div className="flex items-center justify-between sm:justify-start gap-2.5 w-full sm:w-auto">
-              <label className="text-white/40 text-[10px] sm:text-xs uppercase tracking-wider whitespace-nowrap">Monthly Target</label>
+              <label className="text-muted-foreground text-[10px] sm:text-xs uppercase tracking-wider whitespace-nowrap">Monthly Target</label>
               <div className="relative">
                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-amber-400/60 text-xs sm:text-sm">₹</span>
                 <input
                   type="text"
                   value={targetInput}
                   onChange={(e) => handleTargetChange(e.target.value)}
-                  className="w-28 sm:w-36 h-9 pl-7 pr-2.5 rounded-xl bg-white/[0.04] border border-amber-500/15 text-white/90 text-xs sm:text-sm font-semibold focus:outline-none focus:border-amber-500/40 focus:ring-1 focus:ring-amber-500/20 transition-all placeholder:text-white/20"
+                  className="w-28 sm:w-36 h-9 pl-7 pr-2.5 rounded-xl bg-secondary/60 border border-primary/15 text-foreground text-xs sm:text-sm font-semibold focus:outline-none focus:border-amber-500/40 focus:ring-1 focus:ring-amber-500/20 transition-all placeholder:text-muted-foreground/40"
                   placeholder="Enter target"
                 />
               </div>
@@ -1186,7 +1186,7 @@ export function ExecutiveOverview() {
 
         {/* Distribution Visual Bar */}
         <div className="mb-6">
-          <div className="w-full h-3 bg-white/[0.03] rounded-full overflow-hidden flex">
+          <div className="w-full h-3 bg-secondary/50 rounded-full overflow-hidden flex">
             {budgetCategories.map((cat) => {
               const alloc = budgetAllocation[cat.key]
               const width = monthlyIncome > 0 ? (alloc.budget / monthlyIncome) * 100 : cat.key === 'personal' ? 40 : cat.key === 'savings' ? 25 : cat.key === 'business' ? 15 : 10
@@ -1262,12 +1262,12 @@ export function ExecutiveOverview() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.6 }}
-        className="bg-[#0e0e11] lg:bg-white/[0.03] lg:backdrop-blur-xl border border-white/[0.06] rounded-2xl p-5"
+        className="bg-card lg:bg-card/80 lg:backdrop-blur-xl border border-border rounded-2xl p-5"
       >
         <div className="flex items-center gap-2 mb-4">
           <CircleDot className="w-4 h-4 text-amber-400" />
-          <h3 className="text-white/90 text-sm font-semibold">Active Operations</h3>
-          <span className="text-white/20 text-xs ml-1">
+          <h3 className="text-foreground text-sm font-semibold">Active Operations</h3>
+          <span className="text-muted-foreground/40 text-xs ml-1">
             ({todayFollowups.length + pendingProposals.length + overdueClients.length} items)
           </span>
         </div>
@@ -1276,7 +1276,7 @@ export function ExecutiveOverview() {
           {/* Today's Notifications */}
           {todayNotifications.length > 0 && (
             <div className="mb-3">
-              <p className="text-white/25 text-[10px] uppercase tracking-wider mb-2 flex items-center gap-1.5">
+              <p className="text-muted-foreground/50 font-mono text-[10px] uppercase tracking-wider mb-2 flex items-center gap-1.5">
                 <Bell className="w-3 h-3 text-amber-400" /> Notifications
               </p>
               {todayNotifications.map((n, i) => (
@@ -1295,7 +1295,7 @@ export function ExecutiveOverview() {
           {/* Followups Due Today */}
           {todayFollowups.length > 0 && (
             <div className="mb-3">
-              <p className="text-white/25 text-[10px] uppercase tracking-wider mb-2 flex items-center gap-1.5">
+              <p className="text-muted-foreground/50 font-mono text-[10px] uppercase tracking-wider mb-2 flex items-center gap-1.5">
                 <Clock className="w-3 h-3" /> Due Today
               </p>
               {todayFollowups.map((f, i) => (
@@ -1314,7 +1314,7 @@ export function ExecutiveOverview() {
           {/* Pending Proposals */}
           {pendingProposals.length > 0 && (
             <div className="mb-3">
-              <p className="text-white/25 text-[10px] uppercase tracking-wider mb-2 flex items-center gap-1.5">
+              <p className="text-muted-foreground/50 font-mono text-[10px] uppercase tracking-wider mb-2 flex items-center gap-1.5">
                 <Send className="w-3 h-3" /> Pending Proposals
               </p>
               {pendingProposals.map((c, i) => (
@@ -1334,7 +1334,7 @@ export function ExecutiveOverview() {
           {/* Overdue/Urgent Clients */}
           {overdueClients.length > 0 && (
             <div className="mb-3">
-              <p className="text-white/25 text-[10px] uppercase tracking-wider mb-2 flex items-center gap-1.5">
+              <p className="text-muted-foreground/50 font-mono text-[10px] uppercase tracking-wider mb-2 flex items-center gap-1.5">
                 <AlertTriangle className="w-3 h-3" /> Urgent Clients
               </p>
               {overdueClients.map((c, i) => (
@@ -1355,8 +1355,8 @@ export function ExecutiveOverview() {
           {todayFollowups.length === 0 && pendingProposals.length === 0 && overdueClients.length === 0 && (
             <div className="text-center py-8">
               <CheckCircle2 className="w-8 h-8 text-emerald-400/30 mx-auto mb-2" />
-              <p className="text-white/30 text-sm">All clear — no urgent actions right now</p>
-              <p className="text-white/15 text-xs mt-1">Use Quick Add to create followups and clients</p>
+              <p className="text-muted-foreground/60 text-sm">All clear — no urgent actions right now</p>
+              <p className="text-muted-foreground/30 text-xs mt-1">Use Quick Add to create followups and clients</p>
             </div>
           )}
         </div>
@@ -1369,19 +1369,19 @@ export function ExecutiveOverview() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.7 }}
-        className="hidden md:block bg-[#0e0e11] lg:bg-white/[0.03] lg:backdrop-blur-xl border border-white/[0.06] rounded-2xl p-5 mb-8"
+        className="hidden md:block bg-card lg:bg-card/80 lg:backdrop-blur-xl border border-border rounded-2xl p-5 mb-8"
       >
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
           <div className="flex items-center gap-2">
-            <Flame className="w-5 h-5 text-amber-400 animate-pulse" />
+            <Flame className="w-5 h-5 text-primary animate-pulse" />
             <div>
-              <h3 className="text-white/95 text-base font-bold tracking-tight">Imperial Daily Execution</h3>
-              <p className="text-white/30 text-xs mt-0.5">Track, log, and maintain discipline consistency metrics in real-time.</p>
+              <h3 className="text-foreground text-base font-bold tracking-tight">Imperial Daily Execution</h3>
+              <p className="text-muted-foreground/60 text-xs mt-0.5">Track, log, and maintain discipline consistency metrics in real-time.</p>
             </div>
           </div>
           <div className="flex flex-wrap items-center gap-2">
             {jobStreak > 0 && (
-              <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-xs font-semibold text-amber-400">
+              <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-xs font-semibold text-amber-400">
                 <Flame className="w-3.5 h-3.5 fill-amber-400" />
                 <span>{jobStreak} Day Job Streak</span>
               </div>
@@ -1392,7 +1392,7 @@ export function ExecutiveOverview() {
                 <span>{weeklyStreak} Week Outreach Streak</span>
               </div>
             )}
-            <div className="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10 text-[10px] text-white/50 uppercase tracking-wider font-semibold">
+            <div className="px-2.5 py-1 rounded-lg bg-secondary/50 border border-border text-[10px] text-muted-foreground uppercase tracking-wider font-semibold">
               Live Database Sync
             </div>
           </div>
@@ -1400,23 +1400,23 @@ export function ExecutiveOverview() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-4">
           {/* Jobs Applied */}
-          <div className="bg-white/[0.02] border border-white/[0.04] rounded-2xl p-4 text-center hover:border-amber-500/20 hover:bg-white/[0.04] transition-all flex flex-col justify-between group">
+          <div className="bg-secondary/30 border border-border rounded-2xl p-4 text-center hover:border-primary/20 hover:bg-secondary/60 transition-all flex flex-col justify-between group">
             <div>
-              <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center mx-auto mb-3 text-amber-400 group-hover:scale-110 transition-transform">
+              <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center mx-auto mb-3 text-amber-400 group-hover:scale-110 transition-transform">
                 <Briefcase className="w-5 h-5" />
               </div>
-              <p className="text-white/90 text-3xl font-extrabold tracking-tight">
+              <p className="text-foreground font-display text-3xl font-extrabold tracking-tight">
                 {jobApplications.filter(j => new Date(j.appliedDate).toDateString() === new Date().toDateString()).length}
               </p>
-              <p className="text-white/40 text-[10px] uppercase tracking-wider font-semibold mt-1">Jobs Applied</p>
+              <p className="text-muted-foreground font-mono text-[10px] uppercase tracking-wider font-semibold mt-1">Jobs Applied</p>
             </div>
             
-            <div className="mt-4 pt-3 border-t border-white/[0.04] flex flex-col gap-2">
+            <div className="mt-4 pt-3 border-t border-border flex flex-col gap-2">
               <Button 
                 variant="ghost" 
                 size="sm"
                 onClick={() => setCurrentPage('jobs')}
-                className="w-full text-xs bg-white/5 hover:bg-amber-500 hover:text-black transition-colors rounded-lg h-8"
+                className="w-full text-xs bg-secondary/50 hover:bg-amber-500 hover:text-black transition-colors rounded-lg h-8"
               >
                 Open Board
               </Button>
@@ -1424,19 +1424,19 @@ export function ExecutiveOverview() {
           </div>
 
           {/* DMs Sent */}
-          <div className="bg-white/[0.02] border border-white/[0.04] rounded-2xl p-4 text-center hover:border-blue-500/20 hover:bg-white/[0.04] transition-all flex flex-col justify-between group">
+          <div className="bg-secondary/30 border border-border rounded-2xl p-4 text-center hover:border-blue-500/20 hover:bg-secondary/60 transition-all flex flex-col justify-between group">
             <div>
               <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mx-auto mb-3 text-blue-400 group-hover:scale-110 transition-transform">
                 <MessageSquare className="w-5 h-5" />
               </div>
-              <p className="text-white/90 text-3xl font-extrabold tracking-tight">{outreachMetrics.dms}</p>
-              <p className="text-white/40 text-[10px] uppercase tracking-wider font-semibold mt-1">DMs Sent</p>
+              <p className="text-foreground font-display text-3xl font-extrabold tracking-tight">{outreachMetrics.dms}</p>
+              <p className="text-muted-foreground font-mono text-[10px] uppercase tracking-wider font-semibold mt-1">DMs Sent</p>
             </div>
 
-            <div className="mt-4 pt-3 border-t border-white/[0.04] flex items-center gap-2">
+            <div className="mt-4 pt-3 border-t border-border flex items-center gap-2">
               <Button 
                 onClick={() => openLogModal('dm')}
-                className="flex-1 text-xs bg-blue-500/10 hover:bg-blue-500 hover:text-white text-blue-400 border border-blue-500/20 rounded-lg h-8"
+                className="flex-1 text-xs bg-blue-500/10 hover:bg-blue-500 hover:text-foreground text-blue-400 border border-blue-500/20 rounded-lg h-8"
               >
                 Log
               </Button>
@@ -1444,7 +1444,7 @@ export function ExecutiveOverview() {
                 size="icon" 
                 variant="ghost"
                 onClick={() => setInspectCategory('dm')}
-                className="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 text-white/60"
+                className="w-8 h-8 rounded-lg bg-secondary/50 hover:bg-accent text-muted-foreground"
               >
                 <History className="w-3.5 h-3.5" />
               </Button>
@@ -1452,19 +1452,19 @@ export function ExecutiveOverview() {
           </div>
 
           {/* Calls Completed */}
-          <div className="bg-white/[0.02] border border-white/[0.04] rounded-2xl p-4 text-center hover:border-emerald-500/20 hover:bg-white/[0.04] transition-all flex flex-col justify-between group">
+          <div className="bg-secondary/30 border border-border rounded-2xl p-4 text-center hover:border-emerald-500/20 hover:bg-secondary/60 transition-all flex flex-col justify-between group">
             <div>
               <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mx-auto mb-3 text-emerald-400 group-hover:scale-110 transition-transform">
                 <Phone className="w-5 h-5" />
               </div>
-              <p className="text-white/90 text-3xl font-extrabold tracking-tight">{outreachMetrics.calls}</p>
-              <p className="text-white/40 text-[10px] uppercase tracking-wider font-semibold mt-1">Calls</p>
+              <p className="text-foreground font-display text-3xl font-extrabold tracking-tight">{outreachMetrics.calls}</p>
+              <p className="text-muted-foreground font-mono text-[10px] uppercase tracking-wider font-semibold mt-1">Calls</p>
             </div>
 
-            <div className="mt-4 pt-3 border-t border-white/[0.04] flex items-center gap-2">
+            <div className="mt-4 pt-3 border-t border-border flex items-center gap-2">
               <Button 
                 onClick={() => openLogModal('call')}
-                className="flex-1 text-xs bg-emerald-500/10 hover:bg-emerald-500 hover:text-white text-emerald-400 border border-emerald-500/20 rounded-lg h-8"
+                className="flex-1 text-xs bg-emerald-500/10 hover:bg-emerald-500 hover:text-foreground text-emerald-400 border border-emerald-500/20 rounded-lg h-8"
               >
                 Log
               </Button>
@@ -1472,7 +1472,7 @@ export function ExecutiveOverview() {
                 size="icon" 
                 variant="ghost"
                 onClick={() => setInspectCategory('call')}
-                className="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 text-white/60"
+                className="w-8 h-8 rounded-lg bg-secondary/50 hover:bg-accent text-muted-foreground"
               >
                 <History className="w-3.5 h-3.5" />
               </Button>
@@ -1480,19 +1480,19 @@ export function ExecutiveOverview() {
           </div>
 
           {/* Meetings */}
-          <div className="bg-white/[0.02] border border-white/[0.04] rounded-2xl p-4 text-center hover:border-purple-500/20 hover:bg-white/[0.04] transition-all flex flex-col justify-between group">
+          <div className="bg-secondary/30 border border-border rounded-2xl p-4 text-center hover:border-purple-500/20 hover:bg-secondary/60 transition-all flex flex-col justify-between group">
             <div>
               <div className="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center mx-auto mb-3 text-purple-400 group-hover:scale-110 transition-transform">
                 <Users className="w-5 h-5" />
               </div>
-              <p className="text-white/90 text-3xl font-extrabold tracking-tight">{outreachMetrics.meetings}</p>
-              <p className="text-white/40 text-[10px] uppercase tracking-wider font-semibold mt-1">Meetings</p>
+              <p className="text-foreground font-display text-3xl font-extrabold tracking-tight">{outreachMetrics.meetings}</p>
+              <p className="text-muted-foreground font-mono text-[10px] uppercase tracking-wider font-semibold mt-1">Meetings</p>
             </div>
 
-            <div className="mt-4 pt-3 border-t border-white/[0.04] flex items-center gap-2">
+            <div className="mt-4 pt-3 border-t border-border flex items-center gap-2">
               <Button 
                 onClick={() => openLogModal('meeting')}
-                className="flex-1 text-xs bg-purple-500/10 hover:bg-purple-500 hover:text-white text-purple-400 border border-purple-500/20 rounded-lg h-8"
+                className="flex-1 text-xs bg-purple-500/10 hover:bg-purple-500 hover:text-foreground text-purple-400 border border-purple-500/20 rounded-lg h-8"
               >
                 Log
               </Button>
@@ -1500,7 +1500,7 @@ export function ExecutiveOverview() {
                 size="icon" 
                 variant="ghost"
                 onClick={() => setInspectCategory('meeting')}
-                className="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 text-white/60"
+                className="w-8 h-8 rounded-lg bg-secondary/50 hover:bg-accent text-muted-foreground"
               >
                 <History className="w-3.5 h-3.5" />
               </Button>
@@ -1508,19 +1508,19 @@ export function ExecutiveOverview() {
           </div>
 
           {/* Proposals Sent */}
-          <div className="bg-white/[0.02] border border-white/[0.04] rounded-2xl p-4 text-center hover:border-amber-500/20 hover:bg-white/[0.04] transition-all flex flex-col justify-between group">
+          <div className="bg-secondary/30 border border-border rounded-2xl p-4 text-center hover:border-primary/20 hover:bg-secondary/60 transition-all flex flex-col justify-between group">
             <div>
-              <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center mx-auto mb-3 text-amber-400 group-hover:scale-110 transition-transform">
+              <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center mx-auto mb-3 text-amber-400 group-hover:scale-110 transition-transform">
                 <Send className="w-5 h-5" />
               </div>
-              <p className="text-white/90 text-3xl font-extrabold tracking-tight">{outreachMetrics.proposals}</p>
-              <p className="text-white/40 text-[10px] uppercase tracking-wider font-semibold mt-1">Proposals</p>
+              <p className="text-foreground font-display text-3xl font-extrabold tracking-tight">{outreachMetrics.proposals}</p>
+              <p className="text-muted-foreground font-mono text-[10px] uppercase tracking-wider font-semibold mt-1">Proposals</p>
             </div>
 
-            <div className="mt-4 pt-3 border-t border-white/[0.04] flex items-center gap-2">
+            <div className="mt-4 pt-3 border-t border-border flex items-center gap-2">
               <Button 
                 onClick={() => openLogModal('proposal')}
-                className="flex-1 text-xs bg-amber-500/10 hover:bg-amber-500 hover:text-white text-amber-400 border border-amber-500/20 rounded-lg h-8"
+                className="flex-1 text-xs bg-primary/10 hover:bg-amber-500 hover:text-foreground text-amber-400 border border-primary/20 rounded-lg h-8"
               >
                 Log
               </Button>
@@ -1528,7 +1528,7 @@ export function ExecutiveOverview() {
                 size="icon" 
                 variant="ghost"
                 onClick={() => setInspectCategory('proposal')}
-                className="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 text-white/60"
+                className="w-8 h-8 rounded-lg bg-secondary/50 hover:bg-accent text-muted-foreground"
               >
                 <History className="w-3.5 h-3.5" />
               </Button>
@@ -1536,19 +1536,19 @@ export function ExecutiveOverview() {
           </div>
 
           {/* Closes */}
-          <div className="bg-white/[0.02] border border-white/[0.04] rounded-2xl p-4 text-center hover:border-emerald-500/20 hover:bg-white/[0.04] transition-all flex flex-col justify-between group">
+          <div className="bg-secondary/30 border border-border rounded-2xl p-4 text-center hover:border-emerald-500/20 hover:bg-secondary/60 transition-all flex flex-col justify-between group">
             <div>
               <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mx-auto mb-3 text-emerald-400 group-hover:scale-110 transition-transform">
                 <CheckCircle2 className="w-5 h-5" />
               </div>
-              <p className="text-white/90 text-3xl font-extrabold tracking-tight">{outreachMetrics.closes}</p>
-              <p className="text-white/40 text-[10px] uppercase tracking-wider font-semibold mt-1">Closes</p>
+              <p className="text-foreground font-display text-3xl font-extrabold tracking-tight">{outreachMetrics.closes}</p>
+              <p className="text-muted-foreground font-mono text-[10px] uppercase tracking-wider font-semibold mt-1">Closes</p>
             </div>
 
-            <div className="mt-4 pt-3 border-t border-white/[0.04] flex items-center gap-2">
+            <div className="mt-4 pt-3 border-t border-border flex items-center gap-2">
               <Button 
                 onClick={() => openLogModal('close')}
-                className="flex-1 text-xs bg-emerald-500/10 hover:bg-emerald-500 hover:text-white text-emerald-400 border border-emerald-500/20 rounded-lg h-8"
+                className="flex-1 text-xs bg-emerald-500/10 hover:bg-emerald-500 hover:text-foreground text-emerald-400 border border-emerald-500/20 rounded-lg h-8"
               >
                 Log
               </Button>
@@ -1556,7 +1556,7 @@ export function ExecutiveOverview() {
                 size="icon" 
                 variant="ghost"
                 onClick={() => setInspectCategory('close')}
-                className="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 text-white/60"
+                className="w-8 h-8 rounded-lg bg-secondary/50 hover:bg-accent text-muted-foreground"
               >
                 <History className="w-3.5 h-3.5" />
               </Button>
@@ -1564,17 +1564,17 @@ export function ExecutiveOverview() {
           </div>
 
           {/* Conversion Rate */}
-          <div className="bg-white/[0.02] border border-amber-500/10 rounded-2xl p-4 text-center hover:border-amber-500/25 hover:bg-white/[0.04] transition-all flex flex-col justify-between group">
+          <div className="bg-secondary/30 border border-primary/10 rounded-2xl p-4 text-center hover:border-primary/25 hover:bg-secondary/60 transition-all flex flex-col justify-between group">
             <div>
-              <div className="w-10 h-10 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center mx-auto mb-3 text-amber-400 group-hover:scale-110 transition-transform">
+              <div className="w-10 h-10 rounded-xl bg-primary/15 border border-primary/30 flex items-center justify-center mx-auto mb-3 text-amber-400 group-hover:scale-110 transition-transform">
                 <TrendingUp className="w-5 h-5" />
               </div>
-              <p className="text-white/90 text-3xl font-extrabold tracking-tight">{conversionRate}%</p>
-              <p className="text-white/40 text-[10px] uppercase tracking-wider font-semibold mt-1">Conv. Rate</p>
+              <p className="text-foreground font-display text-3xl font-extrabold tracking-tight">{conversionRate}%</p>
+              <p className="text-muted-foreground font-mono text-[10px] uppercase tracking-wider font-semibold mt-1">Conv. Rate</p>
             </div>
 
-            <div className="mt-4 pt-3 border-t border-white/[0.04] flex flex-col gap-2">
-              <div className="text-[10px] text-white/30 italic py-1.5">Weekly efficiency</div>
+            <div className="mt-4 pt-3 border-t border-border flex flex-col gap-2">
+              <div className="text-[10px] text-muted-foreground/60 italic py-1.5">Weekly efficiency</div>
             </div>
           </div>
         </div>
@@ -1589,56 +1589,56 @@ export function ExecutiveOverview() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-card backdrop-blur-sm"
           >
             <motion.div
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
-              className="bg-[#111113] border border-white/10 rounded-2xl p-6 w-full max-w-md shadow-2xl relative overflow-hidden"
+              className="bg-secondary border border-border rounded-2xl p-6 w-full max-w-md shadow-2xl relative overflow-hidden"
             >
-              <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/10 blur-[50px] rounded-full pointer-events-none" />
+              <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 blur-[50px] rounded-full pointer-events-none" />
               
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-xl font-bold text-white tracking-tight">Log {logType.toUpperCase()}</h3>
-                <Button variant="ghost" size="icon" onClick={() => setModalOpen(false)} className="w-8 h-8 rounded-full text-white/40 hover:text-white hover:bg-white/5">
+                <h3 className="text-xl font-bold text-foreground tracking-tight">Log {logType.toUpperCase()}</h3>
+                <Button variant="ghost" size="icon" onClick={() => setModalOpen(false)} className="w-8 h-8 rounded-full text-muted-foreground hover:text-foreground hover:bg-secondary/50">
                   <X className="w-4 h-4" />
                 </Button>
               </div>
 
               <form onSubmit={handleModalSubmit} className="space-y-4">
                 <div className="space-y-1.5">
-                  <label className="text-xs text-white/40 ml-1">Contact Name</label>
+                  <label className="text-xs text-muted-foreground ml-1">Contact Name</label>
                   <Input 
                     required 
                     value={contactName} 
                     onChange={e => setContactName(e.target.value)} 
                     placeholder="Enter name..." 
-                    className="bg-white/5 border-white/10 text-white" 
+                    className="bg-secondary/50 border-border text-foreground" 
                   />
                 </div>
 
                 {logType === 'call' && (
                   <div className="space-y-1.5">
-                    <label className="text-xs text-white/40 ml-1">Phone Number</label>
+                    <label className="text-xs text-muted-foreground ml-1">Phone Number</label>
                     <Input 
                       type="tel" 
                       value={phoneNumber} 
                       onChange={e => setPhoneNumber(e.target.value)} 
                       placeholder="Enter phone number..." 
-                      className="bg-white/5 border-white/10 text-white" 
+                      className="bg-secondary/50 border-border text-foreground" 
                     />
                   </div>
                 )}
 
                 <div className="space-y-1.5">
-                  <label className="text-xs text-white/40 ml-1">Notes</label>
+                  <label className="text-xs text-muted-foreground ml-1">Notes</label>
                   <textarea 
                     value={logNotes} 
                     onChange={e => setLogNotes(e.target.value)} 
                     placeholder="Add operational context or outcome..." 
                     rows={3}
-                    className="w-full bg-white/5 border border-white/10 text-white rounded-lg p-2.5 text-sm focus:outline-none focus:border-amber-500/50"
+                    className="w-full bg-secondary/50 border border-border text-foreground rounded-lg p-2.5 text-sm focus:outline-none focus:border-amber-500/50"
                   />
                 </div>
 
@@ -1647,7 +1647,7 @@ export function ExecutiveOverview() {
                     type="button" 
                     variant="ghost" 
                     onClick={() => setModalOpen(false)} 
-                    className="flex-1 border border-white/10 text-white hover:bg-white/5"
+                    className="flex-1 border border-border text-foreground hover:bg-secondary/50"
                   >
                     Cancel
                   </Button>
@@ -1668,52 +1668,52 @@ export function ExecutiveOverview() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-card backdrop-blur-sm"
           >
             <motion.div
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
-              className="bg-[#111113] border border-white/10 rounded-2xl p-6 w-full max-w-xl shadow-2xl relative overflow-hidden"
+              className="bg-secondary border border-border rounded-2xl p-6 w-full max-w-xl shadow-2xl relative overflow-hidden"
             >
-              <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/10 blur-[50px] rounded-full pointer-events-none" />
+              <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 blur-[50px] rounded-full pointer-events-none" />
               
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h3 className="text-xl font-bold text-white tracking-tight">{inspectCategory.toUpperCase()} Execution History</h3>
-                  <p className="text-xs text-white/40 mt-1">Reviewing transaction logs for this execution block.</p>
+                  <h3 className="text-xl font-bold text-foreground tracking-tight">{inspectCategory.toUpperCase()} Execution History</h3>
+                  <p className="text-xs text-muted-foreground mt-1">Reviewing transaction logs for this execution block.</p>
                 </div>
-                <Button variant="ghost" size="icon" onClick={() => setInspectCategory(null)} className="w-8 h-8 rounded-full text-white/40 hover:text-white hover:bg-white/5">
+                <Button variant="ghost" size="icon" onClick={() => setInspectCategory(null)} className="w-8 h-8 rounded-full text-muted-foreground hover:text-foreground hover:bg-secondary/50">
                   <X className="w-4 h-4" />
                 </Button>
               </div>
 
               <div className="max-h-[350px] overflow-y-auto space-y-3 pr-2 scrollbar-thin scrollbar-thumb-white/10">
                 {outreachRecords.filter(r => r.type === inspectCategory).length === 0 ? (
-                  <div className="text-center py-12 border border-dashed border-white/5 rounded-xl">
-                    <History className="w-8 h-8 text-white/10 mx-auto mb-2" />
-                    <p className="text-white/30 text-sm">No recorded executions for {inspectCategory}</p>
+                  <div className="text-center py-12 border border-dashed border-border rounded-xl">
+                    <History className="w-8 h-8 text-muted-foreground/20 mx-auto mb-2" />
+                    <p className="text-muted-foreground/60 text-sm">No recorded executions for {inspectCategory}</p>
                   </div>
                 ) : (
                   outreachRecords.filter(r => r.type === inspectCategory).map(record => (
                     <div 
                       key={record.id} 
-                      className="bg-white/[0.02] border border-white/[0.04] rounded-xl p-3.5 flex items-start justify-between gap-4 hover:bg-white/[0.04] transition-all"
+                      className="bg-secondary/30 border border-border rounded-xl p-3.5 flex items-start justify-between gap-4 hover:bg-secondary/60 transition-all"
                     >
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
-                          <h4 className="text-sm font-bold text-white tracking-tight truncate">{record.contactName}</h4>
-                          <span className="text-[9px] px-2 py-0.5 rounded bg-white/5 border border-white/10 text-white/40">
+                          <h4 className="text-sm font-bold text-foreground tracking-tight truncate">{record.contactName}</h4>
+                          <span className="text-[9px] px-2 py-0.5 rounded bg-secondary/50 border border-border text-muted-foreground">
                             {new Date(record.date).toLocaleDateString()}
                           </span>
                         </div>
                         {record.phoneNumber && (
-                          <p className="text-xs text-white/50 mt-1 flex items-center gap-1">
+                          <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
                             <span className="opacity-60">Tel:</span> {record.phoneNumber}
                           </p>
                         )}
                         {record.notes && (
-                          <p className="text-xs text-white/35 mt-2 bg-black/20 p-2 rounded-lg border border-white/[0.02] leading-relaxed">
+                          <p className="text-xs text-muted-foreground/70 mt-2 bg-secondary/50 p-2 rounded-lg border border-white/[0.02] leading-relaxed">
                             {record.notes}
                           </p>
                         )}
@@ -1731,10 +1731,10 @@ export function ExecutiveOverview() {
                 )}
               </div>
 
-              <div className="mt-6 pt-4 border-t border-white/5 flex justify-end">
+              <div className="mt-6 pt-4 border-t border-border flex justify-end">
                 <Button 
                   onClick={() => setInspectCategory(null)} 
-                  className="bg-white/10 hover:bg-white/15 text-white font-semibold rounded-lg px-6 h-10"
+                  className="bg-accent hover:bg-white/15 text-foreground font-semibold rounded-lg px-6 h-10"
                 >
                   Close History
                 </Button>

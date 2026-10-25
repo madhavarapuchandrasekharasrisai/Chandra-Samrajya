@@ -188,24 +188,24 @@ ${todoDetails || '- No active tasks focus scheduled today.'}
         className="mb-6"
       >
         <div className="flex items-center gap-3 mb-2">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-500/20 to-amber-700/20 border border-amber-500/20 flex items-center justify-center">
-            <Sparkles className="w-6 h-6 text-amber-400" />
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary/15 to-primary/5 border border-primary/20 flex items-center justify-center">
+            <Sparkles className="w-6 h-6 text-primary" />
           </div>
           <div>
-            <h1 className="gold-text text-2xl font-bold tracking-tight">Karna AI</h1>
-            <p className="text-white/30 text-sm">Your strategic advisor for financial sovereignty</p>
+            <h1 className="gold-text font-display text-2xl font-bold tracking-wider uppercase">Karna AI</h1>
+            <p className="text-muted-foreground text-sm font-mono">System Intelligence • Strategic Advisor</p>
           </div>
         </div>
 
         {/* Context Summary */}
-        <div className="flex items-center gap-4 mt-3 text-xs text-white/30">
-          <span>Revenue: <span className="text-amber-400/70">₹{monthlyIncome.toLocaleString('en-IN')}</span></span>
+        <div className="flex items-center gap-4 mt-3 text-xs text-muted-foreground/60">
+          <span>Revenue: <span className="text-primary/70">₹{monthlyIncome.toLocaleString('en-IN')}</span></span>
           <span>|</span>
-          <span>Target: <span className="text-white/50">₹{monthlyTarget.toLocaleString('en-IN')}</span></span>
+          <span>Target: <span className="text-muted-foreground">₹{monthlyTarget.toLocaleString('en-IN')}</span></span>
           <span>|</span>
           <span>Spent: <span className="text-red-400/70">₹{monthExpenses.toLocaleString('en-IN')}</span></span>
           <span>|</span>
-          <span>Clients: <span className="text-white/50">{clients.length}</span></span>
+          <span>Clients: <span className="text-muted-foreground">{clients.length}</span></span>
         </div>
       </motion.div>
 
@@ -219,11 +219,11 @@ ${todoDetails || '- No active tasks focus scheduled today.'}
               animate={{ opacity: 1 }}
               className="flex flex-col items-center justify-center h-full text-center py-12"
             >
-              <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-amber-500/10 to-amber-700/10 border border-amber-500/10 flex items-center justify-center mb-6 gold-glow">
-                <Bot className="w-10 h-10 text-amber-400" />
+              <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/10 flex items-center justify-center mb-6 gold-glow">
+                <Bot className="w-10 h-10 text-primary" />
               </div>
-              <h3 className="text-white/60 text-lg font-medium mb-2">Karna is ready</h3>
-              <p className="text-white/30 text-sm max-w-md mb-8">
+              <h3 className="text-muted-foreground text-lg font-medium mb-2">Karna is ready</h3>
+              <p className="text-muted-foreground/60 text-sm max-w-md mb-8">
                 I have full access to your financial data, client pipeline, and spending patterns. Ask me anything about your wealth strategy.
               </p>
 
@@ -236,10 +236,10 @@ ${todoDetails || '- No active tasks focus scheduled today.'}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.1 }}
                     onClick={() => sendMessage(item.prompt)}
-                    className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/[0.03] border border-white/[0.06] text-left hover:border-amber-500/20 hover:bg-white/[0.05] transition-all group"
+                    className="flex items-center gap-3 px-4 py-3 rounded-xl bg-secondary/50 border border-border text-left hover:border-primary/20 hover:bg-secondary/70 transition-all group"
                   >
-                    <span className="text-amber-400/50 group-hover:text-amber-400 transition-colors">{item.icon}</span>
-                    <span className="text-white/50 text-xs group-hover:text-white/70 transition-colors">{item.label}</span>
+                    <span className="text-primary/50 group-hover:text-primary transition-colors">{item.icon}</span>
+                    <span className="text-muted-foreground text-xs group-hover:text-foreground/70 transition-colors">{item.label}</span>
                   </motion.button>
                 ))}
               </div>
@@ -258,32 +258,32 @@ ${todoDetails || '- No active tasks focus scheduled today.'}
                 )}
               >
                 {msg.role === 'assistant' && (
-                  <div className="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/10 flex items-center justify-center flex-shrink-0 mt-1">
-                    <Sparkles className="w-4 h-4 text-amber-400" />
+                  <div className="w-8 h-8 rounded-xl bg-primary/10 border border-primary/10 flex items-center justify-center flex-shrink-0 mt-1">
+                    <Sparkles className="w-4 h-4 text-primary" />
                   </div>
                 )}
                 <div
                   className={cn(
                     'max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-relaxed',
                     msg.role === 'user'
-                      ? 'bg-amber-500/10 border border-amber-500/10 text-white/90'
-                      : 'bg-white/[0.03] border border-white/[0.06] text-white/80'
+                      ? 'bg-primary/10 border border-primary/10 text-foreground'
+                      : 'bg-secondary/50 border border-border text-foreground/80'
                   )}
                 >
                   {msg.role === 'assistant' ? (
-                    <div className="prose dark:prose-invert prose-sm max-w-none dark:[&>p]:text-white/80 [&>p]:text-zinc-800 [&>p]:mb-2 dark:[&>ul]:text-white/70 [&>ul]:text-zinc-700 dark:[&>ol]:text-white/70 [&>ol]:text-zinc-700 dark:[&>strong]:text-amber-400/90 [&>strong]:text-amber-700 dark:[&>h1]:text-amber-400 [&>h1]:text-amber-700 dark:[&>h2]:text-amber-400 [&>h2]:text-amber-700 dark:[&>h3]:text-amber-400/80 [&>h3]:text-amber-700">
+                    <div className="prose dark:prose-invert prose-sm max-w-none dark:[&>p]:text-foreground/80 [&>p]:text-zinc-800 [&>p]:mb-2 dark:[&>ul]:text-foreground/70 [&>ul]:text-zinc-700 dark:[&>ol]:text-foreground/70 [&>ol]:text-zinc-700 dark:[&>strong]:text-primary/90 [&>strong]:text-blue-700 dark:[&>h1]:text-primary [&>h1]:text-blue-700 dark:[&>h2]:text-primary [&>h2]:text-blue-700 dark:[&>h3]:text-primary/80 [&>h3]:text-blue-700">
                       <ReactMarkdown>{msg.content}</ReactMarkdown>
                     </div>
                   ) : (
                     <p>{msg.content}</p>
                   )}
-                  <span className="text-[10px] text-white/20 mt-2 block">
+                  <span className="text-[10px] text-muted-foreground/40 mt-2 block">
                     {msg.timestamp.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}
                   </span>
                 </div>
                 {msg.role === 'user' && (
-                  <div className="w-8 h-8 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center flex-shrink-0 mt-1">
-                    <User className="w-4 h-4 text-white/40" />
+                  <div className="w-8 h-8 rounded-xl bg-secondary/50 border border-border flex items-center justify-center flex-shrink-0 mt-1">
+                    <User className="w-4 h-4 text-muted-foreground" />
                   </div>
                 )}
               </motion.div>
@@ -296,13 +296,13 @@ ${todoDetails || '- No active tasks focus scheduled today.'}
               animate={{ opacity: 1, y: 0 }}
               className="flex gap-3 items-start"
             >
-              <div className="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/10 flex items-center justify-center flex-shrink-0">
-                <Sparkles className="w-4 h-4 text-amber-400 animate-pulse" />
+              <div className="w-8 h-8 rounded-xl bg-primary/10 border border-primary/10 flex items-center justify-center flex-shrink-0">
+                <Sparkles className="w-4 h-4 text-primary animate-pulse" />
               </div>
-              <div className="bg-white/[0.03] border border-white/[0.06] rounded-2xl px-4 py-3">
+              <div className="bg-secondary/50 border border-border rounded-2xl px-4 py-3">
                 <div className="flex items-center gap-2">
-                  <Loader2 className="w-4 h-4 text-amber-400 animate-spin" />
-                  <span className="text-white/40 text-sm">Karna is thinking...</span>
+                  <Loader2 className="w-4 h-4 text-primary animate-spin" />
+                  <span className="text-muted-foreground text-sm">Karna is thinking...</span>
                 </div>
               </div>
             </motion.div>
@@ -310,7 +310,7 @@ ${todoDetails || '- No active tasks focus scheduled today.'}
         </div>
 
         {/* Input Area */}
-        <div className="border-t border-white/[0.06] p-4">
+        <div className="border-t border-border p-4">
           <div className="flex items-center gap-3">
             <div className="flex-1 relative">
               <Input
@@ -319,14 +319,14 @@ ${todoDetails || '- No active tasks focus scheduled today.'}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder="Ask Karna anything about your wealth, strategy, or business..."
-                className="bg-white/[0.03] border-white/[0.06] text-white placeholder:text-white/20 pr-12 h-11 rounded-xl focus:border-amber-500/30"
+                className="bg-secondary/50 border-border text-foreground placeholder:text-muted-foreground/40 pr-12 h-11 rounded-xl focus:border-primary/30"
                 disabled={isLoading}
               />
             </div>
             <Button
               onClick={() => sendMessage(input)}
               disabled={!input.trim() || isLoading}
-              className="bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 text-black font-medium h-11 px-4 rounded-xl"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground font-medium h-11 px-4 rounded-xl"
             >
               {isLoading ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -335,7 +335,7 @@ ${todoDetails || '- No active tasks focus scheduled today.'}
               )}
             </Button>
           </div>
-          <p className="text-[10px] text-white/15 mt-2 text-center">
+          <p className="text-[10px] text-muted-foreground/30 mt-2 text-center">
             Karna AI has access to your financial data, budgets, clients, and spending patterns
           </p>
         </div>

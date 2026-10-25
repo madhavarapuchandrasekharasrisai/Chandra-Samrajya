@@ -28,9 +28,6 @@ export function Navbar() {
     setMounted(true)
   }, [])
 
-  const hour = new Date().getHours()
-  const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening'
-
   const today = new Date().toLocaleDateString('en-IN', {
     weekday: 'long',
     day: 'numeric',
@@ -39,7 +36,7 @@ export function Navbar() {
   })
 
   const pageNames: Record<string, string> = {
-    overview: 'Executive Overview',
+    overview: 'Command Center',
     sololeveling: '⚔️ Solo Leveling',
     wealth: 'Wealth Engine',
     budget: 'Budget Intelligence',
@@ -49,6 +46,8 @@ export function Navbar() {
     discipline: 'Discipline System',
     warroom: 'War Room',
     karna: 'Karna AI',
+    calendar: 'Imperial Calendar',
+    jobs: 'Job Search',
   }
 
   const handleMarkAsRead = async (id: string) => {
@@ -90,17 +89,15 @@ export function Navbar() {
     return () => document.removeEventListener('keydown', down)
   }, [])
 
-  // Timer for notifications
   useEffect(() => {
     const interval = setInterval(() => {
       const now = new Date()
       notifications.forEach((notif) => {
         const notifTime = new Date(notif.dateTime)
-        // If the time has passed in the last minute and we haven't notified yet
         if (!notif.read && notifTime <= now && !notifiedIds.has(notif.id)) {
           toast(notif.title, {
             description: notif.message || 'Reminder time has arrived',
-            icon: <Bell className="w-4 h-4 text-amber-500" />,
+            icon: <Bell className="w-4 h-4 text-primary" />,
             duration: 10000,
             action: {
               label: 'Mark Read',
@@ -110,14 +107,13 @@ export function Navbar() {
           setNotifiedIds(prev => new Set(prev).add(notif.id))
         }
       })
-    }, 10000) // Check every 10 seconds
+    }, 10000)
 
     return () => clearInterval(interval)
   }, [notifications, notifiedIds, updateNotification])
 
   const unreadCount = notifications.filter(n => !n.read).length
   
-  // Show all unread notifications + any read notifications for today
   const visibleNotifications = useMemo(() => {
     const todayStr = new Date().toDateString()
     return notifications
@@ -128,76 +124,81 @@ export function Navbar() {
   return (
     <>
       <header className="sticky top-0 z-40 w-full">
-        <div className="mx-4 mt-3 rounded-2xl bg-black/40 dark:bg-black/60 backdrop-blur-xl border border-border px-5 py-3 flex items-center justify-between shadow-sm">
-          {/* Left: Greeting + Page Name + Mobile Menu Toggle */}
+        <div className="mx-3 mt-2.5 rounded-xl bg-card/80 backdrop-blur-xl border border-border px-4 py-2.5 flex items-center justify-between shadow-sm">
+          {/* Left: Page Title */}
           <div className="flex items-center gap-3">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 -ml-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-all lg:hidden"
+              className="p-2 -ml-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent transition-all lg:hidden"
             >
-              <Menu className="w-5 h-5 text-amber-500 dark:text-amber-400" />
+              <Menu className="w-5 h-5 text-primary" />
             </button>
             <div>
-              <h2 className="text-foreground text-xs sm:text-sm font-semibold tracking-wide">{pageNames[currentPage] || 'Overview'}</h2>
+              <h2 className="text-foreground text-sm font-display font-bold tracking-wide uppercase">
+                {pageNames[currentPage] || 'Overview'}
+              </h2>
             </div>
           </div>
 
-          {/* Center: Command Search */}
+          {/* Center: Search */}
           <button
             onClick={() => setCommandOpen(true)}
-            className="hidden md:flex items-center gap-3 px-4 py-2 rounded-xl bg-muted/30 border border-border text-muted-foreground/60 text-sm hover:border-amber-500/20 hover:text-muted-foreground/80 transition-all min-w-[280px]"
+            className="hidden md:flex items-center gap-3 px-4 py-1.5 rounded-lg bg-secondary/50 border border-border text-muted-foreground text-sm hover:border-primary/20 hover:bg-secondary transition-all min-w-[260px]"
           >
             <Search className="w-3.5 h-3.5" />
-            <span>Search commands...</span>
-            <kbd className="ml-auto text-[10px] bg-muted px-1.5 py-0.5 rounded text-muted-foreground/30">⌘K</kbd>
+            <span className="font-mono text-xs">Search commands...</span>
+            <kbd className="ml-auto text-[10px] bg-accent px-1.5 py-0.5 rounded text-muted-foreground/50 font-mono">⌘K</kbd>
           </button>
 
           {/* Right: Actions */}
-          <div className="flex items-center gap-2">
-            {/* AI Status */}
-            <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500/10 dark:bg-amber-500/5 border border-amber-500/20 dark:border-amber-500/10">
-              <Sparkles className="w-3 h-3 text-amber-600 dark:text-amber-400" />
-              <span className="text-[11px] text-amber-700/85 dark:text-amber-400/70 font-medium">Karna Active</span>
+          <div className="flex items-center gap-1.5">
+            {/* System Status */}
+            <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-primary/5 border border-primary/10">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+              </span>
+              <span className="text-[10px] text-primary font-mono font-medium tracking-wider uppercase">System Online</span>
             </div>
 
             {/* Date */}
-            <div className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-muted/30 border border-border">
-              <CalendarDays className="w-3 h-3 text-muted-foreground/50" />
-              <span className="text-[11px] text-muted-foreground">{today}</span>
+            <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-secondary/50 border border-border">
+              <CalendarDays className="w-3 h-3 text-muted-foreground/60" />
+              <span className="text-[10px] text-muted-foreground font-mono">{today}</span>
             </div>
 
-            {/* Theme Toggle Button */}
+            {/* Theme Toggle */}
             {mounted && (
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                className="text-muted-foreground hover:text-foreground hover:bg-muted/50 h-8 w-8 rounded-xl transition-all"
+                className="text-muted-foreground hover:text-foreground hover:bg-accent h-8 w-8 rounded-lg transition-all"
                 title={theme === 'dark' ? "Switch to Morning" : "Switch to Night"}
               >
-                {theme === 'dark' ? <Sun className="w-4 h-4 text-amber-500" /> : <Moon className="w-4 h-4 text-slate-700" />}
+                {theme === 'dark' ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-primary" />}
               </Button>
             )}
 
             {/* Notifications */}
             <Popover>
               <PopoverTrigger asChild>
-                <Button variant="ghost" size="icon" className="relative text-muted-foreground hover:text-foreground hover:bg-muted/50 h-8 w-8">
+                <Button variant="ghost" size="icon" className="relative text-muted-foreground hover:text-foreground hover:bg-accent h-8 w-8 rounded-lg">
                   <Bell className="w-4 h-4" />
                   {unreadCount > 0 && (
-                    <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 rounded-full bg-amber-500 border-2 border-background" />
+                    <span className="absolute top-1 right-1 w-2.5 h-2.5 rounded-full bg-primary border-2 border-card animate-pulse" />
                   )}
                 </Button>
               </PopoverTrigger>
               <PopoverContent align="end" className="w-80 p-0 bg-popover border-border shadow-2xl rounded-xl">
                 <div className="px-4 py-3 border-b border-border flex items-center justify-between">
                   <div>
-                    <h4 className="text-sm font-semibold text-foreground">Notifications</h4>
-                    <p className="text-[10px] text-muted-foreground">Reminders & updates</p>
+                    <h4 className="text-sm font-display font-bold text-foreground tracking-wide uppercase">Notifications</h4>
+                    <p className="text-[10px] text-muted-foreground font-mono">System alerts & reminders</p>
                   </div>
                   {unreadCount > 0 && (
-                    <span className="bg-amber-500/10 text-amber-600 dark:text-amber-500 text-[10px] font-medium px-2 py-0.5 rounded-full">
-                      {unreadCount} unread
+                    <span className="bg-primary/10 text-primary text-[10px] font-mono font-medium px-2 py-0.5 rounded-full">
+                      {unreadCount} new
                     </span>
                   )}
                 </div>
@@ -205,7 +206,7 @@ export function Navbar() {
                   {visibleNotifications.length === 0 ? (
                     <div className="p-6 text-center text-muted-foreground/60 text-xs">
                       <Bell className="w-8 h-8 mx-auto mb-2 opacity-20" />
-                      No notifications for today.
+                      <p className="font-mono">No active alerts.</p>
                     </div>
                   ) : (
                     <div className="flex flex-col">
@@ -216,15 +217,15 @@ export function Navbar() {
                           <div
                             key={notif.id}
                             className={cn(
-                              'p-3 border-b border-border/40 transition-colors hover:bg-muted/30 flex gap-3',
-                              !notif.read ? 'bg-amber-500/5' : 'opacity-60'
+                              'p-3 border-b border-border/40 transition-colors hover:bg-accent/50 flex gap-3',
+                              !notif.read ? 'bg-primary/[0.03]' : 'opacity-60'
                             )}
                           >
                             <div className="mt-0.5">
                               {notif.read ? (
                                 <Check className="w-4 h-4 text-emerald-500" />
                               ) : isPast ? (
-                                <Bell className="w-4 h-4 text-amber-500 animate-pulse" />
+                                <Bell className="w-4 h-4 text-primary animate-pulse" />
                               ) : (
                                 <Clock className="w-4 h-4 text-sky-500" />
                               )}
@@ -238,7 +239,7 @@ export function Navbar() {
                                   {notif.message}
                                 </p>
                               )}
-                              <p className="text-[9px] text-muted-foreground/80 mt-1.5 flex items-center gap-1">
+                              <p className="text-[9px] text-muted-foreground/80 mt-1.5 flex items-center gap-1 font-mono">
                                 {notifDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
                                 <span>•</span>
                                 {notifDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
@@ -260,8 +261,8 @@ export function Navbar() {
                                 variant="ghost"
                                 size="icon"
                                 onClick={() => handleDeleteNotification(notif.id)}
-                                className="w-6 h-6 text-muted-foreground hover:text-red-500 hover:bg-red-500/10"
-                                title="Delete notification"
+                                className="w-6 h-6 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                                title="Delete"
                               >
                                 <Trash2 className="w-3 h-3" />
                               </Button>
@@ -278,7 +279,7 @@ export function Navbar() {
             {/* Quick Add */}
             <Button
               onClick={() => setQuickAddOpen(true)}
-              className="bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 text-white font-medium text-xs h-8 px-3 rounded-lg"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground font-display font-semibold text-xs h-8 px-3 rounded-lg tracking-wider uppercase"
             >
               <Plus className="w-3.5 h-3.5 mr-1" />
               Quick Add

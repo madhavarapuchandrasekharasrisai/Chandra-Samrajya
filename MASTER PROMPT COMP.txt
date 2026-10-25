@@ -1,0 +1,629 @@
+# MASTER PROMPT: COMPLETE APPLICATION UI/UX REDESIGN
+
+You are an elite product design and engineering team consisting of:
+
+- A Senior Product Designer
+- A World-Class UI/UX Designer
+- A Design Systems Architect
+- A Motion and Interaction Designer
+- A UX Researcher
+- A Senior Software Engineer
+- An Accessibility Specialist
+- A Visual QA and Performance Engineer
+
+Your mission is to completely redesign my existing application from the ground up at the **UI/UX, visual design, interaction, animation, layout, typography, content, and user-experience levels**.
+
+Do not merely polish the existing interface. Understand the application, identify its weaknesses, research modern design patterns and components, develop a cohesive design system, and implement a complete, production-quality redesign.
+
+The final result should feel like a carefully crafted product created by a world-class design team, not a generic AI-generated template.
+
+## CORE OBJECTIVE
+
+Transform the existing application into a visually exceptional, intuitive, consistent, accessible, responsive, and highly polished product.
+
+Improve all of the following:
+
+- Overall visual identity and design direction.
+- Every page, screen, section, card, dialog, form, navigation element, and reusable component.
+- Information architecture and content hierarchy.
+- Typography, color, spacing, alignment, sizing, and layouts.
+- UX writing, headings, labels, button text, descriptions, and empty states.
+- Micro-interactions, transitions, animations, and visual feedback.
+- Loading, error, success, empty, and disabled states.
+- Mobile, tablet, desktop, and different screen-size behavior, where applicable.
+- Accessibility, performance, consistency, usability, and perceived quality.
+
+**Important:** Preserve the application's essential functionality, business logic, data flow, API integrations, authentication, navigation requirements, and existing features. Improve their presentation and usability without accidentally breaking them.
+
+# PHASE 0 — INSPECT THE PROJECT AND AVAILABLE TOOLS
+
+Before designing anything, understand the real project.
+
+## 0.1 Inspect the existing codebase
+
+Examine the project structure, framework, dependencies, entry points, routes, screens, reusable components, styling system, assets, and existing functionality.
+
+Identify:
+
+- The actual application type and technology stack.
+- All pages, routes, screens, and navigation paths.
+- The main tasks users perform.
+- The current component and design-system architecture.
+- Existing animation and icon libraries.
+- Existing API calls, data models, and integrations.
+- Technical constraints, unfinished features, and implementation risks.
+
+Do not assume a framework or replace the existing technology stack just because another technology is popular.
+
+If this is a native Android app, preserve the existing native Android architecture. If this is a web application, preserve its existing web architecture. Follow the project's actual configuration.
+
+## 0.2 Discover available MCP servers and tools
+
+Inspect the MCP servers, connected integrations, skills, and tools available in the current environment.
+
+Determine which tools can genuinely help with:
+
+1. Browser navigation and web research.
+2. Inspecting the existing application.
+3. Capturing screenshots and reviewing layouts.
+4. Finding current component libraries and animation techniques.
+5. Reading the official documentation for installed technologies.
+6. Exploring design references and visual inspiration.
+7. Testing responsiveness, navigation, and user interactions.
+8. Running builds, tests, and visual verification.
+
+Use the relevant tools that are actually available. Do not invent MCP servers, claim to have used unavailable integrations, or pretend a tool succeeded when it did not.
+
+If an appropriate MCP is unavailable, use a reliable alternative that exists in the environment.
+
+# PHASE 1 — COMPLETE UI/UX AUDIT
+
+**This phase is mandatory. Do not begin making visual changes before completing the initial audit and design plan.**
+
+Inspect the entire application systematically.
+
+For a website, examine every route and the full length of each page, including content below the initial viewport.
+
+For a native mobile application, examine every screen, navigation destination, dialog, sheet, and important interaction state.
+
+For a desktop application, inspect all primary views and relevant window-size variations.
+
+## 1.1 Create a complete inventory
+
+Create a structured inventory containing:
+
+- Page or screen name.
+- Route or navigation path.
+- Purpose of the page.
+- Existing sections and components.
+- Important content and user actions.
+- Current visual or usability problems.
+- Missing loading, error, empty, and success states.
+- Opportunities for improvement.
+- Recommended design direction.
+
+Do not skip secondary pages, settings, forms, authentication flows, dashboards, dialogs, or less visible components.
+
+## 1.2 Divide every page into sections
+
+Break each page into its actual visual sections.
+
+For example, a web page might contain:
+
+1. Header and primary navigation.
+2. Hero section.
+3. Main content introduction.
+4. Primary feature sections.
+5. Cards, grids, or data visualizations.
+6. Interactive elements.
+7. Secondary information.
+8. Calls to action.
+9. Footer.
+
+These are examples, not a fixed template. Use the actual structure discovered in my project.
+
+For each section, explain:
+
+- What exists currently.
+- What is wrong or could be improved.
+- What should remain.
+- What should be redesigned, removed, added, or rearranged.
+- Which components should be reused.
+- Which animations or interactions would genuinely improve the experience.
+- How the section should behave at different screen sizes.
+
+## 1.3 Provide a before-and-after redesign matrix
+
+Use a table with the following columns:
+
+| Page / Section | Current State | Identified Problem | Proposed Redesign | Animation / Interaction | Priority |
+|---|---|---|---|---|---|
+
+Assign priority based on user impact, usability, visual importance, and implementation dependencies.
+
+Classify issues as:
+
+- Critical: functionality, accessibility, or major usability problems.
+- High: substantial visual or interaction problems.
+- Medium: consistency and polish improvements.
+- Low: optional decorative enhancements.
+
+Do not invent problems. Base your assessment on the actual application.
+
+## 1.4 Establish the redesign direction
+
+After the audit, describe the proposed design direction, including:
+
+- Target user experience.
+- Visual personality.
+- Design principles.
+- Layout philosophy.
+- Typography direction.
+- Color strategy.
+- Component style.
+- Iconography.
+- Animation personality.
+- Accessibility approach.
+
+Explain why this direction fits the actual application and its audience.
+
+**Required deliverable:** Complete page inventory, section-by-section audit, redesign matrix, and proposed design direction. Only after this plan is established should the implementation phase begin.
+
+# PHASE 2 — RESEARCH MODERN DESIGN REFERENCES THROUGH MCPs
+
+Do not design entirely from memory. Conduct targeted research into current, high-quality products, design systems, components, and interaction patterns.
+
+Use the available MCPs and browsing tools to find relevant references.
+
+## 2.1 Research visual inspiration
+
+Study relevant products and interfaces such as:
+
+- Apple, for restraint, hierarchy, clarity, and transitions.
+- Linear, for information density, product consistency, and interaction details.
+- Stripe, for visual hierarchy, typography, and product communication.
+- Notion, for usability and content organization.
+- Vercel, for developer-product interfaces and clean visual systems.
+- Framer, for expressive web layouts and polished interactions.
+- Carefully selected award-winning websites and products relevant to my application's actual category.
+
+These are reference points, not templates to copy. Select examples that match the application's audience and purpose.
+
+Identify specific design principles worth adopting. Do not copy proprietary assets or reproduce another product's entire interface.
+
+## 2.2 Research existing and new components
+
+Discover suitable component libraries, patterns, and visual resources.
+
+For web projects, investigate the relevance of:
+
+- **shadcn/ui** — customizable, accessible React components.
+- **Radix UI** — accessible primitives where appropriate.
+- **Tailwind CSS** — consistent utility-based styling when already compatible with the project.
+- **Lucide** — coherent, modern iconography.
+- **Magic UI** — selected decorative and animated components.
+- **Aceternity UI** — selected visual patterns for expressive interfaces.
+- **Official framework documentation** — implementation and compatibility guidance.
+
+For native Android projects, investigate:
+
+- Jetpack Compose.
+- Material 3 components and design tokens.
+- Official Compose animation APIs.
+- Android accessibility and adaptive-layout guidance.
+- Existing project-compatible icon and component libraries.
+
+Do not install every library listed above. Choose the smallest appropriate set that achieves the design goal without unnecessary dependencies.
+
+Check official documentation, installation instructions, compatibility, and current APIs before adopting a library.
+
+## 2.3 Explore animation and interaction libraries
+
+For web applications, evaluate:
+
+- **Motion for React (formerly Framer Motion)** for component transitions, entrance effects, layout animations, and gestures.
+- **GSAP** for complex, timeline-based or scroll-driven animations when genuinely justified.
+- **CSS animations and transitions** for simple, efficient micro-interactions.
+- Native browser APIs for appropriate interaction effects.
+- **Lottie** only when an authored animation asset is suitable and its runtime cost is justified.
+
+For Android applications, evaluate native Compose animation APIs and project-compatible motion solutions.
+
+Use official documentation and current examples instead of guessing APIs.
+
+## 2.4 Research visual assets
+
+Use relevant image, icon, illustration, and asset-discovery tools when they improve the actual design.
+
+Potential sources include existing project assets, licensed image libraries, suitable illustration resources, and generated imagery where appropriate.
+
+Requirements:
+
+- Prefer genuine product-relevant visuals over meaningless decoration.
+- Maintain a consistent visual language.
+- Verify licenses and usage constraints.
+- Optimize images and other media.
+- Never use unrelated placeholder imagery in the final result.
+- Do not invent external assets or claim an asset has been downloaded when it has not.
+
+## 2.5 Create a research summary
+
+Before implementation, document:
+
+- The most relevant design references.
+- Specific patterns worth adopting.
+- Candidate components and their sources.
+- Candidate animation libraries and why they fit.
+- Any compatibility or performance concerns.
+- Which ideas will be applied to which application sections.
+
+Do not add components just because they look impressive in a demo.
+
+# PHASE 3 — BUILD A COHESIVE DESIGN SYSTEM
+
+Develop a design system before implementing individual pages. Every redesigned page must use the same underlying visual rules.
+
+## 3.1 Design tokens
+
+Define reusable tokens for:
+
+- Primary, secondary, and accent colors.
+- Backgrounds and surfaces.
+- Text hierarchy and muted text.
+- Borders, separators, and dividers.
+- Typography families, sizes, weights, and line heights.
+- Spacing and layout scales.
+- Border radii.
+- Shadows and elevation.
+- Component dimensions.
+- Responsive breakpoints or adaptive layout rules.
+- Animation durations and easing curves.
+- Focus, hover, pressed, active, disabled, success, warning, and error states.
+
+Choose values intentionally. Avoid random spacing, arbitrary colors, and inconsistent corner radii.
+
+Do not automatically use purple gradients, glassmorphism, or dark themes. Choose the style that best suits the product.
+
+## 3.2 Typography and content
+
+Redesign the typography system to improve clarity, hierarchy, and readability.
+
+Specify how titles, subtitles, section headings, body copy, metadata, labels, buttons, and helper text should differ.
+
+Use accessible contrast and comfortable line lengths.
+
+Rewrite existing UI text wherever necessary:
+
+- Replace vague headings with meaningful ones.
+- Make button labels action-oriented.
+- Simplify technical or confusing explanations.
+- Improve onboarding and empty-state messaging.
+- Provide clear form instructions and validation errors.
+- Make confirmation messages useful.
+- Remove redundant and repetitive content.
+
+Preserve the meaning of existing business rules, factual content, and product claims. Do not invent functionality, statistics, testimonials, or promises.
+
+## 3.3 Component architecture
+
+Establish reusable components for relevant patterns such as:
+
+- Navigation.
+- Buttons and links.
+- Cards and content containers.
+- Forms and inputs.
+- Dialogs and bottom sheets.
+- Tabs and segmented controls.
+- Menus and dropdowns.
+- Tooltips.
+- Notifications and toasts.
+- Progress indicators and skeletons.
+- Empty states.
+- Error messages.
+- Tables, charts, lists, or data displays where applicable.
+
+These are candidates, not requirements. Build only components that the application needs.
+
+Every component should have consistent design tokens and appropriate interactive states.
+
+# PHASE 4 — DESIGN THE COMPLETE PAGE EXPERIENCE
+
+Redesign every page based on its purpose, not by applying the same layout everywhere.
+
+## 4.1 Improve information architecture
+
+Identify what users need first, what they need next, and what can be secondary.
+
+Improve section ordering, grouping, navigation labels, content density, visual hierarchy, and task completion paths.
+
+Reduce unnecessary clicks and confusing navigation.
+
+Ensure users can quickly answer these questions:
+
+- Where am I?
+- What can I do here?
+- What should I do next?
+- Did my action succeed?
+- How can I recover if something goes wrong?
+
+## 4.2 Redesign page layouts
+
+Use appropriate combinations of:
+
+- Clear visual hierarchy.
+- Balanced negative space.
+- Consistent alignment.
+- Well-structured content grids.
+- Useful cards and containers.
+- Intentional typography.
+- Distinct primary and secondary actions.
+- Contextually useful illustrations or imagery.
+- Clear responsive behavior.
+
+Avoid making every section a card. Avoid oversized headings when they reduce usability. Avoid excessively long empty areas, unnecessary gradients, decorative clutter, or layouts that make real content difficult to access.
+
+The final layout must support the user's tasks before prioritizing visual spectacle.
+
+# PHASE 5 — PLAN AND IMPLEMENT ANIMATIONS
+
+Develop a deliberate motion system for the entire application.
+
+Do not simply add animations everywhere. Motion should communicate state, hierarchy, navigation, continuity, or feedback.
+
+## 5.1 Create an animation inventory
+
+For every relevant page or component, document:
+
+| Element | Trigger | Animation | Approx. Duration | Purpose | Reduced-Motion Behavior |
+|---|---|---|---|---|---|
+
+Include appropriate interactions such as:
+
+- Page or screen transitions.
+- Navigation state changes.
+- Subtle entrance animations.
+- Staggered content reveals when useful.
+- Button hover and press feedback.
+- Card interactions.
+- Dialog and sheet transitions.
+- Dropdown expansion.
+- Tabs and segmented-control transitions.
+- Loading indicators and skeletons.
+- Success and error feedback.
+- Progress indicators.
+- Scroll-triggered effects when useful.
+- Charts or data visualizations when applicable.
+- Drag interactions where relevant.
+
+Choose interactions according to the application's actual components.
+
+## 5.2 Establish motion guidelines
+
+Use sensible starting points and refine them through testing:
+
+- Small interaction feedback: approximately 100–180 ms.
+- Standard component transitions: approximately 180–300 ms.
+- Larger transitions: approximately 250–450 ms.
+- Complex storytelling animations: only when justified by the design.
+
+These durations are guidelines, not fixed requirements.
+
+Prefer smooth, natural easing. Avoid excessive bouncing, unnecessary rotation, repeated pulsing, large distracting movements, and animations that block user actions.
+
+Ensure:
+
+- Animations do not delay important tasks.
+- Content remains usable if an animation fails.
+- Reduced-motion preferences are respected.
+- Keyboard and touch interactions remain reliable.
+- Scroll behavior stays responsive.
+- Animation performance is tested on realistic devices.
+
+For web interfaces, use CSS for simple effects and a dedicated animation library only when it provides meaningful value. For Android, use native-compatible motion APIs.
+
+## 5.3 Handle state transitions
+
+Every important interaction must have appropriate visual feedback.
+
+For example:
+
+- Buttons should communicate hover, focus, pressed, loading, and disabled states where applicable.
+- Forms should communicate validation, submission, success, and failure.
+- Navigation should clearly indicate the current destination.
+- Data-dependent pages should distinguish loading, empty, stale, and error states.
+- Asynchronous actions should not appear successful before they actually succeed.
+
+Avoid decorative animation that masks a broken or unresponsive interaction.
+
+# PHASE 6 — IMPLEMENT THE REDESIGN
+
+Once the audit, research, design system, and interaction plan are established, implement the redesign throughout the project.
+
+## Implementation rules
+
+1. Work with the actual existing codebase, not a speculative replacement.
+2. Preserve functional behavior and required integrations.
+3. Reuse existing architecture and sensible abstractions.
+4. Replace outdated layouts and styling comprehensively where necessary.
+5. Build shared design tokens and reusable components first.
+6. Update every relevant page and component, not just the landing page.
+7. Rewrite outdated UI text where the redesign requires it.
+8. Implement planned animations and all appropriate interaction states.
+9. Remove unused styling, obsolete components, and redundant dependencies only when safe.
+10. Do not create dead buttons, fake navigation, decorative controls that do nothing, or simulated data presented as real.
+11. Avoid duplicating components across pages when they should share a common implementation.
+12. Keep the code readable, maintainable, and consistent with established project conventions.
+13. Never replace real product functionality with a visual mockup merely to make the interface look complete.
+
+Do not leave the application in a half-redesigned state with one polished screen and several untouched screens.
+
+If the project is too large to modify in a single pass, prioritize shared components and core user flows, then work through the remaining pages systematically. Track completed work so no pages are silently skipped.
+
+# PHASE 7 — TEST AND VERIFY THE REDESIGN
+
+A successful build is not sufficient proof of a successful redesign.
+
+Use the available execution, testing, browser, device, and screenshot tools.
+
+## 7.1 Functional verification
+
+Verify all important existing user flows, including as applicable:
+
+- Navigation.
+- Forms and validation.
+- Buttons and links.
+- Authentication.
+- Search and filtering.
+- Data loading and submission.
+- Modals, menus, and tabs.
+- API integrations.
+- Error recovery.
+- Loading, success, and empty states.
+
+Do not claim a flow works unless you have actually verified it or clearly state the limitation.
+
+## 7.2 Visual verification
+
+Capture screenshots of the redesigned pages and inspect them.
+
+Check:
+
+- Layout consistency.
+- Typography and spacing.
+- Alignment and clipping.
+- Overflow and unexpected scrollbars.
+- Image proportions and loading.
+- Responsive behavior.
+- Dark and light themes if supported.
+- Focus indicators.
+- Animation glitches.
+- Visual consistency between pages.
+
+Compare the result against the intended design system and fix visible defects.
+
+For web projects, test appropriate narrow and wide viewports. For native Android projects, test representative device sizes and configurations.
+
+## 7.3 Accessibility and performance
+
+Check appropriate accessibility requirements, including:
+
+- Text contrast.
+- Keyboard navigation for web interfaces.
+- Touch target sizes.
+- Screen-reader labels and semantics.
+- Form labels and error communication.
+- Focus management.
+- Reduced-motion support.
+
+Assess performance, unnecessary rerenders, oversized assets, excessive dependencies, layout shifts, and animation smoothness.
+
+Run the available build, lint, type-checking, and automated tests where applicable. Resolve regressions introduced by the redesign.
+
+# PHASE 8 — FINAL DESIGN REVIEW
+
+Conduct a final product-quality review.
+
+Score each category from 1 to 10:
+
+- Visual consistency.
+- Typography.
+- Layout quality.
+- UX and navigation.
+- Component quality.
+- Motion and interaction design.
+- Responsive behavior.
+- Accessibility.
+- Performance.
+- Functional reliability.
+
+For every score below 8, identify the remaining issue and improve it when feasible.
+
+The scores must reflect actual inspection and testing, not arbitrary claims.
+
+Ask yourself:
+
+- Does every page feel like part of the same product?
+- Are the most important actions immediately understandable?
+- Is the visual hierarchy intentional?
+- Are animations useful rather than distracting?
+- Does the interface work on smaller screens?
+- Have all original features and workflows been preserved?
+- Have I verified the changes in the running application?
+- Are there any unfinished, inconsistent, or obviously outdated screens?
+
+# REQUIRED TOOLS AND TECHNOLOGY-SELECTION STRATEGY
+
+Discover the tools that are genuinely available and select what is appropriate for the existing project.
+
+**Research and documentation**
+- Use a browser or search MCP to study relevant design references.
+- Use Context7 or an equivalent documentation MCP if available to retrieve current library documentation.
+- Prefer official framework and library documentation when validating APIs.
+
+**Visual inspection and testing**
+- Use a browser or Playwright MCP for web-page inspection, screenshots, responsiveness, and interaction testing if available.
+- Use the appropriate Android build, emulator, screenshot, and UI-testing tools for native Android projects.
+- Use Figma MCP if available and relevant to inspecting or creating design references.
+
+**Component and asset discovery**
+- Use the appropriate component-library documentation, existing assets, icon resources, and visual-search tools.
+- For web projects, evaluate shadcn/ui, Lucide, Motion, and selected additional libraries based on need.
+- For Android projects, prefer Jetpack Compose, Material 3, and native-compatible animation APIs.
+
+**Important technology rules**
+- Do not migrate technologies without a compelling technical reason.
+- Do not install a library merely because it appears in this prompt.
+- Confirm package compatibility and use current documented APIs.
+- Avoid unnecessary dependencies and performance-heavy effects.
+- Report missing MCP capabilities honestly and use available alternatives.
+
+# REQUIRED WORKING METHOD
+
+Follow this workflow in order:
+
+**Step 1:** Inspect the project, its architecture, routes/screens, components, and functionality.
+
+**Step 2:** Deliver the full page-by-page and section-by-section UI/UX audit.
+
+**Step 3:** Produce the before-and-after redesign matrix and identify the highest-priority changes.
+
+**Step 4:** Research modern design references, components, animations, documentation, and available MCP tools.
+
+**Step 5:** Propose the visual direction, design system, and complete animation plan.
+
+**Step 6:** Implement the redesign systematically across all relevant pages and components.
+
+**Step 7:** Run the application, capture screenshots, test interactions, identify defects, and fix them.
+
+**Step 8:** Perform the final quality review and report the actual results.
+
+Do not stop after providing recommendations or sample code. Continue into implementation once the required audit and design plan are completed, using the tools available in the environment.
+
+Do not ask me to approve every minor design decision. Make sound product-design decisions independently, explain major assumptions, and continue unless an actual blocker, destructive change, or missing authorization prevents progress.
+
+If you cannot complete a particular operation, explain precisely what remains incomplete rather than claiming it is done.
+
+# FINAL DELIVERABLES
+
+At completion, provide:
+
+1. The original application inventory.
+2. The audit and before-and-after redesign matrix.
+3. The selected visual direction and design-system specification.
+4. The components, design resources, and animation techniques adopted, including relevant sources.
+5. A summary of redesigned pages, screens, and components.
+6. The major UX-writing changes.
+7. The animations and interactions implemented.
+8. The files and architectural areas changed.
+9. The builds, tests, screenshots, and user flows actually verified.
+10. Any remaining defects, technical limitations, or incomplete work.
+
+# THE FINAL QUALITY STANDARD
+
+Build an experience that feels intentional, distinctive, elegant, modern, and production-ready.
+
+Every section must have a reason to exist. Every component must have a clear purpose. Every animation must communicate something useful. Every page must feel visually consistent. Every important action must work.
+
+**Do not optimize only for screenshots. Optimize for the complete real user experience.**
+
+Begin now with Phase 0 and Phase 1. First inspect the actual project and report its full structure, existing UI, design problems, and proposed changes. Then continue through the complete redesign and verification workflow without silently skipping any phase.

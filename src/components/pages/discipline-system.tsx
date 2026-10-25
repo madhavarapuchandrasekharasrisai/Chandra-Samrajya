@@ -95,7 +95,7 @@ function DisciplineRing({ score, size = 200 }: { score: number; size?: number })
         >
           {score}
         </motion.span>
-        <span className="text-white/30 text-xs uppercase tracking-widest mt-1">Discipline Score™</span>
+        <span className="text-muted-foreground/60 text-xs uppercase tracking-widest mt-1">Discipline Score™</span>
       </div>
     </div>
   )
@@ -131,24 +131,24 @@ function ScoreComponentBar({
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.5, delay }}
       className={cn(
-        "bg-white/[0.02] border border-white/[0.04] hover:bg-white/[0.04] transition-all duration-300 rounded-xl p-4 cursor-pointer",
-        expanded && "bg-white/[0.05] border-white/[0.08] shadow-lg shadow-black/40"
+        "bg-secondary/30 border border-border hover:bg-secondary/60 transition-all duration-300 rounded-xl p-4 cursor-pointer",
+        expanded && "bg-secondary/70 border-border shadow-lg shadow-black/40"
       )}
       onClick={() => setExpanded(!expanded)}
     >
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="text-white/80 text-sm font-semibold">{label}</span>
-            <HelpCircle className="w-3.5 h-3.5 text-white/30 hover:text-white/60 transition-colors" />
+            <span className="text-foreground/80 text-sm font-semibold">{label}</span>
+            <HelpCircle className="w-3.5 h-3.5 text-muted-foreground/60 hover:text-muted-foreground transition-colors" />
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-white/95 text-base font-bold" style={{ color }}>{score.toFixed(1)}</span>
-            <span className="text-white/25 text-xs">/ {maxScore} pts</span>
-            {expanded ? <ChevronUp className="w-4 h-4 text-white/40 ml-1" /> : <ChevronDown className="w-4 h-4 text-white/40 ml-1" />}
+            <span className="text-foreground text-base font-bold" style={{ color }}>{score.toFixed(1)}</span>
+            <span className="text-muted-foreground/50 text-xs">/ {maxScore} pts</span>
+            {expanded ? <ChevronUp className="w-4 h-4 text-muted-foreground ml-1" /> : <ChevronDown className="w-4 h-4 text-muted-foreground ml-1" />}
           </div>
         </div>
-        <div className="w-full h-2 bg-white/5 rounded-full overflow-hidden relative">
+        <div className="w-full h-2 bg-secondary/50 rounded-full overflow-hidden relative">
           <motion.div
             initial={{ width: 0 }}
             animate={{ width: `${Math.min(100, percent)}%` }}
@@ -168,18 +168,18 @@ function ScoreComponentBar({
             transition={{ duration: 0.3 }}
             className="overflow-hidden"
           >
-            <div className="border-t border-white/[0.06] mt-4 pt-3 space-y-3 text-xs leading-relaxed text-white/60">
+            <div className="border-t border-border mt-4 pt-3 space-y-3 text-xs leading-relaxed text-muted-foreground">
               <div>
-                <span className="text-white/30 uppercase tracking-wider text-[9px] block mb-1">How it's Calculated</span>
-                <p className="text-white/80">{explanation}</p>
+                <span className="text-muted-foreground/60 uppercase tracking-wider text-[9px] block mb-1">How it's Calculated</span>
+                <p className="text-foreground/80">{explanation}</p>
               </div>
-              <div className="bg-black/30 border border-white/[0.03] rounded-lg p-2.5">
+              <div className="bg-secondary/50 border border-white/[0.03] rounded-lg p-2.5">
                 <span className="text-amber-400/80 font-mono text-[10px] block mb-1">📐 Formula:</span>
-                <code className="text-white/90 font-mono text-[10px] break-all">{formula}</code>
+                <code className="text-foreground font-mono text-[10px] break-all">{formula}</code>
               </div>
               <div>
-                <span className="text-white/30 uppercase tracking-wider text-[9px] block mb-1">👑 Strategies for Perfect Score</span>
-                <ul className="list-inside space-y-1 text-white/70">
+                <span className="text-muted-foreground/60 uppercase tracking-wider text-[9px] block mb-1">👑 Strategies for Perfect Score</span>
+                <ul className="list-inside space-y-1 text-foreground/70">
                   {tips.map((tip, i) => (
                     <li key={i} className="flex items-start gap-1.5 mt-1">
                       <span className="text-amber-400 mt-0.5">•</span>
@@ -221,15 +221,15 @@ function InsightCard({
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.3, delay }}
       className={cn(
-        'bg-white/[0.02] border border-white/[0.04] border-l-2 rounded-xl p-4 hover:bg-white/[0.03] transition-all',
+        'bg-secondary/30 border border-border border-l-2 rounded-xl p-4 hover:bg-secondary/50 transition-all',
         c.borderColor
       )}
     >
       <div className="flex items-start gap-3">
         <Icon className={cn('w-4 h-4 mt-0.5 flex-shrink-0', c.iconColor)} />
         <div>
-          <span className="text-white/25 text-[10px] uppercase tracking-wider font-medium">{c.label}</span>
-          <p className="text-white/70 text-sm mt-0.5 leading-relaxed">{message}</p>
+          <span className="text-muted-foreground/50 font-mono text-[10px] uppercase tracking-wider font-medium">{c.label}</span>
+          <p className="text-foreground/70 text-sm mt-0.5 leading-relaxed">{message}</p>
         </div>
       </div>
     </motion.div>
@@ -255,15 +255,15 @@ function DayCell({
     good: 'bg-emerald-400/20 text-emerald-400',
     warning: 'bg-amber-400/20 text-amber-400',
     bad: 'bg-red-400/20 text-red-400',
-    none: 'bg-white/5 text-white/20',
+    none: 'bg-secondary/50 text-muted-foreground/40',
   }
 
   return (
     <div className={cn(
-      'bg-white/[0.02] border rounded-xl p-3 text-center transition-all',
-      isToday ? 'border-amber-500/30 bg-amber-500/5' : 'border-white/[0.04]'
+      'bg-secondary/30 border rounded-xl p-3 text-center transition-all',
+      isToday ? 'border-primary/30 bg-primary/5' : 'border-border'
     )}>
-      <p className={cn('text-white/50 text-[10px] uppercase tracking-wider mb-2', isToday && 'text-amber-400/70')}>{day}</p>
+      <p className={cn('text-muted-foreground font-mono text-[10px] uppercase tracking-wider mb-2', isToday && 'text-primary/70')}>{day}</p>
       <div className={cn('w-8 h-8 rounded-lg flex items-center justify-center mx-auto mb-2 text-xs font-bold', scoreColors[spendingScore])}>
         {spendingScore === 'good' ? '✓' : spendingScore === 'warning' ? '!' : spendingScore === 'bad' ? '✗' : '—'}
       </div>
@@ -271,9 +271,9 @@ function DayCell({
         {outreachDone ? (
           <CheckCircle2 className="w-3 h-3 text-emerald-400" />
         ) : (
-          <div className="w-3 h-3 rounded-full bg-white/10" />
+          <div className="w-3 h-3 rounded-full bg-accent" />
         )}
-        <span className="text-white/25 text-[9px]">Outreach</span>
+        <span className="text-muted-foreground/50 text-[9px]">Outreach</span>
       </div>
       {savingsContrib > 0 && (
         <p className="text-emerald-400/60 text-[9px] font-medium">{formatINR(savingsContrib)}</p>
@@ -486,13 +486,13 @@ export function DisciplineSystem() {
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="relative overflow-hidden bg-gradient-to-br from-amber-500/[0.06] via-black/40 to-black/60 border border-amber-500/10 rounded-2xl p-6"
+        className="relative overflow-hidden bg-gradient-to-br from-amber-500/[0.06] via-background/40 to-background/60 border border-primary/10 rounded-2xl p-6"
       >
         <div className="absolute inset-0 ambient-gradient pointer-events-none" />
         <div className="relative z-10">
-          <p className="text-white/40 text-xs uppercase tracking-widest mb-2">Behavioral Operating Layer</p>
-          <h1 className="gold-text text-3xl lg:text-4xl font-bold tracking-tight">Discipline System</h1>
-          <p className="text-white/30 text-sm mt-1">Track, measure, and optimize your financial behavior</p>
+          <p className="text-muted-foreground text-xs uppercase tracking-widest mb-2">Behavioral Operating Layer</p>
+          <h1 className="gold-text text-3xl lg:font-display text-4xl font-bold tracking-tight">Discipline System</h1>
+          <p className="text-muted-foreground/60 text-sm mt-1">Track, measure, and optimize your financial behavior</p>
         </div>
       </motion.div>
 
@@ -503,7 +503,7 @@ export function DisciplineSystem() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.1 }}
-        className="bg-[#0e0e11] lg:bg-white/[0.03] lg:backdrop-blur-xl border border-white/[0.06] rounded-2xl p-8 relative overflow-hidden"
+        className="bg-card lg:bg-card/80 lg:backdrop-blur-xl border border-border rounded-2xl p-8 relative overflow-hidden"
       >
         {/* Ambient glow */}
         <div
@@ -525,7 +525,7 @@ export function DisciplineSystem() {
             <span className="text-xl font-bold" style={{ color: scoreColor }}>{ratingLabel}</span>
           </motion.div>
 
-          <p className="text-white/30 text-xs mt-2 text-center max-w-md">
+          <p className="text-muted-foreground/60 text-xs mt-2 text-center max-w-md">
             Computed from: 30% spending discipline + 40% savings consistency + 30% outreach consistency
           </p>
         </div>
@@ -538,15 +538,15 @@ export function DisciplineSystem() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.2 }}
-        className="bg-[#0e0e11] lg:bg-white/[0.03] lg:backdrop-blur-xl border border-white/[0.06] rounded-2xl p-6"
+        className="bg-card lg:bg-card/80 lg:backdrop-blur-xl border border-border rounded-2xl p-6"
       >
         <div className="flex items-center gap-2 mb-6">
-          <div className="p-1.5 rounded-lg bg-amber-400/10 border border-amber-400/20">
+          <div className="p-1.5 rounded-lg bg-primary/10 border border-primary/20">
             <Shield className="w-4 h-4 text-amber-400" />
           </div>
           <div>
-            <h3 className="text-white/90 text-sm font-semibold">Consistency Analytics</h3>
-            <p className="text-white/25 text-[10px]">Breakdown of your discipline score components</p>
+            <h3 className="text-foreground text-sm font-semibold">Consistency Analytics</h3>
+            <p className="text-muted-foreground/50 text-[10px]">Breakdown of your discipline score components</p>
           </div>
         </div>
 
@@ -597,8 +597,8 @@ export function DisciplineSystem() {
         </div>
 
         {/* Per-Category Adherence */}
-        <div className="border-t border-white/[0.04] pt-5">
-          <p className="text-white/40 text-xs uppercase tracking-wider font-medium mb-4">Per-Category Budget Adherence</p>
+        <div className="border-t border-border pt-5">
+          <p className="text-muted-foreground text-xs uppercase tracking-wider font-medium mb-4">Per-Category Budget Adherence</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
             {categoryAdherence.map((cat, idx) => (
               <motion.div
@@ -606,14 +606,14 @@ export function DisciplineSystem() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: 0.5 + idx * 0.05 }}
-                className="bg-white/[0.02] border border-white/[0.04] rounded-xl p-3 text-center hover:border-white/[0.08] transition-all"
+                className="bg-secondary/30 border border-border rounded-xl p-3 text-center hover:border-border transition-all"
               >
                 <div className="w-3 h-3 rounded-full mx-auto mb-2" style={{ backgroundColor: cat.color }} />
-                <p className="text-white/60 text-xs font-medium mb-1">{cat.label}</p>
+                <p className="text-muted-foreground text-xs font-medium mb-1">{cat.label}</p>
                 <p className="text-lg font-bold" style={{ color: cat.adherence >= 80 ? '#10b981' : cat.adherence >= 50 ? '#f59e0b' : '#ef4444' }}>
                   {cat.adherence.toFixed(0)}%
                 </p>
-                <p className="text-white/25 text-[9px] mt-1">
+                <p className="text-muted-foreground/50 text-[9px] mt-1">
                   {formatINR(cat.spent)} / {formatINR(cat.budget)}
                 </p>
               </motion.div>
@@ -629,18 +629,18 @@ export function DisciplineSystem() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.25 }}
-        className="bg-gradient-to-br from-amber-500/[0.04] via-[#0f0f12] to-black border border-amber-500/15 rounded-2xl p-6 relative overflow-hidden"
+        className="bg-gradient-to-br from-amber-500/[0.04] via-background to-background border border-primary/15 rounded-2xl p-6 relative overflow-hidden"
       >
-        <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 rounded-full blur-2xl pointer-events-none" />
+        <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-2xl pointer-events-none" />
         <div className="flex items-center gap-2.5 mb-5 relative z-10">
-          <div className="p-1.5 rounded-lg bg-amber-500/10 border border-amber-500/20">
-            <Sparkles className="w-4 h-4 text-amber-400 animate-pulse" />
+          <div className="p-1.5 rounded-lg bg-primary/10 border border-primary/20">
+            <Sparkles className="w-4 h-4 text-primary animate-pulse" />
           </div>
           <div>
-            <h3 className="text-white font-bold tracking-tight text-sm flex items-center gap-2">
+            <h3 className="text-foreground font-bold tracking-tight text-sm flex items-center gap-2">
               👑 Imperial Discipline Advisor & Score Optimizer
             </h3>
-            <p className="text-white/30 text-[10px]">Your customized royal road map to a perfect 100/100 score</p>
+            <p className="text-muted-foreground/60 text-[10px]">Your customized royal road map to a perfect 100/100 score</p>
           </div>
         </div>
 
@@ -648,29 +648,29 @@ export function DisciplineSystem() {
           {/* Outreach Task */}
           <div className={cn(
             "border rounded-xl p-4 transition-all duration-300 flex flex-col md:flex-row md:items-center justify-between gap-3",
-            (outreachRecords.filter(r => new Date(r.date).toISOString().split('T')[0] === new Date().toISOString().split('T')[0]).length > 0) ? "bg-emerald-500/[0.02] border-emerald-500/20" : "bg-amber-500/[0.02] border-amber-500/20"
+            (outreachRecords.filter(r => new Date(r.date).toISOString().split('T')[0] === new Date().toISOString().split('T')[0]).length > 0) ? "bg-emerald-500/[0.02] border-emerald-500/20" : "bg-amber-500/[0.02] border-primary/20"
           )}>
             <div className="space-y-1">
               <div className="flex items-center gap-2">
                 <span className={cn(
-                  "px-2 py-0.5 rounded text-[9px] uppercase tracking-wider font-bold",
-                  (outreachRecords.filter(r => new Date(r.date).toISOString().split('T')[0] === new Date().toISOString().split('T')[0]).length > 0) ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" : "bg-amber-500/10 text-amber-400 border border-amber-500/20"
+                  "px-2 py-0.5 rounded font-mono text-[9px] uppercase tracking-wider font-bold",
+                  (outreachRecords.filter(r => new Date(r.date).toISOString().split('T')[0] === new Date().toISOString().split('T')[0]).length > 0) ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" : "bg-primary/10 text-amber-400 border border-primary/20"
                 )}>
                   {(outreachRecords.filter(r => new Date(r.date).toISOString().split('T')[0] === new Date().toISOString().split('T')[0]).length > 0) ? "Completed" : "Action Needed"}
                 </span>
-                <span className="text-white/80 text-xs font-semibold">Outreach Consistency Pillar</span>
+                <span className="text-foreground/80 text-xs font-semibold">Outreach Consistency Pillar</span>
               </div>
-              <p className="text-white/50 text-[11px]">
+              <p className="text-muted-foreground text-[11px]">
                 {(outreachRecords.filter(r => new Date(r.date).toISOString().split('T')[0] === new Date().toISOString().split('T')[0]).length > 0) 
                   ? "Outstanding! You have successfully logged active outreach today, keeping your momentum and score safe." 
                   : "Daily sales activity is crucial. Log 1 client Call or DM today using the Executive overview panel to keep your daily flame streak alive."}
               </p>
             </div>
             <div className="flex items-center gap-2 self-start md:self-center">
-              <span className="text-[10px] text-white/40 font-mono">Weight: 30 pts</span>
+              <span className="text-[10px] text-muted-foreground font-mono">Weight: 30 pts</span>
               <div className={cn(
                 "px-3 py-1 rounded-lg text-xs font-bold flex items-center gap-1.5",
-                (outreachRecords.filter(r => new Date(r.date).toISOString().split('T')[0] === new Date().toISOString().split('T')[0]).length > 0) ? "bg-emerald-500/10 text-emerald-400" : "bg-amber-500/10 text-amber-400"
+                (outreachRecords.filter(r => new Date(r.date).toISOString().split('T')[0] === new Date().toISOString().split('T')[0]).length > 0) ? "bg-emerald-500/10 text-emerald-400" : "bg-primary/10 text-amber-400"
               )}>
                 {(outreachRecords.filter(r => new Date(r.date).toISOString().split('T')[0] === new Date().toISOString().split('T')[0]).length > 0) ? <Check className="w-3.5 h-3.5" /> : <Flame className="w-3.5 h-3.5" />}
                 {(outreachRecords.filter(r => new Date(r.date).toISOString().split('T')[0] === new Date().toISOString().split('T')[0]).length > 0) ? "Optimal (+30 pts)" : "Gain points (+15 pts)"}
@@ -686,21 +686,21 @@ export function DisciplineSystem() {
             <div className="space-y-1">
               <div className="flex items-center gap-2">
                 <span className={cn(
-                  "px-2 py-0.5 rounded text-[9px] uppercase tracking-wider font-bold",
+                  "px-2 py-0.5 rounded font-mono text-[9px] uppercase tracking-wider font-bold",
                   ((monthlyIncome > 0 ? (budgetAllocation.savings.spent / monthlyIncome) * 100 : 0) >= 25) ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" : "bg-red-500/10 text-red-400 border border-red-500/20"
                 )}>
                   {((monthlyIncome > 0 ? (budgetAllocation.savings.spent / monthlyIncome) * 100 : 0) >= 25) ? "Optimal" : "Needs Work"}
                 </span>
-                <span className="text-white/80 text-xs font-semibold">Savings Consistency Pillar</span>
+                <span className="text-foreground/80 text-xs font-semibold">Savings Consistency Pillar</span>
               </div>
-              <p className="text-white/50 text-[11px]">
+              <p className="text-muted-foreground text-[11px]">
                 {((monthlyIncome > 0 ? (budgetAllocation.savings.spent / monthlyIncome) * 100 : 0) >= 25) 
                   ? `Your current savings rate is ${(monthlyIncome > 0 ? (budgetAllocation.savings.spent / monthlyIncome) * 100 : 0).toFixed(1)}%, which exceeds the 25% royal target. Excellent financial buffer!`
                   : `Your current savings rate is ${(monthlyIncome > 0 ? (budgetAllocation.savings.spent / monthlyIncome) * 100 : 0).toFixed(1)}%. Allocate savings entries to hit the 25% target and reclaim your lost points.`}
               </p>
             </div>
             <div className="flex items-center gap-2 self-start md:self-center">
-              <span className="text-[10px] text-white/40 font-mono">Weight: 40 pts</span>
+              <span className="text-[10px] text-muted-foreground font-mono">Weight: 40 pts</span>
               <div className={cn(
                 "px-3 py-1 rounded-lg text-xs font-bold flex items-center gap-1.5",
                 ((monthlyIncome > 0 ? (budgetAllocation.savings.spent / monthlyIncome) * 100 : 0) >= 25) ? "bg-emerald-500/10 text-emerald-400" : "bg-red-500/10 text-red-400"
@@ -722,7 +722,7 @@ export function DisciplineSystem() {
             <div className="space-y-1">
               <div className="flex items-center gap-2">
                 <span className={cn(
-                  "px-2 py-0.5 rounded text-[9px] uppercase tracking-wider font-bold",
+                  "px-2 py-0.5 rounded font-mono text-[9px] uppercase tracking-wider font-bold",
                   (CATEGORIES.filter(cat => {
                     const alloc = budgetAllocation[cat.key as keyof typeof budgetAllocation]
                     return alloc.budget > 0 && alloc.spent > alloc.budget
@@ -733,9 +733,9 @@ export function DisciplineSystem() {
                     return alloc.budget > 0 && alloc.spent > alloc.budget
                   }).length === 0) ? "Perfect" : "Overspent"}
                 </span>
-                <span className="text-white/80 text-xs font-semibold">Spending Discipline Pillar</span>
+                <span className="text-foreground/80 text-xs font-semibold">Spending Discipline Pillar</span>
               </div>
-              <p className="text-white/50 text-[11px]">
+              <p className="text-muted-foreground text-[11px]">
                 {(CATEGORIES.filter(cat => {
                   const alloc = budgetAllocation[cat.key as keyof typeof budgetAllocation]
                   return alloc.budget > 0 && alloc.spent > alloc.budget
@@ -748,7 +748,7 @@ export function DisciplineSystem() {
               </p>
             </div>
             <div className="flex items-center gap-2 self-start md:self-center">
-              <span className="text-[10px] text-white/40 font-mono">Weight: 30 pts</span>
+              <span className="text-[10px] text-muted-foreground font-mono">Weight: 30 pts</span>
               <div className={cn(
                 "px-3 py-1 rounded-lg text-xs font-bold flex items-center gap-1.5",
                 (CATEGORIES.filter(cat => {
@@ -777,15 +777,15 @@ export function DisciplineSystem() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.3 }}
-        className="bg-[#0e0e11] lg:bg-white/[0.03] lg:backdrop-blur-xl border border-white/[0.06] rounded-2xl p-6"
+        className="bg-card lg:bg-card/80 lg:backdrop-blur-xl border border-border rounded-2xl p-6"
       >
         <div className="flex items-center gap-2 mb-5">
-          <div className="p-1.5 rounded-lg bg-amber-400/10 border border-amber-400/20">
+          <div className="p-1.5 rounded-lg bg-primary/10 border border-primary/20">
             <Zap className="w-4 h-4 text-amber-400" />
           </div>
           <div>
-            <h3 className="text-white/90 text-sm font-semibold">Behavioral Analysis</h3>
-            <p className="text-white/25 text-[10px]">AI-generated insights from your patterns</p>
+            <h3 className="text-foreground text-sm font-semibold">Behavioral Analysis</h3>
+            <p className="text-muted-foreground/50 text-[10px]">AI-generated insights from your patterns</p>
           </div>
           <span className="ml-auto text-[10px] text-amber-400/50 uppercase tracking-wider px-2 py-1 rounded-lg bg-amber-400/5 border border-amber-400/10">Karna AI</span>
         </div>
@@ -809,23 +809,23 @@ export function DisciplineSystem() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.4 }}
-        className="bg-[#0e0e11] lg:bg-white/[0.03] lg:backdrop-blur-xl border border-white/[0.06] rounded-2xl p-6"
+        className="bg-card lg:bg-card/80 lg:backdrop-blur-xl border border-border rounded-2xl p-6"
       >
         <div className="flex items-center justify-between mb-5">
           <div className="flex items-center gap-2">
-            <div className="p-1.5 rounded-lg bg-amber-400/10 border border-amber-400/20">
+            <div className="p-1.5 rounded-lg bg-primary/10 border border-primary/20">
               <Calendar className="w-4 h-4 text-amber-400" />
             </div>
             <div>
-              <h3 className="text-white/90 text-sm font-semibold">Weekly Discipline Log</h3>
-              <p className="text-white/25 text-[10px]">7-day behavioral tracker</p>
+              <h3 className="text-foreground text-sm font-semibold">Weekly Discipline Log</h3>
+              <p className="text-muted-foreground/50 text-[10px]">7-day behavioral tracker</p>
             </div>
           </div>
 
           {/* Streak & Trend */}
           <div className="flex items-center gap-3">
             {streak > 0 && (
-              <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-amber-500/5 border border-amber-500/10">
+              <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-primary/5 border border-primary/10">
                 <Flame className="w-3.5 h-3.5 text-amber-400" />
                 <span className="text-amber-400 text-xs font-bold">{streak}-day streak</span>
               </div>
@@ -834,16 +834,16 @@ export function DisciplineSystem() {
               'flex items-center gap-1 px-2.5 py-1.5 rounded-lg border',
               trend === 'improving' ? 'bg-emerald-500/5 border-emerald-500/10' :
               trend === 'declining' ? 'bg-red-500/5 border-red-500/10' :
-              'bg-white/5 border-white/10'
+              'bg-secondary/50 border-border'
             )}>
               {trend === 'improving' ? <ArrowUpRight className="w-3.5 h-3.5 text-emerald-400" /> :
                trend === 'declining' ? <ArrowDownRight className="w-3.5 h-3.5 text-red-400" /> :
-               <Minus className="w-3.5 h-3.5 text-white/40" />}
+               <Minus className="w-3.5 h-3.5 text-muted-foreground" />}
               <span className={cn(
                 'text-xs font-medium capitalize',
                 trend === 'improving' ? 'text-emerald-400' :
                 trend === 'declining' ? 'text-red-400' :
-                'text-white/40'
+                'text-muted-foreground'
               )}>{trend}</span>
             </div>
           </div>
@@ -853,19 +853,19 @@ export function DisciplineSystem() {
         <div className="flex items-center gap-4 mb-4 px-1">
           <div className="flex items-center gap-1.5">
             <div className="w-3 h-3 rounded bg-emerald-400/20 flex items-center justify-center text-emerald-400 text-[8px] font-bold">✓</div>
-            <span className="text-white/25 text-[10px]">Under budget</span>
+            <span className="text-muted-foreground/50 text-[10px]">Under budget</span>
           </div>
           <div className="flex items-center gap-1.5">
             <div className="w-3 h-3 rounded bg-amber-400/20 flex items-center justify-center text-amber-400 text-[8px] font-bold">!</div>
-            <span className="text-white/25 text-[10px]">Near limit</span>
+            <span className="text-muted-foreground/50 text-[10px]">Near limit</span>
           </div>
           <div className="flex items-center gap-1.5">
             <div className="w-3 h-3 rounded bg-red-400/20 flex items-center justify-center text-red-400 text-[8px] font-bold">✗</div>
-            <span className="text-white/25 text-[10px]">Over budget</span>
+            <span className="text-muted-foreground/50 text-[10px]">Over budget</span>
           </div>
           <div className="flex items-center gap-1.5">
             <CheckCircle2 className="w-3 h-3 text-emerald-400" />
-            <span className="text-white/25 text-[10px]">Outreach done</span>
+            <span className="text-muted-foreground/50 text-[10px]">Outreach done</span>
           </div>
         </div>
 

@@ -181,7 +181,7 @@ ${expenseDetails || '- No expenses recorded yet'}
         {/* Tooltip Pill / Hover Label */}
         {!isOpen && (
           <div className={cn(
-            "absolute px-3 py-1.5 rounded-full bg-[#0d0d0f]/95 backdrop-blur-md border border-amber-500/20 text-amber-400 text-xs font-semibold tracking-wider shadow-[0_4px_12px_rgba(0,0,0,0.5)] opacity-0 group-hover:opacity-100 pointer-events-none transition-all duration-300 whitespace-nowrap",
+            "absolute px-3 py-1.5 rounded-full bg-card/95 backdrop-blur-md border border-primary/20 text-amber-400 text-xs font-semibold tracking-wider shadow-[0_4px_12px_rgba(0,0,0,0.5)] opacity-0 group-hover:opacity-100 pointer-events-none transition-all duration-300 whitespace-nowrap",
             position === 'right' ? "right-16 translate-x-2 group-hover:translate-x-0" : "left-16 -translate-x-2 group-hover:translate-x-0"
           )}>
             Karna AI
@@ -190,7 +190,7 @@ ${expenseDetails || '- No expenses recorded yet'}
 
         {/* Stable Glow Backplate (Static Premium Glow) */}
         {!isOpen && (
-          <div className="absolute inset-0 rounded-full bg-amber-500/10 border border-amber-500/20 shadow-[0_0_30px_10px_rgba(212,168,73,0.15)] pointer-events-none scale-110" />
+          <div className="absolute inset-0 rounded-full bg-primary/10 border border-primary/20 shadow-[0_0_30px_10px_rgba(212,168,73,0.15)] pointer-events-none scale-110" />
         )}
         
         <button
@@ -200,11 +200,11 @@ ${expenseDetails || '- No expenses recorded yet'}
             "relative w-14 h-14 rounded-full flex items-center justify-center text-black font-semibold shadow-[0_0_24px_rgba(212,168,73,0.4)] transition-all duration-300 transform hover:scale-105 active:scale-95 z-50",
             isOpen
               ? "bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 shadow-[0_0_24px_rgba(239,68,68,0.4)]"
-              : "bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400"
+              : "bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary/80"
           )}
         >
           {isOpen ? (
-            <X className="w-6 h-6 text-white stroke-[2.5]" />
+            <X className="w-6 h-6 text-foreground stroke-[2.5]" />
           ) : (
             <Sparkles className="w-6 h-6 text-black stroke-[2.5] fill-black/10" />
           )}
@@ -220,19 +220,19 @@ ${expenseDetails || '- No expenses recorded yet'}
             exit={{ opacity: 0, y: 30, scale: 0.95 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
             className={cn(
-              "fixed bottom-24 w-[380px] h-[550px] max-w-[calc(100vw-2rem)] max-h-[calc(100vh-8rem)] z-50 flex flex-col bg-[#030712]/95 backdrop-blur-xl border border-white/[0.08] rounded-2xl shadow-[0_12px_40px_rgba(0,0,0,0.6)] overflow-hidden",
+              "fixed bottom-24 w-[380px] h-[550px] max-w-[calc(100vw-2rem)] max-h-[calc(100vh-8rem)] z-50 flex flex-col bg-card/95 backdrop-blur-xl border border-border rounded-2xl shadow-[0_12px_40px_rgba(0,0,0,0.6)] overflow-hidden",
               position === 'right' ? "right-6" : "left-6"
             )}
           >
             {/* Header */}
-            <div className="p-4 bg-gradient-to-r from-amber-500/10 to-transparent border-b border-white/[0.06] flex items-center justify-between">
+            <div className="p-4 bg-gradient-to-r from-amber-500/10 to-transparent border-b border-border flex items-center justify-between">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/15 flex items-center justify-center">
+                <div className="w-8 h-8 rounded-xl bg-primary/10 border border-primary/15 flex items-center justify-center">
                   <Sparkles className="w-4 h-4 text-amber-400" />
                 </div>
                 <div>
-                  <h3 className="text-white/95 text-sm font-semibold tracking-wide">Karna AI Advisor</h3>
-                  <p className="text-white/40 text-[10px]">Your strategic wealth co-pilot</p>
+                  <h3 className="text-foreground text-sm font-semibold tracking-wide">Karna AI Advisor</h3>
+                  <p className="text-muted-foreground text-[10px]">Your strategic wealth co-pilot</p>
                 </div>
               </div>
               <div className="flex items-center gap-1">
@@ -241,14 +241,14 @@ ${expenseDetails || '- No expenses recorded yet'}
                   size="sm"
                   onClick={togglePosition}
                   title={position === 'right' ? "Move Karna to Left Side" : "Move Karna to Right Side"}
-                  className="text-white/45 hover:text-amber-400 hover:bg-white/5 h-8 px-2 text-[10px] flex items-center gap-1 border border-white/5"
+                  className="text-white/45 hover:text-amber-400 hover:bg-secondary/50 h-8 px-2 text-[10px] flex items-center gap-1 border border-white/5"
                 >
                   <ArrowLeftRight className="w-3 h-3 text-amber-400" />
                   <span>Swap Side</span>
                 </Button>
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="p-1 rounded-lg text-white/40 hover:text-white/70 hover:bg-white/5 transition-all h-8 w-8 flex items-center justify-center"
+                  className="p-1 rounded-lg text-muted-foreground hover:text-foreground/70 hover:bg-secondary/50 transition-all h-8 w-8 flex items-center justify-center"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -262,11 +262,11 @@ ${expenseDetails || '- No expenses recorded yet'}
             >
               {messages.length === 0 && (
                 <div className="flex flex-col items-center justify-center h-full text-center py-6">
-                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-500/10 to-amber-700/10 border border-amber-500/10 flex items-center justify-center mb-4 gold-glow">
+                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/10 flex items-center justify-center mb-4 gold-glow">
                     <Bot className="w-7 h-7 text-amber-400" />
                   </div>
-                  <h4 className="text-white/70 text-xs font-semibold mb-1">Karna is listening</h4>
-                  <p className="text-white/30 text-[10px] max-w-[240px] mb-4">
+                  <h4 className="text-foreground/70 text-xs font-semibold mb-1">Karna is listening</h4>
+                  <p className="text-muted-foreground/60 text-[10px] max-w-[240px] mb-4">
                     Ask me anything about your current wealth portfolio, client deals, or daily outreach focus.
                   </p>
 
@@ -276,10 +276,10 @@ ${expenseDetails || '- No expenses recorded yet'}
                       <button
                         key={i}
                         onClick={() => sendMessage(item.prompt)}
-                        className="w-full flex items-center gap-2 px-3 py-2 rounded-lg bg-white/[0.02] border border-white/[0.04] text-left hover:border-amber-500/20 hover:bg-white/[0.04] transition-all group"
+                        className="w-full flex items-center gap-2 px-3 py-2 rounded-lg bg-white/[0.02] border border-border text-left hover:border-primary/20 hover:bg-white/[0.04] transition-all group"
                       >
                         <span className="text-amber-400/40 group-hover:text-amber-400 transition-colors">{item.icon}</span>
-                        <span className="text-white/45 text-[10px] group-hover:text-white/70 truncate transition-colors">{item.label}</span>
+                        <span className="text-white/45 text-[10px] group-hover:text-foreground/70 truncate transition-colors">{item.label}</span>
                       </button>
                     ))}
                   </div>
@@ -296,7 +296,7 @@ ${expenseDetails || '- No expenses recorded yet'}
                   )}
                 >
                   {msg.role === 'assistant' && (
-                    <div className="w-6 h-6 rounded-lg bg-amber-500/10 border border-amber-500/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <div className="w-6 h-6 rounded-lg bg-primary/10 border border-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
                       <Sparkles className="w-3 h-3 text-amber-400" />
                     </div>
                   )}
@@ -304,12 +304,12 @@ ${expenseDetails || '- No expenses recorded yet'}
                     className={cn(
                       'max-w-[85%] rounded-xl px-3.5 py-2 text-xs leading-relaxed',
                       msg.role === 'user'
-                        ? 'bg-amber-500/10 border border-amber-500/10 text-white/90'
-                        : 'bg-white/[0.02] border border-white/[0.04] text-white/80'
+                        ? 'bg-primary/10 border border-primary/10 text-foreground'
+                        : 'bg-white/[0.02] border border-border text-foreground/80'
                     )}
                   >
                     {msg.role === 'assistant' ? (
-                      <div className="prose dark:prose-invert prose-xs max-w-none dark:[&>p]:text-white/80 [&>p]:text-zinc-800 [&>p]:mb-1 dark:[&>ul]:text-white/70 [&>ul]:text-zinc-700 dark:[&>ol]:text-white/70 [&>ol]:text-zinc-700 dark:[&>strong]:text-amber-400/90 [&>strong]:text-amber-700 dark:[&>h1]:text-amber-400 [&>h1]:text-amber-700 dark:[&>h2]:text-amber-400 [&>h2]:text-amber-700">
+                      <div className="prose dark:prose-invert prose-xs max-w-none dark:[&>p]:text-foreground/80 [&>p]:text-zinc-800 [&>p]:mb-1 dark:[&>ul]:text-foreground/70 [&>ul]:text-zinc-700 dark:[&>ol]:text-foreground/70 [&>ol]:text-zinc-700 dark:[&>strong]:text-amber-400/90 [&>strong]:text-amber-700 dark:[&>h1]:text-amber-400 [&>h1]:text-amber-700 dark:[&>h2]:text-amber-400 [&>h2]:text-amber-700">
                         <ReactMarkdown>{msg.content}</ReactMarkdown>
                       </div>
                     ) : (
@@ -322,19 +322,19 @@ ${expenseDetails || '- No expenses recorded yet'}
               {/* Loading Indicator */}
               {isLoading && (
                 <div className="flex gap-2.5 items-start">
-                  <div className="w-6 h-6 rounded-lg bg-amber-500/10 border border-amber-500/10 flex items-center justify-center flex-shrink-0">
-                    <Sparkles className="w-3 h-3 text-amber-400 animate-pulse" />
+                  <div className="w-6 h-6 rounded-lg bg-primary/10 border border-primary/10 flex items-center justify-center flex-shrink-0">
+                    <Sparkles className="w-3 h-3 text-primary animate-pulse" />
                   </div>
-                  <div className="bg-white/[0.02] border border-white/[0.04] rounded-xl px-3 py-2 flex items-center gap-2">
+                  <div className="bg-white/[0.02] border border-border rounded-xl px-3 py-2 flex items-center gap-2">
                     <Loader2 className="w-3.5 h-3.5 text-amber-400 animate-spin" />
-                    <span className="text-white/40 text-[11px]">Karna is crafting insight...</span>
+                    <span className="text-muted-foreground text-[11px]">Karna is crafting insight...</span>
                   </div>
                 </div>
               )}
             </div>
 
             {/* Input area */}
-            <div className="p-3 border-t border-white/[0.06] bg-black/40">
+            <div className="p-3 border-t border-border bg-card/80">
               <div className="flex items-center gap-2">
                 <Input
                   ref={inputRef}
@@ -342,14 +342,14 @@ ${expenseDetails || '- No expenses recorded yet'}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={handleKeyDown}
                   placeholder="Ask anything about strategy, wealth..."
-                  className="bg-white/[0.02] border-white/[0.05] text-white placeholder:text-white/20 h-9 rounded-lg text-xs focus:border-amber-500/30"
+                  className="bg-white/[0.02] border-white/[0.05] text-foreground placeholder:text-muted-foreground/40 h-9 rounded-lg text-xs focus:border-primary/30"
                   disabled={isLoading}
                 />
                 <Button
                   onClick={() => sendMessage(input)}
                   disabled={!input.trim() || isLoading}
                   size="icon"
-                  className="w-9 h-9 bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 text-black font-semibold rounded-lg flex-shrink-0"
+                  className="w-9 h-9 bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary/80 text-black font-semibold rounded-lg flex-shrink-0"
                 >
                   {isLoading ? (
                     <Loader2 className="w-3.5 h-3.5 animate-spin" />

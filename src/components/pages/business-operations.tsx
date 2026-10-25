@@ -153,8 +153,8 @@ const outreachMetrics: OutreachMetricConfig[] = [
     dailyTarget: 2,
     weeklyTarget: 10,
     color: 'text-amber-400',
-    bgColor: 'bg-amber-400/10',
-    borderColor: 'border-amber-400/20',
+    bgColor: 'bg-primary/10',
+    borderColor: 'border-primary/20',
   },
   {
     key: 'meeting',
@@ -196,7 +196,7 @@ function MissionTracker() {
       initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7 }}
-      className="relative overflow-hidden bg-gradient-to-br from-amber-500/[0.08] via-black/40 to-black/60 border border-amber-500/10 rounded-2xl p-6 lg:p-8"
+      className="relative overflow-hidden bg-gradient-to-br from-amber-500/[0.08] via-background/40 to-background/60 border border-primary/10 rounded-2xl p-6 lg:p-8"
     >
       {/* Ambient gradient overlay */}
       <div className="absolute inset-0 ambient-gradient pointer-events-none" />
@@ -212,21 +212,21 @@ function MissionTracker() {
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6">
           <div>
             <div className="flex items-center gap-2 mb-2">
-              <div className="p-1.5 rounded-lg bg-amber-500/10 border border-amber-500/20">
+              <div className="p-1.5 rounded-lg bg-primary/10 border border-primary/20">
                 <Crown className="w-4 h-4 text-amber-400" />
               </div>
-              <span className="text-[11px] text-amber-400/70 uppercase tracking-widest font-medium">Mission Control</span>
+              <span className="text-[11px] text-primary/70 uppercase tracking-widest font-medium">Mission Control</span>
             </div>
-            <h1 className="gold-text text-3xl lg:text-4xl font-bold tracking-tight">
+            <h1 className="gold-text text-3xl lg:font-display text-4xl font-bold tracking-tight">
               {formatINR(monthlyTarget)} Mission
             </h1>
-            <p className="text-white/30 text-sm mt-1">Revenue growth headquarters — every rupee counts</p>
+            <p className="text-muted-foreground/60 text-sm mt-1">Revenue growth headquarters — every rupee counts</p>
           </div>
           <div className={cn(
             'flex items-center gap-1.5 px-3 py-2 rounded-xl border',
             isTargetHit
               ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
-              : 'bg-amber-500/10 border-amber-500/20 text-amber-400'
+              : 'bg-primary/10 border-primary/20 text-amber-400'
           )}>
             {isTargetHit ? (
               <CheckCircle2 className="w-4 h-4" />
@@ -244,31 +244,31 @@ function MissionTracker() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.15 }}
-            className="bg-[#0a0a0c] lg:bg-white/[0.03] lg:backdrop-blur-sm border border-white/[0.06] rounded-xl p-4"
+            className="bg-card lg:bg-card/80 lg:backdrop-blur-sm border border-border rounded-xl p-4"
           >
-            <p className="text-white/30 text-[10px] uppercase tracking-wider mb-1">Earned This Month</p>
-            <p className="gold-text text-2xl font-bold">{formatINR(monthlyIncome)}</p>
+            <p className="text-muted-foreground/60 font-mono text-[10px] uppercase tracking-wider mb-1">Earned This Month</p>
+            <p className="gold-text font-display text-2xl font-bold">{formatINR(monthlyIncome)}</p>
           </motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="bg-[#0a0a0c] lg:bg-white/[0.03] lg:backdrop-blur-sm border border-white/[0.06] rounded-xl p-4"
+            className="bg-card lg:bg-card/80 lg:backdrop-blur-sm border border-border rounded-xl p-4"
           >
-            <p className="text-white/30 text-[10px] uppercase tracking-wider mb-1">Target</p>
-            <p className="text-white/80 text-2xl font-bold">{formatINR(monthlyTarget)}</p>
+            <p className="text-muted-foreground/60 font-mono text-[10px] uppercase tracking-wider mb-1">Target</p>
+            <p className="text-foreground/80 font-display text-2xl font-bold">{formatINR(monthlyTarget)}</p>
           </motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.25 }}
-            className="bg-[#0a0a0c] lg:bg-white/[0.03] lg:backdrop-blur-sm border border-white/[0.06] rounded-xl p-4"
+            className="bg-card lg:bg-card/80 lg:backdrop-blur-sm border border-border rounded-xl p-4"
           >
-            <p className="text-white/30 text-[10px] uppercase tracking-wider mb-1">Remaining</p>
+            <p className="text-muted-foreground/60 font-mono text-[10px] uppercase tracking-wider mb-1">Remaining</p>
             <p className={cn(
-              'text-2xl font-bold',
+              'font-display text-2xl font-bold',
               remaining > 0 ? 'text-amber-400' : 'text-emerald-400'
             )}>
               {remaining > 0 ? formatINR(remaining) : 'Done! ✓'}
@@ -279,22 +279,22 @@ function MissionTracker() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="bg-[#0a0a0c] lg:bg-white/[0.03] lg:backdrop-blur-sm border border-white/[0.06] rounded-xl p-4"
+            className="bg-card lg:bg-card/80 lg:backdrop-blur-sm border border-border rounded-xl p-4"
           >
-            <p className="text-white/30 text-[10px] uppercase tracking-wider mb-1">Required / Day</p>
+            <p className="text-muted-foreground/60 font-mono text-[10px] uppercase tracking-wider mb-1">Required / Day</p>
             <p className={cn(
-              'text-2xl font-bold',
-              requiredDaily > 0 ? 'text-white/80' : 'text-emerald-400'
+              'font-display text-2xl font-bold',
+              requiredDaily > 0 ? 'text-foreground/80' : 'text-emerald-400'
             )}>
               {remaining > 0 ? `${formatINR(Math.round(requiredDaily))}` : '—'}
             </p>
-            <p className="text-white/30 text-[10px] mt-0.5">{daysLeft} days left</p>
+            <p className="text-muted-foreground/60 text-[10px] mt-0.5">{daysLeft} days left</p>
           </motion.div>
         </div>
 
         {/* Cinematic Progress Bar */}
         <div className="relative">
-          <div className="w-full h-4 bg-white/5 rounded-full overflow-hidden relative">
+          <div className="w-full h-4 bg-secondary/50 rounded-full overflow-hidden relative">
             {/* Shimmer overlay */}
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.03] to-transparent animate-[shimmer_3s_ease-in-out_infinite]" />
 
@@ -323,12 +323,12 @@ function MissionTracker() {
                   {/* Tick mark */}
                   <div className={cn(
                     'w-px h-3',
-                    isReached ? 'bg-amber-400/60' : 'bg-white/10'
+                    isReached ? 'bg-amber-400/60' : 'bg-accent'
                   )} />
                   {/* Label */}
                   <span className={cn(
                     'text-[9px] font-medium mt-0.5',
-                    isReached ? 'text-amber-400' : 'text-white/20'
+                    isReached ? 'text-amber-400' : 'text-muted-foreground/40'
                   )}>
                     {milestone}%
                   </span>
@@ -484,16 +484,16 @@ function OutreachTracker() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: 0.3 }}
-      className="bg-[#0e0e11] lg:bg-white/[0.03] lg:backdrop-blur-xl border border-white/[0.06] rounded-2xl p-5"
+      className="bg-card lg:bg-card/80 lg:backdrop-blur-xl border border-border rounded-2xl p-5"
     >
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-2">
-          <div className="p-1.5 rounded-lg bg-amber-400/10 border border-amber-400/20">
+          <div className="p-1.5 rounded-lg bg-primary/10 border border-primary/20">
             <Rocket className="w-4 h-4 text-amber-400" />
           </div>
           <div>
             <h2 className="gold-text text-lg font-bold">Outreach Tracker</h2>
-            <p className="text-white/30 text-[10px]">Daily & weekly execution metrics</p>
+            <p className="text-muted-foreground/60 text-[10px]">Daily & weekly execution metrics</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -501,8 +501,8 @@ function OutreachTracker() {
             <Flame className="w-3.5 h-3.5" />
             <span className="text-[10px] font-bold">{weeklyStreak} Wk Streak</span>
           </div>
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-500/5 border border-amber-500/10">
-            <span className="text-[10px] text-amber-400/70 uppercase tracking-wider">This Week</span>
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-primary/5 border border-primary/10">
+            <span className="text-[10px] text-primary/70 uppercase tracking-wider">This Week</span>
           </div>
         </div>
       </div>
@@ -522,8 +522,8 @@ function OutreachTracker() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.35 + index * 0.06 }}
               className={cn(
-                'bg-[#0a0a0c] lg:bg-white/[0.02] border rounded-xl p-4 hover:border-white/[0.1] transition-all duration-300 relative overflow-hidden group',
-                isHittingWeekly ? 'border-amber-500/30' : 'border-white/[0.04]'
+                'bg-card lg:bg-card/60 border rounded-xl p-4 hover:border-border transition-all duration-300 relative overflow-hidden group',
+                isHittingWeekly ? 'border-primary/30' : 'border-border'
               )}
             >
               {/* Ambient glow for hitting targets */}
@@ -545,15 +545,15 @@ function OutreachTracker() {
 
                   {/* Count */}
                   <div className="flex items-baseline gap-1.5 mb-1">
-                    <span className="text-white/90 text-2xl font-bold">{count}</span>
-                    <span className="text-white/30 text-xs">/ {metric.weeklyTarget}</span>
+                    <span className="text-foreground font-display text-2xl font-bold">{count}</span>
+                    <span className="text-muted-foreground/60 text-xs">/ {metric.weeklyTarget}</span>
                   </div>
                   <p className={cn('text-xs font-medium uppercase tracking-wider', metric.color)}>
                     {metric.label}
                   </p>
 
                   {/* Progress bar */}
-                  <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden mt-3">
+                  <div className="w-full h-1.5 bg-secondary/50 rounded-full overflow-hidden mt-3">
                     <motion.div
                       initial={{ width: 0 }}
                       animate={{ width: `${weeklyProgress}%` }}
@@ -569,12 +569,12 @@ function OutreachTracker() {
 
                   {/* Daily target info */}
                   {metric.dailyTarget > 0 && (
-                    <p className="text-white/20 text-[9px] mt-1.5">
+                    <p className="text-muted-foreground/40 text-[9px] mt-1.5">
                       Daily: {metric.dailyTarget} · Weekly: {metric.weeklyTarget}
                     </p>
                   )}
                   {metric.dailyTarget === 0 && (
-                    <p className="text-white/20 text-[9px] mt-1.5">
+                    <p className="text-muted-foreground/40 text-[9px] mt-1.5">
                       Weekly target: {metric.weeklyTarget}
                     </p>
                   )}
@@ -586,14 +586,14 @@ function OutreachTracker() {
                     variant="ghost"
                     onClick={() => openLogModal(metric.key)}
                     disabled={isLoading}
-                    className="h-8 text-[10px] text-white/50 hover:text-amber-400 hover:bg-amber-500/10 border border-white/[0.04] hover:border-amber-500/20 transition-all flex items-center justify-center gap-1"
+                    className="h-8 text-[10px] text-muted-foreground hover:text-amber-400 hover:bg-primary/10 border border-border hover:border-primary/20 transition-all flex items-center justify-center gap-1"
                   >
                     <Plus className="w-3.5 h-3.5" /> Log
                   </Button>
                   <Button
                     variant="ghost"
                     onClick={() => setInspectCategory(metric.key)}
-                    className="h-8 text-[10px] text-white/50 hover:text-amber-400 hover:bg-amber-500/10 border border-white/[0.04] hover:border-amber-500/20 transition-all flex items-center justify-center gap-1"
+                    className="h-8 text-[10px] text-muted-foreground hover:text-amber-400 hover:bg-primary/10 border border-border hover:border-primary/20 transition-all flex items-center justify-center gap-1"
                   >
                     <History className="w-3.5 h-3.5" /> History
                   </Button>
@@ -611,55 +611,55 @@ function OutreachTracker() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-card backdrop-blur-sm"
           >
             <motion.div
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
-              className="bg-[#111113] border border-white/10 rounded-2xl p-6 w-full max-w-md shadow-2xl relative overflow-hidden"
+              className="bg-secondary border border-border rounded-2xl p-6 w-full max-w-md shadow-2xl relative overflow-hidden"
             >
-              <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/10 blur-[50px] rounded-full pointer-events-none" />
+              <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 blur-[50px] rounded-full pointer-events-none" />
               
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-xl font-bold text-white tracking-tight">Log {logType.toUpperCase()}</h3>
-                <Button variant="ghost" size="icon" onClick={() => setModalOpen(false)} className="w-8 h-8 rounded-full text-white/40 hover:text-white hover:bg-white/5">
+                <h3 className="text-xl font-bold text-foreground tracking-tight">Log {logType.toUpperCase()}</h3>
+                <Button variant="ghost" size="icon" onClick={() => setModalOpen(false)} className="w-8 h-8 rounded-full text-muted-foreground hover:text-foreground hover:bg-secondary/50">
                   <X className="w-4 h-4" />
                 </Button>
               </div>
 
               <form onSubmit={handleModalSubmit} className="space-y-4">
                 <div className="space-y-1.5">
-                  <label className="text-xs text-white/40 ml-1">Contact Name</label>
+                  <label className="text-xs text-muted-foreground ml-1">Contact Name</label>
                   <Input 
                     required 
                     value={contactName} 
                     onChange={e => setContactName(e.target.value)} 
                     placeholder="Enter name..." 
-                    className="bg-white/5 border-white/10 text-white" 
+                    className="bg-secondary/50 border-border text-foreground" 
                   />
                 </div>
 
                 {logType === 'call' && (
                   <div className="space-y-1.5">
-                    <label className="text-xs text-white/40 ml-1">Phone Number</label>
+                    <label className="text-xs text-muted-foreground ml-1">Phone Number</label>
                     <Input 
                       type="tel" 
                       value={phoneNumber} 
                       onChange={e => setPhoneNumber(e.target.value)} 
                       placeholder="Enter phone number..." 
-                      className="bg-white/5 border-white/10 text-white" 
+                      className="bg-secondary/50 border-border text-foreground" 
                     />
                   </div>
                 )}
 
                 <div className="space-y-1.5">
-                  <label className="text-xs text-white/40 ml-1">Notes (Optional)</label>
+                  <label className="text-xs text-muted-foreground ml-1">Notes (Optional)</label>
                   <Input 
                     value={logNotes} 
                     onChange={e => setLogNotes(e.target.value)} 
                     placeholder="Any quick notes..." 
-                    className="bg-white/5 border-white/10 text-white" 
+                    className="bg-secondary/50 border-border text-foreground" 
                   />
                 </div>
 
@@ -681,29 +681,29 @@ function OutreachTracker() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-card backdrop-blur-sm"
           >
             <motion.div
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
-              className="bg-[#111113] border border-white/10 rounded-2xl p-6 w-full max-w-lg shadow-2xl relative overflow-hidden"
+              className="bg-secondary border border-border rounded-2xl p-6 w-full max-w-lg shadow-2xl relative overflow-hidden"
             >
-              <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/10 blur-[50px] rounded-full pointer-events-none" />
+              <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 blur-[50px] rounded-full pointer-events-none" />
               
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h3 className="text-xl font-bold text-white tracking-tight capitalize">{inspectCategory} Outreach History</h3>
-                  <p className="text-white/40 text-xs">All registered {inspectCategory} outreach attempts</p>
+                  <h3 className="text-xl font-bold text-foreground tracking-tight capitalize">{inspectCategory} Outreach History</h3>
+                  <p className="text-muted-foreground text-xs">All registered {inspectCategory} outreach attempts</p>
                 </div>
-                <Button variant="ghost" size="icon" onClick={() => setInspectCategory(null)} className="w-8 h-8 rounded-full text-white/40 hover:text-white hover:bg-white/5">
+                <Button variant="ghost" size="icon" onClick={() => setInspectCategory(null)} className="w-8 h-8 rounded-full text-muted-foreground hover:text-foreground hover:bg-secondary/50">
                   <X className="w-4 h-4" />
                 </Button>
               </div>
 
               <div className="space-y-2 max-h-[400px] overflow-y-auto pr-1">
                 {outreachRecords.filter(r => r.type === inspectCategory).length === 0 ? (
-                  <div className="py-12 text-center text-white/30 text-sm">
+                  <div className="py-12 text-center text-muted-foreground/60 text-sm">
                     <History className="w-10 h-10 mx-auto mb-2 opacity-20" />
                     No logs found for {inspectCategory}.
                   </div>
@@ -714,19 +714,19 @@ function OutreachTracker() {
                     .map((log) => (
                       <div
                         key={log.id}
-                        className="flex items-center justify-between gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.04] hover:bg-white/[0.04] transition-all group"
+                        className="flex items-center justify-between gap-3 p-3 rounded-xl bg-secondary/30 border border-border hover:bg-secondary/60 transition-all group"
                       >
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center gap-2">
-                            <span className="text-white/80 text-sm font-semibold truncate">{log.contactName}</span>
+                            <span className="text-foreground/80 text-sm font-semibold truncate">{log.contactName}</span>
                             {log.phoneNumber && (
-                              <span className="text-white/40 text-xs truncate">({log.phoneNumber})</span>
+                              <span className="text-muted-foreground text-xs truncate">({log.phoneNumber})</span>
                             )}
                           </div>
                           {log.notes && (
-                            <p className="text-white/40 text-xs mt-1 truncate">{log.notes}</p>
+                            <p className="text-muted-foreground text-xs mt-1 truncate">{log.notes}</p>
                           )}
-                          <p className="text-[10px] text-white/20 mt-1">
+                          <p className="text-[10px] text-muted-foreground/40 mt-1">
                             {new Date(log.date).toLocaleDateString('en-IN', {
                               day: '2-digit',
                               month: 'short',
@@ -740,7 +740,7 @@ function OutreachTracker() {
                           variant="ghost"
                           size="icon"
                           onClick={() => handleDeleteLog(log.id)}
-                          className="w-8 h-8 text-white/20 hover:text-red-400 hover:bg-red-400/10 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
+                          className="w-8 h-8 text-muted-foreground/40 hover:text-red-400 hover:bg-red-400/10 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
                         >
                           <Trash2 className="w-4 h-4" />
                         </Button>
@@ -788,21 +788,21 @@ function BusinessRoadmap() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: 0.5 }}
-      className="bg-[#0e0e11] lg:bg-white/[0.03] lg:backdrop-blur-xl border border-white/[0.06] rounded-2xl p-5"
+      className="bg-card lg:bg-card/80 lg:backdrop-blur-xl border border-border rounded-2xl p-5"
     >
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-2">
-          <div className="p-1.5 rounded-lg bg-amber-400/10 border border-amber-400/20">
+          <div className="p-1.5 rounded-lg bg-primary/10 border border-primary/20">
             <Flag className="w-4 h-4 text-amber-400" />
           </div>
           <div>
             <h2 className="gold-text text-lg font-bold">Business Roadmap</h2>
-            <p className="text-white/30 text-[10px]">7-month empire building plan</p>
+            <p className="text-muted-foreground/60 text-[10px]">7-month empire building plan</p>
           </div>
         </div>
-        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/[0.02] border border-white/5">
-          <Milestone className="w-3 h-3 text-white/30" />
-          <span className="text-[10px] text-white/30 uppercase tracking-wider">Month {currentMonthIndex + 1}</span>
+        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-secondary/30 border border-border">
+          <Milestone className="w-3 h-3 text-muted-foreground/60" />
+          <span className="text-[10px] text-muted-foreground/60 uppercase tracking-wider">Month {currentMonthIndex + 1}</span>
         </div>
       </div>
 
@@ -835,38 +835,38 @@ function BusinessRoadmap() {
                 <div className={cn(
                   'absolute left-0 top-4 w-10 h-10 rounded-xl flex items-center justify-center z-10 transition-all',
                   isCurrentMonth
-                    ? 'bg-amber-500/20 border-2 border-amber-400 shadow-[0_0_20px_rgba(212,168,73,0.2)]'
+                    ? 'bg-primary/20 border-2 border-amber-400 shadow-[0_0_20px_rgba(212,168,73,0.2)]'
                     : isCompleted
                     ? 'bg-emerald-500/20 border border-emerald-500/30'
-                    : 'bg-white/[0.03] border border-white/[0.06]'
+                    : 'bg-secondary/50 border border-border'
                 )}>
                   {isCompleted ? (
                     <CheckCircle2 className="w-4 h-4 text-emerald-400" />
                   ) : isCurrentMonth ? (
                     <Flame className="w-4 h-4 text-amber-400" />
                   ) : (
-                    <span className="text-white/30 text-xs font-bold">{month.month}</span>
+                    <span className="text-muted-foreground/60 text-xs font-bold">{month.month}</span>
                   )}
                 </div>
 
                 {/* Card */}
                 <div className={cn(
-                  'bg-[#0a0a0c] lg:bg-white/[0.02] border rounded-2xl p-4 transition-all duration-300 hover:bg-white/[0.04]',
+                  'bg-card lg:bg-card/60 border rounded-2xl p-4 transition-all duration-300 hover:bg-secondary/60',
                   isCurrentMonth
-                    ? 'border-amber-500/30 shadow-[0_0_30px_rgba(212,168,73,0.08)]'
-                    : 'border-white/[0.04] hover:border-white/[0.08]'
+                    ? 'border-primary/30 shadow-[0_0_30px_rgba(212,168,73,0.08)]'
+                    : 'border-border hover:border-border'
                 )}>
                   {/* Header row */}
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-2">
                       <span className={cn(
                         'text-xs font-bold uppercase tracking-wider',
-                        isCurrentMonth ? 'text-amber-400' : isCompleted ? 'text-emerald-400/70' : 'text-white/40'
+                        isCurrentMonth ? 'text-amber-400' : isCompleted ? 'text-emerald-400/70' : 'text-muted-foreground'
                       )}>
                         Month {month.month}
                       </span>
                       {isCurrentMonth && (
-                        <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-medium">
+                        <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-primary/10 text-amber-400 border border-primary/20 font-medium">
                           CURRENT
                         </span>
                       )}
@@ -878,7 +878,7 @@ function BusinessRoadmap() {
                     </div>
                     <span className={cn(
                       'text-lg font-bold',
-                      isCurrentMonth ? 'gold-text' : isCompleted ? 'text-emerald-400/70' : 'text-white/50'
+                      isCurrentMonth ? 'gold-text' : isCompleted ? 'text-emerald-400/70' : 'text-muted-foreground'
                     )}>
                       {formatINR(month.target)}
                     </span>
@@ -887,13 +887,13 @@ function BusinessRoadmap() {
                   {/* Title */}
                   <h4 className={cn(
                     'text-sm font-semibold mb-2',
-                    isCurrentMonth ? 'text-white/90' : 'text-white/60'
+                    isCurrentMonth ? 'text-foreground' : 'text-muted-foreground'
                   )}>
                     {month.title}
                   </h4>
 
                   {/* Focus strategy */}
-                  <p className="text-white/40 text-xs leading-relaxed mb-3">
+                  <p className="text-muted-foreground text-xs leading-relaxed mb-3">
                     {month.focus}
                   </p>
 
@@ -901,10 +901,10 @@ function BusinessRoadmap() {
                   {isCurrentMonth && (
                     <div className="mb-3">
                       <div className="flex items-center justify-between mb-1">
-                        <span className="text-white/30 text-[9px] uppercase tracking-wider">Revenue Progress</span>
+                        <span className="text-muted-foreground/60 font-mono text-[9px] uppercase tracking-wider">Revenue Progress</span>
                         <span className="text-amber-400 text-[10px] font-semibold">{progress.toFixed(0)}%</span>
                       </div>
-                      <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
+                      <div className="w-full h-1.5 bg-secondary/50 rounded-full overflow-hidden">
                         <motion.div
                           initial={{ width: 0 }}
                           animate={{ width: `${progress}%` }}
@@ -917,13 +917,13 @@ function BusinessRoadmap() {
 
                   {/* Outreach & Systems */}
                   <div className="grid grid-cols-2 gap-3">
-                    <div className="bg-white/[0.02] rounded-lg p-2.5 border border-white/[0.03]">
-                      <p className="text-white/20 text-[9px] uppercase tracking-wider mb-1">Outreach</p>
-                      <p className="text-white/50 text-[11px] leading-snug">{month.outreach}</p>
+                    <div className="bg-secondary/30 rounded-lg p-2.5 border border-white/[0.03]">
+                      <p className="text-muted-foreground/40 font-mono text-[9px] uppercase tracking-wider mb-1">Outreach</p>
+                      <p className="text-muted-foreground text-[11px] leading-snug">{month.outreach}</p>
                     </div>
-                    <div className="bg-white/[0.02] rounded-lg p-2.5 border border-white/[0.03]">
-                      <p className="text-white/20 text-[9px] uppercase tracking-wider mb-1">Systems</p>
-                      <p className="text-white/50 text-[11px] leading-snug">{month.systems}</p>
+                    <div className="bg-secondary/30 rounded-lg p-2.5 border border-white/[0.03]">
+                      <p className="text-muted-foreground/40 font-mono text-[9px] uppercase tracking-wider mb-1">Systems</p>
+                      <p className="text-muted-foreground text-[11px] leading-snug">{month.systems}</p>
                     </div>
                   </div>
                 </div>

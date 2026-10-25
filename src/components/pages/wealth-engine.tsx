@@ -172,8 +172,8 @@ function generateStreamComparison(incomes: IncomeEntry[]) {
 function ChartTooltip({ active, payload, label }: ChartTooltipProps) {
   if (!active || !payload?.length) return null
   return (
-    <div className="bg-black/80 backdrop-blur-xl border border-white/10 rounded-lg px-3 py-2 text-xs shadow-xl">
-      <p className="text-white/50 mb-1">{label}</p>
+    <div className="bg-card backdrop-blur-xl border border-border rounded-lg px-3 py-2 text-xs shadow-xl">
+      <p className="text-muted-foreground mb-1">{label}</p>
       {payload.map((entry, idx) => (
         <p key={idx} style={{ color: entry.color || '#d4a849' }} className="font-semibold">
           {entry.name}: {formatINR(entry.value)}
@@ -207,7 +207,7 @@ function MonthlyIncomeHeader({ monthlyIncome, incomes }: { monthlyIncome: number
       initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
-      className="relative overflow-hidden bg-gradient-to-br from-amber-500/[0.08] via-black/40 to-black/60 border border-amber-500/10 rounded-2xl p-6 lg:p-8"
+      className="relative overflow-hidden bg-gradient-to-br from-amber-500/[0.08] via-background/40 to-background/60 border border-primary/10 rounded-2xl p-6 lg:p-8"
     >
       {/* Ambient gradient overlay */}
       <div className="absolute inset-0 ambient-gradient pointer-events-none" />
@@ -220,7 +220,7 @@ function MonthlyIncomeHeader({ monthlyIncome, incomes }: { monthlyIncome: number
       <div className="relative z-10">
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
           <div>
-            <p className="text-white/40 text-xs uppercase tracking-widest mb-2">This Month Revenue</p>
+            <p className="text-muted-foreground text-xs uppercase tracking-widest mb-2">This Month Revenue</p>
             <h1 className="gold-text text-4xl lg:text-5xl font-bold tracking-tight">
               {formatINR(monthlyIncome)}
             </h1>
@@ -238,7 +238,7 @@ function MonthlyIncomeHeader({ monthlyIncome, incomes }: { monthlyIncome: number
                 <span className="text-xs opacity-60">vs last month</span>
               </div>
             ) : (
-              <div className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white/[0.03] border border-white/[0.06] text-white/40">
+              <div className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-secondary/50 border border-border text-muted-foreground">
                 <IndianRupee className="w-3.5 h-3.5" />
                 <span className="text-xs">First month tracking</span>
               </div>
@@ -249,12 +249,12 @@ function MonthlyIncomeHeader({ monthlyIncome, incomes }: { monthlyIncome: number
         {/* Revenue bar */}
         <div className="mt-6">
           <div className="flex items-center justify-between mb-1.5">
-            <span className="text-white/30 text-[10px] uppercase tracking-wider">Monthly Target Progress</span>
+            <span className="text-muted-foreground/60 font-mono text-[10px] uppercase tracking-wider">Monthly Target Progress</span>
             <span className="text-amber-400/60 text-xs font-medium">
               {monthlyIncome > 0 ? ((monthlyIncome / 100000) * 100).toFixed(1) : '0'}% of ₹1,00,000
             </span>
           </div>
-          <div className="w-full h-2 bg-white/5 rounded-full overflow-hidden">
+          <div className="w-full h-2 bg-secondary/50 rounded-full overflow-hidden">
             <motion.div
               initial={{ width: 0 }}
               animate={{ width: `${Math.min(100, (monthlyIncome / 100000) * 100)}%` }}
@@ -361,7 +361,7 @@ function IncomeStreamCard({
   }
   const iconBgMap: Record<string, string> = {
     'sky-400': 'bg-sky-400/10 text-sky-400',
-    'amber-400': 'bg-amber-400/10 text-amber-400',
+    'amber-400': 'bg-primary/10 text-amber-400',
     'emerald-400': 'bg-emerald-400/10 text-emerald-400',
     'purple-400': 'bg-purple-400/10 text-purple-400',
   }
@@ -378,7 +378,7 @@ function IncomeStreamCard({
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.5, delay }}
       className={cn(
-        'bg-[#0e0e11] lg:bg-white/[0.03] lg:backdrop-blur-xl border border-white/[0.06] border-t-2 rounded-2xl p-5 relative overflow-hidden group hover:border-white/[0.1] transition-all duration-300',
+        'bg-card lg:bg-card/80 lg:backdrop-blur-xl border border-border border-t-2 rounded-2xl p-5 relative overflow-hidden group hover:border-border transition-all duration-300',
         borderColorMap[source.color]
       )}
     >
@@ -399,10 +399,10 @@ function IncomeStreamCard({
                 onNameChange?.(source.key, e.target.value)
               }}
               placeholder="Stream Name"
-              className="bg-transparent font-semibold text-white/90 hover:border-b hover:border-white/20 focus:border-b focus:border-amber-400/50 text-sm outline-none w-full transition-all border-b border-transparent truncate"
+              className="bg-transparent font-semibold text-foreground hover:border-b hover:border-white/20 focus:border-b focus:border-amber-400/50 text-sm outline-none w-full transition-all border-b border-transparent truncate"
             />
             <div className="flex items-center gap-1 mt-0.5" onClick={(e) => e.stopPropagation()}>
-              <span className="text-white/30 text-[10px] uppercase tracking-wider">Target: ₹</span>
+              <span className="text-muted-foreground/60 font-mono text-[10px] uppercase tracking-wider">Target: ₹</span>
               <input
                 type="text"
                 value={target === 0 ? '' : target.toLocaleString('en-IN')}
@@ -411,7 +411,7 @@ function IncomeStreamCard({
                   const numVal = rawVal ? parseInt(rawVal) : 0
                   onTargetChange?.(source.key, numVal)
                 }}
-                className="bg-transparent border-b border-white/5 hover:border-white/20 focus:border-b focus:border-amber-400/50 text-[10px] font-semibold text-white/50 focus:text-white outline-none w-16 px-0.5 transition-all"
+                className="bg-transparent border-b border-border hover:border-white/20 focus:border-b focus:border-amber-400/50 text-[10px] font-semibold text-muted-foreground focus:text-foreground outline-none w-16 px-0.5 transition-all"
               />
             </div>
           </div>
@@ -431,12 +431,12 @@ function IncomeStreamCard({
 
       {/* Revenue */}
       <div className="mb-3">
-        <p className="gold-text text-2xl font-bold">{formatINR(currentRevenue)}</p>
-        <p className="text-white/30 text-[10px] mt-0.5">this month</p>
+        <p className="gold-text font-display text-2xl font-bold">{formatINR(currentRevenue)}</p>
+        <p className="text-muted-foreground/60 text-[10px] mt-0.5">this month</p>
       </div>
 
       {/* Progress bar */}
-      <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden mb-4">
+      <div className="w-full h-1.5 bg-secondary/50 rounded-full overflow-hidden mb-4">
         <motion.div
           initial={{ width: 0 }}
           animate={{ width: `${progressPercent}%` }}
@@ -449,12 +449,12 @@ function IncomeStreamCard({
       {/* Stats grid */}
       <div className="grid grid-cols-2 gap-3 mb-4">
         <div>
-          <p className="text-white/25 text-[10px] uppercase tracking-wider">Active Projects</p>
-          <p className="text-white/70 text-sm font-semibold">{activeProjects}</p>
+          <p className="text-muted-foreground/50 font-mono text-[10px] uppercase tracking-wider">Active Projects</p>
+          <p className="text-foreground/70 text-sm font-semibold">{activeProjects}</p>
         </div>
         <div>
-          <p className="text-white/25 text-[10px] uppercase tracking-wider">Projected</p>
-          <p className="text-white/70 text-sm font-semibold">{formatINR(projectedMonthEnd)}</p>
+          <p className="text-muted-foreground/50 font-mono text-[10px] uppercase tracking-wider">Projected</p>
+          <p className="text-foreground/70 text-sm font-semibold">{formatINR(projectedMonthEnd)}</p>
         </div>
       </div>
 
@@ -564,20 +564,20 @@ function AddIncomePanel({ onAdded }: { onAdded: (income: IncomeEntry) => void })
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.4 }}
-      className="bg-[#0e0e11] lg:bg-white/[0.03] lg:backdrop-blur-xl border border-white/[0.06] rounded-2xl p-5"
+      className="bg-card lg:bg-card/80 lg:backdrop-blur-xl border border-border rounded-2xl p-5"
     >
       <div className="flex items-center gap-2 mb-5">
-        <div className="p-1.5 rounded-lg bg-amber-400/10 border border-amber-400/20">
+        <div className="p-1.5 rounded-lg bg-primary/10 border border-primary/20">
           <Plus className="w-4 h-4 text-amber-400" />
         </div>
-        <h3 className="text-white/90 text-sm font-semibold">Add Revenue</h3>
+        <h3 className="text-foreground text-sm font-semibold">Add Revenue</h3>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {/* Amount */}
           <div className="space-y-1.5">
-            <Label className="text-white/40 text-xs uppercase tracking-wider">Amount (₹)</Label>
+            <Label className="text-muted-foreground text-xs uppercase tracking-wider">Amount (₹)</Label>
             <div className="relative">
               <IndianRupee className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-amber-400/50" />
               <Input
@@ -585,21 +585,21 @@ function AddIncomePanel({ onAdded }: { onAdded: (income: IncomeEntry) => void })
                 placeholder="0"
                 value={form.amount}
                 onChange={(e) => setForm(prev => ({ ...prev, amount: formatIndianCommas(e.target.value) }))}
-                className="pl-9 bg-white/[0.04] border-white/[0.08] text-white/90 placeholder:text-white/20 focus:border-amber-500/30 focus:ring-amber-500/20"
+                className="pl-9 bg-secondary/60 border-border text-foreground placeholder:text-muted-foreground/40 focus:border-primary/30 focus:ring-amber-500/20"
               />
             </div>
           </div>
 
           {/* Source */}
           <div className="space-y-1.5">
-            <Label className="text-white/40 text-xs uppercase tracking-wider">Income Source</Label>
+            <Label className="text-muted-foreground text-xs uppercase tracking-wider">Income Source</Label>
             <Select value={form.source} onValueChange={(val) => setForm(prev => ({ ...prev, source: val }))}>
-              <SelectTrigger className="bg-white/[0.04] border-white/[0.08] text-white/90 focus:ring-amber-500/20">
+              <SelectTrigger className="bg-secondary/60 border-border text-foreground focus:ring-amber-500/20">
                 <SelectValue placeholder="Select source" />
               </SelectTrigger>
-              <SelectContent className="bg-[#1a1a1e] border-white/[0.08]">
+              <SelectContent className="bg-accent border-border">
                 {INCOME_SOURCES.map(src => (
-                  <SelectItem key={src.key} value={src.key} className="text-white/80 focus:bg-white/[0.06] focus:text-white">
+                  <SelectItem key={src.key} value={src.key} className="text-foreground/80 focus:bg-white/[0.06] focus:text-foreground">
                     {getSourceLabel(src.key)}
                   </SelectItem>
                 ))}
@@ -609,49 +609,49 @@ function AddIncomePanel({ onAdded }: { onAdded: (income: IncomeEntry) => void })
 
           {/* Client Name */}
           <div className="space-y-1.5">
-            <Label className="text-white/40 text-xs uppercase tracking-wider">Client Name <span className="text-white/20">(optional)</span></Label>
+            <Label className="text-muted-foreground text-xs uppercase tracking-wider">Client Name <span className="text-muted-foreground/40">(optional)</span></Label>
             <Input
               placeholder="Enter client name"
               value={form.clientName}
               onChange={(e) => setForm(prev => ({ ...prev, clientName: e.target.value }))}
-              className="bg-white/[0.04] border-white/[0.08] text-white/90 placeholder:text-white/20 focus:border-amber-500/30 focus:ring-amber-500/20"
+              className="bg-secondary/60 border-border text-foreground placeholder:text-muted-foreground/40 focus:border-primary/30 focus:ring-amber-500/20"
             />
           </div>
 
           {/* Date */}
           <div className="space-y-1.5">
-            <Label className="text-white/40 text-xs uppercase tracking-wider">Date</Label>
+            <Label className="text-muted-foreground text-xs uppercase tracking-wider">Date</Label>
             <Input
               type="date"
               value={form.date}
               onChange={(e) => setForm(prev => ({ ...prev, date: e.target.value }))}
-              className="bg-white/[0.04] border-white/[0.08] text-white/90 focus:border-amber-500/30 focus:ring-amber-500/20"
+              className="bg-secondary/60 border-border text-foreground focus:border-primary/30 focus:ring-amber-500/20"
             />
           </div>
 
           {/* Payment Status */}
           <div className="space-y-1.5">
-            <Label className="text-white/40 text-xs uppercase tracking-wider">Payment Status</Label>
+            <Label className="text-muted-foreground text-xs uppercase tracking-wider">Payment Status</Label>
             <Select value={form.status} onValueChange={(val) => setForm(prev => ({ ...prev, status: val }))}>
-              <SelectTrigger className="bg-white/[0.04] border-white/[0.08] text-white/90 focus:ring-amber-500/20">
+              <SelectTrigger className="bg-secondary/60 border-border text-foreground focus:ring-amber-500/20">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent className="bg-[#1a1a1e] border-white/[0.08]">
-                <SelectItem value="received" className="text-white/80 focus:bg-white/[0.06] focus:text-white">Received</SelectItem>
-                <SelectItem value="pending" className="text-white/80 focus:bg-white/[0.06] focus:text-white">Pending</SelectItem>
+              <SelectContent className="bg-accent border-border">
+                <SelectItem value="received" className="text-foreground/80 focus:bg-white/[0.06] focus:text-foreground">Received</SelectItem>
+                <SelectItem value="pending" className="text-foreground/80 focus:bg-white/[0.06] focus:text-foreground">Pending</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           {/* Description */}
           <div className="space-y-1.5 sm:col-span-2">
-            <Label className="text-white/40 text-xs uppercase tracking-wider">Description</Label>
+            <Label className="text-muted-foreground text-xs uppercase tracking-wider">Description</Label>
             <Textarea
               placeholder="Add a note about this income..."
               value={form.description}
               onChange={(e) => setForm(prev => ({ ...prev, description: e.target.value }))}
               rows={2}
-              className="bg-white/[0.04] border-white/[0.08] text-white/90 placeholder:text-white/20 focus:border-amber-500/30 focus:ring-amber-500/20 resize-none"
+              className="bg-secondary/60 border-border text-foreground placeholder:text-muted-foreground/40 focus:border-primary/30 focus:ring-amber-500/20 resize-none"
             />
           </div>
         </div>
@@ -740,24 +740,24 @@ function IncomeTable({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.5 }}
-      className="bg-[#0e0e11] lg:bg-white/[0.03] lg:backdrop-blur-xl border border-white/[0.06] rounded-2xl p-5"
+      className="bg-card lg:bg-card/80 lg:backdrop-blur-xl border border-border rounded-2xl p-5"
     >
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
         <div className="flex items-center gap-2">
           <DollarSign className="w-4 h-4 text-amber-400" />
-          <h3 className="text-white/90 text-sm font-semibold">Income Records</h3>
-          <span className="text-white/20 text-xs">({filtered.length})</span>
+          <h3 className="text-foreground text-sm font-semibold">Income Records</h3>
+          <span className="text-muted-foreground/40 text-xs">({filtered.length})</span>
         </div>
         <div className="flex items-center gap-2">
           <Select value={searchSource} onValueChange={(val) => { setSearchSource(val); setPage(1) }}>
-            <SelectTrigger className="w-48 h-8 text-xs bg-white/[0.04] border-white/[0.08] text-white/70 focus:ring-amber-500/20">
+            <SelectTrigger className="w-48 h-8 text-xs bg-secondary/60 border-border text-foreground/70 focus:ring-amber-500/20">
               <SelectValue placeholder="Filter by source" />
             </SelectTrigger>
-            <SelectContent className="bg-[#1a1a1e] border-white/[0.08]">
-              <SelectItem value="all" className="text-white/80 focus:bg-white/[0.06]">All Sources</SelectItem>
+            <SelectContent className="bg-accent border-border">
+              <SelectItem value="all" className="text-foreground/80 focus:bg-white/[0.06]">All Sources</SelectItem>
               {INCOME_SOURCES.map(src => (
-                <SelectItem key={src.key} value={src.key} className="text-white/80 focus:bg-white/[0.06]">{getSourceLabel(src.key)}</SelectItem>
+                <SelectItem key={src.key} value={src.key} className="text-foreground/80 focus:bg-white/[0.06]">{getSourceLabel(src.key)}</SelectItem>
               ))}
             </SelectContent>
           </Select>
@@ -767,33 +767,33 @@ function IncomeTable({
       {/* Table */}
       {filtered.length === 0 ? (
         <div className="text-center py-12">
-          <IndianRupee className="w-10 h-10 text-white/10 mx-auto mb-3" />
-          <p className="text-white/30 text-sm">No income records yet</p>
-          <p className="text-white/15 text-xs mt-1">Add your first revenue entry above</p>
+          <IndianRupee className="w-10 h-10 text-muted-foreground/20 mx-auto mb-3" />
+          <p className="text-muted-foreground/60 text-sm">No income records yet</p>
+          <p className="text-muted-foreground/30 text-xs mt-1">Add your first revenue entry above</p>
         </div>
       ) : (
         <>
           <div className="overflow-x-auto -mx-5 px-5 max-h-[350px] overflow-y-auto scrollbar-thin scrollbar-thumb-white/5 scrollbar-track-transparent pr-1">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-white/[0.06]">
+                <tr className="border-b border-border">
                   <th
-                    className="text-left text-white/30 text-[10px] uppercase tracking-wider py-3 px-2 cursor-pointer hover:text-white/50 transition-colors"
+                    className="text-left text-muted-foreground/60 font-mono text-[10px] uppercase tracking-wider py-3 px-2 cursor-pointer hover:text-muted-foreground transition-colors"
                     onClick={() => toggleSort('date')}
                   >
                     Date {sortField === 'date' && (sortDir === 'asc' ? '↑' : '↓')}
                   </th>
-                  <th className="text-left text-white/30 text-[10px] uppercase tracking-wider py-3 px-2">Source</th>
-                  <th className="text-left text-white/30 text-[10px] uppercase tracking-wider py-3 px-2">Client</th>
-                  <th className="text-left text-white/30 text-[10px] uppercase tracking-wider py-3 px-2 hidden md:table-cell">Description</th>
+                  <th className="text-left text-muted-foreground/60 font-mono text-[10px] uppercase tracking-wider py-3 px-2">Source</th>
+                  <th className="text-left text-muted-foreground/60 font-mono text-[10px] uppercase tracking-wider py-3 px-2">Client</th>
+                  <th className="text-left text-muted-foreground/60 font-mono text-[10px] uppercase tracking-wider py-3 px-2 hidden md:table-cell">Description</th>
                   <th
-                    className="text-right text-white/30 text-[10px] uppercase tracking-wider py-3 px-2 cursor-pointer hover:text-white/50 transition-colors"
+                    className="text-right text-muted-foreground/60 font-mono text-[10px] uppercase tracking-wider py-3 px-2 cursor-pointer hover:text-muted-foreground transition-colors"
                     onClick={() => toggleSort('amount')}
                   >
                     Amount {sortField === 'amount' && (sortDir === 'asc' ? '↑' : '↓')}
                   </th>
-                  <th className="text-center text-white/30 text-[10px] uppercase tracking-wider py-3 px-2">Status</th>
-                  <th className="text-center text-white/30 text-[10px] uppercase tracking-wider py-3 px-2">Actions</th>
+                  <th className="text-center text-muted-foreground/60 font-mono text-[10px] uppercase tracking-wider py-3 px-2">Status</th>
+                  <th className="text-center text-muted-foreground/60 font-mono text-[10px] uppercase tracking-wider py-3 px-2">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -802,30 +802,30 @@ function IncomeTable({
                   return (
                     <tr
                       key={income.id}
-                      className="border-b border-white/[0.03] hover:bg-white/[0.02] transition-colors group"
+                      className="border-b border-white/[0.03] hover:bg-secondary/30 transition-colors group"
                     >
-                      <td className="py-3 px-2 text-white/60 text-xs whitespace-nowrap">
+                      <td className="py-3 px-2 text-muted-foreground text-xs whitespace-nowrap">
                         {new Date(income.date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: '2-digit' })}
                       </td>
                       <td className="py-3 px-2">
                         <span className={cn(
                           'text-xs px-2 py-0.5 rounded-full border font-medium',
                           sourceConfig?.color === 'sky-400' && 'bg-sky-400/10 text-sky-400 border-sky-400/20',
-                          sourceConfig?.color === 'amber-400' && 'bg-amber-400/10 text-amber-400 border-amber-400/20',
+                          sourceConfig?.color === 'amber-400' && 'bg-primary/10 text-amber-400 border-primary/20',
                           sourceConfig?.color === 'emerald-400' && 'bg-emerald-400/10 text-emerald-400 border-emerald-400/20',
                           sourceConfig?.color === 'purple-400' && 'bg-purple-400/10 text-purple-400 border-purple-400/20',
-                          !sourceConfig && 'bg-white/5 text-white/50 border-white/10',
+                          !sourceConfig && 'bg-secondary/50 text-muted-foreground border-border',
                         )}>
                           {getSourceLabel(income.source)}
                         </span>
                       </td>
-                      <td className="py-3 px-2 text-white/50 text-xs max-w-[120px] truncate">
+                      <td className="py-3 px-2 text-muted-foreground text-xs max-w-[120px] truncate">
                         {income.clientName || '—'}
                       </td>
-                      <td className="py-3 px-2 text-white/40 text-xs max-w-[180px] truncate hidden md:table-cell">
+                      <td className="py-3 px-2 text-muted-foreground text-xs max-w-[180px] truncate hidden md:table-cell">
                         {income.description || '—'}
                       </td>
-                      <td className="py-3 px-2 text-right text-amber-400 font-semibold text-xs whitespace-nowrap">
+                      <td className="py-3 px-2 text-right text-primary font-semibold text-xs whitespace-nowrap">
                         {formatINR(income.amount)}
                       </td>
                       <td className="py-3 px-2 text-center">
@@ -833,7 +833,7 @@ function IncomeTable({
                           'text-[10px] px-2 py-0.5 rounded-full border font-medium uppercase tracking-wider',
                           income.status === 'received'
                             ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
-                            : 'bg-amber-500/10 text-amber-400 border-amber-500/20'
+                            : 'bg-primary/10 text-amber-400 border-primary/20'
                         )}>
                           {income.status}
                         </span>
@@ -843,7 +843,7 @@ function IncomeTable({
                           variant="ghost"
                           size="sm"
                           onClick={() => onDelete(income.id)}
-                          className="h-7 w-7 p-0 text-white/20 hover:text-red-400 hover:bg-red-500/10 opacity-0 group-hover:opacity-100 transition-all"
+                          className="h-7 w-7 p-0 text-muted-foreground/40 hover:text-red-400 hover:bg-red-500/10 opacity-0 group-hover:opacity-100 transition-all"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </Button>
@@ -857,8 +857,8 @@ function IncomeTable({
 
           {/* Pagination */}
           {totalPages > 1 && (
-            <div className="flex items-center justify-between mt-4 pt-3 border-t border-white/[0.04]">
-              <span className="text-white/30 text-xs">
+            <div className="flex items-center justify-between mt-4 pt-3 border-t border-border">
+              <span className="text-muted-foreground/60 text-xs">
                 Showing {(page - 1) * ITEMS_PER_PAGE + 1}–{Math.min(page * ITEMS_PER_PAGE, filtered.length)} of {filtered.length}
               </span>
               <div className="flex items-center gap-1">
@@ -867,7 +867,7 @@ function IncomeTable({
                   size="sm"
                   disabled={page === 1}
                   onClick={() => setPage(prev => Math.max(1, prev - 1))}
-                  className="h-7 px-2.5 text-white/40 hover:text-white/70 text-xs"
+                  className="h-7 px-2.5 text-muted-foreground hover:text-foreground/70 text-xs"
                 >
                   Prev
                 </Button>
@@ -880,8 +880,8 @@ function IncomeTable({
                     className={cn(
                       'h-7 w-7 p-0 text-xs',
                       p === page
-                        ? 'bg-amber-500/20 text-amber-400 border border-amber-500/20'
-                        : 'text-white/30 hover:text-white/60'
+                        ? 'bg-primary/20 text-amber-400 border border-primary/20'
+                        : 'text-muted-foreground/60 hover:text-muted-foreground'
                     )}
                   >
                     {p}
@@ -892,7 +892,7 @@ function IncomeTable({
                   size="sm"
                   disabled={page === totalPages}
                   onClick={() => setPage(prev => Math.min(totalPages, prev + 1))}
-                  className="h-7 px-2.5 text-white/40 hover:text-white/70 text-xs"
+                  className="h-7 px-2.5 text-muted-foreground hover:text-foreground/70 text-xs"
                 >
                   Next
                 </Button>
@@ -921,19 +921,19 @@ function RevenueAnalytics({ incomes, monthlyIncome }: { incomes: IncomeEntry[]; 
     >
       <div className="flex items-center gap-2 mb-2">
         <TrendingUp className="w-4 h-4 text-amber-400" />
-        <h3 className="text-white/90 text-sm font-semibold">Revenue Analytics</h3>
+        <h3 className="text-foreground text-sm font-semibold">Revenue Analytics</h3>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Monthly Growth Area Chart */}
-        <div className="bg-[#0e0e11] lg:bg-white/[0.03] lg:backdrop-blur-xl border border-white/[0.06] rounded-2xl p-5">
+        <div className="bg-card lg:bg-card/80 lg:backdrop-blur-xl border border-border rounded-2xl p-5">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <p className="text-white/60 text-xs font-medium">Monthly Growth</p>
-              <p className="text-white/30 text-[10px]">Last 6 months revenue trend</p>
+              <p className="text-muted-foreground text-xs font-medium">Monthly Growth</p>
+              <p className="text-muted-foreground/60 text-[10px]">Last 6 months revenue trend</p>
             </div>
-            <div className="px-2 py-1 rounded-lg bg-amber-500/5 border border-amber-500/10">
-              <span className="text-amber-400/70 text-[10px] uppercase tracking-wider">6 Months</span>
+            <div className="px-2 py-1 rounded-lg bg-primary/5 border border-primary/10">
+              <span className="text-primary/70 font-mono text-[10px] uppercase tracking-wider">6 Months</span>
             </div>
           </div>
           <div className="h-52">
@@ -970,14 +970,14 @@ function RevenueAnalytics({ incomes, monthlyIncome }: { incomes: IncomeEntry[]; 
         </div>
 
         {/* Stream Comparison Bar Chart */}
-        <div className="bg-[#0e0e11] lg:bg-white/[0.03] lg:backdrop-blur-xl border border-white/[0.06] rounded-2xl p-5">
+        <div className="bg-card lg:bg-card/80 lg:backdrop-blur-xl border border-border rounded-2xl p-5">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <p className="text-white/60 text-xs font-medium">Stream Comparison</p>
-              <p className="text-white/30 text-[10px]">Revenue vs Target by source</p>
+              <p className="text-muted-foreground text-xs font-medium">Stream Comparison</p>
+              <p className="text-muted-foreground/60 text-[10px]">Revenue vs Target by source</p>
             </div>
-            <div className="px-2 py-1 rounded-lg bg-amber-500/5 border border-amber-500/10">
-              <span className="text-amber-400/70 text-[10px] uppercase tracking-wider">This Month</span>
+            <div className="px-2 py-1 rounded-lg bg-primary/5 border border-primary/10">
+              <span className="text-primary/70 font-mono text-[10px] uppercase tracking-wider">This Month</span>
             </div>
           </div>
           <div className="h-52">
@@ -1009,16 +1009,16 @@ function RevenueAnalytics({ incomes, monthlyIncome }: { incomes: IncomeEntry[]; 
         </div>
 
         {/* Income Velocity — full width */}
-        <div className="bg-[#0e0e11] lg:bg-white/[0.03] lg:backdrop-blur-xl border border-white/[0.06] rounded-2xl p-5 lg:col-span-2">
+        <div className="bg-card lg:bg-card/80 lg:backdrop-blur-xl border border-border rounded-2xl p-5 lg:col-span-2">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <p className="text-white/60 text-xs font-medium">Income Velocity</p>
-              <p className="text-white/30 text-[10px]">Cumulative daily income this month</p>
+              <p className="text-muted-foreground text-xs font-medium">Income Velocity</p>
+              <p className="text-muted-foreground/60 text-[10px]">Cumulative daily income this month</p>
             </div>
             <div className="flex items-center gap-3">
               <span className="text-amber-400/60 text-xs font-medium">{formatINR(monthlyIncome)} total</span>
-              <div className="px-2 py-1 rounded-lg bg-amber-500/5 border border-amber-500/10">
-                <span className="text-amber-400/70 text-[10px] uppercase tracking-wider">Live</span>
+              <div className="px-2 py-1 rounded-lg bg-primary/5 border border-primary/10">
+                <span className="text-primary/70 font-mono text-[10px] uppercase tracking-wider">Live</span>
               </div>
             </div>
           </div>

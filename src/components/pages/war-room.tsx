@@ -62,7 +62,7 @@ function MissionStat({
     gold: 'text-amber-400',
     red: 'text-red-400',
     amber: 'text-amber-500',
-    white: 'text-white/90',
+    white: 'text-foreground',
   }
 
   return (
@@ -70,15 +70,15 @@ function MissionStat({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay }}
-      className="bg-black/60 border border-white/[0.04] rounded-xl p-5 text-center relative overflow-hidden group"
+      className="bg-card border border-border rounded-xl p-5 text-center relative overflow-hidden group"
     >
       {/* Scan line effect */}
       <div className="absolute inset-0 bg-gradient-to-b from-white/[0.01] to-transparent pointer-events-none" />
-      <p className="text-white/25 text-[10px] uppercase tracking-widest mb-2">{label}</p>
-      <p className={cn('text-3xl lg:text-4xl font-black tracking-tight', accent ? accentColors[accent] : 'text-white/90')}>
+      <p className="text-muted-foreground/50 font-mono text-[10px] uppercase tracking-widest mb-2">{label}</p>
+      <p className={cn('text-3xl lg:font-display text-4xl font-black tracking-tight', accent ? accentColors[accent] : 'text-foreground')}>
         {value}
       </p>
-      {sub && <p className="text-white/20 text-[10px] mt-1 uppercase tracking-wider">{sub}</p>}
+      {sub && <p className="text-muted-foreground/40 text-[10px] mt-1 uppercase tracking-wider">{sub}</p>}
     </motion.div>
   )
 }
@@ -100,9 +100,9 @@ function UrgentActionCard({
 }) {
   const config = {
     overdue: { borderColor: 'border-red-500/30', dotColor: 'bg-red-400', bgGlow: 'shadow-red-500/5', icon: Clock },
-    'high-urgency': { borderColor: 'border-amber-500/20', dotColor: 'bg-amber-400', bgGlow: 'shadow-amber-500/5', icon: AlertTriangle },
+    'high-urgency': { borderColor: 'border-primary/20', dotColor: 'bg-amber-400', bgGlow: 'shadow-amber-500/5', icon: AlertTriangle },
     'over-budget': { borderColor: 'border-red-500/20', dotColor: 'bg-red-400', bgGlow: 'shadow-red-500/5', icon: XCircle },
-    expiring: { borderColor: 'border-amber-500/20', dotColor: 'bg-amber-400', bgGlow: 'shadow-amber-500/5', icon: Clock },
+    expiring: { borderColor: 'border-primary/20', dotColor: 'bg-amber-400', bgGlow: 'shadow-amber-500/5', icon: Clock },
   }
   const c = config[type]
   const Icon = c.icon
@@ -113,7 +113,7 @@ function UrgentActionCard({
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.3, delay }}
       className={cn(
-        'bg-black/60 border rounded-xl p-4 flex items-center gap-3 group hover:bg-black/80 transition-all',
+        'bg-card border rounded-xl p-4 flex items-center gap-3 group hover:bg-card transition-all',
         c.borderColor,
         type === 'overdue' && 'shadow-lg',
       )}
@@ -127,8 +127,8 @@ function UrgentActionCard({
       )}
       <Icon className={cn('w-4 h-4 flex-shrink-0', type === 'overdue' ? 'text-red-400' : 'text-amber-400')} />
       <div className="flex-1 min-w-0">
-        <p className="text-white/80 text-sm font-medium truncate">{title}</p>
-        <p className="text-white/25 text-xs truncate">{subtitle}</p>
+        <p className="text-foreground/80 text-sm font-medium truncate">{title}</p>
+        <p className="text-muted-foreground/50 text-xs truncate">{subtitle}</p>
       </div>
       <Button
         variant="ghost"
@@ -137,7 +137,7 @@ function UrgentActionCard({
           'text-xs h-8 px-3 flex-shrink-0 font-semibold border',
           type === 'overdue'
             ? 'text-red-400 border-red-500/20 hover:bg-red-500/10 hover:text-red-300'
-            : 'text-amber-400 border-amber-500/20 hover:bg-amber-500/10 hover:text-amber-300'
+            : 'text-amber-400 border-primary/20 hover:bg-primary/10 hover:text-amber-300'
         )}
       >
         {actionLabel}
@@ -169,16 +169,16 @@ function OpportunityCard({
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: 0.4 + index * 0.06 }}
-      className="bg-black/60 border border-white/[0.04] rounded-xl p-4 hover:border-amber-500/15 transition-all group"
+      className="bg-card border border-border rounded-xl p-4 hover:border-primary/15 transition-all group"
     >
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-amber-500/5 border border-amber-500/10 flex items-center justify-center">
+          <div className="w-8 h-8 rounded-lg bg-primary/5 border border-primary/10 flex items-center justify-center">
             <span className="text-amber-400 text-xs font-bold">{index + 1}</span>
           </div>
           <div>
-            <p className="text-white/80 text-sm font-semibold">{name}</p>
-            <p className="text-white/25 text-[10px] uppercase tracking-wider">{pipelineStage}</p>
+            <p className="text-foreground/80 text-sm font-semibold">{name}</p>
+            <p className="text-muted-foreground/50 font-mono text-[10px] uppercase tracking-wider">{pipelineStage}</p>
           </div>
         </div>
         <span className="gold-text text-lg font-bold">{formatINR(projectValue)}</span>
@@ -186,12 +186,12 @@ function OpportunityCard({
 
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="text-white/20 text-[10px] uppercase tracking-wider">Close Probability</span>
+          <span className="text-muted-foreground/40 font-mono text-[10px] uppercase tracking-wider">Close Probability</span>
           <span className={cn('text-sm font-bold', probColor)}>{closeProbability}%</span>
         </div>
         <Button
           size="sm"
-          className="bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 text-black font-bold text-xs h-8 px-4 rounded-lg shadow-lg shadow-amber-500/20"
+          className="bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary/80 text-black font-bold text-xs h-8 px-4 rounded-lg shadow-lg shadow-amber-500/20"
         >
           <Crosshair className="w-3 h-3 mr-1" />
           Execute
@@ -199,7 +199,7 @@ function OpportunityCard({
       </div>
 
       {/* Probability bar */}
-      <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden mt-3">
+      <div className="w-full h-1 bg-secondary/50 rounded-full overflow-hidden mt-3">
         <motion.div
           initial={{ width: 0 }}
           animate={{ width: `${closeProbability}%` }}
@@ -229,8 +229,8 @@ function RiskCard({
 }) {
   const severityConfig = {
     critical: { icon: Skull, color: 'text-red-400', bg: 'bg-red-500/5 border-red-500/15', label: 'CRITICAL' },
-    high: { icon: AlertTriangle, color: 'text-amber-400', bg: 'bg-amber-500/5 border-amber-500/15', label: 'HIGH' },
-    medium: { icon: Shield, color: 'text-amber-500/70', bg: 'bg-white/[0.02] border-white/[0.04]', label: 'MEDIUM' },
+    high: { icon: AlertTriangle, color: 'text-amber-400', bg: 'bg-primary/5 border-primary/15', label: 'HIGH' },
+    medium: { icon: Shield, color: 'text-amber-500/70', bg: 'bg-secondary/30 border-border', label: 'MEDIUM' },
   }
   const c = severityConfig[severity]
   const Icon = c.icon
@@ -246,7 +246,7 @@ function RiskCard({
         <Icon className={cn('w-4 h-4', c.color)} />
         <span className={cn('text-[10px] font-bold uppercase tracking-wider', c.color)}>{c.label}</span>
       </div>
-      <p className="text-white/60 text-sm leading-relaxed">{description}</p>
+      <p className="text-muted-foreground text-sm leading-relaxed">{description}</p>
     </motion.div>
   )
 }
@@ -464,7 +464,7 @@ export function WarRoom() {
   }, [budgetAllocation, monthlyIncome, monthlyTarget, daysLeft, requiredDaily, followups, clients, now])
 
   return (
-    <div className="space-y-6 bg-[#050506] -m-4 lg:-m-6 p-4 lg:p-6 min-h-screen">
+    <div className="space-y-6 bg-background -m-4 lg:-m-6 p-4 lg:p-6 min-h-screen">
       {/* ═══════════════════════════════════════════════════════════════════════
           HEADER — War Room
           ═══════════════════════════════════════════════════════════════════════ */}
@@ -472,7 +472,7 @@ export function WarRoom() {
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="relative overflow-hidden border border-red-500/10 rounded-2xl p-6 bg-gradient-to-br from-red-500/[0.04] via-black/80 to-black/90"
+        className="relative overflow-hidden border border-red-500/10 rounded-2xl p-6 bg-gradient-to-br from-red-500/[0.04] via-background/80 to-background/90"
       >
         {/* Red scan line */}
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-red-500/20 to-transparent" />
@@ -487,7 +487,7 @@ export function WarRoom() {
             </div>
             <div>
               <p className="text-red-400/60 text-xs uppercase tracking-widest">High-Pressure Execution Mode</p>
-              <h1 className="text-white/90 text-3xl lg:text-4xl font-black tracking-tight">WAR ROOM</h1>
+              <h1 className="text-foreground text-3xl lg:font-display text-4xl font-black tracking-tight">WAR ROOM</h1>
             </div>
             {urgentActions.filter(a => a.type === 'overdue').length > 0 && (
               <div className="ml-auto flex items-center gap-2 px-3 py-2 rounded-lg bg-red-500/10 border border-red-500/20">
@@ -498,7 +498,7 @@ export function WarRoom() {
               </div>
             )}
           </div>
-          <p className="text-white/20 text-sm">Execute. No distractions. Close the gap.</p>
+          <p className="text-muted-foreground/40 text-sm">Execute. No distractions. Close the gap.</p>
         </div>
       </motion.div>
 
@@ -543,14 +543,14 @@ export function WarRoom() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.3 }}
-        className="bg-black/60 border border-white/[0.04] rounded-2xl p-5"
+        className="bg-card border border-border rounded-2xl p-5"
       >
         <div className="flex items-center gap-2 mb-4">
           <div className="p-1.5 rounded-lg bg-red-500/10 border border-red-500/20">
             <Flame className="w-4 h-4 text-red-400" />
           </div>
-          <h3 className="text-white/80 text-sm font-semibold">Urgent Actions</h3>
-          <span className="text-red-400/60 text-[10px] uppercase tracking-wider ml-auto mr-2">
+          <h3 className="text-foreground/80 text-sm font-semibold">Urgent Actions</h3>
+          <span className="text-red-400/60 font-mono text-[10px] uppercase tracking-wider ml-auto mr-2">
             {urgentActions.length + warRoomActions.filter(a => a.status !== 'completed').length} critical
           </span>
           <Button variant="ghost" size="sm" onClick={() => setShowAddAction(!showAddAction)} className="text-red-400/60 hover:text-red-400 hover:bg-red-500/10 h-7 w-7 p-0 border border-red-500/15">
@@ -563,9 +563,9 @@ export function WarRoom() {
           {showAddAction && (
             <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden mb-3">
               <div className="bg-red-500/5 border border-red-500/15 rounded-xl p-4 space-y-3">
-                <input value={actionTitle} onChange={e => setActionTitle(e.target.value)} placeholder="Action title..." className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-sm text-white/80 placeholder:text-white/20 focus:outline-none focus:border-red-500/30" />
-                <input value={actionSubtitle} onChange={e => setActionSubtitle(e.target.value)} placeholder="Details (optional)" className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-sm text-white/80 placeholder:text-white/20 focus:outline-none focus:border-red-500/30" />
-                <select value={actionUrgency} onChange={e => setActionUrgency(e.target.value)} className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-sm text-white/80 focus:outline-none">
+                <input value={actionTitle} onChange={e => setActionTitle(e.target.value)} placeholder="Action title..." className="w-full bg-card/80 border border-border rounded-lg px-3 py-2 text-sm text-foreground/80 placeholder:text-muted-foreground/40 focus:outline-none focus:border-red-500/30" />
+                <input value={actionSubtitle} onChange={e => setActionSubtitle(e.target.value)} placeholder="Details (optional)" className="w-full bg-card/80 border border-border rounded-lg px-3 py-2 text-sm text-foreground/80 placeholder:text-muted-foreground/40 focus:outline-none focus:border-red-500/30" />
+                <select value={actionUrgency} onChange={e => setActionUrgency(e.target.value)} className="w-full bg-card/80 border border-border rounded-lg px-3 py-2 text-sm text-foreground/80 focus:outline-none">
                   <option value="overdue">Overdue</option>
                   <option value="high-urgency">High Urgency</option>
                   <option value="over-budget">Over Budget</option>
@@ -573,7 +573,7 @@ export function WarRoom() {
                 </select>
                 <div className="flex gap-2">
                   <Button onClick={handleAddAction} disabled={submitting || !actionTitle.trim()} className="flex-1 bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/20 text-xs h-8">{submitting ? 'Adding...' : 'Add Action'}</Button>
-                  <Button variant="ghost" onClick={() => setShowAddAction(false)} className="text-white/30 hover:text-white/60 h-8 w-8 p-0"><X className="w-3.5 h-3.5" /></Button>
+                  <Button variant="ghost" onClick={() => setShowAddAction(false)} className="text-muted-foreground/60 hover:text-muted-foreground h-8 w-8 p-0"><X className="w-3.5 h-3.5" /></Button>
                 </div>
               </div>
             </motion.div>
@@ -596,23 +596,23 @@ export function WarRoom() {
         ) : warRoomActions.filter(a => a.status !== 'completed').length === 0 ? (
           <div className="text-center py-8">
             <Shield className="w-8 h-8 text-emerald-400/20 mx-auto mb-2" />
-            <p className="text-white/30 text-sm">All clear — no urgent actions</p>
+            <p className="text-muted-foreground/60 text-sm">All clear — no urgent actions</p>
           </div>
         ) : null}
 
         {/* Custom DB Actions */}
         {warRoomActions.filter(a => a.status !== 'completed').length > 0 && (
-          <div className={urgentActions.length > 0 ? 'space-y-2 mt-3 pt-3 border-t border-white/[0.04]' : 'space-y-2'}>
-            <p className="text-white/20 text-[9px] uppercase tracking-widest mb-2">Custom Actions</p>
+          <div className={urgentActions.length > 0 ? 'space-y-2 mt-3 pt-3 border-t border-border' : 'space-y-2'}>
+            <p className="text-muted-foreground/40 font-mono text-[9px] uppercase tracking-widest mb-2">Custom Actions</p>
             {warRoomActions.filter(a => a.status !== 'completed').map((action, idx) => (
-              <div key={action.id} className="flex items-center gap-3 bg-black/60 border border-red-500/15 rounded-xl p-4 group">
+              <div key={action.id} className="flex items-center gap-3 bg-card border border-red-500/15 rounded-xl p-4 group">
                 <div className="w-2.5 h-2.5 rounded-full bg-amber-400 flex-shrink-0" />
                 <AlertTriangle className="w-4 h-4 text-amber-400 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-white/80 text-sm font-medium truncate">{action.title}</p>
-                  {action.subtitle && <p className="text-white/25 text-xs truncate">{action.subtitle}</p>}
+                  <p className="text-foreground/80 text-sm font-medium truncate">{action.title}</p>
+                  {action.subtitle && <p className="text-muted-foreground/50 text-xs truncate">{action.subtitle}</p>}
                 </div>
-                <Button variant="ghost" size="sm" onClick={() => handleDeleteAction(action.id)} className="text-white/15 hover:text-red-400 hover:bg-red-500/10 h-7 w-7 p-0 opacity-0 group-hover:opacity-100 transition-opacity"><Trash2 className="w-3 h-3" /></Button>
+                <Button variant="ghost" size="sm" onClick={() => handleDeleteAction(action.id)} className="text-muted-foreground/30 hover:text-red-400 hover:bg-red-500/10 h-7 w-7 p-0 opacity-0 group-hover:opacity-100 transition-opacity"><Trash2 className="w-3 h-3" /></Button>
               </div>
             ))}
           </div>
@@ -626,17 +626,17 @@ export function WarRoom() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.35 }}
-        className="bg-black/60 border border-white/[0.04] rounded-2xl p-5"
+        className="bg-card border border-border rounded-2xl p-5"
       >
         <div className="flex items-center gap-2 mb-4">
-          <div className="p-1.5 rounded-lg bg-amber-500/10 border border-amber-500/20">
+          <div className="p-1.5 rounded-lg bg-primary/10 border border-primary/20">
             <Target className="w-4 h-4 text-amber-400" />
           </div>
           <div className="flex-1">
-            <h3 className="text-white/80 text-sm font-semibold">High-Value Opportunities</h3>
-            <p className="text-white/20 text-[10px]">Top clients + custom opportunities</p>
+            <h3 className="text-foreground/80 text-sm font-semibold">High-Value Opportunities</h3>
+            <p className="text-muted-foreground/40 text-[10px]">Top clients + custom opportunities</p>
           </div>
-          <Button variant="ghost" size="sm" onClick={() => setShowAddOpp(!showAddOpp)} className="text-amber-400/60 hover:text-amber-400 hover:bg-amber-500/10 h-7 w-7 p-0 border border-amber-500/15">
+          <Button variant="ghost" size="sm" onClick={() => setShowAddOpp(!showAddOpp)} className="text-amber-400/60 hover:text-amber-400 hover:bg-primary/10 h-7 w-7 p-0 border border-primary/15">
             <Plus className="w-3.5 h-3.5" />
           </Button>
         </div>
@@ -645,15 +645,15 @@ export function WarRoom() {
         <AnimatePresence>
           {showAddOpp && (
             <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden mb-3">
-              <div className="bg-amber-500/5 border border-amber-500/15 rounded-xl p-4 space-y-3">
-                <input value={oppName} onChange={e => setOppName(e.target.value)} placeholder="Opportunity name..." className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-sm text-white/80 placeholder:text-white/20 focus:outline-none focus:border-amber-500/30" />
+              <div className="bg-primary/5 border border-primary/15 rounded-xl p-4 space-y-3">
+                <input value={oppName} onChange={e => setOppName(e.target.value)} placeholder="Opportunity name..." className="w-full bg-card/80 border border-border rounded-lg px-3 py-2 text-sm text-foreground/80 placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary/30" />
                 <div className="grid grid-cols-2 gap-3">
-                  <input value={oppValue} onChange={e => setOppValue(e.target.value)} placeholder="Value (₹)" type="number" className="bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-sm text-white/80 placeholder:text-white/20 focus:outline-none" />
-                  <input value={oppProb} onChange={e => setOppProb(e.target.value)} placeholder="Close %" type="number" className="bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-sm text-white/80 placeholder:text-white/20 focus:outline-none" />
+                  <input value={oppValue} onChange={e => setOppValue(e.target.value)} placeholder="Value (₹)" type="number" className="bg-card/80 border border-border rounded-lg px-3 py-2 text-sm text-foreground/80 placeholder:text-muted-foreground/40 focus:outline-none" />
+                  <input value={oppProb} onChange={e => setOppProb(e.target.value)} placeholder="Close %" type="number" className="bg-card/80 border border-border rounded-lg px-3 py-2 text-sm text-foreground/80 placeholder:text-muted-foreground/40 focus:outline-none" />
                 </div>
                 <div className="flex gap-2">
-                  <Button onClick={handleAddOpp} disabled={submitting || !oppName.trim()} className="flex-1 bg-amber-500/20 hover:bg-amber-500/30 text-amber-400 border border-amber-500/20 text-xs h-8">{submitting ? 'Adding...' : 'Add Opportunity'}</Button>
-                  <Button variant="ghost" onClick={() => setShowAddOpp(false)} className="text-white/30 hover:text-white/60 h-8 w-8 p-0"><X className="w-3.5 h-3.5" /></Button>
+                  <Button onClick={handleAddOpp} disabled={submitting || !oppName.trim()} className="flex-1 bg-primary/20 hover:bg-amber-500/30 text-amber-400 border border-primary/20 text-xs h-8">{submitting ? 'Adding...' : 'Add Opportunity'}</Button>
+                  <Button variant="ghost" onClick={() => setShowAddOpp(false)} className="text-muted-foreground/60 hover:text-muted-foreground h-8 w-8 p-0"><X className="w-3.5 h-3.5" /></Button>
                 </div>
               </div>
             </motion.div>
@@ -675,38 +675,38 @@ export function WarRoom() {
           </div>
         ) : warRoomOpportunities.filter(o => o.status === 'active').length === 0 ? (
           <div className="text-center py-8">
-            <Users className="w-8 h-8 text-white/10 mx-auto mb-2" />
-            <p className="text-white/30 text-sm">No active opportunities in pipeline</p>
-            <p className="text-white/15 text-xs mt-1">Click + to add custom opportunities</p>
+            <Users className="w-8 h-8 text-muted-foreground/20 mx-auto mb-2" />
+            <p className="text-muted-foreground/60 text-sm">No active opportunities in pipeline</p>
+            <p className="text-muted-foreground/30 text-xs mt-1">Click + to add custom opportunities</p>
           </div>
         ) : null}
 
         {/* Custom DB Opportunities */}
         {warRoomOpportunities.filter(o => o.status === 'active').length > 0 && (
-          <div className={topOpportunities.length > 0 ? 'space-y-3 mt-3 pt-3 border-t border-white/[0.04]' : 'space-y-3'}>
-            <p className="text-white/20 text-[9px] uppercase tracking-widest mb-2">Custom Opportunities</p>
+          <div className={topOpportunities.length > 0 ? 'space-y-3 mt-3 pt-3 border-t border-border' : 'space-y-3'}>
+            <p className="text-muted-foreground/40 font-mono text-[9px] uppercase tracking-widest mb-2">Custom Opportunities</p>
             {warRoomOpportunities.filter(o => o.status === 'active').map((opp, idx) => (
-              <div key={opp.id} className="bg-black/60 border border-white/[0.04] rounded-xl p-4 hover:border-amber-500/15 transition-all group">
+              <div key={opp.id} className="bg-card border border-border rounded-xl p-4 hover:border-primary/15 transition-all group">
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-lg bg-amber-500/5 border border-amber-500/10 flex items-center justify-center">
+                    <div className="w-8 h-8 rounded-lg bg-primary/5 border border-primary/10 flex items-center justify-center">
                       <Target className="w-3.5 h-3.5 text-amber-400" />
                     </div>
                     <div>
-                      <p className="text-white/80 text-sm font-semibold">{opp.name}</p>
-                      <p className="text-white/25 text-[10px] uppercase tracking-wider">{opp.pipelineStage}</p>
+                      <p className="text-foreground/80 text-sm font-semibold">{opp.name}</p>
+                      <p className="text-muted-foreground/50 font-mono text-[10px] uppercase tracking-wider">{opp.pipelineStage}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="gold-text text-lg font-bold">{formatINR(opp.projectValue)}</span>
-                    <Button variant="ghost" size="sm" onClick={() => handleDeleteOpp(opp.id)} className="text-white/15 hover:text-red-400 hover:bg-red-500/10 h-7 w-7 p-0 opacity-0 group-hover:opacity-100 transition-opacity"><Trash2 className="w-3 h-3" /></Button>
+                    <Button variant="ghost" size="sm" onClick={() => handleDeleteOpp(opp.id)} className="text-muted-foreground/30 hover:text-red-400 hover:bg-red-500/10 h-7 w-7 p-0 opacity-0 group-hover:opacity-100 transition-opacity"><Trash2 className="w-3 h-3" /></Button>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-white/20 text-[10px] uppercase tracking-wider">Close Probability</span>
+                  <span className="text-muted-foreground/40 font-mono text-[10px] uppercase tracking-wider">Close Probability</span>
                   <span className={cn('text-sm font-bold', opp.closeProbability >= 60 ? 'text-emerald-400' : opp.closeProbability >= 30 ? 'text-amber-400' : 'text-red-400')}>{opp.closeProbability}%</span>
                 </div>
-                <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden mt-2">
+                <div className="w-full h-1 bg-secondary/50 rounded-full overflow-hidden mt-2">
                   <div className={cn('h-full rounded-full', opp.closeProbability >= 60 ? 'bg-emerald-400' : opp.closeProbability >= 30 ? 'bg-amber-400' : 'bg-red-400')} style={{ width: `${opp.closeProbability}%` }} />
                 </div>
               </div>
@@ -722,15 +722,15 @@ export function WarRoom() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.4 }}
-        className="bg-black/60 border border-white/[0.04] rounded-2xl p-5"
+        className="bg-card border border-border rounded-2xl p-5"
       >
         <div className="flex items-center gap-2 mb-4">
           <div className="p-1.5 rounded-lg bg-red-500/10 border border-red-500/20">
             <AlertTriangle className="w-4 h-4 text-red-400" />
           </div>
           <div>
-            <h3 className="text-white/80 text-sm font-semibold">Critical Risks</h3>
-            <p className="text-white/20 text-[10px]">Threats that could prevent hitting target</p>
+            <h3 className="text-foreground/80 text-sm font-semibold">Critical Risks</h3>
+            <p className="text-muted-foreground/40 text-[10px]">Threats that could prevent hitting target</p>
           </div>
         </div>
 
@@ -756,17 +756,17 @@ export function WarRoom() {
       >
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 rounded-full bg-red-400 animate-pulse" />
-          <span className="text-white/20 text-[10px] uppercase tracking-widest">War Room Active</span>
+          <span className="text-muted-foreground/40 font-mono text-[10px] uppercase tracking-widest">War Room Active</span>
         </div>
         <div className="flex items-center gap-2">
           <IndianRupee className="w-3 h-3 text-amber-400/40" />
-          <span className="text-white/20 text-[10px] uppercase tracking-widest">
+          <span className="text-muted-foreground/40 font-mono text-[10px] uppercase tracking-widest">
             {formatINR(monthlyIncome)} / {formatINR(monthlyTarget)}
           </span>
         </div>
         <div className="flex items-center gap-2">
-          <Clock className="w-3 h-3 text-white/20" />
-          <span className="text-white/20 text-[10px] uppercase tracking-widest">{daysLeft} days remaining</span>
+          <Clock className="w-3 h-3 text-muted-foreground/40" />
+          <span className="text-muted-foreground/40 font-mono text-[10px] uppercase tracking-widest">{daysLeft} days remaining</span>
         </div>
       </motion.div>
     </div>

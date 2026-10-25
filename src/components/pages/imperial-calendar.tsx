@@ -103,18 +103,18 @@ function DayCell({
       className={cn(
         'relative w-full aspect-[1.35] rounded-lg border transition-all duration-200 flex flex-col items-center justify-start pt-1 gap-0.5 overflow-hidden',
         isSelected
-          ? 'bg-amber-500/15 border-amber-500/40 ring-1 ring-amber-500/30 shadow-lg shadow-amber-500/10'
+          ? 'bg-primary/15 border-amber-500/40 ring-1 ring-amber-500/30 shadow-lg shadow-amber-500/10'
           : isToday
-          ? 'bg-amber-500/[0.06] border-amber-500/20'
+          ? 'bg-amber-500/[0.06] border-primary/20'
           : isCurrentMonth
-          ? 'bg-white/[0.02] border-white/[0.04] hover:bg-white/[0.05] hover:border-white/[0.08]'
+          ? 'bg-secondary/30 border-border hover:bg-secondary/70 hover:border-border'
           : 'bg-transparent border-white/[0.02] opacity-30'
       )}
     >
       {/* Day number */}
       <span className={cn(
         'text-[10px] sm:text-xs font-semibold z-10',
-        isToday ? 'text-amber-400' : isCurrentMonth ? 'text-white/70' : 'text-white/20'
+        isToday ? 'text-amber-400' : isCurrentMonth ? 'text-foreground/70' : 'text-muted-foreground/40'
       )}>
         {dayNum}
       </span>
@@ -134,7 +134,7 @@ function DayCell({
       {events.length > 0 && (
         <span className={cn(
           'text-[8px] font-bold mt-auto mb-0.5 z-10',
-          isSelected ? 'text-amber-400' : 'text-white/20'
+          isSelected ? 'text-amber-400' : 'text-muted-foreground/40'
         )}>
           {events.length}
         </span>
@@ -209,19 +209,19 @@ function DayDetailPanel({
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: 20, scale: 0.95 }}
       transition={{ duration: 0.3 }}
-      className="bg-[#0e0e11]/95 backdrop-blur-xl border border-white/[0.08] rounded-2xl p-5 shadow-2xl shadow-black/40 max-w-3xl mx-auto w-full"
+      className="bg-card/95 backdrop-blur-xl border border-border rounded-2xl p-5 shadow-2xl shadow-black/40 max-w-3xl mx-auto w-full"
     >
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div>
-          <p className="text-amber-400/60 text-[10px] uppercase tracking-widest">Daily Summary</p>
-          <h3 className="text-white/90 text-lg font-bold">{dateStr}</h3>
+          <p className="text-amber-400/60 font-mono text-[10px] uppercase tracking-widest">Daily Summary</p>
+          <h3 className="text-foreground text-lg font-bold">{dateStr}</h3>
         </div>
         <Button
           variant="ghost"
           size="sm"
           onClick={onClose}
-          className="text-white/30 hover:text-white/80 hover:bg-white/5 h-8 w-8 p-0"
+          className="text-muted-foreground/60 hover:text-foreground/80 hover:bg-secondary/50 h-8 w-8 p-0"
         >
           <X className="w-4 h-4" />
         </Button>
@@ -231,11 +231,11 @@ function DayDetailPanel({
       {(totalIncome > 0 || totalExpense > 0) && (
         <div className="grid grid-cols-2 gap-3 mb-4">
           <div className="bg-emerald-500/5 border border-emerald-500/15 rounded-xl p-3">
-            <p className="text-emerald-400/60 text-[9px] uppercase tracking-wider">Income</p>
+            <p className="text-emerald-400/60 font-mono text-[9px] uppercase tracking-wider">Income</p>
             <p className="text-emerald-400 text-lg font-bold">{formatINR(totalIncome)}</p>
           </div>
           <div className="bg-red-500/5 border border-red-500/15 rounded-xl p-3">
-            <p className="text-red-400/60 text-[9px] uppercase tracking-wider">Expense</p>
+            <p className="text-red-400/60 font-mono text-[9px] uppercase tracking-wider">Expense</p>
             <p className="text-red-400 text-lg font-bold">{formatINR(totalExpense)}</p>
           </div>
         </div>
@@ -244,22 +244,22 @@ function DayDetailPanel({
       {/* Events list */}
       {events.length === 0 ? (
         <div className="text-center py-8">
-          <Calendar className="w-8 h-8 text-white/10 mx-auto mb-2" />
-          <p className="text-white/25 text-sm">No activity on this day</p>
+          <Calendar className="w-8 h-8 text-muted-foreground/20 mx-auto mb-2" />
+          <p className="text-muted-foreground/50 text-sm">No activity on this day</p>
         </div>
       ) : (
         <div className="space-y-2 max-h-[300px] overflow-y-auto pr-1">
           {events.map((event) => (
             <div
               key={event.id}
-              className="flex items-center gap-3 p-3 bg-white/[0.02] border border-white/[0.04] rounded-xl hover:bg-white/[0.04] transition-all"
+              className="flex items-center gap-3 p-3 bg-secondary/30 border border-border rounded-xl hover:bg-secondary/60 transition-all"
             >
               <div className={cn('p-2 rounded-lg flex-shrink-0', event.color)}>
                 {event.icon}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-white/80 text-sm font-medium truncate">{event.label}</p>
-                <p className="text-white/30 text-xs truncate">{event.detail}</p>
+                <p className="text-foreground/80 text-sm font-medium truncate">{event.label}</p>
+                <p className="text-muted-foreground/60 text-xs truncate">{event.detail}</p>
               </div>
               {event.amount !== undefined && event.amount > 0 && (
                 <span className={cn(
@@ -275,13 +275,13 @@ function DayDetailPanel({
       )}
 
       {/* Add Notification Form */}
-      <div className="mt-4 pt-4 border-t border-white/[0.04]">
+      <div className="mt-4 pt-4 border-t border-border">
         <form onSubmit={handleAddNotif} className="flex items-center gap-2">
           <Input 
             placeholder="Add a notification/reminder for this day..."
             value={newNotif}
             onChange={(e) => setNewNotif(e.target.value)}
-            className="flex-1 bg-white/[0.02] border-white/[0.06] text-white/90 placeholder:text-white/20 h-9"
+            className="flex-1 bg-secondary/30 border-border text-foreground placeholder:text-muted-foreground/40 h-9"
           />
           <Button 
             type="submit" 
@@ -319,7 +319,7 @@ function MonthSummary({
       >
         <div className="flex items-center gap-2 mb-1">
           <TrendingUp className="w-3.5 h-3.5 text-emerald-400" />
-          <span className="text-emerald-400/60 text-[9px] uppercase tracking-wider">Income</span>
+          <span className="text-emerald-400/60 font-mono text-[9px] uppercase tracking-wider">Income</span>
         </div>
         <p className="text-emerald-400 text-xl font-bold">{formatINR(monthIncome)}</p>
       </motion.div>
@@ -332,7 +332,7 @@ function MonthSummary({
       >
         <div className="flex items-center gap-2 mb-1">
           <TrendingDown className="w-3.5 h-3.5 text-red-400" />
-          <span className="text-red-400/60 text-[9px] uppercase tracking-wider">Expenses</span>
+          <span className="text-red-400/60 font-mono text-[9px] uppercase tracking-wider">Expenses</span>
         </div>
         <p className="text-red-400 text-xl font-bold">{formatINR(monthExpense)}</p>
       </motion.div>
@@ -345,7 +345,7 @@ function MonthSummary({
       >
         <div className="flex items-center gap-2 mb-1">
           <Clock className="w-3.5 h-3.5 text-sky-400" />
-          <span className="text-sky-400/60 text-[9px] uppercase tracking-wider">Followups</span>
+          <span className="text-sky-400/60 font-mono text-[9px] uppercase tracking-wider">Followups</span>
         </div>
         <p className="text-sky-400 text-xl font-bold">{followupCount}</p>
       </motion.div>
@@ -358,7 +358,7 @@ function MonthSummary({
       >
         <div className="flex items-center gap-2 mb-1">
           <Send className="w-3.5 h-3.5 text-purple-400" />
-          <span className="text-purple-400/60 text-[9px] uppercase tracking-wider">Outreach</span>
+          <span className="text-purple-400/60 font-mono text-[9px] uppercase tracking-wider">Outreach</span>
         </div>
         <p className="text-purple-400 text-xl font-bold">{outreachCount}</p>
       </motion.div>
@@ -455,7 +455,7 @@ export function ImperialCalendar() {
         type: 'notification',
         label: n.title,
         detail: n.message || 'Notification',
-        color: 'bg-amber-400/10 text-amber-400',
+        color: 'bg-primary/10 text-amber-400',
         icon: <Bell className="w-3.5 h-3.5" />,
       })
     })
@@ -530,7 +530,7 @@ export function ImperialCalendar() {
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7 }}
-        className="relative overflow-hidden bg-gradient-to-br from-amber-500/[0.08] via-black/40 to-black/60 border border-amber-500/10 rounded-2xl p-6 lg:p-8"
+        className="relative overflow-hidden bg-gradient-to-br from-amber-500/[0.08] via-background/40 to-background/60 border border-primary/10 rounded-2xl p-6 lg:p-8"
       >
         <div className="absolute inset-0 ambient-gradient pointer-events-none" />
         <div className="absolute top-6 right-12 w-1 h-1 rounded-full bg-amber-400/30 particle" />
@@ -538,15 +538,15 @@ export function ImperialCalendar() {
 
         <div className="relative z-10">
           <div className="flex items-center gap-2 mb-2">
-            <div className="p-1.5 rounded-lg bg-amber-500/10 border border-amber-500/20">
+            <div className="p-1.5 rounded-lg bg-primary/10 border border-primary/20">
               <Crown className="w-4 h-4 text-amber-400" />
             </div>
-            <span className="text-[11px] text-amber-400/70 uppercase tracking-widest font-medium">Timeline Intelligence</span>
+            <span className="text-[11px] text-primary/70 uppercase tracking-widest font-medium">Timeline Intelligence</span>
           </div>
-          <h1 className="gold-text text-3xl lg:text-4xl font-bold tracking-tight">
+          <h1 className="gold-text text-3xl lg:font-display text-4xl font-bold tracking-tight">
             Imperial Calendar
           </h1>
-          <p className="text-white/30 text-sm mt-1">
+          <p className="text-muted-foreground/60 text-sm mt-1">
             Your unified empire timeline — track income, expenses, outreach, and followups across time
           </p>
         </div>
@@ -567,7 +567,7 @@ export function ImperialCalendar() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.2 }}
-        className="bg-[#0e0e11] lg:bg-white/[0.03] lg:backdrop-blur-xl border border-white/[0.06] rounded-2xl p-5 max-w-3xl mx-auto w-full"
+        className="bg-card lg:bg-card/80 lg:backdrop-blur-xl border border-border rounded-2xl p-5 max-w-3xl mx-auto w-full"
       >
         {/* Month Navigation */}
         <div className="flex items-center justify-between mb-5">
@@ -576,18 +576,18 @@ export function ImperialCalendar() {
               variant="ghost"
               size="sm"
               onClick={goToPrevMonth}
-              className="text-white/40 hover:text-white/80 hover:bg-white/5 h-8 w-8 p-0"
+              className="text-muted-foreground hover:text-foreground/80 hover:bg-secondary/50 h-8 w-8 p-0"
             >
               <ChevronLeft className="w-4 h-4" />
             </Button>
-            <h2 className="text-white/90 text-lg font-bold min-w-[180px] text-center">
+            <h2 className="text-foreground text-lg font-bold min-w-[180px] text-center">
               {monthLabel}
             </h2>
             <Button
               variant="ghost"
               size="sm"
               onClick={goToNextMonth}
-              className="text-white/40 hover:text-white/80 hover:bg-white/5 h-8 w-8 p-0"
+              className="text-muted-foreground hover:text-foreground/80 hover:bg-secondary/50 h-8 w-8 p-0"
             >
               <ChevronRight className="w-4 h-4" />
             </Button>
@@ -598,7 +598,7 @@ export function ImperialCalendar() {
               variant="ghost"
               size="sm"
               onClick={goToToday}
-              className="text-amber-400/70 hover:text-amber-400 hover:bg-amber-500/10 text-xs h-8 px-3 border border-amber-500/15"
+              className="text-primary/70 hover:text-amber-400 hover:bg-primary/10 text-xs h-8 px-3 border border-primary/15"
             >
               Today
             </Button>
@@ -609,23 +609,23 @@ export function ImperialCalendar() {
         <div className="flex flex-wrap items-center gap-4 mb-4 px-1">
           <div className="flex items-center gap-1.5">
             <div className="w-2 h-2 rounded-full bg-emerald-400" />
-            <span className="text-white/30 text-[10px]">Income</span>
+            <span className="text-muted-foreground/60 text-[10px]">Income</span>
           </div>
           <div className="flex items-center gap-1.5">
             <div className="w-2 h-2 rounded-full bg-red-400" />
-            <span className="text-white/30 text-[10px]">Expense</span>
+            <span className="text-muted-foreground/60 text-[10px]">Expense</span>
           </div>
           <div className="flex items-center gap-1.5">
             <div className="w-2 h-2 rounded-full bg-sky-400" />
-            <span className="text-white/30 text-[10px]">Followup</span>
+            <span className="text-muted-foreground/60 text-[10px]">Followup</span>
           </div>
           <div className="flex items-center gap-1.5">
             <div className="w-2 h-2 rounded-full bg-purple-400" />
-            <span className="text-white/30 text-[10px]">Outreach</span>
+            <span className="text-muted-foreground/60 text-[10px]">Outreach</span>
           </div>
           <div className="flex items-center gap-1.5">
             <div className="w-2 h-2 rounded-full bg-amber-400" />
-            <span className="text-white/30 text-[10px]">Notification</span>
+            <span className="text-muted-foreground/60 text-[10px]">Notification</span>
           </div>
         </div>
 
@@ -633,7 +633,7 @@ export function ImperialCalendar() {
         <div className="grid grid-cols-7 gap-1.5 mb-2">
           {WEEKDAYS.map(day => (
             <div key={day} className="text-center">
-              <span className="text-white/25 text-[10px] uppercase tracking-wider font-medium">
+              <span className="text-muted-foreground/50 font-mono text-[10px] uppercase tracking-wider font-medium">
                 {day}
               </span>
             </div>
