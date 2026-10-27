@@ -546,6 +546,17 @@ export function SoloLeveling() {
             : "from-primary/5 via-background to-background border-border"
         )}
       >
+        {/* Panoramic Eye Banner Background with flying embers */}
+        <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+          <img
+            src="/images/solo-leveling/jinwoo-eye-banner.jpg"
+            alt="Jin-Woo Awakening Eye Banner"
+            className="w-full h-full object-cover object-right opacity-25 dark:opacity-40 filter contrast-125"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-card via-card/85 to-card/40 dark:from-background dark:via-background/90 dark:to-background/50" />
+          <div className="absolute inset-0 bg-gradient-to-t from-card dark:from-background via-transparent to-transparent" />
+        </div>
+
         {/* Glow behind Header */}
         <div className="absolute top-0 right-0 w-80 h-80 bg-cyan-500/[0.04] dark:bg-cyan-500/[0.08] rounded-full filter blur-[90px] pointer-events-none" />
 
@@ -853,9 +864,9 @@ export function SoloLeveling() {
           <div className="flex items-center gap-4 min-w-0">
             <div className="relative flex-shrink-0">
               <img
-                src="/images/solo-leveling/sukuna-power.png"
-                alt="Sukuna Cursed Trial Guardian"
-                className="h-20 sm:h-24 md:h-28 w-auto object-contain filter drop-shadow-[0_0_20px_rgba(239,68,68,0.35)]"
+                src="/images/solo-leveling/sukuna-fuga-fire.png"
+                alt="Sukuna Flame Arrow Trial"
+                className="h-20 sm:h-24 md:h-28 w-auto object-contain filter drop-shadow-[0_0_25px_rgba(239,68,68,0.45)]"
               />
             </div>
             <div className="min-w-0">
@@ -864,9 +875,9 @@ export function SoloLeveling() {
                   "text-[9px] font-mono font-black uppercase tracking-wider px-2 py-0.5 rounded-full border",
                   stats.failureState === 1
                     ? "bg-red-500/20 text-red-600 dark:text-red-400 border-red-500/40 animate-pulse"
-                    : "bg-amber-500/15 text-amber-700 dark:text-amber-400 border-amber-500/30"
+                    : "bg-red-500/15 text-red-700 dark:text-red-400 border-red-500/30"
                 )}>
-                  {stats.failureState === 1 ? '🚨 PENALTY DEBUFF ACTIVE' : '⚡ TRIAL OF THE CURSED KING'}
+                  {stats.failureState === 1 ? '🚨 PENALTY DEBUFF ACTIVE' : '🔥 FLAME ARROW [FUGA] THRESHOLD'}
                 </span>
                 <span className="text-[10px] font-mono text-muted-foreground">
                   PENALTY ENFORCEMENT
@@ -1061,27 +1072,43 @@ export function SoloLeveling() {
               <Award className={cn("w-4.5 h-4.5", stats.failureState === 1 ? "text-red-500 animate-pulse" : "text-yellow-400")} />
             </div>
             
-            <div className="space-y-3 relative z-10">
-              <h3 className="text-muted-foreground/60 text-[9px] uppercase font-mono tracking-widest font-extrabold">System Standing</h3>
-              <div className={cn(
-                "inline-flex px-3.5 py-1.5 rounded-xl text-xs font-black tracking-widest uppercase border filter backdrop-blur transition-all",
-                stats.failureState === 1 
-                  ? 'text-red-500/50 border-red-500/20 bg-red-950/10 shadow-none' 
-                  : rankInfo.color
-              )}>
-                {stats.failureState === 1 ? '⚠️ SYSTEM CORRUPTED' : rankInfo.badgeText}
+            <div className="flex items-start justify-between gap-3 relative z-10">
+              <div className="space-y-2.5 min-w-0 flex-1">
+                <h3 className="text-muted-foreground/60 text-[9px] uppercase font-mono tracking-widest font-extrabold">System Standing</h3>
+                <div className={cn(
+                  "inline-flex px-3.5 py-1.5 rounded-xl text-xs font-black tracking-widest uppercase border filter backdrop-blur transition-all",
+                  stats.failureState === 1 
+                    ? 'text-red-500/50 border-red-500/20 bg-red-950/10 shadow-none' 
+                    : rankInfo.color
+                )}>
+                  {stats.failureState === 1 ? '⚠️ SYSTEM CORRUPTED' : rankInfo.badgeText}
+                </div>
+                <h2 className={cn(
+                  "font-display text-xl sm:text-2xl font-black font-mono tracking-wider transition-all",
+                  stats.failureState === 1 ? "text-red-600/70" : cn(rankInfo.color.split(' ')[0], "premium-rank-text")
+                )}>
+                  {stats.failureState === 1 ? 'DEGRADED CIVILIAN' : rankInfo.title}
+                </h2>
+                <p className="text-muted-foreground text-[11px] leading-relaxed">
+                  {stats.failureState === 1 
+                    ? 'Your biometric parameters collapsed due to inconsistent discipline. System resonance drops to minimum safety.'
+                    : rankInfo.description}
+                </p>
               </div>
-              <h2 className={cn(
-                "font-display text-2xl font-black font-mono tracking-wider transition-all",
-                stats.failureState === 1 ? "text-red-600/70" : cn(rankInfo.color.split(' ')[0], "premium-rank-text")
-              )}>
-                {stats.failureState === 1 ? 'DEGRADED CIVILIAN' : rankInfo.title}
-              </h2>
-              <p className="text-muted-foreground text-[11px] leading-relaxed">
-                {stats.failureState === 1 
-                  ? 'Your biometric parameters collapsed due to inconsistent discipline. System resonance drops to minimum safety.'
-                  : rankInfo.description}
-              </p>
+
+              {/* Shadow Monarch Frontal Portrait */}
+              <div className="relative flex-shrink-0 group">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden border-2 border-purple-500/50 shadow-[0_0_20px_rgba(168,85,247,0.4)] ring-2 ring-purple-500/20 bg-slate-950">
+                  <img
+                    src="/images/solo-leveling/jinwoo-monarch-portrait.jpg"
+                    alt="Shadow Monarch Frontal Portrait"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+                <span className="absolute -bottom-1 -right-1 text-[8px] font-mono font-bold px-1.5 py-0.5 bg-purple-950 border border-purple-500/50 text-purple-300 rounded shadow-xs">
+                  MONARCH
+                </span>
+              </div>
             </div>
           </div>
 
@@ -1829,6 +1856,57 @@ export function SoloLeveling() {
             </div>
           )
         })}
+      </motion.div>
+
+      {/* ─── HUMAN RESONANCE & DEEP WISDOM (COMMUNICATION & STABILITY ARCHITECTURE) ─── */}
+      <motion.div
+        initial={{ opacity: 0, y: 15 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.16 }}
+        className="rounded-2xl border border-slate-300 dark:border-border/80 bg-card overflow-hidden shadow-xs hover:shadow-md transition-all relative"
+      >
+        <div className="grid grid-cols-1 md:grid-cols-12 items-center">
+          <div className="md:col-span-5 relative h-40 sm:h-48 md:h-full min-h-[160px] overflow-hidden bg-black">
+            <img
+              src="/images/solo-leveling/se7en-reflection.jpg"
+              alt="Deep Contemplation & Human Resonance"
+              className="w-full h-full object-cover filter grayscale contrast-125 hover:grayscale-0 transition-all duration-700"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-transparent via-transparent to-card" />
+            <div className="absolute bottom-2 left-3">
+              <span className="text-[9px] font-mono font-bold tracking-widest text-slate-300 uppercase bg-black/70 px-2 py-0.5 rounded border border-white/10">
+                DEEP REFLECTION // HUMAN WISDOM
+              </span>
+            </div>
+          </div>
+          <div className="md:col-span-7 p-4 sm:p-5 lg:p-6 space-y-2">
+            <div className="flex items-center gap-2">
+              <span className="text-[9px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border border-cyan-500/20">
+                COMMUNICATION & MENTAL STABILITY
+              </span>
+              <span className="text-muted-foreground text-[10px] font-mono">
+                STABILITY PILLAR
+              </span>
+            </div>
+            <h3 className="text-foreground text-sm sm:text-base font-extrabold font-mono uppercase tracking-wide">
+              BEYOND VIOLENCE: EMOTIONAL RESILIENCE & HUMAN WISDOM
+            </h3>
+            <p className="text-muted-foreground text-xs leading-relaxed font-medium">
+              A True Sovereign rules not through isolation, but through empathy, active listening, deep contemplation, and unwavering emotional composure. Balance physical might with human connection.
+            </p>
+            <div className="flex flex-wrap items-center gap-3 pt-1 text-[10px] font-mono">
+              <span className="text-emerald-700 dark:text-emerald-400 font-bold bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-0.5 rounded">
+                Stability: {stats.stability} PTS
+              </span>
+              <span className="text-cyan-700 dark:text-cyan-400 font-bold bg-cyan-500/10 border border-cyan-500/20 px-2.5 py-0.5 rounded">
+                Communication: {stats.communication} PTS
+              </span>
+              <span className="text-muted-foreground">
+                Resonance: Nominally Calibrated
+              </span>
+            </div>
+          </div>
+        </div>
       </motion.div>
 
       {/* ─── NEW SECTION: THE SOVEREIGN COEFFICIENT MATRIX (POWER CALCULATIONS) ─── */}
