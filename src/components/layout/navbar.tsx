@@ -153,6 +153,18 @@ export function Navbar() {
 
           {/* Right: Actions */}
           <div className="flex items-center gap-1.5">
+            {/* Hunter Recognition Pill */}
+            <div className="flex items-center gap-2 pl-1 pr-2.5 py-0.5 rounded-full bg-cyan-500/[0.08] border border-cyan-500/25">
+              <img
+                src="/images/solo-leveling/jinwoo-awakened.jpg"
+                alt="Chandra"
+                className="w-5 h-5 rounded-full object-cover border border-cyan-400 shadow-[0_0_8px_rgba(6,182,212,0.4)]"
+              />
+              <span className="hidden sm:inline text-[10px] font-mono font-bold text-cyan-600 dark:text-cyan-300">
+                CHANDRA // AWAKENED
+              </span>
+            </div>
+
             {/* System Status */}
             <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-primary/5 border border-primary/10">
               <span className="relative flex h-2 w-2">

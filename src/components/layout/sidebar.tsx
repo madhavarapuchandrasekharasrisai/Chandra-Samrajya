@@ -136,6 +136,26 @@ export function Sidebar() {
           )}
         </div>
 
+        {/* ── Hunter Identity Card ── */}
+        <div className="px-3 py-2 border-b border-border/60">
+          <div className="flex items-center gap-2.5 p-2 rounded-xl bg-cyan-500/[0.04] dark:bg-cyan-950/20 border border-cyan-500/20">
+            <div className="relative flex-shrink-0">
+              <img 
+                src="/images/solo-leveling/jinwoo-awakened.jpg" 
+                alt="Hunter Chandra" 
+                className="w-8 h-8 rounded-lg object-cover border border-cyan-400/80 shadow-[0_0_10px_rgba(6,182,212,0.4)]"
+              />
+              <span className="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-cyan-400 ring-1 ring-background animate-pulse" />
+            </div>
+            {(!sidebarCollapsed || isMobile) && (
+              <div className="min-w-0 flex-1">
+                <p className="text-[11px] font-bold text-foreground truncate font-mono">CHANDRASEKHAR</p>
+                <p className="text-[9px] text-cyan-600 dark:text-cyan-400 font-mono font-semibold uppercase tracking-wider">Awakened Sovereign</p>
+              </div>
+            )}
+          </div>
+        </div>
+
         {/* ── System Navigation ── */}
         <nav className="flex-1 py-3 px-2 space-y-0.5 overflow-y-auto no-scrollbar">
           {/* Section label */}

@@ -5,6 +5,7 @@ import { useSoloLevelingStore, DAILY_CORE_PROTOCOLS, WEEKLY_SPECIALIZATIONS } fr
 import { getPowerRequiredForLevel, getWeeklyQuests, getWeekKey, FANTASY_POWERS, getUnlockedPowers, getNextPower } from '@/lib/solo-leveling-calc'
 import { cn } from '@/lib/utils'
 import { motion, AnimatePresence } from 'framer-motion'
+import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
 import {
   Flame,
@@ -28,6 +29,8 @@ import {
   Trophy,
   Clock,
   Loader2,
+  X,
+  Maximize2,
 } from 'lucide-react'
 import {
   Radar,
@@ -135,6 +138,7 @@ export function SoloLeveling() {
   const [claimingQuestId, setClaimingQuestId] = useState<string | null>(null)
   const [showDiagnostic, setShowDiagnostic] = useState(false)
   const [quoteIndex, setQuoteIndex] = useState(0)
+  const [showHologramModal, setShowHologramModal] = useState(false)
 
   useEffect(() => {
     const quoteInterval = setInterval(() => {
@@ -543,64 +547,105 @@ export function SoloLeveling() {
         )}
       >
         {/* Glow behind Header */}
-        <div className="absolute top-0 right-0 w-80 h-80 bg-orange-500/[0.02] rounded-full filter blur-[80px] pointer-events-none" />
+        <div className="absolute top-0 right-0 w-80 h-80 bg-cyan-500/[0.04] dark:bg-cyan-500/[0.08] rounded-full filter blur-[90px] pointer-events-none" />
 
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 relative z-10">
-          <div className="w-full lg:max-w-3xl">
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-2 mb-3">
-              <span className={cn(
-                "border text-[9px] sm:font-mono text-[10px] uppercase tracking-wider px-2.5 py-0.5 rounded font-mono font-bold animate-pulse inline-block w-fit",
-                stats.failureState === 1 
-                  ? "bg-red-500/10 border-red-500/30 text-red-400" 
-                  : "bg-orange-500/10 border-orange-500/25 text-orange-400"
-              )}>
-                {stats.failureState === 1 ? '🚨 COMBAT CAPABILITY FALLING' : '⚔️ MONARCH AWAKENING PROTOCOL'}
-              </span>
-              <span className="text-muted-foreground text-[10px] font-mono tracking-wider">
-                SYSTEM SYNC: {dayNames[dayOfWeek].toUpperCase()} SEQUENCE
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 md:gap-5 w-full lg:max-w-3xl">
+            {/* Hunter Portrait with Glowing Cyan Eyes */}
+            <div className="relative flex-shrink-0 group">
+              <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-2xl overflow-hidden border-2 border-cyan-400 dark:border-cyan-400/80 shadow-[0_0_25px_rgba(6,182,212,0.45)] ring-2 ring-cyan-500/25 bg-black relative">
+                <img
+                  src="/images/solo-leveling/jinwoo-awakened.jpg"
+                  alt="Awakened Hunter Chandrasekhar"
+                  className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
+                <div className="absolute bottom-1 inset-x-1 text-center">
+                  <span className="text-[8px] font-mono font-black text-cyan-300 tracking-wider bg-black/70 px-1.5 py-0.5 rounded border border-cyan-400/30">
+                    AWAKENED
+                  </span>
+                </div>
+              </div>
+              <span className="absolute -top-1 -right-1 flex h-3 w-3">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-cyan-500 border-2 border-background" />
               </span>
             </div>
-            
-            <h1 className={cn(
-              "text-lg sm:text-2xl md:font-display text-3xl font-black tracking-wider font-mono uppercase leading-tight",
-              stats.failureState === 1 ? "animate-[pulse_1.5s_infinite] text-red-500" : "text-foreground"
-            )}>
-              {stats.failureState === 1 ? (
-                <span>DEGRADED SOVEREIGN SUITE</span>
-              ) : (
-                <span>
-                  SOLO LEVELING <span className="text-orange-500 block sm:inline mt-1 sm:mt-0">PROTOCOL</span>
+
+            {/* Hunter Information */}
+            <div className="min-w-0 flex-1">
+              <div className="flex flex-wrap items-center gap-2 mb-1.5">
+                <span className={cn(
+                  "border text-[9px] uppercase tracking-wider px-2 py-0.5 rounded font-mono font-bold animate-pulse inline-flex items-center gap-1",
+                  stats.failureState === 1 
+                    ? "bg-red-500/10 border-red-500/30 text-red-500" 
+                    : "bg-cyan-500/10 border-cyan-500/30 text-cyan-600 dark:text-cyan-400"
+                )}>
+                  {stats.failureState === 1 ? '🚨 COMBAT DEGRADATION ACTIVE' : '⚔️ SYSTEM RECOGNITION: CONFIRMED'}
                 </span>
-              )}
-            </h1>
-            
-            <p className="text-slate-500 dark:text-muted-foreground text-xs mt-2.5 max-w-xl font-medium leading-relaxed">
-              God System RPG Engine. Keep core streaks intact to secure massive multipliers. Faltering triggers combat degradation and accelerated stat decay.
-            </p>
+                <span className="text-muted-foreground text-[10px] font-mono tracking-wider">
+                  PLAYER ID: #0001
+                </span>
+              </div>
+              
+              <h1 className={cn(
+                "text-lg sm:text-xl md:text-2xl font-black tracking-wider font-mono uppercase leading-tight truncate",
+                stats.failureState === 1 ? "animate-[pulse_1.5s_infinite] text-red-500" : "text-foreground"
+              )}>
+                MADHAVARAPU CHANDRASEKHAR
+              </h1>
+
+              <div className="flex flex-wrap items-center gap-2 mt-1.5">
+                <span className="text-[10px] font-mono font-bold text-amber-700 dark:text-amber-300 bg-amber-500/10 border border-amber-500/30 px-2 py-0.5 rounded">
+                  {stats.currentRank} RANK
+                </span>
+                <span className="text-[10px] font-mono font-bold text-primary bg-primary/10 border border-primary/20 px-2 py-0.5 rounded">
+                  LEVEL {stats.level || 1}
+                </span>
+                <span className="text-[10px] font-mono font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2 py-0.5 rounded">
+                  PL: {stats.powerLevel || 0}
+                </span>
+              </div>
+              
+              <p className="text-muted-foreground text-xs mt-2 max-w-xl font-medium leading-relaxed italic border-l-2 border-cyan-400/50 pl-2.5">
+                "{MOTIVATION_QUOTES[quoteIndex]}"
+              </p>
+            </div>
           </div>
 
-          <div className="flex items-center gap-4 bg-secondary/30 border border-border p-3 rounded-xl filter backdrop-blur-sm">
-            <div className="text-right">
-              <p className="text-muted-foreground/60 text-[9px] uppercase font-mono tracking-wider font-bold">Perfect Streak</p>
-              <div className="flex items-center gap-1.5 justify-end">
-                <Flame className={cn("w-4.5 h-4.5", stats.failureState === 1 ? "text-red-500" : "text-orange-500 animate-pulse")} />
-                <span className="text-foreground font-extrabold text-lg font-mono">
-                  <AnimateNumber value={stats.perfectStreak} /> Days
+          {/* Right Streak & Multiplier HUD */}
+          <div className="flex flex-col sm:flex-row items-end sm:items-center gap-3 w-full lg:w-auto justify-end">
+            <div className="flex items-center gap-4 bg-secondary/40 border border-border p-3 rounded-xl filter backdrop-blur-sm shadow-2xs">
+              <div className="text-right">
+                <p className="text-muted-foreground font-mono text-[9px] uppercase tracking-wider font-bold">Perfect Streak</p>
+                <div className="flex items-center gap-1.5 justify-end">
+                  <Flame className={cn("w-4.5 h-4.5", stats.failureState === 1 ? "text-red-500" : "text-orange-500 animate-pulse")} />
+                  <span className="text-foreground font-black text-lg font-mono">
+                    <AnimateNumber value={stats.perfectStreak} /> Days
+                  </span>
+                </div>
+              </div>
+              <div className="h-8 w-px bg-border" />
+              <div className="text-right">
+                <p className="text-muted-foreground font-mono text-[9px] uppercase tracking-wider font-bold">XP Multiplier</p>
+                <span className={cn(
+                  "font-black text-lg font-mono block",
+                  stats.failureState === 1 ? "text-red-500" : "text-orange-500 dark:text-orange-400"
+                )}>
+                  {stats.failureState === 1 
+                    ? `${(stats.xpMultiplier * 0.6).toFixed(2)}x` 
+                    : `${stats.xpMultiplier.toFixed(2)}x`}
                 </span>
               </div>
             </div>
-            <div className="h-8 w-px bg-accent" />
-            <div className="text-right">
-              <p className="text-muted-foreground/60 text-[9px] uppercase font-mono tracking-wider font-bold">XP Multiplier</p>
-              <span className={cn(
-                "font-extrabold text-lg font-mono block",
-                stats.failureState === 1 ? "text-red-500" : "text-orange-400"
-              )}>
-                {stats.failureState === 1 
-                  ? `${(stats.xpMultiplier * 0.6).toFixed(2)}x` 
-                  : `${stats.xpMultiplier.toFixed(2)}x`}
-              </span>
-            </div>
+
+            <Button
+              onClick={() => setShowHologramModal(true)}
+              className="rounded-xl border border-cyan-500/40 bg-cyan-950/20 hover:bg-cyan-900/30 text-cyan-600 dark:text-cyan-300 font-mono text-xs font-bold flex items-center gap-2 px-3.5 py-2 h-auto shadow-[0_0_15px_rgba(6,182,212,0.2)]"
+            >
+              <Maximize2 className="w-3.5 h-3.5" />
+              Hologram View
+            </Button>
           </div>
         </div>
 
@@ -789,6 +834,61 @@ export function SoloLeveling() {
               "{MOTIVATION_QUOTES[quoteIndex]}"
             </motion.span>
           </AnimatePresence>
+        </div>
+      </motion.div>
+
+      {/* ─── TRIAL OF THE CURSED KING: PENALTY THRESHOLD BANNER ─── */}
+      <motion.div
+        initial={{ opacity: 0, y: 15 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.08 }}
+        className={cn(
+          "relative border rounded-2xl p-4 sm:p-5 transition-all duration-500 overflow-hidden shadow-xs",
+          stats.failureState === 1
+            ? "bg-gradient-to-r from-red-500/15 via-red-950/20 to-card border-red-500/40 shadow-[0_0_25px_rgba(239,68,68,0.2)] ring-1 ring-red-500/30"
+            : "bg-gradient-to-r from-amber-500/[0.08] via-card to-card border-border hover:border-amber-500/30"
+        )}
+      >
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 relative z-10">
+          <div className="flex items-center gap-4 min-w-0">
+            <div className="relative flex-shrink-0">
+              <img
+                src="/images/solo-leveling/sukuna-power.png"
+                alt="Sukuna Cursed Trial Guardian"
+                className="h-20 sm:h-24 md:h-28 w-auto object-contain filter drop-shadow-[0_0_20px_rgba(239,68,68,0.35)]"
+              />
+            </div>
+            <div className="min-w-0">
+              <div className="flex items-center gap-2 mb-1">
+                <span className={cn(
+                  "text-[9px] font-mono font-black uppercase tracking-wider px-2 py-0.5 rounded-full border",
+                  stats.failureState === 1
+                    ? "bg-red-500/20 text-red-600 dark:text-red-400 border-red-500/40 animate-pulse"
+                    : "bg-amber-500/15 text-amber-700 dark:text-amber-400 border-amber-500/30"
+                )}>
+                  {stats.failureState === 1 ? '🚨 PENALTY DEBUFF ACTIVE' : '⚡ TRIAL OF THE CURSED KING'}
+                </span>
+                <span className="text-[10px] font-mono text-muted-foreground">
+                  PENALTY ENFORCEMENT
+                </span>
+              </div>
+              <h3 className="text-foreground text-sm sm:text-base font-black font-mono uppercase tracking-wide">
+                ZERO SLOTH TOLERANCE — CONQUER TODAY’S OBJECTIVES
+              </h3>
+              <p className="text-muted-foreground text-xs mt-1 leading-relaxed max-w-2xl font-medium">
+                The System recognizes relentless daily progress. If all core protocols are not cleared before 24:00, you will be banished to the Penalty Zone with active multiplier penalties.
+              </p>
+              <div className="flex flex-wrap items-center gap-3 mt-2.5 text-[10px] font-mono">
+                <span className="text-muted-foreground">Reset Countdown:</span>
+                <span className="text-red-600 dark:text-red-400 font-extrabold font-mono bg-red-500/10 border border-red-500/25 px-2 py-0.5 rounded">
+                  {timeLeft || '23:59:59'}
+                </span>
+                <span className="text-emerald-700 dark:text-emerald-400 font-bold bg-emerald-500/10 border border-emerald-500/25 px-2 py-0.5 rounded">
+                  [{completedCoreCount}/{totalCore} Core Cleared]
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
       </motion.div>
 
@@ -1391,99 +1491,119 @@ export function SoloLeveling() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
             className={cn(
-              "border rounded-2xl p-4 md:p-5 transition-all duration-500 flex-shrink-0 relative overflow-hidden bg-card shadow-xs hover:shadow-md",
-              stats.failureState === 1 
-                ? "border-red-500/30 bg-red-950/10" 
-                : "border-primary/30 hover:border-primary/50 shadow-[0_0_25px_rgba(59,130,246,0.06)]"
+              "border-2 rounded-2xl p-5 md:p-6 transition-all duration-500 flex-shrink-0 relative overflow-hidden shadow-2xl",
+              "bg-slate-950/95 dark:bg-[#030712]/95 border-cyan-500/50 dark:border-cyan-400/60 shadow-[0_0_35px_rgba(6,182,212,0.25)]",
+              stats.failureState === 1 ? "border-red-500/50" : ""
             )}
           >
-            {/* System brackets */}
-            <div className="absolute top-2 left-2 text-primary/40 text-xs font-mono select-none">⌜</div>
-            <div className="absolute top-2 right-2 text-primary/40 text-xs font-mono select-none">⌝</div>
+            {/* Cybernetic Tech Corner Accents matching reference image */}
+            <div className="absolute top-2 left-2 w-3.5 h-3.5 border-t-2 border-l-2 border-cyan-400 pointer-events-none" />
+            <div className="absolute top-2 right-2 w-3.5 h-3.5 border-t-2 border-r-2 border-cyan-400 pointer-events-none" />
+            <div className="absolute bottom-2 left-2 w-3.5 h-3.5 border-b-2 border-l-2 border-cyan-400 pointer-events-none" />
+            <div className="absolute bottom-2 right-2 w-3.5 h-3.5 border-b-2 border-r-2 border-cyan-400 pointer-events-none" />
 
-            <div className="flex items-center justify-between mb-3 relative z-10">
-              <div>
-                <span className="text-[9px] font-mono font-bold text-primary tracking-widest uppercase block">[QUEST INFO]</span>
-                <h3 className="text-foreground text-xs sm:text-sm font-bold tracking-wider font-mono">
-                  DAILY QUEST: PREPARATIONS TO BECOME STRONG
-                </h3>
+            {/* Ambient Background Energy */}
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(6,182,212,0.12),transparent_70%)] pointer-events-none" />
+
+            {/* Dual-Dagger Combat Jin-Woo Illustration (auto-shrinks on mobile, absolute on desktop) */}
+            <div className="hidden lg:block absolute -right-3 -bottom-5 w-44 xl:w-52 pointer-events-none select-none z-0 opacity-75 hover:opacity-100 transition-opacity">
+              <img
+                src="/images/solo-leveling/jinwoo-combat.png"
+                alt="Jin-Woo Combat Dual Daggers"
+                className="w-full h-auto object-contain filter drop-shadow-[0_0_20px_rgba(6,182,212,0.4)]"
+              />
+            </div>
+
+            {/* Header: [!] QUEST INFO */}
+            <div className="flex flex-col items-center justify-center mb-3 relative z-10">
+              <div className="inline-flex items-center gap-2 px-6 py-1.5 rounded-lg border border-cyan-400/70 bg-cyan-950/60 shadow-[0_0_20px_rgba(6,182,212,0.5)]">
+                <span className="w-5 h-5 rounded-full border border-cyan-400 flex items-center justify-center text-cyan-300 font-bold text-xs">!</span>
+                <span className="font-mono font-black text-xs sm:text-sm tracking-[0.25em] text-cyan-300 drop-shadow-[0_0_10px_rgba(6,182,212,0.8)]">
+                  QUEST INFO
+                </span>
               </div>
-              <span className={cn(
-                "text-[10px] sm:text-xs font-mono font-black px-2.5 py-1 rounded-lg border shadow-2xs",
-                completedCoreCount === totalCore
-                  ? "bg-emerald-50 text-emerald-700 border-emerald-300 dark:bg-emerald-500/15 dark:border-emerald-500/30 dark:text-emerald-400"
-                  : "bg-primary/10 border-primary/25 text-primary"
-              )}>
-                [{completedCoreCount}/{totalCore}] CLEARED
+              <p className="text-cyan-400/95 text-xs font-mono font-bold tracking-wider mt-2 text-center">
+                [Daily Quest: Preparations to Become Strong has arrived.]
+              </p>
+            </div>
+
+            {/* GOAL Underlined */}
+            <div className="text-center my-3 relative z-10">
+              <span className="font-mono font-black text-xs sm:text-sm tracking-[0.3em] text-cyan-300 uppercase pb-1 border-b-2 border-cyan-400 inline-block drop-shadow-[0_0_8px_rgba(6,182,212,0.7)]">
+                GOAL
               </span>
             </div>
 
-            {/* Penalty Zone Warning Alert */}
-            <div className="mb-3 p-2.5 rounded-xl bg-red-50 border border-red-200 dark:bg-red-950/30 dark:border-red-500/30 text-[9px] sm:text-[10px] font-mono text-red-700 dark:text-red-400 flex items-center gap-2 shadow-2xs">
-              <AlertTriangle className="w-3.5 h-3.5 flex-shrink-0 animate-pulse text-red-600 dark:text-red-400" />
-              <span>PENALTY WARNING: Incomplete protocols before 24:00 trigger Penalty Zone banishment.</span>
-            </div>
-
-            <div className="space-y-2 mb-3">
+            {/* Quest items list */}
+            <div className="space-y-2 mb-4 relative z-10">
               {DAILY_CORE_PROTOCOLS.map((task) => {
                 const isDone = !!completedTasks[task.id]
                 return (
-                  <div 
+                  <div
                     key={task.id}
                     onClick={() => handleToggleTask(task.id, !isDone)}
                     className={cn(
-                      "flex items-start justify-between p-3 rounded-xl border transition-all duration-300 cursor-pointer select-none gap-3 group shadow-2xs hover:shadow-xs",
-                      isDone 
-                        ? "bg-emerald-50/70 border-emerald-300 text-foreground dark:bg-emerald-950/20 dark:border-emerald-500/30 shadow-[0_0_12px_rgba(16,185,129,0.08)]" 
-                        : "bg-card border-border hover:border-primary/40 hover:bg-secondary/40 text-muted-foreground hover:text-foreground"
+                      "flex items-center justify-between p-3 rounded-xl border transition-all duration-300 cursor-pointer select-none group",
+                      isDone
+                        ? "bg-cyan-950/40 border-cyan-400/60 shadow-[0_0_15px_rgba(6,182,212,0.2)]"
+                        : "bg-slate-900/60 border-cyan-500/25 hover:border-cyan-400/60 hover:bg-slate-900/90"
                     )}
                   >
-                    <div className="flex items-start gap-2.5 min-w-0 pr-1">
-                      <div className={cn(
-                        "w-5 h-5 rounded-md border flex items-center justify-center flex-shrink-0 transition-all mt-0.5",
-                        isDone 
-                          ? "border-emerald-500 bg-emerald-500/20 text-emerald-600 dark:text-emerald-300 dark:border-emerald-400 dark:bg-emerald-500/30 shadow-[0_0_10px_rgba(16,185,129,0.4)]" 
-                          : "border-slate-300 dark:border-slate-700 bg-secondary/30 group-hover:border-primary/60"
-                      )}>
-                        {isDone ? (
-                          <Check className="w-3.5 h-3.5 stroke-[3] text-emerald-600 dark:text-emerald-300" />
-                        ) : (
-                          <div className="w-1.5 h-1.5 rounded-full bg-slate-400/40 group-hover:bg-primary/50 transition-colors" />
-                        )}
-                      </div>
+                    <div className="flex items-center gap-3 min-w-0 pr-2">
                       <div className="min-w-0">
                         <span className={cn(
-                          "text-[11px] font-bold tracking-wide text-left leading-relaxed block break-words transition-colors",
-                          isDone ? "text-foreground" : "text-foreground/90 group-hover:text-foreground"
-                        )}>{task.label}</span>
-                        {isDone && (
-                          <span className="text-[9px] font-mono text-emerald-600 dark:text-emerald-400 font-bold tracking-wider inline-flex items-center gap-1 mt-0.5">
-                            ✓ [STATUS: CLEARED]
-                          </span>
-                        )}
+                          "text-xs font-mono font-bold tracking-wide block transition-colors",
+                          isDone ? "text-cyan-300 drop-shadow-[0_0_6px_rgba(6,182,212,0.7)]" : "text-slate-200 group-hover:text-cyan-300"
+                        )}>
+                          {task.label}
+                        </span>
+                        <span className="text-[9px] font-mono text-cyan-400/70 font-semibold">
+                          {Object.entries(task.rewards).map(([stat, val]) => `+${val.toFixed(1)} ${getShortStatName(stat)}`).join(' ')}
+                        </span>
                       </div>
                     </div>
-                    
-                    <div className={cn(
-                      "text-[8px] sm:text-[9px] font-mono font-bold px-2 py-0.5 rounded border flex-shrink-0 mt-0.5",
-                      isDone
-                        ? "bg-emerald-100 text-emerald-800 border-emerald-300 dark:bg-emerald-500/15 dark:border-emerald-500/30 dark:text-emerald-300"
-                        : "bg-secondary border-border text-muted-foreground"
-                    )}>
-                      {Object.entries(task.rewards).map(([stat, val]) => `+${val.toFixed(1)} ${getShortStatName(stat)}`).join(' ')}
+
+                    <div className="flex items-center gap-2.5 flex-shrink-0">
+                      {/* Live Counter Bracket */}
+                      <span className={cn(
+                        "text-[10px] font-mono font-extrabold px-2 py-0.5 rounded border",
+                        isDone
+                          ? "bg-cyan-500/20 text-cyan-300 border-cyan-400/40"
+                          : "bg-slate-800 text-slate-400 border-slate-700"
+                      )}>
+                        {isDone ? "[CLEARED]" : "[INCOMPLETE]"}
+                      </span>
+
+                      {/* Holographic Checkbox */}
+                      <div className={cn(
+                        "w-6 h-6 rounded-md border-2 flex items-center justify-center transition-all",
+                        isDone
+                          ? "border-cyan-400 bg-cyan-500/30 text-cyan-300 shadow-[0_0_12px_rgba(6,182,212,0.6)]"
+                          : "border-cyan-500/40 bg-slate-900 group-hover:border-cyan-400"
+                      )}>
+                        {isDone && <Check className="w-4 h-4 stroke-[3] text-cyan-300" />}
+                      </div>
                     </div>
                   </div>
                 )
               })}
             </div>
 
+            {/* Warning Banner matching image footer */}
+            <div className="pt-3 border-t border-cyan-500/25 text-center font-mono text-[10px] leading-relaxed relative z-10">
+              <p className="text-slate-300">
+                <span className="text-cyan-400 font-extrabold tracking-wider drop-shadow-[0_0_8px_rgba(6,182,212,0.9)]">WARNING:</span>{' '}
+                Failure to complete the daily quest will result in an appropriate penalty.
+              </p>
+            </div>
+
             {/* Daily Quest Rewards Box */}
-            <div className="p-3 rounded-xl bg-primary/[0.05] border border-primary/20 space-y-1 font-mono text-[9px] sm:text-[10px]">
-              <div className="flex items-center justify-between text-primary font-bold uppercase tracking-wider">
+            <div className="mt-4 p-3 rounded-xl bg-cyan-950/40 border border-cyan-500/30 space-y-1 font-mono text-[9px] sm:text-[10px] relative z-10">
+              <div className="flex items-center justify-between text-cyan-300 font-bold uppercase tracking-wider">
                 <span>🎁 QUEST REWARDS</span>
-                <span className="text-[9px] text-primary/70">ALL OBJECTIVES</span>
+                <span className="text-[9px] text-cyan-400/70">ALL OBJECTIVES</span>
               </div>
-              <div className="text-muted-foreground/80 space-y-0.5 text-[9px]">
+              <div className="text-slate-300/80 space-y-0.5 text-[9px]">
                 <p>1. Status Recovery (Fatigue → 0%)</p>
                 <p>2. Permanent Biometric Attribute Growth</p>
                 <p>3. Blessed Random Box / Monarch Key</p>
@@ -2015,6 +2135,38 @@ export function SoloLeveling() {
             {getUnlockedPowers(stats.level || 1).length}/{FANTASY_POWERS.length} Unlocked
           </div>
         </div>
+
+        {/* Shadow Monarch Executive Banner */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 md:p-5 rounded-xl bg-gradient-to-r from-purple-500/10 via-card to-card border border-purple-500/30 mb-4 relative overflow-hidden">
+          <div className="flex-1 z-10">
+            <div className="flex items-center gap-2 mb-1.5">
+              <span className="px-2.5 py-0.5 rounded-full text-[9px] font-mono font-bold bg-purple-500/20 text-purple-600 dark:text-purple-400 border border-purple-500/30">
+                SOVEREIGN ASCENSION // LEVEL {stats.level || 1}
+              </span>
+              <span className="text-muted-foreground text-[10px] font-mono">
+                NATIONAL-GRADE MONARCH STATUS
+              </span>
+            </div>
+            <h4 className="text-foreground text-sm sm:text-base font-extrabold font-mono uppercase tracking-wide">
+              EXECUTIVE SOVEREIGNTY: COMMAND SHADOWS IN REALITY
+            </h4>
+            <p className="text-muted-foreground text-xs mt-1.5 leading-relaxed max-w-xl font-medium">
+              Conquer your daily training and professional milestones to unlock fantasy monarch skills. The higher your level, the more absolute your command over reality.
+            </p>
+            <div className="flex items-center gap-2 mt-3">
+              <span className="text-[10px] font-mono font-bold text-amber-700 dark:text-amber-400 bg-amber-500/10 border border-amber-500/30 px-2 py-0.5 rounded">
+                Unlocked: {getUnlockedPowers(stats.level || 1).length}/{FANTASY_POWERS.length} Powers
+              </span>
+            </div>
+          </div>
+          <div className="relative flex-shrink-0 z-10">
+            <img
+              src="/images/solo-leveling/jinwoo-monarch.png"
+              alt="Shadow Monarch Executive"
+              className="h-28 sm:h-36 md:h-44 w-auto object-contain filter drop-shadow-[0_0_25px_rgba(147,51,234,0.35)]"
+            />
+          </div>
+        </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2.5 mb-3 relative z-10">
           {FANTASY_POWERS.map((power) => {
             const unlocked = (stats.level || 1) >= power.level
@@ -2128,6 +2280,109 @@ export function SoloLeveling() {
           </button>
         </div>
       </motion.div>
+
+      {/* ─── FULL-SCREEN HOLOGRAPHIC QUEST SCROLL MODAL (MATCHING REFERENCE IMAGE) ─── */}
+      <AnimatePresence>
+        {showHologramModal && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowHologramModal(false)}
+              className="fixed inset-0 bg-black/85 backdrop-blur-md"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="relative z-10 max-w-md w-full rounded-2xl overflow-hidden border-2 border-cyan-400 bg-slate-950 text-slate-100 shadow-[0_0_50px_rgba(6,182,212,0.45)] p-5 sm:p-7 max-h-[90vh] overflow-y-auto"
+            >
+              {/* Corner tech notches matching reference image */}
+              <div className="absolute top-2 left-2 w-4 h-4 border-t-2 border-l-2 border-cyan-400" />
+              <div className="absolute top-2 right-2 w-4 h-4 border-t-2 border-r-2 border-cyan-400" />
+              <div className="absolute bottom-2 left-2 w-4 h-4 border-b-2 border-l-2 border-cyan-400" />
+              <div className="absolute bottom-2 right-2 w-4 h-4 border-b-2 border-r-2 border-cyan-400" />
+
+              {/* Close Button */}
+              <button
+                onClick={() => setShowHologramModal(false)}
+                className="absolute top-4 right-4 text-cyan-400 hover:text-cyan-200 p-1 rounded-lg border border-cyan-500/30 hover:bg-cyan-500/10 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              {/* Header Box: (!) QUEST INFO */}
+              <div className="flex flex-col items-center justify-center mb-4 text-center mt-2">
+                <div className="inline-flex items-center gap-2.5 px-6 py-2 rounded-xl border-2 border-cyan-400 bg-cyan-950/70 shadow-[0_0_25px_rgba(6,182,212,0.6)]">
+                  <span className="w-6 h-6 rounded-full border-2 border-cyan-300 flex items-center justify-center text-cyan-300 font-black text-sm">!</span>
+                  <span className="font-mono font-black text-base tracking-[0.25em] text-cyan-300 drop-shadow-[0_0_12px_rgba(6,182,212,0.9)]">
+                    QUEST INFO
+                  </span>
+                </div>
+                <p className="text-cyan-400 text-xs font-mono font-bold tracking-widest mt-3">
+                  [Daily Quest: Strength Training has arrived.]
+                </p>
+              </div>
+
+              {/* GOAL */}
+              <div className="text-center my-3">
+                <span className="font-mono font-black text-base tracking-[0.35em] text-cyan-300 uppercase pb-1.5 border-b-2 border-cyan-400 inline-block drop-shadow-[0_0_10px_rgba(6,182,212,0.8)]">
+                  GOAL
+                </span>
+              </div>
+
+              {/* Holographic Tasks */}
+              <div className="space-y-2.5 my-4">
+                {DAILY_CORE_PROTOCOLS.map((task) => {
+                  const isDone = !!completedTasks[task.id]
+                  return (
+                    <div
+                      key={task.id}
+                      onClick={() => handleToggleTask(task.id, !isDone)}
+                      className={cn(
+                        "flex items-center justify-between p-3 rounded-xl border transition-all cursor-pointer select-none",
+                        isDone
+                          ? "bg-cyan-950/50 border-cyan-400/80 shadow-[0_0_15px_rgba(6,182,212,0.3)]"
+                          : "bg-slate-900/70 border-cyan-500/30 hover:border-cyan-400"
+                      )}
+                    >
+                      <span className={cn(
+                        "text-xs md:text-sm font-mono font-bold tracking-wide",
+                        isDone ? "text-cyan-300 drop-shadow-[0_0_6px_rgba(6,182,212,0.8)]" : "text-slate-200"
+                      )}>
+                        {task.label}
+                      </span>
+                      <div className="flex items-center gap-2.5">
+                        <span className={cn(
+                          "text-xs font-mono font-extrabold px-2 py-0.5 rounded border",
+                          isDone ? "bg-cyan-500/20 text-cyan-300 border-cyan-400/50" : "bg-slate-800 text-slate-400 border-slate-700"
+                        )}>
+                          {isDone ? "[100/100]" : "[0/100]"}
+                        </span>
+                        <div className={cn(
+                          "w-6 h-6 rounded border-2 flex items-center justify-center transition-all",
+                          isDone ? "border-cyan-400 bg-cyan-500/30 text-cyan-300 shadow-[0_0_12px_rgba(6,182,212,0.7)]" : "border-cyan-500/50 bg-slate-900"
+                        )}>
+                          {isDone && <Check className="w-4 h-4 stroke-[3] text-cyan-300" />}
+                        </div>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+
+              {/* Warning Footer */}
+              <div className="mt-4 pt-3.5 border-t border-cyan-500/30 text-center font-mono text-[11px] leading-relaxed">
+                <p className="text-slate-300">
+                  <span className="text-cyan-400 font-extrabold tracking-wider drop-shadow-[0_0_8px_rgba(6,182,212,0.9)]">WARNING:</span>{' '}
+                  Failure to complete the daily quest will result in an appropriate penalty.
+                </p>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }
