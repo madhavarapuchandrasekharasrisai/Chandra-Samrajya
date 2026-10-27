@@ -430,7 +430,15 @@ export function ExecutiveOverview() {
     setCurrentPage,
     jobApplications,
     notifications,
-    outreachRecords
+    outreachRecords,
+    nameSocialMedia,
+    nameAIAutomation,
+    nameRetainer,
+    nameFreelance,
+    targetSocialMedia,
+    targetAIAutomation,
+    targetRetainer,
+    targetFreelance,
   } = useAppStore()
 
   const [incomeInput, setIncomeInput] = useState(monthlyIncome.toString())
@@ -616,26 +624,45 @@ export function ExecutiveOverview() {
       .reduce((s, c) => s + c.projectValue, 0)
   }, [clients])
 
-  // Income streams analysis
-  const incomeBySource = useMemo(() => {
-    const map: Record<string, number> = {}
-    incomes.forEach(i => {
-      map[i.source] = (map[i.source] || 0) + i.amount
+  // All 4 configured streams analysis
+  const allStreams = useMemo(() => {
+    const list = [
+      { key: 'Social Media Websites', label: nameSocialMedia || 'Social Media Websites', target: targetSocialMedia || 15000 },
+      { key: 'AI Automation', label: nameAIAutomation || 'AI Automation', target: targetAIAutomation || 40000 },
+      { key: 'Retainer Clients', label: nameRetainer || 'Retainer Clients', target: targetRetainer || 30000 },
+      { key: 'International Freelance', label: nameFreelance || 'International Freelance', target: targetFreelance || 15000 },
+    ]
+
+    const currentDate = new Date()
+    const monthIncomes = incomes.filter(i => {
+      const d = new Date(i.date)
+      return d.getMonth() === currentDate.getMonth() && d.getFullYear() === currentDate.getFullYear()
     })
-    return map
-  }, [incomes])
+
+    return list.map(stream => {
+      const amount = monthIncomes
+        .filter(i => i.source === stream.key || i.source === stream.label)
+        .reduce((sum, i) => sum + i.amount, 0)
+      return {
+        source: stream.label,
+        amount,
+        target: stream.target,
+      }
+    })
+  }, [incomes, nameSocialMedia, nameAIAutomation, nameRetainer, nameFreelance, targetSocialMedia, targetAIAutomation, targetRetainer, targetFreelance])
 
   const strongestStream = useMemo(() => {
-    const entries = Object.entries(incomeBySource)
-    if (entries.length === 0) return { source: 'No data', amount: 0 }
-    return entries.reduce((max, [source, amount]) => amount > max.amount ? { source, amount } : max, { source: '', amount: 0 })
-  }, [incomeBySource])
+    const sorted = [...allStreams].sort((a, b) => b.amount - a.amount)
+    return sorted[0] || { source: 'No data', amount: 0 }
+  }, [allStreams])
 
   const weakestStream = useMemo(() => {
-    const entries = Object.entries(incomeBySource)
-    if (entries.length === 0) return { source: 'No data', amount: 0 }
-    return entries.reduce((min, [source, amount]) => amount < min.amount ? { source, amount } : min, { source: '', amount: Infinity })
-  }, [incomeBySource])
+    // Sort ascending by revenue
+    const sorted = [...allStreams].sort((a, b) => a.amount - b.amount)
+    // Find the lowest stream that is NOT the strongest stream so they never duplicate
+    const different = sorted.find(s => s.source !== strongestStream.source)
+    return different || sorted[1] || sorted[0] || { source: 'No data', amount: 0 }
+  }, [allStreams, strongestStream])
 
   // Discipline warning
   const personalBudgetPercent = budgetAllocation.personal.budget > 0
@@ -962,17 +989,21 @@ export function ExecutiveOverview() {
                 </div>
 
                 {/* Strongest Stream */}
-                <div className="premium-stats-card rounded-2xl p-3.5 sm:p-4 min-w-0 bg-card border border-border shadow-xs">
+                <div className="premium-stats-card rounded-2xl p-3.5 sm:p-4 min-w-0 bg-card border border-border shadow-xs hover:border-emerald-500/30 transition-all">
                   <p className="text-muted-foreground text-[9px] sm:font-mono text-[10px] uppercase tracking-wider mb-1 truncate font-semibold">Strongest Stream</p>
                   <p className="text-emerald-600 dark:text-emerald-400 text-xs sm:text-sm font-bold truncate">{strongestStream.source}</p>
-                  <p className="text-muted-foreground text-[10px] sm:text-xs truncate font-medium">{formatINR(strongestStream.amount)}</p>
+                  <p className="text-muted-foreground text-[10px] sm:text-xs truncate font-medium">
+                    {formatINR(strongestStream.amount)} <span className="text-[9px] opacity-60">/ {formatINR(strongestStream.target)}</span>
+                  </p>
                 </div>
 
                 {/* Weakest Stream */}
-                <div className="premium-stats-card rounded-2xl p-3.5 sm:p-4 min-w-0 bg-card border border-border shadow-xs">
+                <div className="premium-stats-card rounded-2xl p-3.5 sm:p-4 min-w-0 bg-card border border-border shadow-xs hover:border-amber-500/30 transition-all">
                   <p className="text-muted-foreground text-[9px] sm:font-mono text-[10px] uppercase tracking-wider mb-1 truncate font-semibold">Weakest Stream</p>
-                  <p className="text-blue-600 dark:text-primary text-xs sm:text-sm font-bold truncate">{weakestStream.source}</p>
-                  <p className="text-muted-foreground text-[10px] sm:text-xs truncate font-medium">{formatINR(weakestStream.amount)}</p>
+                  <p className="text-amber-600 dark:text-amber-400 text-xs sm:text-sm font-bold truncate">{weakestStream.source}</p>
+                  <p className="text-muted-foreground text-[10px] sm:text-xs truncate font-medium">
+                    {formatINR(weakestStream.amount)} <span className="text-[9px] opacity-60">/ {formatINR(weakestStream.target)}</span>
+                  </p>
                 </div>
               </div>
             </div>
