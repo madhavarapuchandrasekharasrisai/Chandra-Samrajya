@@ -189,14 +189,14 @@ ${todoDetails || '- No active tasks focus scheduled today.'}
       >
         <div className="flex items-center gap-3.5 mb-2">
           <div className="relative group">
-            <div className="w-13 h-13 rounded-2xl overflow-hidden border-2 border-amber-400/80 shadow-[0_0_20px_rgba(245,158,11,0.4)] ring-2 ring-primary/30 bg-black">
+            <div className="w-14 h-14 rounded-2xl overflow-hidden border-2 border-amber-400/80 shadow-[0_0_20px_rgba(245,158,11,0.4)] ring-2 ring-primary/30 bg-gradient-to-b from-slate-900 to-black p-0.5 flex items-center justify-center">
               <img
-                src="/images/karna-ai.png"
+                src="/images/karna-sukuna.png"
                 alt="Karna AI Strategic Intelligence"
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                className="w-full h-full object-contain filter drop-shadow-[0_0_10px_rgba(236,72,153,0.5)] group-hover:scale-105 transition-transform duration-500"
               />
             </div>
-            <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-400 border-2 border-background animate-pulse" />
+            <span className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-400 border-2 border-background animate-pulse" />
           </div>
           <div>
             <div className="flex items-center gap-2">
@@ -231,19 +231,11 @@ ${todoDetails || '- No active tasks focus scheduled today.'}
               animate={{ opacity: 1 }}
               className="flex flex-col items-center justify-center h-full text-center py-12"
             >
-              <div className="relative group mb-5">
-                <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-3xl overflow-hidden border-2 border-amber-400 shadow-[0_0_35px_rgba(245,158,11,0.5)] ring-4 ring-primary/20 bg-black">
-                  <img
-                    src="/images/karna-ai.png"
-                    alt="Karna AI Strategic Intelligence"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                </div>
-                <span className="absolute -bottom-1 -right-1 px-2 py-0.5 rounded-full bg-emerald-500 text-black font-mono font-bold text-[8px] uppercase tracking-wider shadow">
-                  ONLINE
-                </span>
+              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-mono font-bold uppercase tracking-widest mb-3 shadow-[0_0_15px_rgba(245,158,11,0.15)]">
+                <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                <span>Strategic Oracle Active</span>
               </div>
-              <h3 className="text-foreground text-lg font-bold font-display uppercase tracking-wider mb-2">Karna AI Strategic Oracle</h3>
+              <h3 className="text-foreground text-xl font-bold font-display uppercase tracking-wider mb-2">Karna AI Strategic Oracle</h3>
               <p className="text-muted-foreground text-xs sm:text-sm max-w-md mb-8 leading-relaxed">
                 Synchronized with your real-time revenue streams, client pipeline, and daily biometrics. Ask me anything about scaling your wealth, client conversion, or strategic priority.
               </p>
@@ -281,7 +273,7 @@ ${todoDetails || '- No active tasks focus scheduled today.'}
                 {msg.role === 'assistant' && (
                   <div className="w-8 h-8 rounded-xl overflow-hidden border border-amber-400/80 shadow-[0_0_10px_rgba(245,158,11,0.35)] flex-shrink-0 mt-0.5 bg-black">
                     <img
-                      src="/images/karna-ai.png"
+                      src="/images/karna-sukuna.png"
                       alt="Karna"
                       className="w-full h-full object-cover"
                     />
@@ -327,7 +319,7 @@ ${todoDetails || '- No active tasks focus scheduled today.'}
             >
               <div className="w-8 h-8 rounded-xl overflow-hidden border border-amber-400/80 shadow-[0_0_10px_rgba(245,158,11,0.35)] flex-shrink-0 animate-pulse bg-black">
                 <img
-                  src="/images/karna-ai.png"
+                  src="/images/karna-sukuna.png"
                   alt="Karna"
                   className="w-full h-full object-cover"
                 />

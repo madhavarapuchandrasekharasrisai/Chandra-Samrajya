@@ -2968,9 +2968,9 @@ export function SoloLeveling() {
           </div>
           <div className="relative flex-shrink-0 z-10">
             <img
-              src="/images/solo-leveling/jinwoo-monarch.png"
-              alt="Shadow Monarch Executive"
-              className="h-28 sm:h-36 md:h-44 w-auto object-contain filter drop-shadow-[0_0_25px_rgba(147,51,234,0.35)]"
+              src="/images/solo-leveling/sukuna-power-sovereign.png"
+              alt="Supreme Sovereign Power"
+              className="h-32 sm:h-40 md:h-48 w-auto object-contain filter drop-shadow-[0_0_30px_rgba(236,72,153,0.5)] transition-transform duration-500 hover:scale-105"
             />
           </div>
         </div>

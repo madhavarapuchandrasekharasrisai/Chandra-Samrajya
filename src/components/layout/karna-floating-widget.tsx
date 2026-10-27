@@ -229,7 +229,7 @@ ${expenseDetails || '- No expenses recorded yet'}
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-xl overflow-hidden border border-amber-400/80 shadow-[0_0_10px_rgba(245,158,11,0.4)] flex-shrink-0 bg-black">
                   <img
-                    src="/images/karna-ai.png"
+                    src="/images/karna-sukuna.png"
                     alt="Karna"
                     className="w-full h-full object-cover"
                   />
@@ -266,14 +266,10 @@ ${expenseDetails || '- No expenses recorded yet'}
             >
               {messages.length === 0 && (
                 <div className="flex flex-col items-center justify-center h-full text-center py-6">
-                  <div className="w-16 h-16 rounded-2xl overflow-hidden border border-amber-400 shadow-[0_0_20px_rgba(245,158,11,0.4)] mb-3 bg-black">
-                    <img
-                      src="/images/karna-ai.png"
-                      alt="Karna"
-                      className="w-full h-full object-cover"
-                    />
+                  <div className="inline-flex items-center justify-center w-11 h-11 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-400 mb-3 shadow-[0_0_15px_rgba(245,158,11,0.2)]">
+                    <Sparkles className="w-5 h-5 text-amber-400" />
                   </div>
-                  <h4 className="text-foreground/70 text-xs font-semibold mb-1">Karna is listening</h4>
+                  <h4 className="text-foreground/80 text-xs font-semibold mb-1">Karna is listening</h4>
                   <p className="text-muted-foreground/60 text-[10px] max-w-[240px] mb-4">
                     Ask me anything about your current wealth portfolio, client deals, or daily outreach focus.
                   </p>
