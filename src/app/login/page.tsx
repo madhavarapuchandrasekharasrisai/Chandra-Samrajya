@@ -282,7 +282,7 @@ export default function LoginPage() {
           <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-cyan-950/80 border border-cyan-400/40 mb-1">
             <Crown className="w-3 h-3 text-amber-400" />
             <span className="text-[10px] font-mono font-bold text-cyan-300 tracking-wider uppercase">
-              PLAYER #0001 · CHANDRASEKHAR
+              PLAYER #0001 · CHANDRA SEKHAR
             </span>
           </div>
           <span className="text-[9px] font-mono text-purple-400 font-bold tracking-widest uppercase">
@@ -441,7 +441,7 @@ export default function LoginPage() {
                 &ldquo;I am the only one who can level up in this world. Sweat in training, reign in battle.&rdquo;
               </p>
               <p className="text-[10px] font-mono text-cyan-400/90 font-bold uppercase tracking-widest pl-3">
-                — PLAYER: CHANDRASEKHAR
+                — PLAYER: CHANDRA SEKHAR
               </p>
             </div>
           </div>

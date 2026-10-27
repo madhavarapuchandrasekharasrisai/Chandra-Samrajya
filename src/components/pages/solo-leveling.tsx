@@ -437,8 +437,8 @@ export function SoloLeveling() {
       >
         {/* Panoramic Eye Banner Background with High-Definition Sovereign Eye */}
         <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
-          {/* Right-aligned vivid eye portrait container */}
-          <div className="absolute right-0 top-0 bottom-0 w-full sm:w-3/4 md:w-3/5 lg:w-1/2 overflow-hidden">
+          {/* ─── DESKTOP BANNER VIEW (unchanged on desktop) ─── */}
+          <div className="hidden lg:block absolute right-0 top-0 bottom-0 w-1/2 overflow-hidden">
             <img
               src="/images/solo-leveling/jinwoo-eye-banner.jpg"
               alt="Jin-Woo Awakening Eye Banner"
@@ -449,7 +449,22 @@ export function SoloLeveling() {
             <div className="absolute inset-0 bg-gradient-to-t from-card/80 via-transparent to-card/40 dark:from-background/80 dark:via-transparent dark:to-background/40" />
             
             {/* Monarch Eye Cyan Plasma Pulse */}
-            <div className="absolute right-[18%] sm:right-[22%] top-1/2 -translate-y-1/2 w-28 h-28 sm:w-36 sm:h-36 rounded-full bg-cyan-400/25 blur-2xl animate-pulse pointer-events-none" />
+            <div className="absolute right-[22%] top-1/2 -translate-y-1/2 w-36 h-36 rounded-full bg-cyan-400/25 blur-2xl animate-pulse pointer-events-none" />
+          </div>
+
+          {/* ─── MOBILE BANNER VIEW (lg:hidden) — Specially framed for portrait viewport ─── */}
+          <div className="lg:hidden absolute right-0 top-0 bottom-0 w-[75%] sm:w-[65%] overflow-hidden">
+            <img
+              src="/images/solo-leveling/jinwoo-eye-banner.jpg"
+              alt="Jin-Woo Awakening Eye Banner"
+              className="w-full h-full object-cover object-[92%_center] opacity-90 dark:opacity-95 filter contrast-130 saturate-140 brightness-100 dark:brightness-105 transition-opacity duration-500"
+            />
+            {/* Gentle edge fade on the left so credentials text remains crisp while leaving the glowing eye completely sharp */}
+            <div className="absolute inset-0 bg-gradient-to-r from-card via-card/40 to-transparent dark:from-background dark:via-background/40 dark:to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-card/75 via-transparent to-transparent dark:from-background/75 dark:via-transparent dark:to-transparent" />
+
+            {/* Glowing cyan monarch plasma beacon directly over the eye coordinate on mobile */}
+            <div className="absolute right-[28%] top-[30%] -translate-y-1/2 w-28 h-28 rounded-full bg-cyan-400/35 dark:bg-cyan-400/45 blur-xl animate-pulse pointer-events-none" />
           </div>
         </div>
 
@@ -463,7 +478,7 @@ export function SoloLeveling() {
               <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-2xl overflow-hidden border-2 border-cyan-400 dark:border-cyan-400/80 shadow-[0_0_25px_rgba(6,182,212,0.45)] ring-2 ring-cyan-500/25 bg-black relative">
                 <img
                   src="/images/solo-leveling/jinwoo-awakened.jpg"
-                  alt="Awakened Hunter Chandrasekhar"
+                  alt="Awakened Hunter Chandra Shekhar"
                   className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
@@ -499,7 +514,7 @@ export function SoloLeveling() {
                 "text-lg sm:text-xl md:text-2xl font-black tracking-wider font-mono uppercase leading-tight truncate",
                 stats.failureState === 1 ? "animate-[pulse_1.5s_infinite] text-red-500" : "text-foreground"
               )}>
-                MADHAVARAPU CHANDRASEKHAR
+                MADHAVARAPU CHANDRA SEKHAR
               </h1>
 
               <div className="flex flex-wrap items-center gap-2 mt-1.5">
@@ -1043,132 +1058,6 @@ export function SoloLeveling() {
               </p>
             </div>
           </motion.div>
-        {/* ─── SOVEREIGN QUEST BOARD & CHRONICLE ─── */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.15 }}
-            className={cn(
-              "bg-white dark:bg-card border rounded-2xl p-4 md:p-5 transition-all duration-500 relative overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] dark:shadow-[0_1px_10px_rgba(255,255,255,0.02)] hover:translate-y-[-1px] hover:shadow-[0_10px_30px_rgba(0,0,0,0.04)] dark:hover:shadow-[0_2px_15px_rgba(255,255,255,0.05)]",
-              stats.failureState === 1 ? "border-red-200 dark:border-red-500/15" : "border-border hover:border-primary/30"
-            )}
-          >
-            <div className="absolute top-0 right-0 w-60 h-40 bg-orange-500/[0.01] rounded-full filter blur-[60px] pointer-events-none" />
-
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
-              <div className="flex items-center gap-3">
-                <div className={cn(
-                  "p-1.5 rounded-lg border flex-shrink-0",
-                  stats.failureState === 1 ? "bg-red-500/10 border-red-500/20 text-red-500" : "bg-orange-500/10 border-orange-500/20 text-orange-400"
-                )}>
-                  <Trophy className="w-4 h-4" />
-                </div>
-                <div>
-                  <h3 className="text-foreground/80 text-xs font-semibold tracking-wider font-mono uppercase">SOVEREIGN QUEST BOARD</h3>
-                  <p className="text-muted-foreground/50 text-[9px] font-mono">Active leveling objectives &amp; cycle chronicle</p>
-                </div>
-              </div>
-              <div className={cn(
-                "flex items-center gap-1.5 font-mono text-[10px] font-bold px-2.5 py-1 rounded-lg border whitespace-nowrap flex-shrink-0",
-                stats.failureState === 1 ? "text-red-400 bg-red-500/5 border-red-500/10" : "text-orange-400 bg-orange-500/5 border-orange-500/10"
-              )}>
-                <Clock className="w-3 h-3" />
-                <span className="text-muted-foreground">Reset in:</span>
-                <span>{timeLeft || '--:--:--'}</span>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Weekly Quests */}
-              <div className="space-y-2">
-                <div className="flex items-center justify-between mb-3">
-                  <h4 className="text-muted-foreground/60 text-[9px] uppercase font-mono tracking-wider font-bold">⚡ Weekly Sovereign Quests</h4>
-                  <span className="text-[8px] font-mono text-muted-foreground/40">Resets {currentWeekKey}</span>
-                </div>
-                {weeklyQuests.map((quest) => {
-                  const { current, target, met } = quest.checkProgress(stats)
-                  const progress = Math.min(100, (current / target) * 100)
-                  const isClaimed = claimedQuestIds.includes(quest.id)
-                  const isClaiming = claimingQuestId === quest.id
-                  return (
-                    <div
-                      key={quest.id}
-                      className={cn(
-                        "p-3 rounded-xl border transition-all duration-300",
-                        isClaimed
-                          ? "bg-emerald-500/5 border-emerald-500/20"
-                          : met
-                          ? "bg-orange-500/5 border-orange-500/20 shadow-[0_0_12px_rgba(249,115,22,0.08)]"
-                          : "bg-white/[0.01] border-border"
-                      )}
-                    >
-                      <div className="flex items-start justify-between gap-2 mb-1.5">
-                        <div className="flex items-center gap-1.5 min-w-0">
-                          <span className="text-sm flex-shrink-0">{quest.icon}</span>
-                          <span className={cn("text-[10px] font-mono font-bold truncate", isClaimed ? 'text-emerald-400' : quest.color)}>
-                            {isClaimed ? '✅ ' : met ? '🔲 ' : '🔐 '}{quest.title}
-                          </span>
-                        </div>
-                        <span className="text-[9px] font-mono text-muted-foreground/60 flex-shrink-0">{current}/{target}</span>
-                      </div>
-                      <div className="h-1 bg-secondary/50 rounded-full overflow-hidden mb-1.5">
-                        <div
-                          className={cn(
-                            "h-full rounded-full transition-all duration-500 bg-gradient-to-r",
-                            isClaimed ? 'from-emerald-600 to-emerald-400' : 'from-orange-600 to-amber-400'
-                          )}
-                          style={{ width: `${progress}%` }}
-                        />
-                      </div>
-                      <p className="text-[8px] text-muted-foreground/50 font-mono mb-2">{quest.description}</p>
-                      {isClaimed ? (
-                        <div className="text-[9px] font-mono text-emerald-400/70 flex items-center gap-1">
-                          <CheckCircle className="w-3 h-3" /> Reward claimed — {quest.rewardText}
-                        </div>
-                      ) : met ? (
-                        <button
-                          onClick={() => handleClaimQuest(quest.id)}
-                          disabled={isClaiming}
-                          className="w-full flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-lg text-[9px] font-mono font-bold uppercase tracking-wider border bg-orange-500/10 hover:bg-orange-500/20 border-orange-500/20 hover:border-orange-500/30 text-orange-400 transition-all disabled:opacity-50"
-                        >
-                          {isClaiming ? (
-                            <><Loader2 className="w-3 h-3 animate-spin" /> Claiming...</>
-                          ) : (
-                            <>⚡ Claim Reward — {quest.rewardText}</>
-                          )}
-                        </button>
-                      ) : (
-                        <div className="text-[8px] font-mono text-muted-foreground/40">
-                          Reward: {quest.rewardText}
-                        </div>
-                      )}
-                    </div>
-                  )
-                })}
-              </div>
-
-              {/* Chronicle Events */}
-              <div>
-                <h4 className="text-muted-foreground/60 text-[9px] uppercase font-mono tracking-wider font-bold mb-3">📜 Sovereign Chronicle</h4>
-                <div className="space-y-0">
-                  {[
-                    { icon: '⚡', event: `System Standing: ${stats.currentRank}`, time: 'LIVE', color: 'text-orange-400' },
-                    { icon: '🔥', event: `Perfect Streak: ${stats.perfectStreak} Day${stats.perfectStreak !== 1 ? 's' : ''}`, time: 'NOW', color: 'text-amber-400' },
-                    { icon: '⚔️', event: `Power Level: ${stats.powerLevel}`, time: 'LATEST', color: 'text-muted-foreground' },
-                    { icon: '🧬', event: `Level ${stats.level || 1} Hunter — ${stats.xpMultiplier.toFixed(2)}x Multiplier`, time: 'ACTIVE', color: 'text-purple-400' },
-                    { icon: '🛡️', event: `Milestones: ${unlockedMilestonesArray.length}/3 Unlocked`, time: 'STATUS', color: 'text-teal-400' },
-                    { icon: stats.failureState === 1 ? '🚨' : '✅', event: stats.failureState === 1 ? 'SYSTEM FAILURE — Degraded State' : 'Protocol Sync: Nominal', time: 'SYS', color: stats.failureState === 1 ? 'text-red-400' : 'text-emerald-400' },
-                  ].map((entry, ei) => (
-                    <div key={ei} className="flex items-center gap-2.5 py-2 border-b border-border last:border-0">
-                      <span className="text-sm flex-shrink-0">{entry.icon}</span>
-                      <p className={cn("text-[10px] font-mono font-semibold flex-grow truncate", entry.color)}>{entry.event}</p>
-                      <span className="text-[8px] font-mono text-muted-foreground/40 flex-shrink-0">{entry.time}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </motion.div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-5 items-stretch">
           {/* Panel A: Combined Power Level & Auric Rank Card */}
           <motion.div
@@ -1598,6 +1487,132 @@ export function SoloLeveling() {
           </div>
         </motion.div>
           </div>{/* end inner panels grid */}
+        {/* ─── SOVEREIGN QUEST BOARD & CHRONICLE ─── */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.15 }}
+            className={cn(
+              "bg-white dark:bg-card border rounded-2xl p-4 md:p-5 transition-all duration-500 relative overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] dark:shadow-[0_1px_10px_rgba(255,255,255,0.02)] hover:translate-y-[-1px] hover:shadow-[0_10px_30px_rgba(0,0,0,0.04)] dark:hover:shadow-[0_2px_15px_rgba(255,255,255,0.05)]",
+              stats.failureState === 1 ? "border-red-200 dark:border-red-500/15" : "border-border hover:border-primary/30"
+            )}
+          >
+            <div className="absolute top-0 right-0 w-60 h-40 bg-orange-500/[0.01] rounded-full filter blur-[60px] pointer-events-none" />
+
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
+              <div className="flex items-center gap-3">
+                <div className={cn(
+                  "p-1.5 rounded-lg border flex-shrink-0",
+                  stats.failureState === 1 ? "bg-red-500/10 border-red-500/20 text-red-500" : "bg-orange-500/10 border-orange-500/20 text-orange-400"
+                )}>
+                  <Trophy className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="text-foreground/80 text-xs font-semibold tracking-wider font-mono uppercase">SOVEREIGN QUEST BOARD</h3>
+                  <p className="text-muted-foreground/50 text-[9px] font-mono">Active leveling objectives &amp; cycle chronicle</p>
+                </div>
+              </div>
+              <div className={cn(
+                "flex items-center gap-1.5 font-mono text-[10px] font-bold px-2.5 py-1 rounded-lg border whitespace-nowrap flex-shrink-0",
+                stats.failureState === 1 ? "text-red-400 bg-red-500/5 border-red-500/10" : "text-orange-400 bg-orange-500/5 border-orange-500/10"
+              )}>
+                <Clock className="w-3 h-3" />
+                <span className="text-muted-foreground">Reset in:</span>
+                <span>{timeLeft || '--:--:--'}</span>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {/* Weekly Quests */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between mb-3">
+                  <h4 className="text-muted-foreground/60 text-[9px] uppercase font-mono tracking-wider font-bold">⚡ Weekly Sovereign Quests</h4>
+                  <span className="text-[8px] font-mono text-muted-foreground/40">Resets {currentWeekKey}</span>
+                </div>
+                {weeklyQuests.map((quest) => {
+                  const { current, target, met } = quest.checkProgress(stats)
+                  const progress = Math.min(100, (current / target) * 100)
+                  const isClaimed = claimedQuestIds.includes(quest.id)
+                  const isClaiming = claimingQuestId === quest.id
+                  return (
+                    <div
+                      key={quest.id}
+                      className={cn(
+                        "p-3 rounded-xl border transition-all duration-300",
+                        isClaimed
+                          ? "bg-emerald-500/5 border-emerald-500/20"
+                          : met
+                          ? "bg-orange-500/5 border-orange-500/20 shadow-[0_0_12px_rgba(249,115,22,0.08)]"
+                          : "bg-white/[0.01] border-border"
+                      )}
+                    >
+                      <div className="flex items-start justify-between gap-2 mb-1.5">
+                        <div className="flex items-center gap-1.5 min-w-0">
+                          <span className="text-sm flex-shrink-0">{quest.icon}</span>
+                          <span className={cn("text-[10px] font-mono font-bold truncate", isClaimed ? 'text-emerald-400' : quest.color)}>
+                            {isClaimed ? '✅ ' : met ? '🔲 ' : '🔐 '}{quest.title}
+                          </span>
+                        </div>
+                        <span className="text-[9px] font-mono text-muted-foreground/60 flex-shrink-0">{current}/{target}</span>
+                      </div>
+                      <div className="h-1 bg-secondary/50 rounded-full overflow-hidden mb-1.5">
+                        <div
+                          className={cn(
+                            "h-full rounded-full transition-all duration-500 bg-gradient-to-r",
+                            isClaimed ? 'from-emerald-600 to-emerald-400' : 'from-orange-600 to-amber-400'
+                          )}
+                          style={{ width: `${progress}%` }}
+                        />
+                      </div>
+                      <p className="text-[8px] text-muted-foreground/50 font-mono mb-2">{quest.description}</p>
+                      {isClaimed ? (
+                        <div className="text-[9px] font-mono text-emerald-400/70 flex items-center gap-1">
+                          <CheckCircle className="w-3 h-3" /> Reward claimed — {quest.rewardText}
+                        </div>
+                      ) : met ? (
+                        <button
+                          onClick={() => handleClaimQuest(quest.id)}
+                          disabled={isClaiming}
+                          className="w-full flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-lg text-[9px] font-mono font-bold uppercase tracking-wider border bg-orange-500/10 hover:bg-orange-500/20 border-orange-500/20 hover:border-orange-500/30 text-orange-400 transition-all disabled:opacity-50"
+                        >
+                          {isClaiming ? (
+                            <><Loader2 className="w-3 h-3 animate-spin" /> Claiming...</>
+                          ) : (
+                            <>⚡ Claim Reward — {quest.rewardText}</>
+                          )}
+                        </button>
+                      ) : (
+                        <div className="text-[8px] font-mono text-muted-foreground/40">
+                          Reward: {quest.rewardText}
+                        </div>
+                      )}
+                    </div>
+                  )
+                })}
+              </div>
+
+              {/* Chronicle Events */}
+              <div>
+                <h4 className="text-muted-foreground/60 text-[9px] uppercase font-mono tracking-wider font-bold mb-3">📜 Sovereign Chronicle</h4>
+                <div className="space-y-0">
+                  {[
+                    { icon: '⚡', event: `System Standing: ${stats.currentRank}`, time: 'LIVE', color: 'text-orange-400' },
+                    { icon: '🔥', event: `Perfect Streak: ${stats.perfectStreak} Day${stats.perfectStreak !== 1 ? 's' : ''}`, time: 'NOW', color: 'text-amber-400' },
+                    { icon: '⚔️', event: `Power Level: ${stats.powerLevel}`, time: 'LATEST', color: 'text-muted-foreground' },
+                    { icon: '🧬', event: `Level ${stats.level || 1} Hunter — ${stats.xpMultiplier.toFixed(2)}x Multiplier`, time: 'ACTIVE', color: 'text-purple-400' },
+                    { icon: '🛡️', event: `Milestones: ${unlockedMilestonesArray.length}/3 Unlocked`, time: 'STATUS', color: 'text-teal-400' },
+                    { icon: stats.failureState === 1 ? '🚨' : '✅', event: stats.failureState === 1 ? 'SYSTEM FAILURE — Degraded State' : 'Protocol Sync: Nominal', time: 'SYS', color: stats.failureState === 1 ? 'text-red-400' : 'text-emerald-400' },
+                  ].map((entry, ei) => (
+                    <div key={ei} className="flex items-center gap-2.5 py-2 border-b border-border last:border-0">
+                      <span className="text-sm flex-shrink-0">{entry.icon}</span>
+                      <p className={cn("text-[10px] font-mono font-semibold flex-grow truncate", entry.color)}>{entry.event}</p>
+                      <span className="text-[8px] font-mono text-muted-foreground/40 flex-shrink-0">{entry.time}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </motion.div>
         {/* Panel C: Stats Grid breakdown with level-up tickers */}
           <motion.div
             initial={{ opacity: 0, x: 15 }}
