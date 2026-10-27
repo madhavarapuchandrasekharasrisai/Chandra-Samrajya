@@ -63,17 +63,38 @@ export default function Home() {
     window.scrollTo(0, 0)
   }, [currentPage])
 
-  // Load initial data
+  // Load initial data with instant cache hydration and non-blocking background sync
   useEffect(() => {
+    // 1. Instant hydration from localStorage cache if present (0ms delay)
+    try {
+      const cached = localStorage.getItem('god_system_app_cache_v1')
+      if (cached) {
+        const parsed = JSON.parse(cached)
+        if (parsed.incomes) setIncomes(parsed.incomes)
+        if (parsed.expenses) setExpenses(parsed.expenses)
+        if (parsed.clients) setClients(parsed.clients)
+        if (parsed.followups) setFollowups(parsed.followups)
+        if (parsed.todos) setTodos(parsed.todos)
+        if (parsed.outreachRecords) setOutreachRecords(parsed.outreachRecords)
+        if (parsed.warRoomActions) setWarRoomActions(parsed.warRoomActions)
+        if (parsed.warRoomOpportunities) setWarRoomOpportunities(parsed.warRoomOpportunities)
+        if (parsed.jobApplications) setJobApplications(parsed.jobApplications)
+        if (parsed.notifications) setNotifications(parsed.notifications)
+        if (parsed.monthlyIncome) setMonthlyIncome(parsed.monthlyIncome)
+      }
+    } catch {
+      // Ignore cache parse error
+    }
+
+    // 2. Non-blocking fresh data fetch from APIs
     const loadData = async () => {
-      setIsLoading(true)
       try {
         const [
           incomesRes, expensesRes, clientsRes, followupsRes,
           settingsRes, todosRes, outreachRecordsRes,
           warRoomActionsRes, warRoomOpportunitiesRes,
           jobApplicationsRes, notificationsRes
-        ] = await Promise.all([
+        ] = await Promise.allSettled([
           fetch('/api/income'),
           fetch('/api/expenses'),
           fetch('/api/clients'),
@@ -87,48 +108,60 @@ export default function Home() {
           fetch('/api/notifications'),
         ])
 
-        if (incomesRes.ok) {
-          const incomesData = await incomesRes.json()
+        const freshCache: Record<string, any> = {}
+
+        if (incomesRes.status === 'fulfilled' && incomesRes.value.ok) {
+          const incomesData = await incomesRes.value.json()
           setIncomes(incomesData)
+          freshCache.incomes = incomesData
         }
-        if (expensesRes.ok) {
-          const expensesData = await expensesRes.json()
+        if (expensesRes.status === 'fulfilled' && expensesRes.value.ok) {
+          const expensesData = await expensesRes.value.json()
           setExpenses(expensesData)
+          freshCache.expenses = expensesData
         }
-        if (clientsRes.ok) {
-          const clientsData = await clientsRes.json()
+        if (clientsRes.status === 'fulfilled' && clientsRes.value.ok) {
+          const clientsData = await clientsRes.value.json()
           setClients(clientsData)
+          freshCache.clients = clientsData
         }
-        if (followupsRes.ok) {
-          const followupsData = await followupsRes.json()
+        if (followupsRes.status === 'fulfilled' && followupsRes.value.ok) {
+          const followupsData = await followupsRes.value.json()
           setFollowups(followupsData)
+          freshCache.followups = followupsData
         }
-        if (todosRes.ok) {
-          const todosData = await todosRes.json()
+        if (todosRes.status === 'fulfilled' && todosRes.value.ok) {
+          const todosData = await todosRes.value.json()
           setTodos(todosData)
+          freshCache.todos = todosData
         }
-        if (outreachRecordsRes.ok) {
-          const outreachData = await outreachRecordsRes.json()
+        if (outreachRecordsRes.status === 'fulfilled' && outreachRecordsRes.value.ok) {
+          const outreachData = await outreachRecordsRes.value.json()
           setOutreachRecords(outreachData)
+          freshCache.outreachRecords = outreachData
         }
-        if (warRoomActionsRes.ok) {
-          const actionsData = await warRoomActionsRes.json()
+        if (warRoomActionsRes.status === 'fulfilled' && warRoomActionsRes.value.ok) {
+          const actionsData = await warRoomActionsRes.value.json()
           setWarRoomActions(actionsData)
+          freshCache.warRoomActions = actionsData
         }
-        if (warRoomOpportunitiesRes.ok) {
-          const oppsData = await warRoomOpportunitiesRes.json()
+        if (warRoomOpportunitiesRes.status === 'fulfilled' && warRoomOpportunitiesRes.value.ok) {
+          const oppsData = await warRoomOpportunitiesRes.value.json()
           setWarRoomOpportunities(oppsData)
+          freshCache.warRoomOpportunities = oppsData
         }
-        if (jobApplicationsRes.ok) {
-          const jobsData = await jobApplicationsRes.json()
+        if (jobApplicationsRes.status === 'fulfilled' && jobApplicationsRes.value.ok) {
+          const jobsData = await jobApplicationsRes.value.json()
           setJobApplications(jobsData)
+          freshCache.jobApplications = jobsData
         }
-        if (notificationsRes.ok) {
-          const notifsData = await notificationsRes.json()
+        if (notificationsRes.status === 'fulfilled' && notificationsRes.value.ok) {
+          const notifsData = await notificationsRes.value.json()
           setNotifications(notifsData)
+          freshCache.notifications = notifsData
         }
-        if (settingsRes.ok) {
-          const settingsData = await settingsRes.json()
+        if (settingsRes.status === 'fulfilled' && settingsRes.value.ok) {
+          const settingsData = await settingsRes.value.json()
           if (settingsData.monthlyTarget) {
             setMonthlyTarget(settingsData.monthlyTarget.income)
             if (settingsData.monthlyTarget.targetSocialMedia !== undefined) setTargetSocialMedia(settingsData.monthlyTarget.targetSocialMedia)
@@ -151,6 +184,14 @@ export default function Home() {
         })
         const totalMonthly = monthIncomes.reduce((s: number, i: any) => s + i.amount, 0)
         setMonthlyIncome(totalMonthly)
+        freshCache.monthlyIncome = totalMonthly
+
+        // Save fresh cache
+        try {
+          localStorage.setItem('god_system_app_cache_v1', JSON.stringify(freshCache))
+        } catch {
+          // Ignore quota errors
+        }
       } catch (error) {
         console.error('Failed to load data:', error)
       } finally {
@@ -212,33 +253,20 @@ export default function Home() {
       >
         <Navbar />
         <main className="p-3 pb-28 lg:p-5">
-          {isLoading ? (
-            <div className="flex items-center justify-center min-h-[60vh]">
-              <motion.div 
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="text-center"
-              >
-                <div className="relative w-12 h-12 mx-auto mb-4">
-                  <Loader2 className="w-12 h-12 text-primary animate-spin" />
-                  <div className="absolute inset-0 w-12 h-12 rounded-full border border-primary/20 animate-ping" style={{ animationDuration: '2s' }} />
-                </div>
-                <p className="text-muted-foreground text-xs font-mono uppercase tracking-[0.15em]">Initializing System...</p>
-              </motion.div>
-            </div>
-          ) : (
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentPage}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
-              >
-                {renderPage()}
-              </motion.div>
-            </AnimatePresence>
+          {isLoading && (
+            <div className="fixed top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-cyan-500 via-primary to-purple-500 z-50 animate-pulse pointer-events-none" />
           )}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentPage}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
+            >
+              {renderPage()}
+            </motion.div>
+          </AnimatePresence>
         </main>
       </div>
       <QuickAddDialog />

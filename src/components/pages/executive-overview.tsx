@@ -1124,7 +1124,7 @@ export function ExecutiveOverview() {
       </motion.div>
 
       {/* ═══════════════════════════════════════════════════════════════════════
-          SOVEREIGN PHILOSOPHY: WORK HARD, ENJOY HARD
+          WORK HARD, ENJOY LIFE
           ═══════════════════════════════════════════════════════════════════════ */}
       <motion.div
         initial={{ opacity: 0, y: 15 }}
@@ -1137,45 +1137,45 @@ export function ExecutiveOverview() {
           <div className="md:col-span-4 lg:col-span-3 relative h-44 md:h-auto min-h-[160px] overflow-hidden bg-black flex-shrink-0">
             <img
               src="/images/solo-leveling/se7en-reflection.jpg"
-              alt="Work Hard, Enjoy Hard — Sovereign Contemplation"
+              alt="Work Hard, Enjoy Life"
               className="w-full h-full object-cover filter grayscale contrast-125 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
             />
             <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-transparent via-transparent to-card/90" />
             <div className="absolute bottom-2.5 left-3">
               <span className="text-[9px] font-mono font-bold tracking-widest text-amber-300 uppercase bg-black/80 px-2 py-0.5 rounded border border-amber-400/30">
-                LIFE PHILOSOPHY // SOVEREIGN BALANCE
+                DAILY REMINDER
               </span>
             </div>
           </div>
 
-          {/* Philosophy Text & Motivation */}
+          {/* Clean, Simple & Heartfelt Text */}
           <div className="md:col-span-8 lg:col-span-9 p-4 sm:p-5 lg:p-6 flex flex-col justify-between space-y-3">
             <div>
               <div className="flex flex-wrap items-center gap-2 mb-1.5">
                 <span className="text-[9px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20">
-                  ⚔️ WORK RELENTLESSLY · REAP ABUNDANTLY 🌟
+                  ✨ WORK HARD · ENJOY LIFE
                 </span>
                 <span className="text-muted-foreground text-[10px] font-mono">
-                  CHANDRA&apos;S SOVEREIGN MANDATE
+                  CHANDRA&apos;S PURPOSE
                 </span>
               </div>
               <h3 className="text-foreground text-sm sm:text-base font-extrabold font-mono uppercase tracking-wide">
-                WORK HARD, ENJOY HARD — THE PURPOSE OF EMPIRE BUILDING
+                WORK HARD, ENJOY LIFE
               </h3>
               <p className="text-muted-foreground text-xs leading-relaxed font-medium mt-1">
-                True sovereignty is not just accumulating numbers in a vault. If you possess the mind, discipline, and power to earn, earn relentlessly with pride so that you can enjoy life to its absolute fullest. Freedom is having the wealth to celebrate your journey, savor every victory, and enjoy yourself without limits.
+                Work hard and earn well with honest dedication, so you have the freedom to truly enjoy your life, spend time happily, and take care of the people and dreams that matter most to you.
               </p>
             </div>
 
             <div className="flex flex-wrap items-center gap-3 pt-1 text-[10px] font-mono border-t border-border/50">
               <span className="text-emerald-700 dark:text-emerald-400 font-bold bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-0.5 rounded">
-                Life Mode: High Ambition & Joyful Living
+                Earn with Dedication
               </span>
               <span className="text-primary font-bold bg-primary/10 border border-primary/20 px-2.5 py-0.5 rounded">
-                Freedom Principle: Earn to Enjoy
+                Enjoy with Peace of Mind
               </span>
               <span className="text-muted-foreground ml-auto hidden sm:inline">
-                &ldquo;Discipline creates wealth; wealth creates freedom.&rdquo;
+                &ldquo;Work hard, live happily.&rdquo;
               </span>
             </div>
           </div>

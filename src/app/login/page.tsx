@@ -262,31 +262,40 @@ export default function LoginPage() {
         {/* Ambient Top Glow Line */}
         <div className="absolute top-0 inset-x-12 h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent z-20" />
 
-        {/* Mobile Top Header Artwork Banner (Auto-shrinks on mobile, hidden on desktop) */}
-        <div className="md:hidden relative w-full h-32 sm:h-40 overflow-hidden bg-slate-950 border-b border-cyan-500/30">
-          <img
-            src="/images/solo-leveling/jinwoo-monarch-portrait.jpg"
-            alt="Sung Jin-Woo Monarch Sovereign"
-            className="w-full h-full object-cover object-top filter brightness-105 contrast-125"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent" />
-          <div className="absolute bottom-2.5 left-4 right-4 flex items-center justify-between">
-            <span className="text-[9px] font-mono font-bold tracking-widest text-cyan-300 uppercase bg-black/70 px-2 py-0.5 rounded border border-cyan-400/30 flex items-center gap-1.5">
-              <Crown className="w-3 h-3 text-amber-400" />
-              PLAYER #0001 · CHANDRASEKHAR
-            </span>
-            <span className="text-[9px] font-mono text-purple-400 font-bold uppercase tracking-wider bg-purple-950/80 px-2 py-0.5 rounded border border-purple-500/30">
-              SHADOW MONARCH
+        {/* Mobile Top Header: Centered Sovereign Monarch Crest */}
+        <div className="md:hidden pt-7 pb-2 px-6 flex flex-col items-center text-center relative z-10">
+          <div className="relative group mb-3">
+            <div className="w-20 h-20 rounded-2xl overflow-hidden border-2 border-cyan-400 shadow-[0_0_25px_rgba(6,182,212,0.5)] ring-2 ring-purple-500/40 bg-black">
+              <img
+                src="/images/solo-leveling/jinwoo-monarch-portrait.jpg"
+                alt="Sung Jin-Woo Monarch Sovereign"
+                className="w-full h-full object-cover object-center filter brightness-105 contrast-125"
+              />
+            </div>
+            {/* Status Ping */}
+            <span className="absolute -top-1 -right-1 flex h-3 w-3">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-cyan-400 border border-slate-900" />
             </span>
           </div>
+
+          <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-cyan-950/80 border border-cyan-400/40 mb-1">
+            <Crown className="w-3 h-3 text-amber-400" />
+            <span className="text-[10px] font-mono font-bold text-cyan-300 tracking-wider uppercase">
+              PLAYER #0001 · CHANDRASEKHAR
+            </span>
+          </div>
+          <span className="text-[9px] font-mono text-purple-400 font-bold tracking-widest uppercase">
+            SHADOW MONARCH · SYSTEM AWAKENED
+          </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-12 min-h-[560px]">
+        <div className="grid grid-cols-1 md:grid-cols-12 min-h-0 md:min-h-[560px]">
           {/* ── LEFT: Login Access Form (7 cols) ── */}
-          <div className="md:col-span-7 p-6 sm:p-10 flex flex-col justify-between relative z-10">
+          <div className="md:col-span-7 p-5 sm:p-8 md:p-10 pt-2 sm:pt-4 md:pt-10 flex flex-col justify-between relative z-10">
             <div>
-              {/* Top System Tag */}
-              <div className="flex items-center gap-2 mb-6">
+              {/* Top System Tag (Desktop) */}
+              <div className="hidden md:flex items-center gap-2 mb-6">
                 <div className="p-1.5 rounded-lg bg-cyan-500/10 border border-cyan-400/40 text-cyan-300">
                   <ShieldCheck className="w-4 h-4" />
                 </div>

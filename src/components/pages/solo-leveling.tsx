@@ -799,11 +799,854 @@ export function SoloLeveling() {
         </div>
       </motion.div>
 
-      {/* ─── SECTION 2: ATTRIBUTE MATRICES (HUD CLASS SYSTEM) ─── */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-5 lg:items-start">
+      {/* ─── SECTION 2: ATTRIBUTE MATRICES & QUEST MODULES ─── */}
+      
+      {/* ─── MOBILE VIEW: QUEST INFO & SPECIALIZATION FIRST (lg:hidden) ─── */}
+      <div className="flex flex-col gap-6 lg:hidden">
+        {/* Core Protocols Checklist — Authentic Solo Leveling Quest Window */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className={cn(
+              "border-2 rounded-2xl p-5 md:p-6 transition-all duration-500 flex-shrink-0 relative overflow-hidden shadow-2xl",
+              "bg-slate-950/95 dark:bg-[#030712]/95 border-cyan-500/50 dark:border-cyan-400/60 shadow-[0_0_35px_rgba(6,182,212,0.25)]",
+              stats.failureState === 1 ? "border-red-500/50" : ""
+            )}
+          >
+            {/* Cybernetic Tech Corner Accents matching reference image */}
+            <div className="absolute top-2 left-2 w-3.5 h-3.5 border-t-2 border-l-2 border-cyan-400 pointer-events-none" />
+            <div className="absolute top-2 right-2 w-3.5 h-3.5 border-t-2 border-r-2 border-cyan-400 pointer-events-none" />
+            <div className="absolute bottom-2 left-2 w-3.5 h-3.5 border-b-2 border-l-2 border-cyan-400 pointer-events-none" />
+            <div className="absolute bottom-2 right-2 w-3.5 h-3.5 border-b-2 border-r-2 border-cyan-400 pointer-events-none" />
 
-        {/* Left 2/3: Panels A + B + Quest Board */}
-        <div className="lg:col-span-2 flex flex-col gap-6 lg:gap-5">
+            {/* Ambient Background Energy */}
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(6,182,212,0.12),transparent_70%)] pointer-events-none" />
+
+            {/* Dual-Dagger Combat Jin-Woo Illustration (auto-shrinks on mobile, absolute on desktop) */}
+            <div className="hidden lg:block absolute -right-3 -bottom-5 w-44 xl:w-52 pointer-events-none select-none z-0 opacity-75 hover:opacity-100 transition-opacity">
+              <img
+                src="/images/solo-leveling/jinwoo-combat.png"
+                alt="Jin-Woo Combat Dual Daggers"
+                className="w-full h-auto object-contain filter drop-shadow-[0_0_20px_rgba(6,182,212,0.4)]"
+              />
+            </div>
+
+            {/* Header: [!] QUEST INFO */}
+            <div className="flex flex-col items-center justify-center mb-3 relative z-10">
+              <div className="inline-flex items-center gap-2 px-6 py-1.5 rounded-lg border border-cyan-400/70 bg-cyan-950/60 shadow-[0_0_20px_rgba(6,182,212,0.5)]">
+                <span className="w-5 h-5 rounded-full border border-cyan-400 flex items-center justify-center text-cyan-300 font-bold text-xs">!</span>
+                <span className="font-mono font-black text-xs sm:text-sm tracking-[0.25em] text-cyan-300 drop-shadow-[0_0_10px_rgba(6,182,212,0.8)]">
+                  QUEST INFO
+                </span>
+              </div>
+              <p className="text-cyan-400/95 text-xs font-mono font-bold tracking-wider mt-2 text-center">
+                [Daily Quest: Preparations to Become Strong has arrived.]
+              </p>
+            </div>
+
+            {/* GOAL Underlined */}
+            <div className="text-center my-3 relative z-10">
+              <span className="font-mono font-black text-xs sm:text-sm tracking-[0.3em] text-cyan-300 uppercase pb-1 border-b-2 border-cyan-400 inline-block drop-shadow-[0_0_8px_rgba(6,182,212,0.7)]">
+                GOAL
+              </span>
+            </div>
+
+            {/* Quest items list */}
+            <div className="space-y-2 mb-4 relative z-10">
+              {DAILY_CORE_PROTOCOLS.map((task) => {
+                const isDone = !!completedTasks[task.id]
+                return (
+                  <div
+                    key={task.id}
+                    onClick={() => handleToggleTask(task.id, !isDone)}
+                    className={cn(
+                      "flex items-center justify-between p-3 rounded-xl border transition-all duration-300 cursor-pointer select-none group",
+                      isDone
+                        ? "bg-cyan-950/40 border-cyan-400/60 shadow-[0_0_15px_rgba(6,182,212,0.2)]"
+                        : "bg-slate-900/60 border-cyan-500/25 hover:border-cyan-400/60 hover:bg-slate-900/90"
+                    )}
+                  >
+                    <div className="flex items-center gap-3 min-w-0 pr-2">
+                      <div className="min-w-0">
+                        <span className={cn(
+                          "text-xs font-mono font-bold tracking-wide block transition-colors",
+                          isDone ? "text-cyan-300 drop-shadow-[0_0_6px_rgba(6,182,212,0.7)]" : "text-slate-200 group-hover:text-cyan-300"
+                        )}>
+                          {task.label}
+                        </span>
+                        <span className="text-[9px] font-mono text-cyan-400/70 font-semibold">
+                          {Object.entries(task.rewards).map(([stat, val]) => `+${val.toFixed(1)} ${getShortStatName(stat)}`).join(' ')}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2.5 flex-shrink-0">
+                      {/* Live Counter Bracket */}
+                      <span className={cn(
+                        "text-[10px] font-mono font-extrabold px-2 py-0.5 rounded border",
+                        isDone
+                          ? "bg-cyan-500/20 text-cyan-300 border-cyan-400/40"
+                          : "bg-slate-800 text-slate-400 border-slate-700"
+                      )}>
+                        {isDone ? "[CLEARED]" : "[INCOMPLETE]"}
+                      </span>
+
+                      {/* Holographic Checkbox */}
+                      <div className={cn(
+                        "w-6 h-6 rounded-md border-2 flex items-center justify-center transition-all",
+                        isDone
+                          ? "border-cyan-400 bg-cyan-500/30 text-cyan-300 shadow-[0_0_12px_rgba(6,182,212,0.6)]"
+                          : "border-cyan-500/40 bg-slate-900 group-hover:border-cyan-400"
+                      )}>
+                        {isDone && <Check className="w-4 h-4 stroke-[3] text-cyan-300" />}
+                      </div>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+
+            {/* Warning Banner matching image footer */}
+            <div className="pt-3 border-t border-cyan-500/25 text-center font-mono text-[10px] leading-relaxed relative z-10">
+              <p className="text-slate-300">
+                <span className="text-cyan-400 font-extrabold tracking-wider drop-shadow-[0_0_8px_rgba(6,182,212,0.9)]">WARNING:</span>{' '}
+                Failure to complete the daily quest will result in an appropriate penalty.
+              </p>
+            </div>
+
+            {/* Daily Quest Rewards Box */}
+            <div className="mt-4 p-3 rounded-xl bg-cyan-950/40 border border-cyan-500/30 space-y-1 font-mono text-[9px] sm:text-[10px] relative z-10">
+              <div className="flex items-center justify-between text-cyan-300 font-bold uppercase tracking-wider">
+                <span>🎁 QUEST REWARDS</span>
+                <span className="text-[9px] text-cyan-400/70">ALL OBJECTIVES</span>
+              </div>
+              <div className="text-slate-300/80 space-y-0.5 text-[9px]">
+                <p>1. Status Recovery (Fatigue → 0%)</p>
+                <p>2. Permanent Biometric Attribute Growth</p>
+                <p>3. Blessed Random Box / Monarch Key</p>
+              </div>
+            </div>
+          </motion.div>
+        {/* Specializations Scheduler — Upgraded Quest Info Cybernetic Aesthetic */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className={cn(
+              "border-2 rounded-2xl p-5 md:p-6 transition-all duration-500 relative overflow-hidden shadow-2xl",
+              "bg-slate-950/95 dark:bg-[#030712]/95 border-cyan-500/50 dark:border-cyan-400/60 shadow-[0_0_35px_rgba(6,182,212,0.25)] text-slate-100",
+              stats.failureState === 1 ? "border-red-500/50" : ""
+            )}
+          >
+            {/* Cybernetic Tech Corner Accents matching Quest Info */}
+            <div className="absolute top-2 left-2 w-3.5 h-3.5 border-t-2 border-l-2 border-cyan-400 pointer-events-none" />
+            <div className="absolute top-2 right-2 w-3.5 h-3.5 border-t-2 border-r-2 border-cyan-400 pointer-events-none" />
+            <div className="absolute bottom-2 left-2 w-3.5 h-3.5 border-b-2 border-l-2 border-cyan-400 pointer-events-none" />
+            <div className="absolute bottom-2 right-2 w-3.5 h-3.5 border-b-2 border-r-2 border-cyan-400 pointer-events-none" />
+
+            {/* Ambient Energy Glow */}
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(6,182,212,0.1),transparent_70%)] pointer-events-none" />
+
+            {/* Header: [!] SPECIALIZATION QUEST */}
+            <div className="flex flex-col items-center justify-center mb-3 relative z-10">
+              <div className="inline-flex items-center gap-2 px-5 py-1.5 rounded-lg border border-cyan-400/70 bg-cyan-950/60 shadow-[0_0_20px_rgba(6,182,212,0.5)]">
+                <span className="w-5 h-5 rounded-full border border-cyan-400 flex items-center justify-center text-cyan-300 font-bold text-xs">!</span>
+                <span className="font-mono font-black text-xs sm:text-sm tracking-[0.25em] text-cyan-300 drop-shadow-[0_0_10px_rgba(6,182,212,0.8)]">
+                  SPECIALIZATION QUEST
+                </span>
+              </div>
+              <p className="text-cyan-400/95 text-xs font-mono font-bold tracking-wider mt-2 text-center">
+                [{dayNames[dayOfWeek].toUpperCase()} SPECIALIZATION: FOCUSED DISCIPLINE]
+              </p>
+            </div>
+
+            {/* GOAL Underlined */}
+            <div className="text-center my-3 relative z-10 flex items-center justify-between flex-wrap gap-2">
+              <span className="font-mono font-black text-xs sm:text-sm tracking-[0.3em] text-cyan-300 uppercase pb-1 border-b-2 border-cyan-400 inline-block drop-shadow-[0_0_8px_rgba(6,182,212,0.7)]">
+                SPECIALIZATION OBJECTIVES
+              </span>
+              <span className={cn(
+                "text-[10px] sm:text-xs font-mono font-black px-2.5 py-1 rounded-lg border",
+                completedSpecialCount === todaySpecializations.length && todaySpecializations.length > 0
+                  ? "bg-cyan-500/20 border-cyan-400/60 text-cyan-300 shadow-[0_0_12px_rgba(6,182,212,0.4)]"
+                  : "bg-slate-900 border-cyan-500/30 text-cyan-400"
+              )}>
+                [{completedSpecialCount}/{todaySpecializations.length}] CLEARED
+              </span>
+            </div>
+
+            {/* Specialization Task Items */}
+            <div className="space-y-2 mb-4 relative z-10">
+              {todaySpecializations.length === 0 ? (
+                <div className="p-8 text-center text-slate-400 text-xs font-mono border border-dashed border-cyan-500/30 rounded-xl">
+                  No specializations scheduled for today. Standard rest cycle.
+                </div>
+              ) : (
+                todaySpecializations.map((task) => {
+                  const isDone = !!completedTasks[task.id]
+                  return (
+                    <div
+                      key={task.id}
+                      onClick={() => handleToggleTask(task.id, !isDone)}
+                      className={cn(
+                        "flex items-center justify-between p-3 rounded-xl border transition-all duration-300 cursor-pointer select-none group",
+                        isDone
+                          ? "bg-cyan-950/40 border-cyan-400/60 shadow-[0_0_15px_rgba(6,182,212,0.2)]"
+                          : "bg-slate-900/60 border-cyan-500/25 hover:border-cyan-400/60 hover:bg-slate-900/90"
+                      )}
+                    >
+                      <div className="flex items-center gap-3 min-w-0 pr-2">
+                        <div className="min-w-0">
+                          <span className={cn(
+                            "text-xs font-mono font-bold tracking-wide block transition-colors",
+                            isDone ? "text-cyan-300 drop-shadow-[0_0_6px_rgba(6,182,212,0.7)]" : "text-slate-200 group-hover:text-cyan-300"
+                          )}>
+                            {task.label}
+                          </span>
+                          <span className="text-[9px] font-mono text-cyan-400/70 font-semibold">
+                            {Object.entries(task.rewards).map(([stat, val]) => `+${val.toFixed(1)} ${getShortStatName(stat)}`).join(' ')}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2.5 flex-shrink-0">
+                        <span className={cn(
+                          "text-[10px] font-mono font-extrabold px-2 py-0.5 rounded border",
+                          isDone
+                            ? "bg-cyan-500/20 text-cyan-300 border-cyan-400/40"
+                            : "bg-slate-800 text-slate-400 border-slate-700"
+                        )}>
+                          {isDone ? "[CLEARED]" : "[INCOMPLETE]"}
+                        </span>
+
+                        <div className={cn(
+                          "w-6 h-6 rounded-md border-2 flex items-center justify-center transition-all",
+                          isDone
+                            ? "border-cyan-400 bg-cyan-500/30 text-cyan-300 shadow-[0_0_12px_rgba(6,182,212,0.6)]"
+                            : "border-cyan-500/40 bg-slate-900 group-hover:border-cyan-400"
+                        )}>
+                          {isDone && <Check className="w-4 h-4 stroke-[3] text-cyan-300" />}
+                        </div>
+                      </div>
+                    </div>
+                  )
+                })
+              )}
+            </div>
+
+            {/* Footer Info Box */}
+            <div className="pt-3 border-t border-cyan-500/25 text-center font-mono text-[10px] leading-relaxed relative z-10">
+              <p className="text-slate-300">
+                <span className="text-cyan-400 font-extrabold tracking-wider drop-shadow-[0_0_8px_rgba(6,182,212,0.9)]">REWARD INFUSION:</span>{' '}
+                Specialization attribute growth is permanently synced with your Sovereign Biometric Matrix upon clearing.
+              </p>
+            </div>
+          </motion.div>
+        {/* ─── SOVEREIGN QUEST BOARD & CHRONICLE ─── */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.15 }}
+            className={cn(
+              "bg-white dark:bg-card border rounded-2xl p-4 md:p-5 transition-all duration-500 relative overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] dark:shadow-[0_1px_10px_rgba(255,255,255,0.02)] hover:translate-y-[-1px] hover:shadow-[0_10px_30px_rgba(0,0,0,0.04)] dark:hover:shadow-[0_2px_15px_rgba(255,255,255,0.05)]",
+              stats.failureState === 1 ? "border-red-200 dark:border-red-500/15" : "border-border hover:border-primary/30"
+            )}
+          >
+            <div className="absolute top-0 right-0 w-60 h-40 bg-orange-500/[0.01] rounded-full filter blur-[60px] pointer-events-none" />
+
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
+              <div className="flex items-center gap-3">
+                <div className={cn(
+                  "p-1.5 rounded-lg border flex-shrink-0",
+                  stats.failureState === 1 ? "bg-red-500/10 border-red-500/20 text-red-500" : "bg-orange-500/10 border-orange-500/20 text-orange-400"
+                )}>
+                  <Trophy className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="text-foreground/80 text-xs font-semibold tracking-wider font-mono uppercase">SOVEREIGN QUEST BOARD</h3>
+                  <p className="text-muted-foreground/50 text-[9px] font-mono">Active leveling objectives &amp; cycle chronicle</p>
+                </div>
+              </div>
+              <div className={cn(
+                "flex items-center gap-1.5 font-mono text-[10px] font-bold px-2.5 py-1 rounded-lg border whitespace-nowrap flex-shrink-0",
+                stats.failureState === 1 ? "text-red-400 bg-red-500/5 border-red-500/10" : "text-orange-400 bg-orange-500/5 border-orange-500/10"
+              )}>
+                <Clock className="w-3 h-3" />
+                <span className="text-muted-foreground">Reset in:</span>
+                <span>{timeLeft || '--:--:--'}</span>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {/* Weekly Quests */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between mb-3">
+                  <h4 className="text-muted-foreground/60 text-[9px] uppercase font-mono tracking-wider font-bold">⚡ Weekly Sovereign Quests</h4>
+                  <span className="text-[8px] font-mono text-muted-foreground/40">Resets {currentWeekKey}</span>
+                </div>
+                {weeklyQuests.map((quest) => {
+                  const { current, target, met } = quest.checkProgress(stats)
+                  const progress = Math.min(100, (current / target) * 100)
+                  const isClaimed = claimedQuestIds.includes(quest.id)
+                  const isClaiming = claimingQuestId === quest.id
+                  return (
+                    <div
+                      key={quest.id}
+                      className={cn(
+                        "p-3 rounded-xl border transition-all duration-300",
+                        isClaimed
+                          ? "bg-emerald-500/5 border-emerald-500/20"
+                          : met
+                          ? "bg-orange-500/5 border-orange-500/20 shadow-[0_0_12px_rgba(249,115,22,0.08)]"
+                          : "bg-white/[0.01] border-border"
+                      )}
+                    >
+                      <div className="flex items-start justify-between gap-2 mb-1.5">
+                        <div className="flex items-center gap-1.5 min-w-0">
+                          <span className="text-sm flex-shrink-0">{quest.icon}</span>
+                          <span className={cn("text-[10px] font-mono font-bold truncate", isClaimed ? 'text-emerald-400' : quest.color)}>
+                            {isClaimed ? '✅ ' : met ? '🔲 ' : '🔐 '}{quest.title}
+                          </span>
+                        </div>
+                        <span className="text-[9px] font-mono text-muted-foreground/60 flex-shrink-0">{current}/{target}</span>
+                      </div>
+                      <div className="h-1 bg-secondary/50 rounded-full overflow-hidden mb-1.5">
+                        <div
+                          className={cn(
+                            "h-full rounded-full transition-all duration-500 bg-gradient-to-r",
+                            isClaimed ? 'from-emerald-600 to-emerald-400' : 'from-orange-600 to-amber-400'
+                          )}
+                          style={{ width: `${progress}%` }}
+                        />
+                      </div>
+                      <p className="text-[8px] text-muted-foreground/50 font-mono mb-2">{quest.description}</p>
+                      {isClaimed ? (
+                        <div className="text-[9px] font-mono text-emerald-400/70 flex items-center gap-1">
+                          <CheckCircle className="w-3 h-3" /> Reward claimed — {quest.rewardText}
+                        </div>
+                      ) : met ? (
+                        <button
+                          onClick={() => handleClaimQuest(quest.id)}
+                          disabled={isClaiming}
+                          className="w-full flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-lg text-[9px] font-mono font-bold uppercase tracking-wider border bg-orange-500/10 hover:bg-orange-500/20 border-orange-500/20 hover:border-orange-500/30 text-orange-400 transition-all disabled:opacity-50"
+                        >
+                          {isClaiming ? (
+                            <><Loader2 className="w-3 h-3 animate-spin" /> Claiming...</>
+                          ) : (
+                            <>⚡ Claim Reward — {quest.rewardText}</>
+                          )}
+                        </button>
+                      ) : (
+                        <div className="text-[8px] font-mono text-muted-foreground/40">
+                          Reward: {quest.rewardText}
+                        </div>
+                      )}
+                    </div>
+                  )
+                })}
+              </div>
+
+              {/* Chronicle Events */}
+              <div>
+                <h4 className="text-muted-foreground/60 text-[9px] uppercase font-mono tracking-wider font-bold mb-3">📜 Sovereign Chronicle</h4>
+                <div className="space-y-0">
+                  {[
+                    { icon: '⚡', event: `System Standing: ${stats.currentRank}`, time: 'LIVE', color: 'text-orange-400' },
+                    { icon: '🔥', event: `Perfect Streak: ${stats.perfectStreak} Day${stats.perfectStreak !== 1 ? 's' : ''}`, time: 'NOW', color: 'text-amber-400' },
+                    { icon: '⚔️', event: `Power Level: ${stats.powerLevel}`, time: 'LATEST', color: 'text-muted-foreground' },
+                    { icon: '🧬', event: `Level ${stats.level || 1} Hunter — ${stats.xpMultiplier.toFixed(2)}x Multiplier`, time: 'ACTIVE', color: 'text-purple-400' },
+                    { icon: '🛡️', event: `Milestones: ${unlockedMilestonesArray.length}/3 Unlocked`, time: 'STATUS', color: 'text-teal-400' },
+                    { icon: stats.failureState === 1 ? '🚨' : '✅', event: stats.failureState === 1 ? 'SYSTEM FAILURE — Degraded State' : 'Protocol Sync: Nominal', time: 'SYS', color: stats.failureState === 1 ? 'text-red-400' : 'text-emerald-400' },
+                  ].map((entry, ei) => (
+                    <div key={ei} className="flex items-center gap-2.5 py-2 border-b border-border last:border-0">
+                      <span className="text-sm flex-shrink-0">{entry.icon}</span>
+                      <p className={cn("text-[10px] font-mono font-semibold flex-grow truncate", entry.color)}>{entry.event}</p>
+                      <span className="text-[8px] font-mono text-muted-foreground/40 flex-shrink-0">{entry.time}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-5 items-stretch">
+          {/* Panel A: Combined Power Level & Auric Rank Card */}
+          <motion.div
+          initial={{ opacity: 0, x: -15 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.05 }}
+          className={cn(
+            "p-4 md:p-5 flex flex-col justify-between space-y-4 md:space-y-5 min-h-[280px] lg:min-h-[340px] relative overflow-hidden transition-all duration-500 rounded-2xl",
+            stats.failureState === 1
+              ? "bg-destructive/10 border border-red-500/20 shadow-[0_0_20px_rgba(239,68,68,0.1)]"
+              : "premium-rank-card animate-sweep-shine"
+          )}
+        >
+          {/* Thunder-sky background & lightning overlays */}
+          {stats.failureState !== 1 && (
+            <>
+              <div className="thunder-sky-overlay" />
+              <div className="thunder-sky-flash" />
+              <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-40 z-0" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="lightningGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#00f5d4" />
+                    <stop offset="70%" stopColor="#9d4edd" />
+                    <stop offset="100%" stopColor="transparent" />
+                  </linearGradient>
+                  <linearGradient id="lightningGradTL" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#00f5d4" />
+                    <stop offset="100%" stopColor="#9d4edd" />
+                  </linearGradient>
+                  <linearGradient id="lightningGradTR" x1="100%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#00bbf9" />
+                    <stop offset="100%" stopColor="#9d4edd" />
+                  </linearGradient>
+                  <linearGradient id="lightningGradBL" x1="0%" y1="100%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#9d4edd" />
+                    <stop offset="100%" stopColor="#00f5d4" />
+                  </linearGradient>
+                  <linearGradient id="lightningGradBR" x1="100%" y1="100%" x2="0%" y2="0%">
+                    <stop offset="0%" stopColor="#9d4edd" />
+                    <stop offset="100%" stopColor="#00bbf9" />
+                  </linearGradient>
+                  <filter id="lightningGlow">
+                    <feGaussianBlur stdDeviation="0.8" result="blur" />
+                    <feMerge>
+                      <feMergeNode in="blur" />
+                      <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                  </filter>
+                </defs>
+                {/* Top-to-bottom bolts */}
+                <path 
+                  d="M 45 0 L 42 15 L 49 28 L 38 48 L 46 62 L 35 85 L 39 100" 
+                  stroke="url(#lightningGrad)" 
+                  strokeWidth="0.35" 
+                  fill="none" 
+                  filter="url(#lightningGlow)" 
+                  className="animate-lightning-bolt-1" 
+                />
+                <path 
+                  d="M 75 0 L 72 12 L 78 24 L 69 40 L 74 54 L 66 72 L 70 85 L 65 100" 
+                  stroke="url(#lightningGrad)" 
+                  strokeWidth="0.25" 
+                  fill="none" 
+                  filter="url(#lightningGlow)" 
+                  className="animate-lightning-bolt-2" 
+                />
+                {/* Extra Central Dynamic Bolt */}
+                <path 
+                  d="M 20 0 L 25 15 L 18 35 L 28 50 L 22 75 L 30 100" 
+                  stroke="url(#lightningGrad)" 
+                  strokeWidth="0.28" 
+                  fill="none" 
+                  filter="url(#lightningGlow)" 
+                  className="animate-lightning-bolt-5" 
+                />
+                <path 
+                  d="M 55 0 L 52 20 L 60 42 L 53 65 L 58 82 L 50 100" 
+                  stroke="url(#lightningGrad)" 
+                  strokeWidth="0.3" 
+                  fill="none" 
+                  filter="url(#lightningGlow)" 
+                  className="animate-lightning-bolt-6" 
+                />
+                {/* Top-left corner bolt */}
+                <path 
+                  d="M 0 8 L 12 15 L 8 22 L 22 32 L 18 40 L 35 52 L 30 58" 
+                  stroke="url(#lightningGradTL)" 
+                  strokeWidth="0.3" 
+                  fill="none" 
+                  filter="url(#lightningGlow)" 
+                  className="animate-lightning-bolt-3" 
+                />
+                {/* Fork on top-left corner bolt */}
+                <path 
+                  d="M 12 15 L 20 12 L 28 22" 
+                  stroke="url(#lightningGradTL)" 
+                  strokeWidth="0.2" 
+                  fill="none" 
+                  filter="url(#lightningGlow)" 
+                  className="animate-lightning-bolt-3" 
+                />
+                {/* Top-right corner bolt */}
+                <path 
+                  d="M 100 5 L 88 14 L 92 22 L 78 30 L 84 38 L 70 48" 
+                  stroke="url(#lightningGradTR)" 
+                  strokeWidth="0.28" 
+                  fill="none" 
+                  filter="url(#lightningGlow)" 
+                  className="animate-lightning-bolt-4" 
+                />
+                {/* Bottom-left corner bolt */}
+                <path 
+                  d="M 5 100 L 14 88 L 10 80 L 24 70 L 18 62 L 32 50" 
+                  stroke="url(#lightningGradBL)" 
+                  strokeWidth="0.25" 
+                  fill="none" 
+                  filter="url(#lightningGlow)" 
+                  className="animate-lightning-bolt-3" 
+                />
+                {/* Extra Bottom-left bolt */}
+                <path 
+                  d="M 0 70 L 10 75 L 8 85 L 18 90" 
+                  stroke="url(#lightningGradBL)" 
+                  strokeWidth="0.2" 
+                  fill="none" 
+                  filter="url(#lightningGlow)" 
+                  className="animate-lightning-bolt-5" 
+                />
+                {/* Bottom-right corner bolt */}
+                <path 
+                  d="M 95 100 L 86 90 L 92 82 L 80 72 L 85 65 L 72 55" 
+                  stroke="url(#lightningGradBR)" 
+                  strokeWidth="0.22" 
+                  fill="none" 
+                  filter="url(#lightningGlow)" 
+                  className="animate-lightning-bolt-4" 
+                />
+                {/* Extra Bottom-right bolt */}
+                <path 
+                  d="M 100 75 L 90 80 L 93 90" 
+                  stroke="url(#lightningGradBR)" 
+                  strokeWidth="0.2" 
+                  fill="none" 
+                  filter="url(#lightningGlow)" 
+                  className="animate-lightning-bolt-6" 
+                />
+              </svg>
+            </>
+          )}
+
+          {/* Holographic scanline indicator */}
+          {stats.failureState !== 1 && <div className="premium-scanline" />}
+
+          {/* Neon Rank Wave background effects */}
+          {stats.failureState !== 1 && (
+            <div className={cn("absolute inset-0 opacity-15 pointer-events-none filter blur-xl transition-all", rankInfo.auraClass)} />
+          )}
+
+          <div>
+            <div className="flex items-center justify-between mb-4 relative z-10">
+              <span className="text-muted-foreground font-mono text-[10px] uppercase tracking-widest font-bold font-mono">Rank & Resonance</span>
+              <Award className={cn("w-4.5 h-4.5", stats.failureState === 1 ? "text-red-500 animate-pulse" : "text-yellow-400")} />
+            </div>
+            
+            <div className="flex items-start justify-between gap-3 relative z-10">
+              <div className="space-y-2.5 min-w-0 flex-1">
+                <h3 className="text-muted-foreground/60 text-[9px] uppercase font-mono tracking-widest font-extrabold">System Standing</h3>
+                <div className={cn(
+                  "inline-flex px-3.5 py-1.5 rounded-xl text-xs font-black tracking-widest uppercase border filter backdrop-blur transition-all",
+                  stats.failureState === 1 
+                    ? 'text-red-500/50 border-red-500/20 bg-red-950/10 shadow-none' 
+                    : rankInfo.color
+                )}>
+                  {stats.failureState === 1 ? '⚠️ SYSTEM CORRUPTED' : rankInfo.badgeText}
+                </div>
+                <h2 className={cn(
+                  "font-display text-xl sm:text-2xl font-black font-mono tracking-wider transition-all",
+                  stats.failureState === 1 ? "text-red-600/70" : cn(rankInfo.color.split(' ')[0], "premium-rank-text")
+                )}>
+                  {stats.failureState === 1 ? 'DEGRADED CIVILIAN' : rankInfo.title}
+                </h2>
+                <p className="text-muted-foreground text-[11px] leading-relaxed">
+                  {stats.failureState === 1 
+                    ? 'Your biometric parameters collapsed due to inconsistent discipline. System resonance drops to minimum safety.'
+                    : rankInfo.description}
+                </p>
+              </div>
+
+              {/* Shadow Monarch Frontal Portrait */}
+              <div className="relative flex-shrink-0 group">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden border-2 border-purple-500/50 shadow-[0_0_20px_rgba(168,85,247,0.4)] ring-2 ring-purple-500/20 bg-slate-950">
+                  <img
+                    src="/images/solo-leveling/jinwoo-monarch-portrait.jpg"
+                    alt="Shadow Monarch Frontal Portrait"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+                <span className="absolute -bottom-1 -right-1 text-[8px] font-mono font-bold px-1.5 py-0.5 bg-purple-950 border border-purple-500/50 text-purple-300 rounded shadow-xs">
+                  MONARCH
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div className="relative z-10">
+            <div className="flex items-baseline justify-between mb-2 font-mono">
+              <span className="text-muted-foreground/60 text-[10px] font-bold uppercase tracking-widest">Power resonance</span>
+              <span className={cn(
+                "font-display font-black text-4xl md:text-5xl tracking-wider select-none",
+                stats.failureState === 1 ? "text-red-500 font-bold" : "text-resonance-glow"
+              )}>
+                <AnimateNumber value={stats.powerLevel} />
+              </span>
+            </div>
+            
+            {/* Rank progress bar */}
+            <div className="space-y-1.5">
+              <div className="h-1.5 w-full bg-secondary/50 rounded-full overflow-hidden">
+                <div 
+                  className={cn(
+                    "h-full rounded-full transition-all duration-500 bg-gradient-to-r",
+                    stats.failureState === 1 
+                      ? "from-red-800 to-red-600" 
+                      : "from-orange-600 via-amber-400 to-cyan-400"
+                  )}
+                  style={{ width: `${rankProgressPercent}%` }}
+                />
+              </div>
+              <div className="flex justify-between text-[9px] font-mono font-bold text-muted-foreground/60">
+                <span>Threshold: {prevThreshold}</span>
+                <span>Next Rank: {nextRankName} ({nextThreshold})</span>
+              </div>
+            </div>
+
+            {/* Level Badge Row */}
+            <div className="flex items-center gap-2 flex-wrap mt-3 pt-3 border-t border-border">
+              <div className={cn(
+                "font-mono font-black text-[10px] px-2.5 py-1 rounded-lg flex items-center gap-1.5 select-none border",
+                stats.failureState === 1
+                  ? "bg-red-500/10 border-red-500/20 text-red-400"
+                  : "bg-orange-600/15 border-orange-500/25 text-orange-400"
+              )}>
+                <Trophy className="w-3 h-3" />
+                LV. {stats.level || 1}
+              </div>
+              {(stats.level || 1) < 100 && (
+                <span className="text-muted-foreground/50 text-[9px] font-mono">
+                  → LV.{(stats.level || 1) + 1} @ PL {getPowerRequiredForLevel((stats.level || 1) + 1)}
+                </span>
+              )}
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Panel B: Recharts Radar Polygon */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.96 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className={cn(
+            "p-4 md:p-5 flex flex-col items-center justify-between min-h-[280px] lg:min-h-[340px] relative overflow-hidden transition-all duration-500 rounded-2xl",
+            stats.failureState === 1
+              ? "bg-destructive/10 border border-red-500/20 shadow-[0_0_20px_rgba(239,68,68,0.1)]"
+              : "premium-rank-card animate-sweep-shine"
+          )}
+        >
+          {/* Thunder-sky background & lightning overlays */}
+          {stats.failureState !== 1 && (
+            <div className="absolute inset-0 z-0 pointer-events-none">
+              <div className="thunder-sky-overlay" />
+              <div className="thunder-sky-flash" />
+              <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-40 z-0" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="lightningGradB" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#00f5d4" />
+                    <stop offset="70%" stopColor="#9d4edd" />
+                    <stop offset="100%" stopColor="transparent" />
+                  </linearGradient>
+                  <linearGradient id="lightningGradTLB" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#00f5d4" />
+                    <stop offset="100%" stopColor="#9d4edd" />
+                  </linearGradient>
+                  <linearGradient id="lightningGradTRB" x1="100%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#00bbf9" />
+                    <stop offset="100%" stopColor="#9d4edd" />
+                  </linearGradient>
+                  <linearGradient id="lightningGradBLB" x1="0%" y1="100%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#9d4edd" />
+                    <stop offset="100%" stopColor="#00f5d4" />
+                  </linearGradient>
+                  <linearGradient id="lightningGradBRB" x1="100%" y1="100%" x2="0%" y2="0%">
+                    <stop offset="0%" stopColor="#9d4edd" />
+                    <stop offset="100%" stopColor="#00bbf9" />
+                  </linearGradient>
+                  <filter id="lightningGlowB">
+                    <feGaussianBlur stdDeviation="0.8" result="blur" />
+                    <feMerge>
+                      <feMergeNode in="blur" />
+                      <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                  </filter>
+                </defs>
+                {/* Top-to-bottom bolts */}
+                <path 
+                  d="M 45 0 L 42 15 L 49 28 L 38 48 L 46 62 L 35 85 L 39 100" 
+                  stroke="url(#lightningGradB)" 
+                  strokeWidth="0.35" 
+                  fill="none" 
+                  filter="url(#lightningGlowB)" 
+                  className="animate-lightning-bolt-1" 
+                />
+                <path 
+                  d="M 75 0 L 72 12 L 78 24 L 69 40 L 74 54 L 66 72 L 70 85 L 65 100" 
+                  stroke="url(#lightningGradB)" 
+                  strokeWidth="0.25" 
+                  fill="none" 
+                  filter="url(#lightningGlowB)" 
+                  className="animate-lightning-bolt-2" 
+                />
+                {/* Extra Central Dynamic Bolt */}
+                <path 
+                  d="M 20 0 L 25 15 L 18 35 L 28 50 L 22 75 L 30 100" 
+                  stroke="url(#lightningGradB)" 
+                  strokeWidth="0.28" 
+                  fill="none" 
+                  filter="url(#lightningGlowB)" 
+                  className="animate-lightning-bolt-5" 
+                />
+                <path 
+                  d="M 55 0 L 52 20 L 60 42 L 53 65 L 58 82 L 50 100" 
+                  stroke="url(#lightningGradB)" 
+                  strokeWidth="0.3" 
+                  fill="none" 
+                  filter="url(#lightningGlowB)" 
+                  className="animate-lightning-bolt-6" 
+                />
+                {/* Top-left corner bolt */}
+                <path 
+                  d="M 0 8 L 12 15 L 8 22 L 22 32 L 18 40 L 35 52 L 30 58" 
+                  stroke="url(#lightningGradTLB)" 
+                  strokeWidth="0.3" 
+                  fill="none" 
+                  filter="url(#lightningGlowB)" 
+                  className="animate-lightning-bolt-3" 
+                />
+                {/* Fork on top-left corner bolt */}
+                <path 
+                  d="M 12 15 L 20 12 L 28 22" 
+                  stroke="url(#lightningGradTLB)" 
+                  strokeWidth="0.2" 
+                  fill="none" 
+                  filter="url(#lightningGlowB)" 
+                  className="animate-lightning-bolt-3" 
+                />
+                {/* Top-right corner bolt */}
+                <path 
+                  d="M 100 5 L 88 14 L 92 22 L 78 30 L 84 38 L 70 48" 
+                  stroke="url(#lightningGradTRB)" 
+                  strokeWidth="0.28" 
+                  fill="none" 
+                  filter="url(#lightningGlowB)" 
+                  className="animate-lightning-bolt-4" 
+                />
+                {/* Bottom-left corner bolt */}
+                <path 
+                  d="M 5 100 L 14 88 L 10 80 L 24 70 L 18 62 L 32 50" 
+                  stroke="url(#lightningGradBLB)" 
+                  strokeWidth="0.25" 
+                  fill="none" 
+                  filter="url(#lightningGlowB)" 
+                  className="animate-lightning-bolt-3" 
+                />
+                {/* Extra Bottom-left bolt */}
+                <path 
+                  d="M 0 70 L 10 75 L 8 85 L 18 90" 
+                  stroke="url(#lightningGradBLB)" 
+                  strokeWidth="0.2" 
+                  fill="none" 
+                  filter="url(#lightningGlowB)" 
+                  className="animate-lightning-bolt-5" 
+                />
+                {/* Bottom-right corner bolt */}
+                <path 
+                  d="M 95 100 L 86 90 L 92 82 L 80 72 L 85 65 L 72 55" 
+                  stroke="url(#lightningGradBRB)" 
+                  strokeWidth="0.22" 
+                  fill="none" 
+                  filter="url(#lightningGlowB)" 
+                  className="animate-lightning-bolt-4" 
+                />
+                {/* Extra Bottom-right bolt */}
+                <path 
+                  d="M 100 75 L 90 80 L 93 90" 
+                  stroke="url(#lightningGradBRB)" 
+                  strokeWidth="0.2" 
+                  fill="none" 
+                  filter="url(#lightningGlowB)" 
+                  className="animate-lightning-bolt-6" 
+                />
+              </svg>
+              <div className="premium-scanline" />
+              <div className={cn("absolute inset-0 opacity-15 pointer-events-none filter blur-xl transition-all", rankInfo.auraClass)} />
+            </div>
+          )}
+
+          <span className="text-muted-foreground font-mono text-[10px] uppercase tracking-widest font-bold font-mono self-start mb-4 relative z-10">Resonance Field</span>
+          <div className="w-full h-[180px] md:h-[220px] lg:h-[300px] flex items-center justify-center relative z-10">
+            <ResponsiveContainer width="100%" height="100%">
+              <RadarChart cx="50%" cy="50%" outerRadius="80%" data={radarData}>
+                <PolarGrid stroke={stats.failureState === 1 ? "#ef4444" : "var(--border)"} strokeOpacity={0.6} />
+                <PolarAngleAxis 
+                  dataKey="subject" 
+                  tick={{ fill: 'var(--foreground)', fontSize: 9, fontWeight: 'bold', fontFamily: 'monospace' }} 
+                />
+                <PolarRadiusAxis angle={30} domain={[0, 200]} tick={false} axisLine={false} />
+                <Radar
+                  name="Sovereign"
+                  dataKey="value"
+                  stroke={stats.failureState === 1 ? "#ef4444" : "#f97316"}
+                  strokeWidth={2.5}
+                  fill={stats.failureState === 1 ? "#ef4444" : "#f97316"}
+                  fillOpacity={stats.failureState === 1 ? 0.18 : 0.38}
+                  dot={{ r: 2.5, fill: stats.failureState === 1 ? '#ef4444' : '#ffb703', stroke: '#060608', strokeWidth: 1 }}
+                />
+              </RadarChart>
+            </ResponsiveContainer>
+          </div>
+        </motion.div>
+          </div>{/* end inner panels grid */}
+        {/* Panel C: Stats Grid breakdown with level-up tickers */}
+          <motion.div
+            initial={{ opacity: 0, x: 15 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.05 }}
+            className={cn(
+              "bg-card border rounded-2xl p-4 md:p-5 space-y-3 transition-all duration-500 shadow-xs hover:shadow-md",
+              stats.failureState === 1 ? "border-red-200 dark:border-red-500/15" : "border-border hover:border-primary/30"
+            )}
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-muted-foreground font-mono text-[10px] uppercase tracking-widest font-bold block">Biometrics Summary</span>
+              <span className="text-[10px] font-mono text-primary font-bold">10 Attributes Synced</span>
+            </div>
+            
+            <div className="grid grid-cols-2 sm:grid-cols-2 gap-2 text-[10px] font-mono">
+              {[
+                { label: 'Strength ⚔️', value: stats.strength, color: 'text-red-700 bg-red-50/80 border-red-200 dark:text-red-400 dark:bg-red-950/20 dark:border-red-500/20' },
+                { label: 'Agility ⚡', value: stats.agility, color: 'text-orange-700 bg-orange-50/80 border-orange-200 dark:text-orange-400 dark:bg-orange-950/20 dark:border-orange-500/20' },
+                { label: 'Intelligence 🧠', value: stats.intelligence, color: 'text-purple-700 bg-purple-50/80 border-purple-200 dark:text-purple-400 dark:bg-purple-950/20 dark:border-purple-500/20' },
+                { label: 'Memory 💾', value: stats.memory, color: 'text-indigo-700 bg-indigo-50/80 border-indigo-200 dark:text-indigo-400 dark:bg-indigo-950/20 dark:border-indigo-500/20' },
+                { label: 'Discipline 🛡️', value: stats.discipline, color: 'text-pink-700 bg-pink-50/80 border-pink-200 dark:text-pink-400 dark:bg-pink-950/20 dark:border-pink-500/20' },
+                { label: 'Focus 🎯', value: stats.focus, color: 'text-amber-700 bg-amber-50/80 border-amber-200 dark:text-amber-400 dark:bg-amber-950/20 dark:border-amber-500/20' },
+                { label: 'Communication 🗣️', value: stats.communication, color: 'text-cyan-700 bg-cyan-50/80 border-cyan-200 dark:text-cyan-400 dark:bg-cyan-950/20 dark:border-cyan-500/20' },
+                { label: 'Confidence 👑', value: stats.confidence, color: 'text-yellow-800 bg-yellow-50/80 border-yellow-200 dark:text-yellow-400 dark:bg-yellow-950/20 dark:border-yellow-500/20' },
+                { label: 'Stability ☯️', value: stats.stability, color: 'text-emerald-700 bg-emerald-50/80 border-emerald-200 dark:text-emerald-400 dark:bg-emerald-950/20 dark:border-emerald-500/20' },
+                { label: 'Career XP 💼', value: stats.careerXp, color: 'text-blue-700 bg-blue-50/80 border-blue-200 dark:text-blue-400 dark:bg-blue-950/20 dark:border-blue-500/20' },
+              ].map((stat, i) => (
+                <div 
+                  key={i} 
+                  className={cn(
+                    "flex items-center justify-between p-2 rounded-xl border transition-all duration-300 hover:scale-[1.02] shadow-2xs select-none",
+                    stats.failureState === 1 ? "bg-red-950/5 border-red-500/10 text-red-400" : stat.color
+                  )}
+                >
+                  <span className="font-semibold truncate pr-1">{stat.label}</span>
+                  <span className="font-black text-xs font-mono">
+                    <AnimateNumber value={stat.value} />
+                  </span>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+      </div>
+
+      {/* ─── DESKTOP VIEW: BALANCED MATRIX WITH ZERO WHITE SPACE (hidden lg:grid) ─── */}
+      <div className="hidden lg:grid lg:grid-cols-12 gap-5 items-start">
+        {/* Left 7 Columns: Panels A & B + Specialization Module + Sovereign Quest Board */}
+        <div className="lg:col-span-7 flex flex-col gap-5">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-5 items-stretch">
           {/* Panel A: Combined Power Level & Auric Rank Card */}
           <motion.div
@@ -1233,7 +2076,121 @@ export function SoloLeveling() {
           </div>
         </motion.div>
           </div>{/* end inner panels grid */}
+          {/* Specializations Scheduler — Upgraded Quest Info Cybernetic Aesthetic */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className={cn(
+              "border-2 rounded-2xl p-5 md:p-6 transition-all duration-500 relative overflow-hidden shadow-2xl",
+              "bg-slate-950/95 dark:bg-[#030712]/95 border-cyan-500/50 dark:border-cyan-400/60 shadow-[0_0_35px_rgba(6,182,212,0.25)] text-slate-100",
+              stats.failureState === 1 ? "border-red-500/50" : ""
+            )}
+          >
+            {/* Cybernetic Tech Corner Accents matching Quest Info */}
+            <div className="absolute top-2 left-2 w-3.5 h-3.5 border-t-2 border-l-2 border-cyan-400 pointer-events-none" />
+            <div className="absolute top-2 right-2 w-3.5 h-3.5 border-t-2 border-r-2 border-cyan-400 pointer-events-none" />
+            <div className="absolute bottom-2 left-2 w-3.5 h-3.5 border-b-2 border-l-2 border-cyan-400 pointer-events-none" />
+            <div className="absolute bottom-2 right-2 w-3.5 h-3.5 border-b-2 border-r-2 border-cyan-400 pointer-events-none" />
 
+            {/* Ambient Energy Glow */}
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(6,182,212,0.1),transparent_70%)] pointer-events-none" />
+
+            {/* Header: [!] SPECIALIZATION QUEST */}
+            <div className="flex flex-col items-center justify-center mb-3 relative z-10">
+              <div className="inline-flex items-center gap-2 px-5 py-1.5 rounded-lg border border-cyan-400/70 bg-cyan-950/60 shadow-[0_0_20px_rgba(6,182,212,0.5)]">
+                <span className="w-5 h-5 rounded-full border border-cyan-400 flex items-center justify-center text-cyan-300 font-bold text-xs">!</span>
+                <span className="font-mono font-black text-xs sm:text-sm tracking-[0.25em] text-cyan-300 drop-shadow-[0_0_10px_rgba(6,182,212,0.8)]">
+                  SPECIALIZATION QUEST
+                </span>
+              </div>
+              <p className="text-cyan-400/95 text-xs font-mono font-bold tracking-wider mt-2 text-center">
+                [{dayNames[dayOfWeek].toUpperCase()} SPECIALIZATION: FOCUSED DISCIPLINE]
+              </p>
+            </div>
+
+            {/* GOAL Underlined */}
+            <div className="text-center my-3 relative z-10 flex items-center justify-between flex-wrap gap-2">
+              <span className="font-mono font-black text-xs sm:text-sm tracking-[0.3em] text-cyan-300 uppercase pb-1 border-b-2 border-cyan-400 inline-block drop-shadow-[0_0_8px_rgba(6,182,212,0.7)]">
+                SPECIALIZATION OBJECTIVES
+              </span>
+              <span className={cn(
+                "text-[10px] sm:text-xs font-mono font-black px-2.5 py-1 rounded-lg border",
+                completedSpecialCount === todaySpecializations.length && todaySpecializations.length > 0
+                  ? "bg-cyan-500/20 border-cyan-400/60 text-cyan-300 shadow-[0_0_12px_rgba(6,182,212,0.4)]"
+                  : "bg-slate-900 border-cyan-500/30 text-cyan-400"
+              )}>
+                [{completedSpecialCount}/{todaySpecializations.length}] CLEARED
+              </span>
+            </div>
+
+            {/* Specialization Task Items */}
+            <div className="space-y-2 mb-4 relative z-10">
+              {todaySpecializations.length === 0 ? (
+                <div className="p-8 text-center text-slate-400 text-xs font-mono border border-dashed border-cyan-500/30 rounded-xl">
+                  No specializations scheduled for today. Standard rest cycle.
+                </div>
+              ) : (
+                todaySpecializations.map((task) => {
+                  const isDone = !!completedTasks[task.id]
+                  return (
+                    <div
+                      key={task.id}
+                      onClick={() => handleToggleTask(task.id, !isDone)}
+                      className={cn(
+                        "flex items-center justify-between p-3 rounded-xl border transition-all duration-300 cursor-pointer select-none group",
+                        isDone
+                          ? "bg-cyan-950/40 border-cyan-400/60 shadow-[0_0_15px_rgba(6,182,212,0.2)]"
+                          : "bg-slate-900/60 border-cyan-500/25 hover:border-cyan-400/60 hover:bg-slate-900/90"
+                      )}
+                    >
+                      <div className="flex items-center gap-3 min-w-0 pr-2">
+                        <div className="min-w-0">
+                          <span className={cn(
+                            "text-xs font-mono font-bold tracking-wide block transition-colors",
+                            isDone ? "text-cyan-300 drop-shadow-[0_0_6px_rgba(6,182,212,0.7)]" : "text-slate-200 group-hover:text-cyan-300"
+                          )}>
+                            {task.label}
+                          </span>
+                          <span className="text-[9px] font-mono text-cyan-400/70 font-semibold">
+                            {Object.entries(task.rewards).map(([stat, val]) => `+${val.toFixed(1)} ${getShortStatName(stat)}`).join(' ')}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2.5 flex-shrink-0">
+                        <span className={cn(
+                          "text-[10px] font-mono font-extrabold px-2 py-0.5 rounded border",
+                          isDone
+                            ? "bg-cyan-500/20 text-cyan-300 border-cyan-400/40"
+                            : "bg-slate-800 text-slate-400 border-slate-700"
+                        )}>
+                          {isDone ? "[CLEARED]" : "[INCOMPLETE]"}
+                        </span>
+
+                        <div className={cn(
+                          "w-6 h-6 rounded-md border-2 flex items-center justify-center transition-all",
+                          isDone
+                            ? "border-cyan-400 bg-cyan-500/30 text-cyan-300 shadow-[0_0_12px_rgba(6,182,212,0.6)]"
+                            : "border-cyan-500/40 bg-slate-900 group-hover:border-cyan-400"
+                        )}>
+                          {isDone && <Check className="w-4 h-4 stroke-[3] text-cyan-300" />}
+                        </div>
+                      </div>
+                    </div>
+                  )
+                })
+              )}
+            </div>
+
+            {/* Footer Info Box */}
+            <div className="pt-3 border-t border-cyan-500/25 text-center font-mono text-[10px] leading-relaxed relative z-10">
+              <p className="text-slate-300">
+                <span className="text-cyan-400 font-extrabold tracking-wider drop-shadow-[0_0_8px_rgba(6,182,212,0.9)]">REWARD INFUSION:</span>{' '}
+                Specialization attribute growth is permanently synced with your Sovereign Biometric Matrix upon clearing.
+              </p>
+            </div>
+          </motion.div>
           {/* ─── SOVEREIGN QUEST BOARD & CHRONICLE ─── */}
           <motion.div
             initial={{ opacity: 0, y: 15 }}
@@ -1360,54 +2317,10 @@ export function SoloLeveling() {
               </div>
             </div>
           </motion.div>
-        </div>{/* end lg:col-span-2 */}
+        </div>
 
-        {/* Column 3: Biometrics Summary & Habits stacked */}
-        <div className="space-y-6 lg:space-y-4 flex flex-col">
-          {/* Panel C: Stats Grid breakdown with level-up tickers */}
-          <motion.div
-            initial={{ opacity: 0, x: 15 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.05 }}
-            className={cn(
-              "bg-card border rounded-2xl p-4 md:p-5 space-y-3 transition-all duration-500 shadow-xs hover:shadow-md",
-              stats.failureState === 1 ? "border-red-200 dark:border-red-500/15" : "border-border hover:border-primary/30"
-            )}
-          >
-            <div className="flex items-center justify-between">
-              <span className="text-muted-foreground font-mono text-[10px] uppercase tracking-widest font-bold block">Biometrics Summary</span>
-              <span className="text-[10px] font-mono text-primary font-bold">10 Attributes Synced</span>
-            </div>
-            
-            <div className="grid grid-cols-2 sm:grid-cols-2 gap-2 text-[10px] font-mono">
-              {[
-                { label: 'Strength ⚔️', value: stats.strength, color: 'text-red-700 bg-red-50/80 border-red-200 dark:text-red-400 dark:bg-red-950/20 dark:border-red-500/20' },
-                { label: 'Agility ⚡', value: stats.agility, color: 'text-orange-700 bg-orange-50/80 border-orange-200 dark:text-orange-400 dark:bg-orange-950/20 dark:border-orange-500/20' },
-                { label: 'Intelligence 🧠', value: stats.intelligence, color: 'text-purple-700 bg-purple-50/80 border-purple-200 dark:text-purple-400 dark:bg-purple-950/20 dark:border-purple-500/20' },
-                { label: 'Memory 💾', value: stats.memory, color: 'text-indigo-700 bg-indigo-50/80 border-indigo-200 dark:text-indigo-400 dark:bg-indigo-950/20 dark:border-indigo-500/20' },
-                { label: 'Discipline 🛡️', value: stats.discipline, color: 'text-pink-700 bg-pink-50/80 border-pink-200 dark:text-pink-400 dark:bg-pink-950/20 dark:border-pink-500/20' },
-                { label: 'Focus 🎯', value: stats.focus, color: 'text-amber-700 bg-amber-50/80 border-amber-200 dark:text-amber-400 dark:bg-amber-950/20 dark:border-amber-500/20' },
-                { label: 'Communication 🗣️', value: stats.communication, color: 'text-cyan-700 bg-cyan-50/80 border-cyan-200 dark:text-cyan-400 dark:bg-cyan-950/20 dark:border-cyan-500/20' },
-                { label: 'Confidence 👑', value: stats.confidence, color: 'text-yellow-800 bg-yellow-50/80 border-yellow-200 dark:text-yellow-400 dark:bg-yellow-950/20 dark:border-yellow-500/20' },
-                { label: 'Stability ☯️', value: stats.stability, color: 'text-emerald-700 bg-emerald-50/80 border-emerald-200 dark:text-emerald-400 dark:bg-emerald-950/20 dark:border-emerald-500/20' },
-                { label: 'Career XP 💼', value: stats.careerXp, color: 'text-blue-700 bg-blue-50/80 border-blue-200 dark:text-blue-400 dark:bg-blue-950/20 dark:border-blue-500/20' },
-              ].map((stat, i) => (
-                <div 
-                  key={i} 
-                  className={cn(
-                    "flex items-center justify-between p-2 rounded-xl border transition-all duration-300 hover:scale-[1.02] shadow-2xs select-none",
-                    stats.failureState === 1 ? "bg-red-950/5 border-red-500/10 text-red-400" : stat.color
-                  )}
-                >
-                  <span className="font-semibold truncate pr-1">{stat.label}</span>
-                  <span className="font-black text-xs font-mono">
-                    <AnimateNumber value={stat.value} />
-                  </span>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-
+        {/* Right 5 Columns: Quest Info (Preparations to Become Strong) + Biometrics Summary */}
+        <div className="lg:col-span-5 flex flex-col gap-5">
           {/* Core Protocols Checklist — Authentic Solo Leveling Quest Window */}
           <motion.div
             initial={{ opacity: 0, y: 15 }}
@@ -1533,93 +2446,47 @@ export function SoloLeveling() {
               </div>
             </div>
           </motion.div>
-
-          {/* Specializations Scheduler */}
+          {/* Panel C: Stats Grid breakdown with level-up tickers */}
           <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.25 }}
+            initial={{ opacity: 0, x: 15 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.05 }}
             className={cn(
-              "border rounded-2xl p-4 md:p-5 transition-all duration-500 flex-shrink-0 relative overflow-hidden bg-gradient-to-b from-secondary/40 to-card shadow-[0_4px_25px_rgba(59,130,246,0.06)]",
-              stats.failureState === 1 
-                ? "border-red-500/20 bg-red-950/10" 
-                : "border-border hover:border-primary/30"
+              "bg-card border rounded-2xl p-4 md:p-5 space-y-3 transition-all duration-500 shadow-xs hover:shadow-md",
+              stats.failureState === 1 ? "border-red-200 dark:border-red-500/15" : "border-border hover:border-primary/30"
             )}
           >
-            <div className="flex items-center justify-between mb-3">
-              <div>
-                <span className="text-[9px] font-mono font-bold text-primary tracking-widest uppercase block">[SPECIALIZATION MODULE]</span>
-                <h3 className="text-foreground text-xs sm:text-sm font-bold tracking-wider font-mono uppercase">
-                  {dayNames[dayOfWeek].toUpperCase()} SPECIALIZATION
-                </h3>
-              </div>
-              <span className={cn(
-                "text-[10px] sm:text-xs font-mono font-black px-2.5 py-1 rounded-lg border",
-                completedSpecialCount === todaySpecializations.length && todaySpecializations.length > 0
-                  ? "bg-emerald-500/15 border-emerald-500/30 text-emerald-400"
-                  : "bg-primary/10 border-primary/25 text-primary"
-              )}>
-                [{completedSpecialCount}/{todaySpecializations.length}] CLEARED
-              </span>
+            <div className="flex items-center justify-between">
+              <span className="text-muted-foreground font-mono text-[10px] uppercase tracking-widest font-bold block">Biometrics Summary</span>
+              <span className="text-[10px] font-mono text-primary font-bold">10 Attributes Synced</span>
             </div>
-
-            <div className="space-y-2">
-              {todaySpecializations.length === 0 ? (
-                <div className="p-8 text-center text-muted-foreground/40 text-xs font-mono">
-                  No specializations logged for today. Standard rest cycle.
+            
+            <div className="grid grid-cols-2 sm:grid-cols-2 gap-2 text-[10px] font-mono">
+              {[
+                { label: 'Strength ⚔️', value: stats.strength, color: 'text-red-700 bg-red-50/80 border-red-200 dark:text-red-400 dark:bg-red-950/20 dark:border-red-500/20' },
+                { label: 'Agility ⚡', value: stats.agility, color: 'text-orange-700 bg-orange-50/80 border-orange-200 dark:text-orange-400 dark:bg-orange-950/20 dark:border-orange-500/20' },
+                { label: 'Intelligence 🧠', value: stats.intelligence, color: 'text-purple-700 bg-purple-50/80 border-purple-200 dark:text-purple-400 dark:bg-purple-950/20 dark:border-purple-500/20' },
+                { label: 'Memory 💾', value: stats.memory, color: 'text-indigo-700 bg-indigo-50/80 border-indigo-200 dark:text-indigo-400 dark:bg-indigo-950/20 dark:border-indigo-500/20' },
+                { label: 'Discipline 🛡️', value: stats.discipline, color: 'text-pink-700 bg-pink-50/80 border-pink-200 dark:text-pink-400 dark:bg-pink-950/20 dark:border-pink-500/20' },
+                { label: 'Focus 🎯', value: stats.focus, color: 'text-amber-700 bg-amber-50/80 border-amber-200 dark:text-amber-400 dark:bg-amber-950/20 dark:border-amber-500/20' },
+                { label: 'Communication 🗣️', value: stats.communication, color: 'text-cyan-700 bg-cyan-50/80 border-cyan-200 dark:text-cyan-400 dark:bg-cyan-950/20 dark:border-cyan-500/20' },
+                { label: 'Confidence 👑', value: stats.confidence, color: 'text-yellow-800 bg-yellow-50/80 border-yellow-200 dark:text-yellow-400 dark:bg-yellow-950/20 dark:border-yellow-500/20' },
+                { label: 'Stability ☯️', value: stats.stability, color: 'text-emerald-700 bg-emerald-50/80 border-emerald-200 dark:text-emerald-400 dark:bg-emerald-950/20 dark:border-emerald-500/20' },
+                { label: 'Career XP 💼', value: stats.careerXp, color: 'text-blue-700 bg-blue-50/80 border-blue-200 dark:text-blue-400 dark:bg-blue-950/20 dark:border-blue-500/20' },
+              ].map((stat, i) => (
+                <div 
+                  key={i} 
+                  className={cn(
+                    "flex items-center justify-between p-2 rounded-xl border transition-all duration-300 hover:scale-[1.02] shadow-2xs select-none",
+                    stats.failureState === 1 ? "bg-red-950/5 border-red-500/10 text-red-400" : stat.color
+                  )}
+                >
+                  <span className="font-semibold truncate pr-1">{stat.label}</span>
+                  <span className="font-black text-xs font-mono">
+                    <AnimateNumber value={stat.value} />
+                  </span>
                 </div>
-              ) : (
-                todaySpecializations.map((task) => {
-                  const isDone = !!completedTasks[task.id]
-                  return (
-                    <div 
-                      key={task.id}
-                      onClick={() => handleToggleTask(task.id, !isDone)}
-                      className={cn(
-                        "flex items-start justify-between p-3 rounded-xl border transition-all duration-300 cursor-pointer select-none gap-3 group shadow-2xs hover:shadow-xs",
-                        isDone 
-                          ? "bg-emerald-50/70 border-emerald-300 text-foreground dark:bg-emerald-950/20 dark:border-emerald-500/30 shadow-[0_0_12px_rgba(16,185,129,0.08)]" 
-                          : "bg-card border-border hover:border-primary/40 hover:bg-secondary/40 text-muted-foreground hover:text-foreground"
-                      )}
-                    >
-                      <div className="flex items-start gap-2.5 min-w-0 pr-1">
-                        <div className={cn(
-                          "w-5 h-5 rounded-md border flex items-center justify-center flex-shrink-0 transition-all mt-0.5",
-                          isDone 
-                            ? "border-emerald-500 bg-emerald-500/20 text-emerald-600 dark:text-emerald-300 dark:border-emerald-400 dark:bg-emerald-500/30 shadow-[0_0_10px_rgba(16,185,129,0.4)]" 
-                            : "border-slate-300 dark:border-slate-700 bg-secondary/30 group-hover:border-primary/60"
-                        )}>
-                          {isDone ? (
-                            <Check className="w-3.5 h-3.5 stroke-[3] text-emerald-600 dark:text-emerald-300" />
-                          ) : (
-                            <div className="w-1.5 h-1.5 rounded-full bg-slate-400/40 group-hover:bg-primary/50 transition-colors" />
-                          )}
-                        </div>
-                        <div className="min-w-0">
-                          <span className={cn(
-                            "text-[11px] font-bold tracking-wide text-left leading-relaxed block break-words transition-colors",
-                            isDone ? "text-foreground" : "text-foreground/90 group-hover:text-foreground"
-                          )}>{task.label}</span>
-                          {isDone && (
-                            <span className="text-[9px] font-mono text-emerald-600 dark:text-emerald-400 font-bold tracking-wider inline-flex items-center gap-1 mt-0.5">
-                              ✓ [STATUS: CLEARED]
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                      
-                      <div className={cn(
-                        "text-[8px] sm:text-[9px] font-mono font-bold px-2 py-0.5 rounded border flex-shrink-0 mt-0.5",
-                        isDone
-                          ? "bg-emerald-100 text-emerald-800 border-emerald-300 dark:bg-emerald-500/15 dark:border-emerald-500/30 dark:text-emerald-300"
-                          : "bg-secondary border-border text-muted-foreground"
-                      )}>
-                        {Object.entries(task.rewards).map(([stat, val]) => `+${val.toFixed(1)} ${getShortStatName(stat)}`).join(' ')}
-                      </div>
-                    </div>
-                  )
-                })
-              )}
+              ))}
             </div>
           </motion.div>
         </div>

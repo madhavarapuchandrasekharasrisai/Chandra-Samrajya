@@ -227,8 +227,12 @@ ${expenseDetails || '- No expenses recorded yet'}
             {/* Header */}
             <div className="p-4 bg-gradient-to-r from-amber-500/10 to-transparent border-b border-border flex items-center justify-between">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-primary/10 border border-primary/15 flex items-center justify-center">
-                  <Sparkles className="w-4 h-4 text-amber-400" />
+                <div className="w-8 h-8 rounded-xl overflow-hidden border border-amber-400/80 shadow-[0_0_10px_rgba(245,158,11,0.4)] flex-shrink-0 bg-black">
+                  <img
+                    src="/images/karna-ai.png"
+                    alt="Karna"
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <div>
                   <h3 className="text-foreground text-sm font-semibold tracking-wide">Karna AI Advisor</h3>
@@ -262,8 +266,12 @@ ${expenseDetails || '- No expenses recorded yet'}
             >
               {messages.length === 0 && (
                 <div className="flex flex-col items-center justify-center h-full text-center py-6">
-                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/10 flex items-center justify-center mb-4 gold-glow">
-                    <Bot className="w-7 h-7 text-amber-400" />
+                  <div className="w-16 h-16 rounded-2xl overflow-hidden border border-amber-400 shadow-[0_0_20px_rgba(245,158,11,0.4)] mb-3 bg-black">
+                    <img
+                      src="/images/karna-ai.png"
+                      alt="Karna"
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                   <h4 className="text-foreground/70 text-xs font-semibold mb-1">Karna is listening</h4>
                   <p className="text-muted-foreground/60 text-[10px] max-w-[240px] mb-4">

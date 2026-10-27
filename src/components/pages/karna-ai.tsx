@@ -187,13 +187,25 @@ ${todoDetails || '- No active tasks focus scheduled today.'}
         animate={{ opacity: 1, y: 0 }}
         className="mb-6"
       >
-        <div className="flex items-center gap-3 mb-2">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary/15 to-primary/5 border border-primary/20 flex items-center justify-center">
-            <Sparkles className="w-6 h-6 text-primary" />
+        <div className="flex items-center gap-3.5 mb-2">
+          <div className="relative group">
+            <div className="w-13 h-13 rounded-2xl overflow-hidden border-2 border-amber-400/80 shadow-[0_0_20px_rgba(245,158,11,0.4)] ring-2 ring-primary/30 bg-black">
+              <img
+                src="/images/karna-ai.png"
+                alt="Karna AI Strategic Intelligence"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+            </div>
+            <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-400 border-2 border-background animate-pulse" />
           </div>
           <div>
-            <h1 className="gold-text font-display text-2xl font-bold tracking-wider uppercase">Karna AI</h1>
-            <p className="text-muted-foreground text-sm font-mono">System Intelligence • Strategic Advisor</p>
+            <div className="flex items-center gap-2">
+              <h1 className="gold-text font-display text-2xl font-bold tracking-wider uppercase">Karna AI</h1>
+              <span className="text-[9px] font-mono font-bold text-amber-600 dark:text-amber-400 bg-amber-500/10 border border-amber-500/30 px-2 py-0.5 rounded-full uppercase tracking-widest">
+                STRATEGIC INTELLIGENCE
+              </span>
+            </div>
+            <p className="text-muted-foreground text-xs font-mono mt-0.5">Sovereign Financial Architect • Empire Advisory</p>
           </div>
         </div>
 
@@ -219,12 +231,21 @@ ${todoDetails || '- No active tasks focus scheduled today.'}
               animate={{ opacity: 1 }}
               className="flex flex-col items-center justify-center h-full text-center py-12"
             >
-              <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/10 flex items-center justify-center mb-6 gold-glow">
-                <Bot className="w-10 h-10 text-primary" />
+              <div className="relative group mb-5">
+                <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-3xl overflow-hidden border-2 border-amber-400 shadow-[0_0_35px_rgba(245,158,11,0.5)] ring-4 ring-primary/20 bg-black">
+                  <img
+                    src="/images/karna-ai.png"
+                    alt="Karna AI Strategic Intelligence"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+                <span className="absolute -bottom-1 -right-1 px-2 py-0.5 rounded-full bg-emerald-500 text-black font-mono font-bold text-[8px] uppercase tracking-wider shadow">
+                  ONLINE
+                </span>
               </div>
-              <h3 className="text-muted-foreground text-lg font-medium mb-2">Karna is ready</h3>
-              <p className="text-muted-foreground/60 text-sm max-w-md mb-8">
-                I have full access to your financial data, client pipeline, and spending patterns. Ask me anything about your wealth strategy.
+              <h3 className="text-foreground text-lg font-bold font-display uppercase tracking-wider mb-2">Karna AI Strategic Oracle</h3>
+              <p className="text-muted-foreground text-xs sm:text-sm max-w-md mb-8 leading-relaxed">
+                Synchronized with your real-time revenue streams, client pipeline, and daily biometrics. Ask me anything about scaling your wealth, client conversion, or strategic priority.
               </p>
 
               {/* Suggested Prompts */}
@@ -258,15 +279,19 @@ ${todoDetails || '- No active tasks focus scheduled today.'}
                 )}
               >
                 {msg.role === 'assistant' && (
-                  <div className="w-8 h-8 rounded-xl bg-primary/10 border border-primary/10 flex items-center justify-center flex-shrink-0 mt-1">
-                    <Sparkles className="w-4 h-4 text-primary" />
+                  <div className="w-8 h-8 rounded-xl overflow-hidden border border-amber-400/80 shadow-[0_0_10px_rgba(245,158,11,0.35)] flex-shrink-0 mt-0.5 bg-black">
+                    <img
+                      src="/images/karna-ai.png"
+                      alt="Karna"
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                 )}
                 <div
                   className={cn(
                     'max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-relaxed',
                     msg.role === 'user'
-                      ? 'bg-primary/10 border border-primary/10 text-foreground'
+                      ? 'bg-primary/10 border border-primary/20 text-foreground'
                       : 'bg-secondary/50 border border-border text-foreground/80'
                   )}
                 >
@@ -282,8 +307,12 @@ ${todoDetails || '- No active tasks focus scheduled today.'}
                   </span>
                 </div>
                 {msg.role === 'user' && (
-                  <div className="w-8 h-8 rounded-xl bg-secondary/50 border border-border flex items-center justify-center flex-shrink-0 mt-1">
-                    <User className="w-4 h-4 text-muted-foreground" />
+                  <div className="w-8 h-8 rounded-xl overflow-hidden border border-cyan-400/80 shadow-[0_0_10px_rgba(6,182,212,0.35)] flex-shrink-0 mt-0.5 bg-black">
+                    <img
+                      src="/images/solo-leveling/jinwoo-awakened.jpg"
+                      alt="Chandra"
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                 )}
               </motion.div>
@@ -296,8 +325,12 @@ ${todoDetails || '- No active tasks focus scheduled today.'}
               animate={{ opacity: 1, y: 0 }}
               className="flex gap-3 items-start"
             >
-              <div className="w-8 h-8 rounded-xl bg-primary/10 border border-primary/10 flex items-center justify-center flex-shrink-0">
-                <Sparkles className="w-4 h-4 text-primary animate-pulse" />
+              <div className="w-8 h-8 rounded-xl overflow-hidden border border-amber-400/80 shadow-[0_0_10px_rgba(245,158,11,0.35)] flex-shrink-0 animate-pulse bg-black">
+                <img
+                  src="/images/karna-ai.png"
+                  alt="Karna"
+                  className="w-full h-full object-cover"
+                />
               </div>
               <div className="bg-secondary/50 border border-border rounded-2xl px-4 py-3">
                 <div className="flex items-center gap-2">
