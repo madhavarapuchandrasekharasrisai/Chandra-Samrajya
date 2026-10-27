@@ -10,11 +10,13 @@ import {
   Flame,
   Zap,
   Shield,
+  ShieldAlert,
   Activity,
   Award,
   AlertTriangle,
   RotateCcw,
   CheckCircle,
+  Check,
   HelpCircle,
   TrendingUp,
   Brain,
@@ -1345,34 +1347,37 @@ export function SoloLeveling() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.05 }}
             className={cn(
-              "bg-white dark:bg-card border rounded-2xl p-4 md:p-5 space-y-3 md:space-y-4 overflow-y-auto max-h-[280px] lg:max-h-[240px] no-scrollbar transition-all duration-500 flex-shrink-0 shadow-[0_4px_20px_rgba(0,0,0,0.02)] dark:shadow-[0_1px_10px_rgba(255,255,255,0.02)] hover:translate-y-[-1px] hover:shadow-[0_10px_30px_rgba(0,0,0,0.04)] dark:hover:shadow-[0_2px_15px_rgba(255,255,255,0.05)]",
+              "bg-card border rounded-2xl p-4 md:p-5 space-y-3 transition-all duration-500 shadow-xs hover:shadow-md",
               stats.failureState === 1 ? "border-red-200 dark:border-red-500/15" : "border-border hover:border-primary/30"
             )}
           >
-            <span className="text-muted-foreground font-mono text-[10px] uppercase tracking-widest font-bold font-mono block">Biometrics Summary</span>
+            <div className="flex items-center justify-between">
+              <span className="text-muted-foreground font-mono text-[10px] uppercase tracking-widest font-bold block">Biometrics Summary</span>
+              <span className="text-[10px] font-mono text-primary font-bold">10 Attributes Synced</span>
+            </div>
             
-            <div className="grid grid-cols-2 gap-2 text-[10px] font-mono">
+            <div className="grid grid-cols-2 sm:grid-cols-2 gap-2 text-[10px] font-mono">
               {[
-                { label: 'Strength ⚔️', value: stats.strength, color: 'text-red-700 bg-red-50/70 border-red-100 dark:text-red-400 dark:bg-red-950/10 dark:border-red-500/5' },
-                { label: 'Agility ⚡', value: stats.agility, color: 'text-orange-700 bg-orange-50/70 border-orange-100 dark:text-orange-400 dark:bg-orange-950/10 dark:border-orange-500/5' },
-                { label: 'Intelligence 🧠', value: stats.intelligence, color: 'text-purple-700 bg-purple-50/70 border-purple-100 dark:text-purple-400 dark:bg-purple-950/10 dark:border-purple-500/5' },
-                { label: 'Memory 💾', value: stats.memory, color: 'text-indigo-700 bg-indigo-50/70 border-indigo-100 dark:text-indigo-400 dark:bg-indigo-950/10 dark:border-indigo-500/5' },
-                { label: 'Discipline 🛡️', value: stats.discipline, color: 'text-pink-700 bg-pink-50/70 border-pink-100 dark:text-pink-400 dark:bg-pink-950/10 dark:border-pink-500/5' },
-                { label: 'Focus 🎯', value: stats.focus, color: 'text-amber-700 bg-amber-50/70 border-amber-100 dark:text-amber-400 dark:bg-amber-950/10 dark:border-amber-500/5' },
-                { label: 'Communication 🗣️', value: stats.communication, color: 'text-cyan-700 bg-cyan-50/70 border-cyan-100 dark:text-cyan-400 dark:bg-cyan-950/10 dark:border-cyan-500/5' },
-                { label: 'Confidence 👑', value: stats.confidence, color: 'text-yellow-800 bg-yellow-50/70 border-yellow-100 dark:text-yellow-400 dark:bg-yellow-950/10 dark:border-yellow-500/5' },
-                { label: 'Stability ☯️', value: stats.stability, color: 'text-emerald-700 bg-emerald-50/70 border-emerald-100 dark:text-emerald-400 dark:bg-emerald-950/10 dark:border-emerald-500/5' },
-                { label: 'Career XP 💼', value: stats.careerXp, color: 'text-blue-700 bg-blue-50/70 border-blue-100 dark:text-blue-400 dark:bg-blue-950/10 dark:border-blue-500/5' },
+                { label: 'Strength ⚔️', value: stats.strength, color: 'text-red-700 bg-red-50/80 border-red-200 dark:text-red-400 dark:bg-red-950/20 dark:border-red-500/20' },
+                { label: 'Agility ⚡', value: stats.agility, color: 'text-orange-700 bg-orange-50/80 border-orange-200 dark:text-orange-400 dark:bg-orange-950/20 dark:border-orange-500/20' },
+                { label: 'Intelligence 🧠', value: stats.intelligence, color: 'text-purple-700 bg-purple-50/80 border-purple-200 dark:text-purple-400 dark:bg-purple-950/20 dark:border-purple-500/20' },
+                { label: 'Memory 💾', value: stats.memory, color: 'text-indigo-700 bg-indigo-50/80 border-indigo-200 dark:text-indigo-400 dark:bg-indigo-950/20 dark:border-indigo-500/20' },
+                { label: 'Discipline 🛡️', value: stats.discipline, color: 'text-pink-700 bg-pink-50/80 border-pink-200 dark:text-pink-400 dark:bg-pink-950/20 dark:border-pink-500/20' },
+                { label: 'Focus 🎯', value: stats.focus, color: 'text-amber-700 bg-amber-50/80 border-amber-200 dark:text-amber-400 dark:bg-amber-950/20 dark:border-amber-500/20' },
+                { label: 'Communication 🗣️', value: stats.communication, color: 'text-cyan-700 bg-cyan-50/80 border-cyan-200 dark:text-cyan-400 dark:bg-cyan-950/20 dark:border-cyan-500/20' },
+                { label: 'Confidence 👑', value: stats.confidence, color: 'text-yellow-800 bg-yellow-50/80 border-yellow-200 dark:text-yellow-400 dark:bg-yellow-950/20 dark:border-yellow-500/20' },
+                { label: 'Stability ☯️', value: stats.stability, color: 'text-emerald-700 bg-emerald-50/80 border-emerald-200 dark:text-emerald-400 dark:bg-emerald-950/20 dark:border-emerald-500/20' },
+                { label: 'Career XP 💼', value: stats.careerXp, color: 'text-blue-700 bg-blue-50/80 border-blue-200 dark:text-blue-400 dark:bg-blue-950/20 dark:border-blue-500/20' },
               ].map((stat, i) => (
                 <div 
                   key={i} 
                   className={cn(
-                    "flex items-center justify-between p-1.5 md:p-2 rounded-xl border transition-all duration-300 hover:opacity-90 select-none",
-                    stats.failureState === 1 ? "bg-red-950/5 border-red-500/5" : stat.color
+                    "flex items-center justify-between p-2 rounded-xl border transition-all duration-300 hover:scale-[1.02] shadow-2xs select-none",
+                    stats.failureState === 1 ? "bg-red-950/5 border-red-500/10 text-red-400" : stat.color
                   )}
                 >
-                  <span className="text-inherit opacity-75">{stat.label}</span>
-                  <span className="font-black text-xs">
+                  <span className="font-semibold truncate pr-1">{stat.label}</span>
+                  <span className="font-black text-xs font-mono">
                     <AnimateNumber value={stat.value} />
                   </span>
                 </div>
@@ -1386,10 +1391,10 @@ export function SoloLeveling() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
             className={cn(
-              "border rounded-2xl p-4 md:p-5 transition-all duration-500 flex-shrink-0 relative overflow-hidden bg-gradient-to-b from-secondary/40 to-card shadow-[0_4px_25px_rgba(59,130,246,0.06)]",
+              "border rounded-2xl p-4 md:p-5 transition-all duration-500 flex-shrink-0 relative overflow-hidden bg-card shadow-xs hover:shadow-md",
               stats.failureState === 1 
-                ? "border-red-500/20 bg-red-950/10" 
-                : "border-primary/30 hover:border-primary/50 shadow-[0_0_20px_rgba(59,130,246,0.08)]"
+                ? "border-red-500/30 bg-red-950/10" 
+                : "border-primary/30 hover:border-primary/50 shadow-[0_0_25px_rgba(59,130,246,0.06)]"
             )}
           >
             {/* System brackets */}
@@ -1404,9 +1409,9 @@ export function SoloLeveling() {
                 </h3>
               </div>
               <span className={cn(
-                "text-[10px] sm:text-xs font-mono font-black px-2.5 py-1 rounded-lg border",
+                "text-[10px] sm:text-xs font-mono font-black px-2.5 py-1 rounded-lg border shadow-2xs",
                 completedCoreCount === totalCore
-                  ? "bg-emerald-500/15 border-emerald-500/30 text-emerald-400"
+                  ? "bg-emerald-50 text-emerald-700 border-emerald-300 dark:bg-emerald-500/15 dark:border-emerald-500/30 dark:text-emerald-400"
                   : "bg-primary/10 border-primary/25 text-primary"
               )}>
                 [{completedCoreCount}/{totalCore}] CLEARED
@@ -1414,8 +1419,8 @@ export function SoloLeveling() {
             </div>
 
             {/* Penalty Zone Warning Alert */}
-            <div className="mb-3 p-2 rounded-xl bg-red-950/20 border border-red-500/20 text-[9px] sm:text-[10px] font-mono text-red-400 flex items-center gap-2">
-              <AlertTriangle className="w-3.5 h-3.5 flex-shrink-0 animate-pulse text-red-400" />
+            <div className="mb-3 p-2.5 rounded-xl bg-red-50 border border-red-200 dark:bg-red-950/30 dark:border-red-500/30 text-[9px] sm:text-[10px] font-mono text-red-700 dark:text-red-400 flex items-center gap-2 shadow-2xs">
+              <AlertTriangle className="w-3.5 h-3.5 flex-shrink-0 animate-pulse text-red-600 dark:text-red-400" />
               <span>PENALTY WARNING: Incomplete protocols before 24:00 trigger Penalty Zone banishment.</span>
             </div>
 
@@ -1427,26 +1432,33 @@ export function SoloLeveling() {
                     key={task.id}
                     onClick={() => handleToggleTask(task.id, !isDone)}
                     className={cn(
-                      "flex items-start justify-between p-3 rounded-xl border transition-all duration-300 cursor-pointer select-none gap-3 group",
+                      "flex items-start justify-between p-3 rounded-xl border transition-all duration-300 cursor-pointer select-none gap-3 group shadow-2xs hover:shadow-xs",
                       isDone 
-                        ? "bg-primary/15 border-primary/40 text-foreground shadow-[0_0_12px_rgba(59,130,246,0.12)]" 
-                        : "bg-card/70 border-border hover:border-primary/40 hover:bg-secondary/40 text-muted-foreground"
+                        ? "bg-emerald-50/70 border-emerald-300 text-foreground dark:bg-emerald-950/20 dark:border-emerald-500/30 shadow-[0_0_12px_rgba(16,185,129,0.08)]" 
+                        : "bg-card border-border hover:border-primary/40 hover:bg-secondary/40 text-muted-foreground hover:text-foreground"
                     )}
                   >
                     <div className="flex items-start gap-2.5 min-w-0 pr-1">
                       <div className={cn(
-                        "w-5 h-5 rounded-lg border flex items-center justify-center flex-shrink-0 transition-all mt-0.5",
+                        "w-5 h-5 rounded-md border flex items-center justify-center flex-shrink-0 transition-all mt-0.5",
                         isDone 
-                          ? "border-primary bg-primary text-black shadow-[0_0_10px_rgba(59,130,246,0.6)]" 
-                          : "border-border/80 group-hover:border-primary/60"
+                          ? "border-emerald-500 bg-emerald-500/20 text-emerald-600 dark:text-emerald-300 dark:border-emerald-400 dark:bg-emerald-500/30 shadow-[0_0_10px_rgba(16,185,129,0.4)]" 
+                          : "border-slate-300 dark:border-slate-700 bg-secondary/30 group-hover:border-primary/60"
                       )}>
-                        {isDone && <CheckCircle className="w-3.5 h-3.5 text-black stroke-[3]" />}
+                        {isDone ? (
+                          <Check className="w-3.5 h-3.5 stroke-[3] text-emerald-600 dark:text-emerald-300" />
+                        ) : (
+                          <div className="w-1.5 h-1.5 rounded-full bg-slate-400/40 group-hover:bg-primary/50 transition-colors" />
+                        )}
                       </div>
                       <div className="min-w-0">
-                        <span className="text-[11px] font-bold tracking-wide text-left leading-relaxed block break-words">{task.label}</span>
+                        <span className={cn(
+                          "text-[11px] font-bold tracking-wide text-left leading-relaxed block break-words transition-colors",
+                          isDone ? "text-foreground" : "text-foreground/90 group-hover:text-foreground"
+                        )}>{task.label}</span>
                         {isDone && (
-                          <span className="text-[9px] font-mono text-cyan-400 font-bold tracking-wider inline-block">
-                            [STATUS: CLEARED]
+                          <span className="text-[9px] font-mono text-emerald-600 dark:text-emerald-400 font-bold tracking-wider inline-flex items-center gap-1 mt-0.5">
+                            ✓ [STATUS: CLEARED]
                           </span>
                         )}
                       </div>
@@ -1455,8 +1467,8 @@ export function SoloLeveling() {
                     <div className={cn(
                       "text-[8px] sm:text-[9px] font-mono font-bold px-2 py-0.5 rounded border flex-shrink-0 mt-0.5",
                       isDone
-                        ? "bg-cyan-500/10 border-cyan-500/25 text-cyan-400"
-                        : "bg-secondary/60 border-border/60 text-muted-foreground"
+                        ? "bg-emerald-100 text-emerald-800 border-emerald-300 dark:bg-emerald-500/15 dark:border-emerald-500/30 dark:text-emerald-300"
+                        : "bg-secondary border-border text-muted-foreground"
                     )}>
                       {Object.entries(task.rewards).map(([stat, val]) => `+${val.toFixed(1)} ${getShortStatName(stat)}`).join(' ')}
                     </div>
@@ -1521,26 +1533,33 @@ export function SoloLeveling() {
                       key={task.id}
                       onClick={() => handleToggleTask(task.id, !isDone)}
                       className={cn(
-                        "flex items-start justify-between p-3 rounded-xl border transition-all duration-300 cursor-pointer select-none gap-3 group",
+                        "flex items-start justify-between p-3 rounded-xl border transition-all duration-300 cursor-pointer select-none gap-3 group shadow-2xs hover:shadow-xs",
                         isDone 
-                          ? "bg-primary/15 border-primary/40 text-foreground shadow-[0_0_12px_rgba(59,130,246,0.12)]" 
-                          : "bg-card/70 border-border hover:border-primary/40 hover:bg-secondary/40 text-muted-foreground"
+                          ? "bg-emerald-50/70 border-emerald-300 text-foreground dark:bg-emerald-950/20 dark:border-emerald-500/30 shadow-[0_0_12px_rgba(16,185,129,0.08)]" 
+                          : "bg-card border-border hover:border-primary/40 hover:bg-secondary/40 text-muted-foreground hover:text-foreground"
                       )}
                     >
                       <div className="flex items-start gap-2.5 min-w-0 pr-1">
                         <div className={cn(
-                          "w-5 h-5 rounded-lg border flex items-center justify-center flex-shrink-0 transition-all mt-0.5",
+                          "w-5 h-5 rounded-md border flex items-center justify-center flex-shrink-0 transition-all mt-0.5",
                           isDone 
-                            ? "border-primary bg-primary text-black shadow-[0_0_10px_rgba(59,130,246,0.6)]" 
-                            : "border-border/80 group-hover:border-primary/60"
+                            ? "border-emerald-500 bg-emerald-500/20 text-emerald-600 dark:text-emerald-300 dark:border-emerald-400 dark:bg-emerald-500/30 shadow-[0_0_10px_rgba(16,185,129,0.4)]" 
+                            : "border-slate-300 dark:border-slate-700 bg-secondary/30 group-hover:border-primary/60"
                         )}>
-                          {isDone && <CheckCircle className="w-3.5 h-3.5 text-black stroke-[3]" />}
+                          {isDone ? (
+                            <Check className="w-3.5 h-3.5 stroke-[3] text-emerald-600 dark:text-emerald-300" />
+                          ) : (
+                            <div className="w-1.5 h-1.5 rounded-full bg-slate-400/40 group-hover:bg-primary/50 transition-colors" />
+                          )}
                         </div>
                         <div className="min-w-0">
-                          <span className="text-[11px] font-bold tracking-wide text-left leading-relaxed block break-words">{task.label}</span>
+                          <span className={cn(
+                            "text-[11px] font-bold tracking-wide text-left leading-relaxed block break-words transition-colors",
+                            isDone ? "text-foreground" : "text-foreground/90 group-hover:text-foreground"
+                          )}>{task.label}</span>
                           {isDone && (
-                            <span className="text-[9px] font-mono text-cyan-400 font-bold tracking-wider inline-block">
-                              [STATUS: CLEARED]
+                            <span className="text-[9px] font-mono text-emerald-600 dark:text-emerald-400 font-bold tracking-wider inline-flex items-center gap-1 mt-0.5">
+                              ✓ [STATUS: CLEARED]
                             </span>
                           )}
                         </div>
@@ -1549,8 +1568,8 @@ export function SoloLeveling() {
                       <div className={cn(
                         "text-[8px] sm:text-[9px] font-mono font-bold px-2 py-0.5 rounded border flex-shrink-0 mt-0.5",
                         isDone
-                          ? "bg-cyan-500/10 border-cyan-500/25 text-cyan-400"
-                          : "bg-secondary/60 border-border/60 text-muted-foreground"
+                          ? "bg-emerald-100 text-emerald-800 border-emerald-300 dark:bg-emerald-500/15 dark:border-emerald-500/30 dark:text-emerald-300"
+                          : "bg-secondary border-border text-muted-foreground"
                       )}>
                         {Object.entries(task.rewards).map(([stat, val]) => `+${val.toFixed(1)} ${getShortStatName(stat)}`).join(' ')}
                       </div>
@@ -1563,66 +1582,70 @@ export function SoloLeveling() {
         </div>
       </div>
 
-      {/* ─── NEW SECTION: 5 POWER CATEGORIES & CIRCULAR PROGRESS CARDS ─── */}
+      {/* ─── 5 POWER CATEGORIES & SPECIALIZATION APIS ─── */}
       <motion.div
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.15 }}
-        className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 lg:gap-3"
+        className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 lg:gap-3.5"
       >
         {[
           { 
-            title: 'Physical Power', 
+            title: 'Physical API', 
             val: stats.physicalPower, 
-            formula: '(Str + Agi) * 2', 
+            formula: '(Str + Agi) × 2', 
             color: 'from-red-500 to-orange-500 shadow-red-500/10',
-            textColor: 'text-red-400',
+            textColor: 'text-red-600 dark:text-red-400',
+            badgeBg: 'bg-red-50 text-red-700 border-red-200 dark:bg-red-950/30 dark:text-red-400 dark:border-red-500/20',
             stroke: '#ef4444',
             icon: <Activity className="w-4 h-4" />,
             max: 3996
           },
           { 
-            title: 'Mental Power', 
+            title: 'Mental API', 
             val: stats.mentalPower, 
-            formula: '(Int + Mem + Foc) * 1.8', 
+            formula: '(Int + Mem + Foc) × 1.8', 
             color: 'from-purple-500 to-indigo-500 shadow-indigo-500/10',
-            textColor: 'text-purple-400',
+            textColor: 'text-purple-600 dark:text-purple-400',
+            badgeBg: 'bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-950/30 dark:text-purple-400 dark:border-purple-500/20',
             stroke: '#a855f7',
             icon: <Brain className="w-4 h-4" />,
             max: 5394
           },
           { 
-            title: 'Discipline Power', 
+            title: 'Biometric API', 
             val: stats.disciplinePower, 
-            formula: '(Disc + Stab) * 2.2', 
-            color: 'from-pink-500 to-rose-500 shadow-pink-500/10',
-            textColor: 'text-pink-400',
-            stroke: '#ec4899',
+            formula: '(Disc + Stab) × 2.2', 
+            color: 'from-emerald-500 to-teal-500 shadow-emerald-500/10',
+            textColor: 'text-emerald-600 dark:text-emerald-400',
+            badgeBg: 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/30 dark:text-emerald-400 dark:border-emerald-500/20',
+            stroke: '#10b981',
             icon: <Shield className="w-4 h-4" />,
             max: 4395
           },
           { 
-            title: 'Communication Power', 
+            title: 'Communication API', 
             val: stats.communicationPower, 
-            formula: '(Comm + Conf) * 1.5', 
-            color: 'from-cyan-500 to-teal-500 shadow-cyan-500/10',
-            textColor: 'text-cyan-400',
+            formula: '(Comm + Conf) × 1.5', 
+            color: 'from-cyan-500 to-sky-500 shadow-cyan-500/10',
+            textColor: 'text-cyan-600 dark:text-cyan-400',
+            badgeBg: 'bg-cyan-50 text-cyan-700 border-cyan-200 dark:bg-cyan-950/30 dark:text-cyan-400 dark:border-cyan-500/20',
             stroke: '#06b6d4',
             icon: <MessageSquare className="w-4 h-4" />,
             max: 2997
           },
           { 
-            title: 'Career Power', 
+            title: 'Career API', 
             val: stats.careerPower, 
-            formula: 'Exp * 2', 
-            color: 'from-blue-500 to-sky-500 shadow-blue-500/10',
-            textColor: 'text-blue-400',
+            formula: 'Exp × 2', 
+            color: 'from-blue-500 to-indigo-500 shadow-blue-500/10',
+            textColor: 'text-blue-600 dark:text-blue-400',
+            badgeBg: 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/30 dark:text-blue-400 dark:border-blue-500/20',
             stroke: '#3b82f6',
             icon: <Briefcase className="w-4 h-4" />,
             max: 1998
           },
         ].map((cat, i) => {
-          // Circular progress calculations
           const radius = 22
           const circumference = 2 * Math.PI * radius
           const percent = Math.min(100, (cat.val / cat.max) * 100)
@@ -1632,25 +1655,31 @@ export function SoloLeveling() {
             <div 
               key={i}
               className={cn(
-                "bg-white dark:bg-card border rounded-xl p-3 md:p-4 flex flex-col justify-between items-center text-center relative overflow-hidden transition-all duration-300 hover:translate-y-[-2px] shadow-[0_4px_20px_rgba(0,0,0,0.02)] dark:shadow-[0_1px_10px_rgba(255,255,255,0.02)]",
-                stats.failureState === 1 ? "border-red-200 dark:border-red-500/15 shadow-none" : "border-border hover:border-primary/30"
+                "bg-card border rounded-2xl p-4 flex flex-col justify-between items-center text-center relative overflow-hidden transition-all duration-300 hover:translate-y-[-2px] shadow-xs hover:shadow-md",
+                stats.failureState === 1 ? "border-red-200 dark:border-red-500/20" : "border-border hover:border-primary/40"
               )}
             >
-              {/* Top info */}
+              {/* Top ambient color edge */}
+              <div 
+                className="absolute top-0 left-0 right-0 h-[2px] opacity-75"
+                style={{ backgroundColor: cat.stroke }}
+              />
+
+              {/* Top header badge */}
               <div className="w-full flex justify-between items-center mb-1">
-                <span className="text-[10px] font-mono text-muted-foreground/60 font-bold uppercase">{cat.title.split(' ')[0]} API</span>
-                <span className={cn("p-1 rounded bg-secondary/50 text-[9px] font-mono", cat.textColor)}>{cat.icon}</span>
+                <span className="text-[10px] font-mono text-muted-foreground font-bold uppercase tracking-wider">{cat.title}</span>
+                <span className={cn("p-1.5 rounded-lg border text-[10px] shadow-2xs", cat.badgeBg)}>{cat.icon}</span>
               </div>
 
               {/* Center Circle SVG */}
-              <div className="relative w-16 h-16 flex items-center justify-center my-2">
-                <svg className="w-full h-full transform -rotate-90">
+              <div className="relative w-18 h-18 flex items-center justify-center my-1.5">
+                <svg className="w-16 h-16 transform -rotate-90">
                   {/* Track */}
                   <circle
                     cx="32"
                     cy="32"
                     r={radius}
-                    className="stroke-white/[0.04] fill-none"
+                    className="stroke-slate-200 dark:stroke-slate-800 fill-none"
                     strokeWidth="3.5"
                   />
                   {/* Progress Indicator */}
@@ -1668,15 +1697,14 @@ export function SoloLeveling() {
                     strokeLinecap="round"
                   />
                 </svg>
-                <div className="absolute text-xs font-black font-mono text-foreground select-none">
+                <div className="absolute text-sm font-black font-mono text-foreground select-none">
                   <AnimateNumber value={cat.val} />
                 </div>
               </div>
 
               {/* Bottom detail */}
-              <div className="w-full mt-1">
-                <p className="text-[10px] text-white/55 font-bold font-mono tracking-wide">{cat.title}</p>
-                <p className="text-[8px] text-muted-foreground/40 font-mono font-medium">{cat.formula}</p>
+              <div className="w-full mt-1 border-t border-border/50 pt-1.5">
+                <p className="text-[9px] text-muted-foreground font-mono font-bold tracking-tight">{cat.formula}</p>
               </div>
             </div>
           )
@@ -1801,70 +1829,163 @@ export function SoloLeveling() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Milestone 1: Iron Body */}
-          <div className={cn(
-            "border rounded-xl p-3 md:p-4 transition-all duration-300 flex items-center gap-3 md:gap-4 relative overflow-hidden",
-            hasIronBody 
-              ? "bg-red-500/[0.03] border-red-500/20 shadow-[0_0_15px_rgba(239,68,68,0.03)]" 
-              : "bg-white/[0.01] border-border opacity-50"
-          )}>
-            <div className={cn(
-              "w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center border flex-shrink-0 transition-all",
-              hasIronBody ? "bg-red-950/20 border-red-500/20 text-red-400" : "bg-black border-border text-muted-foreground/40"
-            )}>
-              {hasIronBody ? <Sparkles className="w-5.5 h-5.5 md:w-6 md:h-6 animate-pulse" /> : <Lock className="w-4.5 h-4.5 md:w-5 md:h-5" />}
-            </div>
-            <div>
-              <div className="flex items-center gap-1.5 flex-wrap">
-                <h4 className="text-xs font-black font-mono tracking-wide text-foreground">IRON BODY</h4>
-                {hasIronBody && <span className="bg-red-500/10 text-red-500 border border-red-500/20 text-[8px] px-1 py-0.5 rounded font-bold font-mono">UNLOCKED</span>}
+          {(() => {
+            const currentVal = stats.strength || 0
+            const targetVal = 100
+            const pct = Math.min(100, Math.round((currentVal / targetVal) * 100))
+            return (
+              <div className={cn(
+                "border rounded-xl p-4 transition-all duration-300 relative overflow-hidden flex flex-col justify-between",
+                hasIronBody 
+                  ? "bg-gradient-to-br from-red-500/10 via-red-500/[0.03] to-transparent border-red-500/40 shadow-[0_0_25px_rgba(239,68,68,0.15)] ring-1 ring-red-500/30" 
+                  : "bg-card dark:bg-card/60 border-border/80 hover:border-red-500/30 hover:shadow-[0_4px_20px_rgba(239,68,68,0.06)]"
+              )}>
+                <div className="flex items-start gap-3.5 mb-3">
+                  <div className={cn(
+                    "w-11 h-11 rounded-xl flex items-center justify-center border flex-shrink-0 transition-all",
+                    hasIronBody ? "bg-red-500/20 border-red-500/40 text-red-500 shadow-[0_0_15px_rgba(239,68,68,0.3)]" : "bg-red-500/10 border-red-500/20 text-red-400"
+                  )}>
+                    {hasIronBody ? <Sparkles className="w-5 h-5 animate-pulse text-red-400" /> : <Flame className="w-5 h-5 text-red-400" />}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between gap-1 flex-wrap">
+                      <h4 className="text-xs font-black font-mono tracking-wide text-foreground">IRON BODY</h4>
+                      {hasIronBody ? (
+                        <span className="bg-red-500/20 text-red-600 dark:text-red-400 border border-red-500/30 text-[8px] px-1.5 py-0.5 rounded-full font-bold font-mono">
+                          UNLOCKED
+                        </span>
+                      ) : (
+                        <span className="bg-secondary text-muted-foreground border border-border text-[8px] px-1.5 py-0.5 rounded-full font-bold font-mono">
+                          {pct}%
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-[10px] text-muted-foreground font-mono mt-0.5">Threshold: <span className="text-red-500 dark:text-red-400 font-bold">100 STR</span> (+50 XP, +0.05 Multiplier)</p>
+                  </div>
+                </div>
+
+                {/* Progress bar */}
+                <div className="space-y-1">
+                  <div className="flex justify-between text-[9px] font-mono">
+                    <span className="text-muted-foreground">Current: {currentVal} / {targetVal} STR</span>
+                    <span className={cn("font-bold", hasIronBody ? "text-red-500" : "text-foreground")}>{pct}%</span>
+                  </div>
+                  <div className="h-1.5 bg-secondary/80 rounded-full overflow-hidden">
+                    <div
+                      className={cn("h-full rounded-full transition-all duration-700", hasIronBody ? "bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)]" : "bg-red-500/70")}
+                      style={{ width: `${pct}%` }}
+                    />
+                  </div>
+                </div>
               </div>
-              <p className="text-[10px] text-muted-foreground font-mono mt-0.5">Strength Threshold: <span className="text-red-400 font-bold">100</span> (Gains: +50 Exp, permanent +0.05 Multiplier)</p>
-            </div>
-          </div>
+            )
+          })()}
 
           {/* Milestone 2: Unbreakable Mind */}
-          <div className={cn(
-            "border rounded-xl p-3 md:p-4 transition-all duration-300 flex items-center gap-3 md:gap-4 relative overflow-hidden",
-            hasUnbreakableMind 
-              ? "bg-pink-500/[0.03] border-pink-500/20 shadow-[0_0_15px_rgba(236,72,153,0.03)]" 
-              : "bg-white/[0.01] border-border opacity-50"
-          )}>
-            <div className={cn(
-              "w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center border flex-shrink-0 transition-all",
-              hasUnbreakableMind ? "bg-pink-950/20 border-pink-500/20 text-pink-400" : "bg-black border-border text-muted-foreground/40"
-            )}>
-              {hasUnbreakableMind ? <Brain className="w-5.5 h-5.5 md:w-6 md:h-6 animate-pulse" /> : <Lock className="w-4.5 h-4.5 md:w-5 md:h-5" />}
-            </div>
-            <div>
-              <div className="flex items-center gap-1.5 flex-wrap">
-                <h4 className="text-xs font-black font-mono tracking-wide text-foreground">UNBREAKABLE MIND</h4>
-                {hasUnbreakableMind && <span className="bg-pink-500/10 text-pink-500 border border-pink-500/20 text-[8px] px-1 py-0.5 rounded font-bold font-mono">UNLOCKED</span>}
+          {(() => {
+            const currentVal = stats.discipline || 0
+            const targetVal = 100
+            const pct = Math.min(100, Math.round((currentVal / targetVal) * 100))
+            return (
+              <div className={cn(
+                "border rounded-xl p-4 transition-all duration-300 relative overflow-hidden flex flex-col justify-between",
+                hasUnbreakableMind 
+                  ? "bg-gradient-to-br from-pink-500/10 via-pink-500/[0.03] to-transparent border-pink-500/40 shadow-[0_0_25px_rgba(236,72,153,0.15)] ring-1 ring-pink-500/30" 
+                  : "bg-card dark:bg-card/60 border-border/80 hover:border-pink-500/30 hover:shadow-[0_4px_20px_rgba(236,72,153,0.06)]"
+              )}>
+                <div className="flex items-start gap-3.5 mb-3">
+                  <div className={cn(
+                    "w-11 h-11 rounded-xl flex items-center justify-center border flex-shrink-0 transition-all",
+                    hasUnbreakableMind ? "bg-pink-500/20 border-pink-500/40 text-pink-500 shadow-[0_0_15px_rgba(236,72,153,0.3)]" : "bg-pink-500/10 border-pink-500/20 text-pink-400"
+                  )}>
+                    {hasUnbreakableMind ? <Brain className="w-5 h-5 animate-pulse text-pink-400" /> : <Brain className="w-5 h-5 text-pink-400" />}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between gap-1 flex-wrap">
+                      <h4 className="text-xs font-black font-mono tracking-wide text-foreground">UNBREAKABLE MIND</h4>
+                      {hasUnbreakableMind ? (
+                        <span className="bg-pink-500/20 text-pink-600 dark:text-pink-400 border border-pink-500/30 text-[8px] px-1.5 py-0.5 rounded-full font-bold font-mono">
+                          UNLOCKED
+                        </span>
+                      ) : (
+                        <span className="bg-secondary text-muted-foreground border border-border text-[8px] px-1.5 py-0.5 rounded-full font-bold font-mono">
+                          {pct}%
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-[10px] text-muted-foreground font-mono mt-0.5">Threshold: <span className="text-pink-500 dark:text-pink-400 font-bold">100 DIS</span> (+50 XP, +0.05 Multiplier)</p>
+                  </div>
+                </div>
+
+                {/* Progress bar */}
+                <div className="space-y-1">
+                  <div className="flex justify-between text-[9px] font-mono">
+                    <span className="text-muted-foreground">Current: {currentVal} / {targetVal} DIS</span>
+                    <span className={cn("font-bold", hasUnbreakableMind ? "text-pink-500" : "text-foreground")}>{pct}%</span>
+                  </div>
+                  <div className="h-1.5 bg-secondary/80 rounded-full overflow-hidden">
+                    <div
+                      className={cn("h-full rounded-full transition-all duration-700", hasUnbreakableMind ? "bg-pink-500 shadow-[0_0_8px_rgba(236,72,153,0.6)]" : "bg-pink-500/70")}
+                      style={{ width: `${pct}%` }}
+                    />
+                  </div>
+                </div>
               </div>
-              <p className="text-[10px] text-muted-foreground font-mono mt-0.5">Discipline Threshold: <span className="text-pink-400 font-bold">100</span> (Gains: +50 Exp, permanent +0.05 Multiplier)</p>
-            </div>
-          </div>
+            )
+          })()}
 
           {/* Milestone 3: Tactical Genius */}
-          <div className={cn(
-            "border rounded-xl p-3 md:p-4 transition-all duration-300 flex items-center gap-3 md:gap-4 relative overflow-hidden",
-            hasTacticalGenius 
-              ? "bg-purple-500/[0.03] border-purple-500/20 shadow-[0_0_15px_rgba(168,85,247,0.03)]" 
-              : "bg-white/[0.01] border-border opacity-50"
-          )}>
-            <div className={cn(
-              "w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center border flex-shrink-0 transition-all",
-              hasTacticalGenius ? "bg-purple-950/20 border-purple-500/20 text-purple-400" : "bg-black border-border text-muted-foreground/40"
-            )}>
-              {hasTacticalGenius ? <Sparkles className="w-5.5 h-5.5 md:w-6 md:h-6 animate-pulse" /> : <Lock className="w-4.5 h-4.5 md:w-5 md:h-5" />}
-            </div>
-            <div>
-              <div className="flex items-center gap-1.5 flex-wrap">
-                <h4 className="text-xs font-black font-mono tracking-wide text-foreground">TACTICAL GENIUS</h4>
-                {hasTacticalGenius && <span className="bg-purple-500/10 text-purple-500 border border-purple-500/20 text-[8px] px-1 py-0.5 rounded font-bold font-mono">UNLOCKED</span>}
+          {(() => {
+            const currentVal = stats.intelligence || 0
+            const targetVal = 150
+            const pct = Math.min(100, Math.round((currentVal / targetVal) * 100))
+            return (
+              <div className={cn(
+                "border rounded-xl p-4 transition-all duration-300 relative overflow-hidden flex flex-col justify-between",
+                hasTacticalGenius 
+                  ? "bg-gradient-to-br from-purple-500/10 via-purple-500/[0.03] to-transparent border-purple-500/40 shadow-[0_0_25px_rgba(168,85,247,0.15)] ring-1 ring-purple-500/30" 
+                  : "bg-card dark:bg-card/60 border-border/80 hover:border-purple-500/30 hover:shadow-[0_4px_20px_rgba(168,85,247,0.06)]"
+              )}>
+                <div className="flex items-start gap-3.5 mb-3">
+                  <div className={cn(
+                    "w-11 h-11 rounded-xl flex items-center justify-center border flex-shrink-0 transition-all",
+                    hasTacticalGenius ? "bg-purple-500/20 border-purple-500/40 text-purple-500 shadow-[0_0_15px_rgba(168,85,247,0.3)]" : "bg-purple-500/10 border-purple-500/20 text-purple-400"
+                  )}>
+                    {hasTacticalGenius ? <Sparkles className="w-5 h-5 animate-pulse text-purple-400" /> : <ShieldAlert className="w-5 h-5 text-purple-400" />}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between gap-1 flex-wrap">
+                      <h4 className="text-xs font-black font-mono tracking-wide text-foreground">TACTICAL GENIUS</h4>
+                      {hasTacticalGenius ? (
+                        <span className="bg-purple-500/20 text-purple-600 dark:text-purple-400 border border-purple-500/30 text-[8px] px-1.5 py-0.5 rounded-full font-bold font-mono">
+                          UNLOCKED
+                        </span>
+                      ) : (
+                        <span className="bg-secondary text-muted-foreground border border-border text-[8px] px-1.5 py-0.5 rounded-full font-bold font-mono">
+                          {pct}%
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-[10px] text-muted-foreground font-mono mt-0.5">Threshold: <span className="text-purple-500 dark:text-purple-400 font-bold">150 INT</span> (+100 XP, +0.10 Multiplier)</p>
+                  </div>
+                </div>
+
+                {/* Progress bar */}
+                <div className="space-y-1">
+                  <div className="flex justify-between text-[9px] font-mono">
+                    <span className="text-muted-foreground">Current: {currentVal} / {targetVal} INT</span>
+                    <span className={cn("font-bold", hasTacticalGenius ? "text-purple-500" : "text-foreground")}>{pct}%</span>
+                  </div>
+                  <div className="h-1.5 bg-secondary/80 rounded-full overflow-hidden">
+                    <div
+                      className={cn("h-full rounded-full transition-all duration-700", hasTacticalGenius ? "bg-purple-500 shadow-[0_0_8px_rgba(168,85,247,0.6)]" : "bg-purple-500/70")}
+                      style={{ width: `${pct}%` }}
+                    />
+                  </div>
+                </div>
               </div>
-              <p className="text-[10px] text-muted-foreground font-mono mt-0.5">Intelligence Threshold: <span className="text-purple-400 font-bold">150</span> (Gains: +100 Exp, permanent +0.10 Multiplier)</p>
-            </div>
-          </div>
+            )
+          })()}
         </div>
       </motion.div>
 
@@ -1878,48 +1999,59 @@ export function SoloLeveling() {
           stats.failureState === 1 ? "border-red-200 dark:border-red-500/15" : "border-border hover:border-primary/30"
         )}
       >
-        <div className="absolute top-0 right-0 w-72 h-48 bg-purple-500/[0.015] rounded-full filter blur-[80px] pointer-events-none" />
+        <div className="absolute top-0 right-0 w-72 h-48 bg-purple-500/[0.03] rounded-full filter blur-[80px] pointer-events-none" />
         <div className="flex items-center gap-3 mb-4 relative z-10">
           <div className={cn(
             "p-1.5 rounded-lg border flex-shrink-0",
-            stats.failureState === 1 ? "bg-red-500/10 border-red-500/20 text-red-500" : "bg-purple-500/10 border-purple-500/20 text-purple-400"
+            stats.failureState === 1 ? "bg-red-500/10 border-red-500/20 text-red-500" : "bg-purple-500/10 border-purple-500/20 text-purple-500 dark:text-purple-400"
           )}>
             <Sparkles className="w-4 h-4" />
           </div>
           <div>
-            <h3 className="text-foreground/80 text-xs font-semibold tracking-wider font-mono uppercase">SOVEREIGN POWERS HALL</h3>
-            <p className="text-muted-foreground/50 text-[9px] font-mono">Fantasy abilities — locked until Sovereign milestone levels are achieved</p>
+            <h3 className="text-foreground/90 text-xs font-semibold tracking-wider font-mono uppercase">SOVEREIGN POWERS HALL</h3>
+            <p className="text-muted-foreground text-[9px] font-mono">Fantasy abilities — locked until Sovereign milestone levels are achieved</p>
           </div>
-          <div className="ml-auto text-[9px] font-mono text-muted-foreground/60">
+          <div className="ml-auto text-[10px] font-mono font-bold text-amber-600 dark:text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded-full">
             {getUnlockedPowers(stats.level || 1).length}/{FANTASY_POWERS.length} Unlocked
           </div>
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 mb-3 relative z-10">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2.5 mb-3 relative z-10">
           {FANTASY_POWERS.map((power) => {
             const unlocked = (stats.level || 1) >= power.level
             return (
               <div
                 key={power.id}
                 className={cn(
-                  "p-3 rounded-xl border transition-all duration-300 relative overflow-hidden",
+                  "p-3 rounded-xl border transition-all duration-300 relative overflow-hidden flex flex-col justify-between group",
                   unlocked
-                    ? cn("border", power.bgColor)
-                    : "bg-white/[0.01] border-border opacity-40 grayscale"
+                    ? cn("border-amber-500/40 bg-gradient-to-br from-amber-500/10 via-card to-card shadow-[0_0_20px_rgba(245,158,11,0.08)] ring-1 ring-amber-500/20")
+                    : "bg-secondary/30 dark:bg-secondary/15 border-border hover:border-primary/40 hover:bg-secondary/50"
                 )}
               >
-                <div className="text-xl mb-1">{power.icon}</div>
-                <div className={cn("text-[8px] font-mono font-black tracking-widest", unlocked ? power.color : "text-muted-foreground/40")}>
-                  {power.title}
-                </div>
-                <div className="text-muted-foreground text-[9px] font-semibold mt-0.5 leading-tight">{power.name}</div>
-                <div className="text-muted-foreground/40 text-[8px] font-mono mt-1">LV.{power.level}</div>
-                {unlocked ? (
-                  <div className="text-muted-foreground text-[8px] mt-1.5 leading-relaxed border-t border-border pt-1.5">{power.effect}</div>
-                ) : (
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <Lock className="w-4 h-4 text-muted-foreground/20" />
+                <div>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="text-xl filter drop-shadow">{power.icon}</span>
+                    {unlocked ? (
+                      <span className="px-1.5 py-0.5 rounded text-[7px] font-mono font-black tracking-wider bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
+                        ACTIVE
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[7px] font-mono font-bold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
+                        <Lock className="w-2 h-2" /> LV.{power.level}
+                      </span>
+                    )}
                   </div>
-                )}
+                  <div className={cn("text-[8px] font-mono font-black tracking-widest", unlocked ? power.color : "text-primary/70 dark:text-primary/60")}>
+                    {power.title}
+                  </div>
+                  <div className="text-foreground text-[10px] font-bold mt-0.5 leading-tight">{power.name}</div>
+                </div>
+
+                <div className="mt-2 pt-1.5 border-t border-border/50">
+                  <div className={cn("text-[8px] leading-relaxed", unlocked ? "text-muted-foreground" : "text-muted-foreground/70")}>
+                    {power.effect}
+                  </div>
+                </div>
               </div>
             )
           })}

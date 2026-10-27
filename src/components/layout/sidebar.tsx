@@ -45,8 +45,9 @@ const navItems: { id: PageType; label: string; icon: React.ReactNode; rank?: str
 export function Sidebar() {
   const router = useRouter()
   const supabase = createClient()
-  const { theme, setTheme } = useTheme()
+  const { theme, setTheme, resolvedTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
+  const isDark = mounted ? (resolvedTheme || theme) === 'dark' : true
 
   const { 
     currentPage, 
@@ -203,12 +204,12 @@ export function Sidebar() {
           {/* Theme Toggle */}
           {mounted && (!sidebarCollapsed || isMobile) && (
             <button
-              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-              className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-lg bg-accent/50 hover:bg-accent border border-border text-muted-foreground hover:text-foreground text-xs transition-all font-medium font-mono"
-              title={theme === 'dark' ? "Switch to Morning" : "Switch to Night"}
+              onClick={() => setTheme(isDark ? 'light' : 'dark')}
+              className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-accent/60 hover:bg-accent border border-border text-foreground text-xs transition-all font-semibold font-mono shadow-2xs"
+              title={isDark ? "Switch to Morning Light View" : "Switch to Sovereign Night View"}
             >
-              {theme === 'dark' ? <Sun className="w-3.5 h-3.5 text-amber-400" /> : <Moon className="w-3.5 h-3.5 text-primary" />}
-              <span>{theme === 'dark' ? 'Morning Mode' : 'Night Mode'}</span>
+              {isDark ? <Sun className="w-3.5 h-3.5 text-amber-400" /> : <Moon className="w-3.5 h-3.5 text-primary" />}
+              <span>{isDark ? 'Switch to Morning' : 'Switch to Night'}</span>
             </button>
           )}
 

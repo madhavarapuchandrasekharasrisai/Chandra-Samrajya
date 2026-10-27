@@ -18,8 +18,9 @@ import { useState, useEffect, useMemo } from 'react'
 import { useTheme } from 'next-themes'
 
 export function Navbar() {
-  const { theme, setTheme } = useTheme()
+  const { theme, setTheme, resolvedTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
+  const isDark = mounted ? (resolvedTheme || theme) === 'dark' : true
   const { setQuickAddOpen, setQuickAddTab, monthlyIncome, currentPage, mobileMenuOpen, setMobileMenuOpen, notifications, updateNotification, removeNotification } = useAppStore()
   const [commandOpen, setCommandOpen] = useState(false)
   const [notifiedIds, setNotifiedIds] = useState<Set<string>>(new Set())
@@ -172,11 +173,11 @@ export function Navbar() {
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                onClick={() => setTheme(isDark ? 'light' : 'dark')}
                 className="text-muted-foreground hover:text-foreground hover:bg-accent h-8 w-8 rounded-lg transition-all"
-                title={theme === 'dark' ? "Switch to Morning" : "Switch to Night"}
+                title={isDark ? "Switch to Morning Light View" : "Switch to Sovereign Night View"}
               >
-                {theme === 'dark' ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-primary" />}
+                {isDark ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-primary" />}
               </Button>
             )}
 
