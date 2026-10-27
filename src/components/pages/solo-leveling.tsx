@@ -36,6 +36,40 @@ import {
   ResponsiveContainer,
 } from 'recharts'
 
+// Authentic Solo Leveling Motivation Creed & System Sound
+const MOTIVATION_QUOTES = [
+  "I am the only one who can level up in this world. Sweat in training, reign in battle.",
+  "If I don't move forward, I will be devoured. Only the strong rewrite fate.",
+  "Do not rely on luck. Power forged through relentless daily discipline never betrays you.",
+  "Pain is temporary. Quitting is an eternal penalty. ARISE.",
+  "Every push-up, every minute of deep work, every focused hour extracts your future greatness.",
+  "The Monarch does not negotiate with laziness. Crush the daily protocol.",
+  "Today's grueling discipline is tomorrow's absolute sovereignty.",
+]
+
+function playSystemChime() {
+  if (typeof window === 'undefined') return
+  try {
+    const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext
+    if (!AudioCtx) return
+    const ctx = new AudioCtx()
+    const osc = ctx.createOscillator()
+    const gain = ctx.createGain()
+    osc.type = 'sine'
+    osc.frequency.setValueAtTime(587.33, ctx.currentTime)
+    osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.08)
+    osc.frequency.exponentialRampToValueAtTime(1174.66, ctx.currentTime + 0.18)
+    gain.gain.setValueAtTime(0.08, ctx.currentTime)
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3)
+    osc.connect(gain)
+    gain.connect(ctx.destination)
+    osc.start()
+    osc.stop(ctx.currentTime + 0.3)
+  } catch {
+    // Audio autoplay restrictions or headless environment
+  }
+}
+
 // Addictive count-up number animation component
 function AnimateNumber({ value, duration = 1000 }: { value: number; duration?: number }) {
   const [displayValue, setDisplayValue] = useState(0)
@@ -98,6 +132,21 @@ export function SoloLeveling() {
   const [timeLeft, setTimeLeft] = useState('')
   const [claimingQuestId, setClaimingQuestId] = useState<string | null>(null)
   const [showDiagnostic, setShowDiagnostic] = useState(false)
+  const [quoteIndex, setQuoteIndex] = useState(0)
+
+  useEffect(() => {
+    const quoteInterval = setInterval(() => {
+      setQuoteIndex((prev) => (prev + 1) % MOTIVATION_QUOTES.length)
+    }, 7000)
+    return () => clearInterval(quoteInterval)
+  }, [])
+
+  const handleToggleTask = (taskId: string, isCompleted: boolean) => {
+    if (isCompleted) {
+      playSystemChime()
+    }
+    completeTask(taskId, isCompleted)
+  }
 
   const handlePurge = () => {
     if (window.confirm('⚠️ WARNING: This will completely purge all biometrics, streaks, milestones, and daily logs. Are you sure you want to reset your system to a Civilian state (start from zero)?')) {
@@ -641,6 +690,104 @@ export function SoloLeveling() {
             </motion.div>
           )}
         </AnimatePresence>
+      </motion.div>
+
+      {/* ─── HOLOGRAPHIC PLAYER STATUS SCREEN (SUNG JIN-WOO SYSTEM HUD) ─── */}
+      <motion.div
+        initial={{ opacity: 0, y: 15 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.05 }}
+        className="relative border border-primary/25 rounded-2xl p-4 sm:p-5 bg-gradient-to-br from-primary/[0.08] via-secondary/40 to-background/95 shadow-[0_0_30px_rgba(59,130,246,0.12)] overflow-hidden"
+      >
+        {/* Holographic background aura */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent pointer-events-none" />
+        
+        {/* Corner system brackets */}
+        <div className="absolute top-2 left-2 text-primary font-mono text-sm select-none opacity-60">⌜</div>
+        <div className="absolute top-2 right-2 text-primary font-mono text-sm select-none opacity-60">⌝</div>
+        <div className="absolute bottom-2 left-2 text-primary font-mono text-sm select-none opacity-60">⌞</div>
+        <div className="absolute bottom-2 right-2 text-primary font-mono text-sm select-none opacity-60">⌟</div>
+
+        {/* Player Vital Status Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-center relative z-10 mb-4">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-purple-600/20 border border-primary/40 flex items-center justify-center font-display font-black text-2xl text-primary shadow-[0_0_15px_rgba(59,130,246,0.35)] flex-shrink-0">
+              ⚡
+            </div>
+            <div className="min-w-0">
+              <div className="flex items-center gap-1.5">
+                <span className="text-[10px] font-mono text-primary font-black uppercase tracking-widest">[SYSTEM PLAYER]</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+              </div>
+              <h2 className="text-foreground font-display text-lg font-black tracking-wider uppercase truncate">CHANDRA</h2>
+              <p className="text-muted-foreground text-[10px] font-mono truncate">TITLE: THE ONE WHO AWAKENED</p>
+            </div>
+          </div>
+
+          {/* HP Gauge */}
+          <div className="bg-secondary/30 border border-border/50 rounded-xl p-3">
+            <div className="flex justify-between items-center text-[10px] font-mono mb-1.5">
+              <span className="text-emerald-400 font-bold flex items-center gap-1">
+                <Shield className="w-3 h-3" /> HP (HEALTH)
+              </span>
+              <span className="text-emerald-400/90 font-bold">1,000 / 1,000</span>
+            </div>
+            <div className="h-2 w-full bg-secondary/80 rounded-full overflow-hidden border border-emerald-500/30">
+              <div className="h-full bg-gradient-to-r from-emerald-500 to-cyan-400 rounded-full shadow-[0_0_8px_rgba(16,185,129,0.5)] w-full" />
+            </div>
+            <p className="text-[9px] text-muted-foreground/60 font-mono mt-1">Physical integrity optimal</p>
+          </div>
+
+          {/* MP Gauge */}
+          <div className="bg-secondary/30 border border-border/50 rounded-xl p-3">
+            <div className="flex justify-between items-center text-[10px] font-mono mb-1.5">
+              <span className="text-primary font-bold flex items-center gap-1">
+                <Zap className="w-3 h-3" /> MP (MANA)
+              </span>
+              <span className="text-primary font-bold">250 / 250</span>
+            </div>
+            <div className="h-2 w-full bg-secondary/80 rounded-full overflow-hidden border border-primary/30">
+              <div className="h-full bg-gradient-to-r from-blue-600 via-primary to-purple-500 rounded-full shadow-[0_0_8px_rgba(59,130,246,0.6)] w-full animate-pulse" />
+            </div>
+            <p className="text-[9px] text-muted-foreground/60 font-mono mt-1">Shadow power capacity full</p>
+          </div>
+
+          {/* Fatigue / Condition */}
+          <div className="bg-secondary/30 border border-border/50 rounded-xl p-3 flex items-center justify-between">
+            <div>
+              <p className="text-[9px] font-mono text-muted-foreground uppercase font-bold">FATIGUE INDEX</p>
+              <p className="text-base font-mono font-black text-emerald-400">
+                {completedCoreCount === totalCore ? '0%' : `${Math.max(0, 100 - Math.round((completedCoreCount / totalCore) * 100))}%`}
+              </p>
+              <p className="text-[9px] text-muted-foreground/60 font-mono mt-0.5">
+                {completedCoreCount === totalCore ? 'Optimal combat ready' : `${completedCoreCount}/${totalCore} protocols clear`}
+              </p>
+            </div>
+            <div className="text-right">
+              <span className="text-[9px] font-mono font-bold px-2.5 py-1 rounded-lg bg-primary/10 border border-primary/25 text-primary inline-block">
+                {completedCoreCount === totalCore ? '🏆 RECOVERED' : '⚔️ QUEST ACTIVE'}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Motivational Creed Ticker */}
+        <div className="pt-3 border-t border-border/40 flex items-center gap-2.5 text-xs font-mono text-muted-foreground relative z-10">
+          <Sparkles className="w-4 h-4 text-primary animate-pulse flex-shrink-0" />
+          <span className="text-primary font-bold uppercase tracking-wider text-[10px] whitespace-nowrap">MONARCH'S RESOLVE:</span>
+          <AnimatePresence mode="wait">
+            <motion.span
+              key={quoteIndex}
+              initial={{ opacity: 0, y: 5 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -5 }}
+              transition={{ duration: 0.35 }}
+              className="text-foreground/90 italic truncate"
+            >
+              "{MOTIVATION_QUOTES[quoteIndex]}"
+            </motion.span>
+          </AnimatePresence>
+        </div>
       </motion.div>
 
       {/* ─── SECTION 2: ATTRIBUTE MATRICES (HUD CLASS SYSTEM) ─── */}
@@ -1233,56 +1380,102 @@ export function SoloLeveling() {
             </div>
           </motion.div>
 
-          {/* Core Protocols Checklist */}
+          {/* Core Protocols Checklist — Authentic Solo Leveling Quest Window */}
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
             className={cn(
-              "bg-white dark:bg-card border rounded-2xl p-4 md:p-5 transition-all duration-500 flex-shrink-0 shadow-[0_4px_20px_rgba(0,0,0,0.02)] dark:shadow-[0_1px_10px_rgba(255,255,255,0.02)] hover:translate-y-[-1px] hover:shadow-[0_10px_30px_rgba(0,0,0,0.04)] dark:hover:shadow-[0_2px_15px_rgba(255,255,255,0.05)]",
-              stats.failureState === 1 ? "border-red-200 dark:border-red-500/15" : "border-border hover:border-primary/30"
+              "border rounded-2xl p-4 md:p-5 transition-all duration-500 flex-shrink-0 relative overflow-hidden bg-gradient-to-b from-secondary/40 to-card shadow-[0_4px_25px_rgba(59,130,246,0.06)]",
+              stats.failureState === 1 
+                ? "border-red-500/20 bg-red-950/10" 
+                : "border-primary/30 hover:border-primary/50 shadow-[0_0_20px_rgba(59,130,246,0.08)]"
             )}
           >
-            <div className="flex items-center justify-between mb-4">
+            {/* System brackets */}
+            <div className="absolute top-2 left-2 text-primary/40 text-xs font-mono select-none">⌜</div>
+            <div className="absolute top-2 right-2 text-primary/40 text-xs font-mono select-none">⌝</div>
+
+            <div className="flex items-center justify-between mb-3 relative z-10">
               <div>
-                <h3 className="text-foreground/80 text-xs sm:text-sm font-semibold tracking-wider font-mono">DAILY COMBAT PROTOCOLS</h3>
-                <p className="text-muted-foreground/40 text-[9px] sm:text-[10px] font-mono leading-relaxed">Mandatory parameters. FAILURE TO COMPLETE TRIGGERS DECAY!</p>
+                <span className="text-[9px] font-mono font-bold text-primary tracking-widest uppercase block">[QUEST INFO]</span>
+                <h3 className="text-foreground text-xs sm:text-sm font-bold tracking-wider font-mono">
+                  DAILY QUEST: PREPARATIONS TO BECOME STRONG
+                </h3>
               </div>
-              <span className="text-[10px] sm:text-[11px] font-mono text-orange-500 font-bold whitespace-nowrap">
-                {completedCoreCount}/{totalCore} Cleared
+              <span className={cn(
+                "text-[10px] sm:text-xs font-mono font-black px-2.5 py-1 rounded-lg border",
+                completedCoreCount === totalCore
+                  ? "bg-emerald-500/15 border-emerald-500/30 text-emerald-400"
+                  : "bg-primary/10 border-primary/25 text-primary"
+              )}>
+                [{completedCoreCount}/{totalCore}] CLEARED
               </span>
             </div>
 
-            <div className="space-y-2">
+            {/* Penalty Zone Warning Alert */}
+            <div className="mb-3 p-2 rounded-xl bg-red-950/20 border border-red-500/20 text-[9px] sm:text-[10px] font-mono text-red-400 flex items-center gap-2">
+              <AlertTriangle className="w-3.5 h-3.5 flex-shrink-0 animate-pulse text-red-400" />
+              <span>PENALTY WARNING: Incomplete protocols before 24:00 trigger Penalty Zone banishment.</span>
+            </div>
+
+            <div className="space-y-2 mb-3">
               {DAILY_CORE_PROTOCOLS.map((task) => {
                 const isDone = !!completedTasks[task.id]
                 return (
                   <div 
                     key={task.id}
-                    onClick={() => completeTask(task.id, !isDone)}
+                    onClick={() => handleToggleTask(task.id, !isDone)}
                     className={cn(
-                      "flex items-start justify-between p-3 rounded-xl border transition-all duration-300 cursor-pointer select-none gap-3",
+                      "flex items-start justify-between p-3 rounded-xl border transition-all duration-300 cursor-pointer select-none gap-3 group",
                       isDone 
-                        ? "bg-orange-50 border-orange-200 text-orange-950 dark:bg-orange-500/10 dark:border-orange-500/35 dark:text-foreground" 
-                        : "bg-white dark:bg-white/[0.01] border-gray-100 dark:border-border text-gray-700 dark:text-muted-foreground hover:bg-gray-50 dark:hover:bg-secondary/50 hover:border-gray-200 dark:hover:border-border"
+                        ? "bg-primary/15 border-primary/40 text-foreground shadow-[0_0_12px_rgba(59,130,246,0.12)]" 
+                        : "bg-card/70 border-border hover:border-primary/40 hover:bg-secondary/40 text-muted-foreground"
                     )}
                   >
                     <div className="flex items-start gap-2.5 min-w-0 pr-1">
                       <div className={cn(
-                        "w-4.5 h-4.5 rounded border flex items-center justify-center flex-shrink-0 transition-all mt-0.5",
-                        isDone ? "border-orange-500 bg-orange-500" : "border-border"
+                        "w-5 h-5 rounded-lg border flex items-center justify-center flex-shrink-0 transition-all mt-0.5",
+                        isDone 
+                          ? "border-primary bg-primary text-black shadow-[0_0_10px_rgba(59,130,246,0.6)]" 
+                          : "border-border/80 group-hover:border-primary/60"
                       )}>
-                        {isDone && <CheckCircle className="w-3.5 h-3.5 text-foreground dark:text-black stroke-[3]" />}
+                        {isDone && <CheckCircle className="w-3.5 h-3.5 text-black stroke-[3]" />}
                       </div>
-                      <span className="text-[11px] font-semibold tracking-wide text-left leading-relaxed whitespace-normal break-words">{task.label}</span>
+                      <div className="min-w-0">
+                        <span className="text-[11px] font-bold tracking-wide text-left leading-relaxed block break-words">{task.label}</span>
+                        {isDone && (
+                          <span className="text-[9px] font-mono text-cyan-400 font-bold tracking-wider inline-block">
+                            [STATUS: CLEARED]
+                          </span>
+                        )}
+                      </div>
                     </div>
                     
-                    <div className="text-[8px] sm:text-[9px] font-mono font-semibold px-2 py-0.5 rounded bg-orange-100/50 border border-orange-200 text-orange-700 dark:bg-[#f97316]/5 dark:border-[#f97316]/10 dark:text-orange-400 flex-shrink-0 mt-0.5">
+                    <div className={cn(
+                      "text-[8px] sm:text-[9px] font-mono font-bold px-2 py-0.5 rounded border flex-shrink-0 mt-0.5",
+                      isDone
+                        ? "bg-cyan-500/10 border-cyan-500/25 text-cyan-400"
+                        : "bg-secondary/60 border-border/60 text-muted-foreground"
+                    )}>
                       {Object.entries(task.rewards).map(([stat, val]) => `+${val.toFixed(1)} ${getShortStatName(stat)}`).join(' ')}
                     </div>
                   </div>
                 )
               })}
+            </div>
+
+            {/* Daily Quest Rewards Box */}
+            <div className="p-3 rounded-xl bg-primary/[0.05] border border-primary/20 space-y-1 font-mono text-[9px] sm:text-[10px]">
+              <div className="flex items-center justify-between text-primary font-bold uppercase tracking-wider">
+                <span>🎁 QUEST REWARDS</span>
+                <span className="text-[9px] text-primary/70">ALL OBJECTIVES</span>
+              </div>
+              <div className="text-muted-foreground/80 space-y-0.5 text-[9px]">
+                <p>1. Status Recovery (Fatigue → 0%)</p>
+                <p>2. Permanent Biometric Attribute Growth</p>
+                <p>3. Blessed Random Box / Monarch Key</p>
+              </div>
             </div>
           </motion.div>
 
@@ -1292,19 +1485,26 @@ export function SoloLeveling() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.25 }}
             className={cn(
-              "bg-white dark:bg-card border rounded-2xl p-4 md:p-5 transition-all duration-500 flex-shrink-0 shadow-[0_4px_20px_rgba(0,0,0,0.02)] dark:shadow-[0_1px_10px_rgba(255,255,255,0.02)] hover:translate-y-[-1px] hover:shadow-[0_10px_30px_rgba(0,0,0,0.04)] dark:hover:shadow-[0_2px_15px_rgba(255,255,255,0.05)]",
-              stats.failureState === 1 ? "border-red-200 dark:border-red-500/15" : "border-border hover:border-primary/30"
+              "border rounded-2xl p-4 md:p-5 transition-all duration-500 flex-shrink-0 relative overflow-hidden bg-gradient-to-b from-secondary/40 to-card shadow-[0_4px_25px_rgba(59,130,246,0.06)]",
+              stats.failureState === 1 
+                ? "border-red-500/20 bg-red-950/10" 
+                : "border-border hover:border-primary/30"
             )}
           >
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between mb-3">
               <div>
-                <h3 className="text-foreground/80 text-xs sm:text-sm font-semibold tracking-wider font-mono uppercase">
+                <span className="text-[9px] font-mono font-bold text-primary tracking-widest uppercase block">[SPECIALIZATION MODULE]</span>
+                <h3 className="text-foreground text-xs sm:text-sm font-bold tracking-wider font-mono uppercase">
                   {dayNames[dayOfWeek].toUpperCase()} SPECIALIZATION
                 </h3>
-                <p className="text-muted-foreground/40 text-[9px] sm:text-[10px] font-mono leading-relaxed">Combat training modules specific to this day.</p>
               </div>
-              <span className="text-[10px] sm:text-[11px] font-mono text-orange-500 font-bold whitespace-nowrap">
-                {completedSpecialCount}/{todaySpecializations.length} Cleared
+              <span className={cn(
+                "text-[10px] sm:text-xs font-mono font-black px-2.5 py-1 rounded-lg border",
+                completedSpecialCount === todaySpecializations.length && todaySpecializations.length > 0
+                  ? "bg-emerald-500/15 border-emerald-500/30 text-emerald-400"
+                  : "bg-primary/10 border-primary/25 text-primary"
+              )}>
+                [{completedSpecialCount}/{todaySpecializations.length}] CLEARED
               </span>
             </div>
 
@@ -1319,25 +1519,39 @@ export function SoloLeveling() {
                   return (
                     <div 
                       key={task.id}
-                      onClick={() => completeTask(task.id, !isDone)}
+                      onClick={() => handleToggleTask(task.id, !isDone)}
                       className={cn(
-                        "flex items-start justify-between p-3 rounded-xl border transition-all duration-300 cursor-pointer select-none gap-3",
+                        "flex items-start justify-between p-3 rounded-xl border transition-all duration-300 cursor-pointer select-none gap-3 group",
                         isDone 
-                          ? "bg-orange-50 border-orange-200 text-orange-950 dark:bg-orange-500/10 dark:border-orange-500/35 dark:text-foreground" 
-                          : "bg-white dark:bg-white/[0.01] border-gray-100 dark:border-border text-gray-700 dark:text-muted-foreground hover:bg-gray-50 dark:hover:bg-secondary/50 hover:border-gray-200 dark:hover:border-border"
+                          ? "bg-primary/15 border-primary/40 text-foreground shadow-[0_0_12px_rgba(59,130,246,0.12)]" 
+                          : "bg-card/70 border-border hover:border-primary/40 hover:bg-secondary/40 text-muted-foreground"
                       )}
                     >
                       <div className="flex items-start gap-2.5 min-w-0 pr-1">
                         <div className={cn(
-                          "w-4.5 h-4.5 rounded border flex items-center justify-center flex-shrink-0 transition-all mt-0.5",
-                          isDone ? "border-orange-500 bg-orange-500" : "border-border"
+                          "w-5 h-5 rounded-lg border flex items-center justify-center flex-shrink-0 transition-all mt-0.5",
+                          isDone 
+                            ? "border-primary bg-primary text-black shadow-[0_0_10px_rgba(59,130,246,0.6)]" 
+                            : "border-border/80 group-hover:border-primary/60"
                         )}>
-                          {isDone && <CheckCircle className="w-3.5 h-3.5 text-foreground dark:text-black stroke-[3]" />}
+                          {isDone && <CheckCircle className="w-3.5 h-3.5 text-black stroke-[3]" />}
                         </div>
-                        <span className="text-[11px] font-semibold tracking-wide text-left leading-relaxed whitespace-normal break-words">{task.label}</span>
+                        <div className="min-w-0">
+                          <span className="text-[11px] font-bold tracking-wide text-left leading-relaxed block break-words">{task.label}</span>
+                          {isDone && (
+                            <span className="text-[9px] font-mono text-cyan-400 font-bold tracking-wider inline-block">
+                              [STATUS: CLEARED]
+                            </span>
+                          )}
+                        </div>
                       </div>
                       
-                      <div className="text-[8px] sm:text-[9px] font-mono font-semibold px-2 py-0.5 rounded bg-orange-100/50 border border-orange-200 text-orange-700 dark:bg-[#f97316]/5 dark:border-[#f97316]/10 dark:text-orange-400 flex-shrink-0 mt-0.5">
+                      <div className={cn(
+                        "text-[8px] sm:text-[9px] font-mono font-bold px-2 py-0.5 rounded border flex-shrink-0 mt-0.5",
+                        isDone
+                          ? "bg-cyan-500/10 border-cyan-500/25 text-cyan-400"
+                          : "bg-secondary/60 border-border/60 text-muted-foreground"
+                      )}>
                         {Object.entries(task.rewards).map(([stat, val]) => `+${val.toFixed(1)} ${getShortStatName(stat)}`).join(' ')}
                       </div>
                     </div>
@@ -1760,15 +1974,24 @@ export function SoloLeveling() {
 
         <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
           <button
+            onClick={handlePurge}
+            className="w-full sm:w-auto flex items-center justify-center gap-2 py-2 px-4 rounded-xl font-semibold text-xs tracking-wider uppercase font-mono transition-all duration-300 border bg-red-500/10 hover:bg-red-500/20 border-red-500/30 text-red-400 hover:text-red-300 shadow-[0_0_12px_rgba(239,68,68,0.15)]"
+            title="Wipe biometrics, clear streaks, and start fresh from Level 1 Civilian"
+          >
+            <RotateCcw className="w-3.5 h-3.5" />
+            Awaken Anew (Reset To Zero)
+          </button>
+
+          <button
             onClick={resetDaily}
             className={cn(
               "w-full sm:w-auto flex items-center justify-center gap-2 py-2 px-4 rounded-xl font-semibold text-xs tracking-wider uppercase font-mono transition-all duration-300 border",
               stats.failureState === 1
                 ? "bg-red-500/10 hover:bg-red-500/20 border-red-500/20 hover:border-red-500/30 text-red-400"
-                : "bg-orange-500/10 hover:bg-orange-500/20 border-orange-500/20 hover:border-orange-500/30 text-orange-400"
+                : "bg-primary/10 hover:bg-primary/20 border-primary/30 hover:border-primary/50 text-primary shadow-[0_0_12px_rgba(59,130,246,0.15)]"
             )}
           >
-            <RotateCcw className="w-3.5 h-3.5" />
+            <Activity className="w-3.5 h-3.5" />
             Evaluate Protocol Cycle
           </button>
         </div>
