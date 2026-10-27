@@ -131,12 +131,8 @@ const getShortStatName = (stat: string) => {
 export function SoloLeveling() {
   const storeStats = useSoloLevelingStore((s) => s.stats)
   const { completedTasks, isLoading, fetchStats, completeTask, resetDaily, purgeStats } = useSoloLevelingStore()
-  const [systemBooting, setSystemBooting] = useState(true)
-  const [bootProgress, setBootProgress] = useState(0)
-  const [consoleLogs, setConsoleLogs] = useState<string[]>([])
   const [timeLeft, setTimeLeft] = useState('')
   const [claimingQuestId, setClaimingQuestId] = useState<string | null>(null)
-  const [showDiagnostic, setShowDiagnostic] = useState(false)
   const [quoteIndex, setQuoteIndex] = useState(0)
   const [showHologramModal, setShowHologramModal] = useState(false)
 
@@ -191,55 +187,9 @@ export function SoloLeveling() {
     lastUpdated: '',
   }
 
-  // Dramatic load sequence
+  // Instant data sync without blocking UI
   useEffect(() => {
     fetchStats()
-    
-    // Fast boot sequences
-    setConsoleLogs([])
-    const logs = [
-      '⚔️ SOVEREIGN PROTOCOL: CONNECTING...',
-      '📡 SYNCING SATELLITE CORE BIOMETRICS...',
-      '🧬 ATOMIC STAT FACTOR LOADED (DISCIPLINE: 1.7X)',
-      '🔋 CALCULATING QUANTUM POWER DEVIATION...',
-      '🛡️ SOVEREIGN SUITE AWAKENED!'
-    ]
-
-    let currentLogIndex = 0
-    const logInterval = setInterval(() => {
-      if (currentLogIndex < logs.length) {
-        setConsoleLogs(prev => [...prev, logs[currentLogIndex]])
-        currentLogIndex++
-      } else {
-        clearInterval(logInterval)
-      }
-    }, 250)
-
-    const diagTimeout = setTimeout(() => {
-      setShowDiagnostic(true)
-    }, 4000)
-
-    const progressInterval = setInterval(() => {
-      setBootProgress(prev => {
-        const currentStats = useSoloLevelingStore.getState().stats
-        // Hold at 90% if stats are still not loaded from database
-        if (prev >= 90 && !currentStats) {
-          return 90
-        }
-        if (prev >= 100) {
-          clearInterval(progressInterval)
-          setTimeout(() => setSystemBooting(false), 300)
-          return 100
-        }
-        return prev + 5
-      })
-    }, 80)
-
-    return () => {
-      clearInterval(logInterval)
-      clearInterval(progressInterval)
-      clearTimeout(diagTimeout)
-    }
   }, [fetchStats])
 
   // Midnight countdown timer
@@ -456,68 +406,7 @@ export function SoloLeveling() {
         <div className="absolute top-[75%] left-[55%] w-2 h-2 rounded-full bg-indigo-400/25 filter blur-[0.5px] particle" style={{ animationDelay: '0.5s', animationDuration: '8s' }} />
         <div className="absolute bottom-[15%] right-[35%] w-1.5 h-1.5 rounded-full bg-red-400/20 filter blur-[0.5px] particle" style={{ animationDelay: '4.2s', animationDuration: '10s' }} />
       </div>
-      {/* Dramatic Glitch Matrix Calibration sequence */}
-      <AnimatePresence>
-        {systemBooting && (
-          <motion.div
-            initial={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.4 }}
-            className="fixed inset-0 bg-background z-[999] flex flex-col items-center justify-center p-6"
-          >
-            <div className="max-w-md w-full space-y-6">
-              <div className="flex items-center justify-center gap-3">
-                <Flame className="w-10 h-10 text-orange-500 animate-pulse" />
-                <h1 className="font-display text-2xl font-black text-foreground tracking-widest font-mono">GOD SYSTEM</h1>
-              </div>
-              <div className="border border-border rounded-xl p-4 bg-card font-mono text-[10px] space-y-1.5 text-muted-foreground h-36 overflow-hidden">
-                {consoleLogs.map((log, i) => (
-                  <p key={i} className="animate-pulse">{log}</p>
-                ))}
-              </div>
-              <div className="space-y-2">
-                <div className="h-1 bg-secondary/50 rounded-full overflow-hidden">
-                  <motion.div
-                    className="h-full bg-gradient-to-r from-orange-600 to-indigo-500"
-                    style={{ width: `${bootProgress}%` }}
-                  />
-                </div>
-                <div className="flex justify-between font-mono text-[10px] text-muted-foreground/60">
-                  <span>SYSTEM CALIBRATION</span>
-                  <span>{bootProgress}%</span>
-                </div>
-              </div>
 
-              {showDiagnostic && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mt-6 border border-yellow-500/20 bg-yellow-950/10 rounded-xl p-4 space-y-3 text-center"
-                >
-                  <div className="flex items-center justify-center gap-2 text-yellow-500 font-mono text-[10px] font-bold">
-                    <AlertTriangle className="w-4 h-4 animate-bounce text-yellow-500" />
-                    <span>DATABASE SYNCHRONIZATION DELAYED</span>
-                  </div>
-                  <p className="text-[9px] text-muted-foreground font-mono leading-relaxed max-w-sm mx-auto">
-                    The system is waiting for database synchronization. If you just deployed, make sure to add your database environment variables (DATABASE_URL, NEXT_PUBLIC_SUPABASE_URL, and NEXT_PUBLIC_SUPABASE_ANON_KEY) in your Vercel project settings and redeploy.
-                  </p>
-                  <button
-                    onClick={() => {
-                      setSystemBooting(false);
-                      toast.info("Offline System Mode loaded. Showing biometrics baseline.", {
-                        description: "Establish a database connection to sync live statistics.",
-                      });
-                    }}
-                    className="w-full py-1.5 px-3 border border-orange-500/30 hover:border-orange-500/60 bg-orange-950/20 text-orange-400 hover:text-orange-300 font-mono text-[9px] font-bold rounded-lg transition-all"
-                  >
-                    ⚡ BYPASS SYNC & ENTER OFFLINE PROTOCOL
-                  </button>
-                </motion.div>
-              )}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       {/* Failure State flickering Red Overlay & Glitch Warnings */}
       {stats.failureState === 1 && (
@@ -546,19 +435,26 @@ export function SoloLeveling() {
             : "from-primary/5 via-background to-background border-border"
         )}
       >
-        {/* Panoramic Eye Banner Background with flying embers */}
+        {/* Panoramic Eye Banner Background with High-Definition Sovereign Eye */}
         <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
-          <img
-            src="/images/solo-leveling/jinwoo-eye-banner.jpg"
-            alt="Jin-Woo Awakening Eye Banner"
-            className="w-full h-full object-cover object-right opacity-25 dark:opacity-40 filter contrast-125"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-card via-card/85 to-card/40 dark:from-background dark:via-background/90 dark:to-background/50" />
-          <div className="absolute inset-0 bg-gradient-to-t from-card dark:from-background via-transparent to-transparent" />
+          {/* Right-aligned vivid eye portrait container */}
+          <div className="absolute right-0 top-0 bottom-0 w-full sm:w-3/4 md:w-3/5 lg:w-1/2 overflow-hidden">
+            <img
+              src="/images/solo-leveling/jinwoo-eye-banner.jpg"
+              alt="Jin-Woo Awakening Eye Banner"
+              className="w-full h-full object-cover object-[73%_center] opacity-80 dark:opacity-90 filter contrast-125 saturate-125 brightness-105 dark:brightness-100 transition-opacity duration-500"
+            />
+            {/* Seamless gradient fade on the left to ensure credentials text readability */}
+            <div className="absolute inset-0 bg-gradient-to-r from-card via-card/60 to-transparent dark:from-background dark:via-background/50 dark:to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-card/80 via-transparent to-card/40 dark:from-background/80 dark:via-transparent dark:to-background/40" />
+            
+            {/* Monarch Eye Cyan Plasma Pulse */}
+            <div className="absolute right-[18%] sm:right-[22%] top-1/2 -translate-y-1/2 w-28 h-28 sm:w-36 sm:h-36 rounded-full bg-cyan-400/25 blur-2xl animate-pulse pointer-events-none" />
+          </div>
         </div>
 
         {/* Glow behind Header */}
-        <div className="absolute top-0 right-0 w-80 h-80 bg-cyan-500/[0.04] dark:bg-cyan-500/[0.08] rounded-full filter blur-[90px] pointer-events-none" />
+        <div className="absolute top-0 right-0 w-80 h-80 bg-cyan-500/[0.08] dark:bg-cyan-500/[0.12] rounded-full filter blur-[90px] pointer-events-none" />
 
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 relative z-10">
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 md:gap-5 w-full lg:max-w-3xl">
@@ -1858,56 +1754,7 @@ export function SoloLeveling() {
         })}
       </motion.div>
 
-      {/* ─── HUMAN RESONANCE & DEEP WISDOM (COMMUNICATION & STABILITY ARCHITECTURE) ─── */}
-      <motion.div
-        initial={{ opacity: 0, y: 15 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.16 }}
-        className="rounded-2xl border border-slate-300 dark:border-border/80 bg-card overflow-hidden shadow-xs hover:shadow-md transition-all relative"
-      >
-        <div className="grid grid-cols-1 md:grid-cols-12 items-center">
-          <div className="md:col-span-5 relative h-40 sm:h-48 md:h-full min-h-[160px] overflow-hidden bg-black">
-            <img
-              src="/images/solo-leveling/se7en-reflection.jpg"
-              alt="Deep Contemplation & Human Resonance"
-              className="w-full h-full object-cover filter grayscale contrast-125 hover:grayscale-0 transition-all duration-700"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-transparent via-transparent to-card" />
-            <div className="absolute bottom-2 left-3">
-              <span className="text-[9px] font-mono font-bold tracking-widest text-slate-300 uppercase bg-black/70 px-2 py-0.5 rounded border border-white/10">
-                DEEP REFLECTION // HUMAN WISDOM
-              </span>
-            </div>
-          </div>
-          <div className="md:col-span-7 p-4 sm:p-5 lg:p-6 space-y-2">
-            <div className="flex items-center gap-2">
-              <span className="text-[9px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border border-cyan-500/20">
-                COMMUNICATION & MENTAL STABILITY
-              </span>
-              <span className="text-muted-foreground text-[10px] font-mono">
-                STABILITY PILLAR
-              </span>
-            </div>
-            <h3 className="text-foreground text-sm sm:text-base font-extrabold font-mono uppercase tracking-wide">
-              BEYOND VIOLENCE: EMOTIONAL RESILIENCE & HUMAN WISDOM
-            </h3>
-            <p className="text-muted-foreground text-xs leading-relaxed font-medium">
-              A True Sovereign rules not through isolation, but through empathy, active listening, deep contemplation, and unwavering emotional composure. Balance physical might with human connection.
-            </p>
-            <div className="flex flex-wrap items-center gap-3 pt-1 text-[10px] font-mono">
-              <span className="text-emerald-700 dark:text-emerald-400 font-bold bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-0.5 rounded">
-                Stability: {stats.stability} PTS
-              </span>
-              <span className="text-cyan-700 dark:text-cyan-400 font-bold bg-cyan-500/10 border border-cyan-500/20 px-2.5 py-0.5 rounded">
-                Communication: {stats.communication} PTS
-              </span>
-              <span className="text-muted-foreground">
-                Resonance: Nominally Calibrated
-              </span>
-            </div>
-          </div>
-        </div>
-      </motion.div>
+
 
       {/* ─── NEW SECTION: THE SOVEREIGN COEFFICIENT MATRIX (POWER CALCULATIONS) ─── */}
       <motion.div

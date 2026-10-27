@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { createClient } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
-import { Loader2, Lock, Mail, ShieldCheck, Zap, Sparkles, ChevronRight } from "lucide-react"
+import { Loader2, Lock, Mail, ShieldCheck, Zap, Sparkles, ChevronRight, Crown } from "lucide-react"
 import { toast } from "sonner"
 import { motion, AnimatePresence } from "framer-motion"
 
@@ -35,16 +35,39 @@ export default function LoginPage() {
   const [password, setPassword] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [thunderFlash, setThunderFlash] = useState(false)
+  const [activeStrike, setActiveStrike] = useState(0)
 
   const supabase = createClient()
 
-  // Periodic subtle lightning flash simulation
+  // Dynamic realistic thunder & lightning storm simulator
   useEffect(() => {
-    const interval = setInterval(() => {
+    const triggerLightning = () => {
+      // Pick random strike pattern
+      setActiveStrike(Math.floor(Math.random() * 3))
+      
+      // Double strike flash (realistic lightning bolt flash-pause-flash)
       setThunderFlash(true)
-      setTimeout(() => setThunderFlash(false), 220)
-    }, 6500)
-    return () => clearInterval(interval)
+      setTimeout(() => {
+        setThunderFlash(false)
+        setTimeout(() => {
+          setThunderFlash(true)
+          setTimeout(() => setThunderFlash(false), 180)
+        }, 90)
+      }, 120)
+    }
+
+    // Initial strike
+    const initialTimer = setTimeout(triggerLightning, 2000)
+
+    // Recurring strikes every 5 to 8 seconds
+    const interval = setInterval(() => {
+      triggerLightning()
+    }, 6000 + Math.random() * 2500)
+
+    return () => {
+      clearTimeout(initialTimer)
+      clearInterval(interval)
+    }
   }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -77,103 +100,188 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center p-3 sm:p-6 lg:p-10 relative overflow-hidden select-none">
-      {/* ── Ambient Thunder Sky & Lightning FX ── */}
-      <div className="absolute inset-0 pointer-events-none">
-        {/* Thunder Flash Light Pulse */}
+    <div className="min-h-screen bg-[#030712] text-slate-100 flex items-center justify-center p-3 sm:p-6 lg:p-10 relative overflow-hidden select-none">
+      {/* ═══════════════════════════════════════════════════════════════════════
+          FULL-SCREEN BACKGROUND THUNDER & LIGHTNING STORM
+          ═══════════════════════════════════════════════════════════════════════ */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        {/* Thunder Flash Ambient Screen Wash */}
         <AnimatePresence>
           {thunderFlash && (
             <motion.div
               initial={{ opacity: 0 }}
-              animate={{ opacity: 0.18 }}
+              animate={{ opacity: 0.35 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.15 }}
-              className="absolute inset-0 bg-cyan-400 z-0 pointer-events-none"
+              transition={{ duration: 0.12 }}
+              className="absolute inset-0 bg-gradient-to-b from-cyan-300/40 via-sky-400/20 to-purple-600/30 backdrop-blur-[2px] pointer-events-none"
             />
           )}
         </AnimatePresence>
 
         {/* Deep Plasma Atmospheric Glows */}
-        <div className="absolute -top-32 left-1/4 w-[600px] h-[600px] rounded-full bg-cyan-600/10 blur-[140px]" />
-        <div className="absolute -bottom-32 right-1/4 w-[600px] h-[600px] rounded-full bg-purple-600/15 blur-[140px]" />
-        <div className="absolute top-1/2 right-10 w-[450px] h-[450px] rounded-full bg-blue-600/10 blur-[130px]" />
+        <div className="absolute -top-40 left-1/4 w-[700px] h-[700px] rounded-full bg-cyan-600/15 blur-[160px]" />
+        <div className="absolute -bottom-40 right-1/4 w-[700px] h-[700px] rounded-full bg-purple-600/20 blur-[160px]" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[550px] h-[550px] rounded-full bg-blue-600/15 blur-[140px]" />
 
-        {/* Animated Lightning Bolt Arcs */}
-        <svg className="absolute inset-0 w-full h-full opacity-25 pointer-events-none" xmlns="http://www.w3.org/2000/svg">
-          <motion.path
-            d="M 120 0 L 150 180 L 130 220 L 170 380 L 140 440 L 190 600"
-            stroke="url(#lightningGrad1)"
-            strokeWidth="1.5"
-            fill="none"
-            initial={{ pathLength: 0, opacity: 0 }}
-            animate={{ pathLength: [0, 1, 0], opacity: [0, 0.8, 0] }}
-            transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
-          />
-          <motion.path
-            d="M 900 0 L 860 140 L 880 200 L 840 340 L 870 420 L 830 700"
-            stroke="url(#lightningGrad2)"
-            strokeWidth="1.5"
-            fill="none"
-            initial={{ pathLength: 0, opacity: 0 }}
-            animate={{ pathLength: [0, 1, 0], opacity: [0, 0.9, 0] }}
-            transition={{ duration: 5.5, delay: 2, repeat: Infinity, ease: "easeInOut" }}
-          />
+        {/* Dynamic Branching SVG Lightning Bolts across background */}
+        <svg 
+          className="absolute inset-0 w-full h-full pointer-events-none" 
+          xmlns="http://www.w3.org/2000/svg"
+          preserveAspectRatio="none"
+        >
           <defs>
-            <linearGradient id="lightningGrad1" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#38bdf8" stopOpacity="0" />
-              <stop offset="50%" stopColor="#00f0ff" stopOpacity="1" />
-              <stop offset="100%" stopColor="#818cf8" stopOpacity="0" />
+            <linearGradient id="mainThunderGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#ffffff" stopOpacity="0.9" />
+              <stop offset="25%" stopColor="#38bdf8" stopOpacity="1" />
+              <stop offset="70%" stopColor="#818cf8" stopOpacity="0.8" />
+              <stop offset="100%" stopColor="#c084fc" stopOpacity="0" />
             </linearGradient>
-            <linearGradient id="lightningGrad2" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#a855f7" stopOpacity="0" />
-              <stop offset="50%" stopColor="#38bdf8" stopOpacity="1" />
-              <stop offset="100%" stopColor="#00f0ff" stopOpacity="0" />
+            <linearGradient id="branchThunderGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor="#ffffff" stopOpacity="1" />
+              <stop offset="60%" stopColor="#00f0ff" stopOpacity="0.9" />
+              <stop offset="100%" stopColor="#38bdf8" stopOpacity="0" />
             </linearGradient>
+            <filter id="lightningGlow">
+              <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+              <feMerge>
+                <feMergeNode in="coloredBlur"/>
+                <feMergeNode in="coloredBlur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
           </defs>
+
+          {/* Bolt 1: Massive Left-to-Center Strike */}
+          <motion.path
+            d="M 220 0 L 260 140 L 230 180 L 290 320 L 250 370 L 320 540 L 270 610 L 350 850 L 310 920 L 400 1200"
+            stroke="url(#mainThunderGrad)"
+            strokeWidth="3.5"
+            fill="none"
+            filter="url(#lightningGlow)"
+            animate={{
+              opacity: thunderFlash && activeStrike === 0 ? [0, 1, 0.4, 1, 0] : [0.15, 0.4, 0.15],
+              strokeWidth: thunderFlash && activeStrike === 0 ? [2, 5, 2] : 2,
+            }}
+            transition={{ duration: thunderFlash ? 0.35 : 4, repeat: thunderFlash ? 0 : Infinity }}
+          />
+
+          {/* Bolt 1 Branch */}
+          <motion.path
+            d="M 290 320 L 380 390 L 360 460 L 440 550"
+            stroke="url(#branchThunderGrad)"
+            strokeWidth="2"
+            fill="none"
+            filter="url(#lightningGlow)"
+            animate={{
+              opacity: thunderFlash && activeStrike === 0 ? [0, 0.9, 0] : [0.1, 0.3, 0.1],
+            }}
+            transition={{ duration: thunderFlash ? 0.3 : 4, repeat: thunderFlash ? 0 : Infinity }}
+          />
+
+          {/* Bolt 2: Massive Right-to-Center Strike */}
+          <motion.path
+            d="M 85% 0 L 82% 160 L 86% 220 L 79% 380 L 83% 450 L 76% 650 L 81% 740 L 74% 950 L 78% 1200"
+            stroke="url(#mainThunderGrad)"
+            strokeWidth="3"
+            fill="none"
+            filter="url(#lightningGlow)"
+            animate={{
+              opacity: thunderFlash && activeStrike === 1 ? [0, 1, 0.5, 1, 0] : [0.12, 0.35, 0.12],
+              strokeWidth: thunderFlash && activeStrike === 1 ? [2, 4.5, 2] : 2,
+            }}
+            transition={{ duration: thunderFlash ? 0.35 : 5, repeat: thunderFlash ? 0 : Infinity }}
+          />
+
+          {/* Bolt 2 Branch */}
+          <motion.path
+            d="M 79% 380 L 68% 460 L 71% 530 L 62% 640"
+            stroke="url(#branchThunderGrad)"
+            strokeWidth="2"
+            fill="none"
+            filter="url(#lightningGlow)"
+            animate={{
+              opacity: thunderFlash && activeStrike === 1 ? [0, 0.85, 0] : [0.08, 0.25, 0.08],
+            }}
+            transition={{ duration: thunderFlash ? 0.3 : 5, repeat: thunderFlash ? 0 : Infinity }}
+          />
+
+          {/* Bolt 3: High Center Overhead Thunder Fork */}
+          <motion.path
+            d="M 52% 0 L 48% 110 L 53% 180 L 47% 290 L 51% 370 L 46% 490"
+            stroke="url(#mainThunderGrad)"
+            strokeWidth="2.5"
+            fill="none"
+            filter="url(#lightningGlow)"
+            animate={{
+              opacity: thunderFlash && activeStrike === 2 ? [0, 1, 0.3, 1, 0] : [0.1, 0.3, 0.1],
+            }}
+            transition={{ duration: thunderFlash ? 0.35 : 4.5, repeat: thunderFlash ? 0 : Infinity }}
+          />
         </svg>
 
-        {/* Floating Electric Sparks / Embers */}
-        {[...Array(12)].map((_, i) => (
+        {/* Electric Particles / Ions floating across screen */}
+        {[...Array(16)].map((_, i) => (
           <motion.div
             key={i}
-            className="absolute w-1 h-1 rounded-full bg-cyan-300 shadow-[0_0_8px_#00f0ff]"
+            className="absolute w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-cyan-300 shadow-[0_0_10px_#00f0ff]"
             style={{
-              top: `${10 + (i * 7.5)}%`,
-              left: `${5 + (i * 8)}%`,
+              top: `${8 + (i * 5.5)}%`,
+              left: `${4 + (i * 6)}%`,
             }}
             animate={{
-              y: [-15, 15, -15],
-              x: [-10, 10, -10],
+              y: [-20, 20, -20],
+              x: [-12, 12, -12],
               opacity: [0.2, 0.9, 0.2],
-              scale: [0.8, 1.4, 0.8],
+              scale: [0.8, 1.5, 0.8],
             }}
             transition={{
               duration: 3 + (i % 4),
               repeat: Infinity,
               ease: "easeInOut",
-              delay: i * 0.4,
+              delay: i * 0.3,
             }}
           />
         ))}
       </div>
 
-      {/* ── Main High-End Portal Container ── */}
+      {/* ═══════════════════════════════════════════════════════════════════════
+          SOVEREIGN ACCESS TERMINAL (CYBERNETIC PORTAL)
+          ═══════════════════════════════════════════════════════════════════════ */}
       <motion.div
         initial={{ opacity: 0, y: 25, scale: 0.97 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        className="w-full max-w-4xl relative z-10 rounded-3xl overflow-hidden border-2 border-cyan-500/40 bg-slate-900/80 backdrop-blur-2xl shadow-[0_0_60px_rgba(6,182,212,0.25)] ring-1 ring-cyan-500/20"
+        className="w-full max-w-4xl relative z-10 rounded-3xl overflow-hidden border-2 border-cyan-500/40 bg-slate-900/85 backdrop-blur-2xl shadow-[0_0_60px_rgba(6,182,212,0.3)] ring-1 ring-cyan-400/20"
       >
         {/* Cybernetic Corner Brackets */}
-        <div className="absolute top-2.5 left-2.5 w-4 h-4 border-t-2 border-l-2 border-cyan-400 pointer-events-none z-20" />
-        <div className="absolute top-2.5 right-2.5 w-4 h-4 border-t-2 border-r-2 border-cyan-400 pointer-events-none z-20" />
-        <div className="absolute bottom-2.5 left-2.5 w-4 h-4 border-b-2 border-l-2 border-cyan-400 pointer-events-none z-20" />
-        <div className="absolute bottom-2.5 right-2.5 w-4 h-4 border-b-2 border-r-2 border-cyan-400 pointer-events-none z-20" />
+        <div className="absolute top-3 left-3 w-4 h-4 border-t-2 border-l-2 border-cyan-400 pointer-events-none z-20" />
+        <div className="absolute top-3 right-3 w-4 h-4 border-t-2 border-r-2 border-cyan-400 pointer-events-none z-20" />
+        <div className="absolute bottom-3 left-3 w-4 h-4 border-b-2 border-l-2 border-cyan-400 pointer-events-none z-20" />
+        <div className="absolute bottom-3 right-3 w-4 h-4 border-b-2 border-r-2 border-cyan-400 pointer-events-none z-20" />
 
         {/* Ambient Top Glow Line */}
         <div className="absolute top-0 inset-x-12 h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent z-20" />
 
-        <div className="grid grid-cols-1 md:grid-cols-12 min-h-[580px]">
+        {/* Mobile Top Header Artwork Banner (Auto-shrinks on mobile, hidden on desktop) */}
+        <div className="md:hidden relative w-full h-32 sm:h-40 overflow-hidden bg-slate-950 border-b border-cyan-500/30">
+          <img
+            src="/images/solo-leveling/jinwoo-monarch-portrait.jpg"
+            alt="Sung Jin-Woo Monarch Sovereign"
+            className="w-full h-full object-cover object-top filter brightness-105 contrast-125"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent" />
+          <div className="absolute bottom-2.5 left-4 right-4 flex items-center justify-between">
+            <span className="text-[9px] font-mono font-bold tracking-widest text-cyan-300 uppercase bg-black/70 px-2 py-0.5 rounded border border-cyan-400/30 flex items-center gap-1.5">
+              <Crown className="w-3 h-3 text-amber-400" />
+              PLAYER #0001 · CHANDRASEKHAR
+            </span>
+            <span className="text-[9px] font-mono text-purple-400 font-bold uppercase tracking-wider bg-purple-950/80 px-2 py-0.5 rounded border border-purple-500/30">
+              SHADOW MONARCH
+            </span>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-12 min-h-[560px]">
           {/* ── LEFT: Login Access Form (7 cols) ── */}
           <div className="md:col-span-7 p-6 sm:p-10 flex flex-col justify-between relative z-10">
             <div>
@@ -268,34 +376,62 @@ export default function LoginPage() {
             </div>
           </div>
 
-          {/* ── RIGHT: Sung Jin-Woo Night Thunder Artwork (5 cols) ── */}
-          <div className="md:col-span-5 relative bg-slate-950 min-h-[260px] md:min-h-full overflow-hidden border-t md:border-t-0 md:border-l border-cyan-500/30 flex flex-col justify-end p-6">
-            {/* Background Night Thunder Image */}
-            <img
-              src="/images/solo-leveling/jinwoo-night-thunder.jpg"
-              alt="Sung Jin-Woo Night Thunder Awakening"
-              className="absolute inset-0 w-full h-full object-cover object-right md:object-center filter brightness-[0.95] contrast-[1.05]"
-            />
+          {/* ── RIGHT: Sung Jin-Woo Shadow Monarch Shrine (5 cols, Desktop) ── */}
+          <div className="hidden md:flex md:col-span-5 relative bg-gradient-to-b from-slate-950 via-[#0a0614] to-slate-950 overflow-hidden border-l border-cyan-500/30 flex-col items-center justify-between p-6">
+            {/* Cybernetic Grid & Plasma Vortex Behind Portrait */}
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-purple-900/30 via-slate-950/80 to-slate-950 pointer-events-none" />
+            <div className="absolute top-1/3 w-48 h-48 rounded-full bg-purple-500/20 blur-[50px] animate-pulse pointer-events-none" />
 
-            {/* Gradient Overlays for Readability and Depth */}
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent pointer-events-none" />
-            <div className="absolute inset-0 bg-gradient-to-r from-slate-950/60 via-transparent to-slate-950/20 pointer-events-none" />
-
-            {/* Electric Plasma Aura Ring */}
-            <div className="absolute top-1/4 right-1/4 w-36 h-36 rounded-full bg-cyan-400/20 filter blur-[40px] pointer-events-none animate-pulse" />
-
-            {/* Inscription Overlay at bottom */}
-            <div className="relative z-10 space-y-2.5">
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-cyan-950/80 border border-cyan-400/50 backdrop-blur-md">
-                <Sparkles className="w-3 h-3 text-cyan-300" />
-                <span className="text-[9px] font-mono font-bold text-cyan-300 tracking-wider uppercase">
-                  MONARCH RECOGNITION
+            {/* Top Monarch Status Pill */}
+            <div className="relative z-10 w-full flex items-center justify-between">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-purple-950/70 border border-purple-500/40 backdrop-blur-md">
+                <Crown className="w-3.5 h-3.5 text-amber-400" />
+                <span className="text-[9px] font-mono font-bold text-purple-300 tracking-wider uppercase">
+                  MONARCH CLASS
                 </span>
               </div>
-              <p className="text-xs text-slate-200 font-mono leading-relaxed italic border-l-2 border-cyan-400/80 pl-3 drop-shadow">
-                "I am the only one who can level up in this world. Sweat in training, reign in battle."
+              <span className="text-[9px] font-mono text-cyan-400 font-bold bg-cyan-950/70 border border-cyan-500/30 px-2 py-0.5 rounded-full">
+                SLOT #0001
+              </span>
+            </div>
+
+            {/* Centered High-Definition Portrait */}
+            <div className="relative z-10 my-auto flex flex-col items-center group">
+              <div className="relative w-48 h-48 lg:w-56 lg:h-56 rounded-2xl overflow-hidden border-2 border-purple-500/60 shadow-[0_0_35px_rgba(168,85,247,0.4)] ring-2 ring-cyan-400/30 bg-black">
+                <img
+                  src="/images/solo-leveling/jinwoo-monarch-portrait.jpg"
+                  alt="Sung Jin-Woo Monarch Sovereign"
+                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 filter brightness-105 contrast-125"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
+                
+                {/* Floating Badge in Portrait */}
+                <div className="absolute bottom-2 inset-x-2 text-center">
+                  <span className="text-[9px] font-mono font-black text-cyan-300 tracking-wider bg-black/80 px-2 py-0.5 rounded border border-cyan-400/40">
+                    SUNG JIN-WOO // MONARCH
+                  </span>
+                </div>
+              </div>
+
+              {/* Runic Corner Indicators */}
+              <div className="absolute -top-2 -left-2 w-3 h-3 border-t-2 border-l-2 border-purple-400" />
+              <div className="absolute -top-2 -right-2 w-3 h-3 border-t-2 border-r-2 border-purple-400" />
+              <div className="absolute -bottom-2 -left-2 w-3 h-3 border-b-2 border-l-2 border-purple-400" />
+              <div className="absolute -bottom-2 -right-2 w-3 h-3 border-b-2 border-r-2 border-purple-400" />
+            </div>
+
+            {/* Inscription Quote at Bottom */}
+            <div className="relative z-10 w-full space-y-2 pt-2">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-cyan-950/80 border border-cyan-400/40">
+                <Sparkles className="w-3 h-3 text-cyan-300" />
+                <span className="text-[9px] font-mono font-bold text-cyan-300 tracking-wider uppercase">
+                  SOVEREIGN ASCENSION
+                </span>
+              </div>
+              <p className="text-xs text-slate-300 font-mono leading-relaxed italic border-l-2 border-cyan-400/80 pl-3 drop-shadow">
+                &ldquo;I am the only one who can level up in this world. Sweat in training, reign in battle.&rdquo;
               </p>
-              <p className="text-[10px] font-mono text-cyan-400/90 font-bold uppercase tracking-widest">
+              <p className="text-[10px] font-mono text-cyan-400/90 font-bold uppercase tracking-widest pl-3">
                 — PLAYER: CHANDRASEKHAR
               </p>
             </div>

@@ -101,40 +101,18 @@ export function Sidebar() {
         transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
         className="glass-sidebar fixed left-0 top-0 h-full z-50 flex flex-col"
       >
-        {/* ── Logo Header ── */}
-        <div className="p-4 flex items-center justify-between gap-3 border-b border-border/60">
-          <div className="flex items-center gap-3">
-            <div className="relative flex-shrink-0">
-              <img 
-                src="/logo.jpg" 
-                alt="God System" 
-                className="w-10 h-10 rounded-lg object-cover border border-primary/30"
-              />
-              {/* System active indicator */}
-              <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-sidebar" />
-            </div>
-            {(!sidebarCollapsed || isMobile) && (
-              <motion.div
-                initial={{ opacity: 0, x: -8 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -8 }}
-                transition={{ duration: 0.2 }}
-              >
-                <h1 className="gold-text font-display font-bold text-sm tracking-[0.15em] uppercase">GOD SYSTEM</h1>
-                <p className="text-[10px] text-muted-foreground tracking-[0.2em] uppercase font-mono">Sovereign OS</p>
-              </motion.div>
-            )}
-          </div>
-          
-          {isMobile && (
+        {/* ── Mobile Close Button (when open) ── */}
+        {isMobile && (
+          <div className="p-3 flex items-center justify-end border-b border-border/60 lg:hidden">
             <button
               onClick={() => setMobileMenuOpen(false)}
-              className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent transition-all lg:hidden"
+              className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent transition-all"
+              aria-label="Close menu"
             >
               <ChevronLeft className="w-5 h-5 text-primary" />
             </button>
-          )}
-        </div>
+          </div>
+        )}
 
         {/* ── Hunter Identity Card ── */}
         <div className="px-3 py-2 border-b border-border/60">

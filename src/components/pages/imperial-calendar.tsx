@@ -5,10 +5,10 @@ import { useAppStore } from '@/store/use-app-store'
 import { cn } from '@/lib/utils'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-  Calendar, ChevronLeft, ChevronRight, IndianRupee,
+  Calendar as CalendarIcon, ChevronLeft, ChevronRight, IndianRupee,
   TrendingUp, TrendingDown, Users, MessageSquare,
   Phone, Send, CheckCircle2, Clock, Target,
-  Sparkles, Crown, X, ArrowUpRight, Bell, Plus
+  Sparkles, Crown, X, ArrowUpRight, Bell, Plus, CalendarClock
 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -37,7 +37,7 @@ function getMonthDays(year: number, month: number): Date[] {
     days.push(new Date(year, month, d))
   }
   
-  // Pad remaining to fill 6 rows
+  // Pad remaining to fill 6 rows (42 total cells)
   while (days.length < 42) {
     days.push(new Date(year, month + 1, days.length - lastDay.getDate() - startDow + 1))
   }
@@ -71,7 +71,7 @@ interface DayEvent {
 
 const WEEKDAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
-// ─── Day Cell ───────────────────────────────────────────────────────────────
+// ─── Day Cell Component ───────────────────────────────────────────────────────
 
 function DayCell({
   date,
@@ -97,72 +97,190 @@ function DayCell({
 
   return (
     <motion.button
-      whileHover={{ scale: 1.04 }}
-      whileTap={{ scale: 0.96 }}
+      whileHover={{ scale: 1.03 }}
+      whileTap={{ scale: 0.97 }}
       onClick={onSelect}
       className={cn(
-        'relative w-full aspect-[1.35] rounded-lg border transition-all duration-200 flex flex-col items-center justify-start pt-1 gap-0.5 overflow-hidden',
+        'relative w-full aspect-[1.1] sm:aspect-[1.25] md:aspect-[1.3] rounded-xl border transition-all duration-200 flex flex-col items-center justify-between p-1 sm:p-1.5 overflow-hidden group',
         isSelected
-          ? 'bg-primary/20 border-primary/50 ring-1 ring-primary/40 shadow-lg shadow-primary/15'
+          ? 'bg-primary/20 border-primary ring-2 ring-primary/40 shadow-md shadow-primary/20'
           : isToday
-          ? 'bg-primary/[0.08] border-primary/30'
+          ? 'bg-amber-500/10 dark:bg-amber-500/15 border-amber-400 dark:border-amber-400/80 ring-1 ring-amber-400/50'
           : isCurrentMonth
-          ? 'bg-secondary/30 border-border hover:bg-secondary/70 hover:border-border'
-          : 'bg-transparent border-border/20 opacity-30'
+          ? 'bg-card hover:bg-accent/60 border-border/80 shadow-2xs'
+          : 'bg-muted/10 border-border/30 opacity-40 hover:opacity-70'
       )}
     >
-      {/* Day number */}
-      <span className={cn(
-        'text-[10px] sm:text-xs font-semibold z-10',
-        isToday ? 'text-primary font-bold' : isCurrentMonth ? 'text-foreground/70' : 'text-muted-foreground/40'
-      )}>
-        {dayNum}
-      </span>
-
-      {/* Event dots */}
-      {events.length > 0 && (
-        <div className="flex items-center gap-[3px] flex-wrap justify-center max-w-full px-0.5 z-10">
-          {hasIncome && <div className="w-1 h-1 rounded-full bg-emerald-400 flex-shrink-0" />}
-          {hasExpense && <div className="w-1 h-1 rounded-full bg-red-400 flex-shrink-0" />}
-          {hasFollowup && <div className="w-1 h-1 rounded-full bg-sky-400 flex-shrink-0" />}
-          {hasOutreach && <div className="w-1 h-1 rounded-full bg-purple-400 flex-shrink-0" />}
-          {hasNotification && <div className="w-1 h-1 rounded-full bg-amber-400 flex-shrink-0" />}
-        </div>
-      )}
-
-      {/* Event count badge */}
-      {events.length > 0 && (
+      {/* Top Header: Day number & today marker */}
+      <div className="w-full flex items-center justify-between">
         <span className={cn(
-          'text-[8px] font-bold mt-auto mb-0.5 z-10',
-          isSelected ? 'text-amber-600 dark:text-amber-400' : 'text-muted-foreground/60'
+          'text-[10px] sm:text-xs font-mono font-bold leading-none',
+          isSelected
+            ? 'text-primary'
+            : isToday
+            ? 'text-amber-700 dark:text-amber-400 font-black'
+            : isCurrentMonth
+            ? 'text-foreground'
+            : 'text-muted-foreground'
+        )}>
+          {dayNum}
+        </span>
+        {isToday && (
+          <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+        )}
+      </div>
+
+      {/* Middle: Event Color Dots */}
+      <div className="flex items-center gap-1 flex-wrap justify-center w-full my-auto px-0.5">
+        {hasIncome && <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_4px_rgba(16,185,129,0.5)]" title="Income" />}
+        {hasExpense && <span className="w-1.5 h-1.5 rounded-full bg-red-500 shadow-[0_0_4px_rgba(239,68,68,0.5)]" title="Expense" />}
+        {hasFollowup && <span className="w-1.5 h-1.5 rounded-full bg-sky-500 shadow-[0_0_4px_rgba(14,165,233,0.5)]" title="Followup" />}
+        {hasOutreach && <span className="w-1.5 h-1.5 rounded-full bg-purple-500 shadow-[0_0_4px_rgba(168,85,247,0.5)]" title="Outreach" />}
+        {hasNotification && <span className="w-1.5 h-1.5 rounded-full bg-amber-500 shadow-[0_0_4px_rgba(245,158,11,0.5)]" title="Reminder" />}
+      </div>
+
+      {/* Bottom: Event Count Pill */}
+      {events.length > 0 ? (
+        <span className={cn(
+          'text-[8px] sm:text-[9px] font-mono font-bold px-1 py-0.2 rounded-full leading-none',
+          isSelected
+            ? 'bg-primary text-primary-foreground'
+            : isToday
+            ? 'bg-amber-500/20 text-amber-700 dark:text-amber-300 font-extrabold'
+            : 'bg-secondary text-muted-foreground group-hover:text-foreground'
         )}>
           {events.length}
         </span>
-      )}
-
-      {/* Today indicator ring */}
-      {isToday && (
-        <div className="absolute inset-0 rounded-lg ring-1 ring-inset ring-amber-400/30 pointer-events-none" />
+      ) : (
+        <span className="h-2" />
       )}
     </motion.button>
   )
 }
 
-// ─── Day Detail Panel ───────────────────────────────────────────────────────
+// ─── Month Summary Cards Component ──────────────────────────────────────────
 
-function DayDetailPanel({
+function MonthSummary({
+  monthIncome,
+  monthExpense,
+  followupCount,
+  outreachCount,
+}: {
+  monthIncome: number
+  monthExpense: number
+  followupCount: number
+  outreachCount: number
+}) {
+  const netCashflow = monthIncome - monthExpense
+
+  return (
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+      {/* Total Income */}
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+        className="bg-card border border-emerald-500/30 rounded-2xl p-4 shadow-xs relative overflow-hidden"
+      >
+        <div className="absolute top-0 inset-x-0 h-[2px] bg-emerald-500" />
+        <div className="flex items-center justify-between mb-1">
+          <span className="text-[10px] font-mono uppercase tracking-wider font-bold text-emerald-700 dark:text-emerald-400">
+            Total Income
+          </span>
+          <div className="p-1 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+            <TrendingUp className="w-3.5 h-3.5" />
+          </div>
+        </div>
+        <p className="text-lg sm:text-2xl font-black font-mono text-emerald-700 dark:text-emerald-400">
+          {formatINR(monthIncome)}
+        </p>
+        <p className="text-[10px] text-muted-foreground mt-0.5">Recorded cashflow</p>
+      </motion.div>
+
+      {/* Total Expenses */}
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.15 }}
+        className="bg-card border border-red-500/30 rounded-2xl p-4 shadow-xs relative overflow-hidden"
+      >
+        <div className="absolute top-0 inset-x-0 h-[2px] bg-red-500" />
+        <div className="flex items-center justify-between mb-1">
+          <span className="text-[10px] font-mono uppercase tracking-wider font-bold text-red-700 dark:text-red-400">
+            Total Expenses
+          </span>
+          <div className="p-1 rounded bg-red-500/10 text-red-600 dark:text-red-400">
+            <TrendingDown className="w-3.5 h-3.5" />
+          </div>
+        </div>
+        <p className="text-lg sm:text-2xl font-black font-mono text-red-700 dark:text-red-400">
+          {formatINR(monthExpense)}
+        </p>
+        <p className="text-[10px] text-muted-foreground mt-0.5">Monthly burn rate</p>
+      </motion.div>
+
+      {/* Active Followups */}
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+        className="bg-card border border-sky-500/30 rounded-2xl p-4 shadow-xs relative overflow-hidden"
+      >
+        <div className="absolute top-0 inset-x-0 h-[2px] bg-sky-500" />
+        <div className="flex items-center justify-between mb-1">
+          <span className="text-[10px] font-mono uppercase tracking-wider font-bold text-sky-700 dark:text-sky-400">
+            Client Followups
+          </span>
+          <div className="p-1 rounded bg-sky-500/10 text-sky-600 dark:text-sky-400">
+            <Clock className="w-3.5 h-3.5" />
+          </div>
+        </div>
+        <p className="text-lg sm:text-2xl font-black font-mono text-sky-700 dark:text-sky-400">
+          {followupCount}
+        </p>
+        <p className="text-[10px] text-muted-foreground mt-0.5">Scheduled client checkpoints</p>
+      </motion.div>
+
+      {/* Outreach Operations */}
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.25 }}
+        className="bg-card border border-purple-500/30 rounded-2xl p-4 shadow-xs relative overflow-hidden"
+      >
+        <div className="absolute top-0 inset-x-0 h-[2px] bg-purple-500" />
+        <div className="flex items-center justify-between mb-1">
+          <span className="text-[10px] font-mono uppercase tracking-wider font-bold text-purple-700 dark:text-purple-400">
+            Outreach Ops
+          </span>
+          <div className="p-1 rounded bg-purple-500/10 text-purple-600 dark:text-purple-400">
+            <Send className="w-3.5 h-3.5" />
+          </div>
+        </div>
+        <p className="text-lg sm:text-2xl font-black font-mono text-purple-700 dark:text-purple-400">
+          {outreachCount}
+        </p>
+        <p className="text-[10px] text-muted-foreground mt-0.5">DMs, calls & proposals</p>
+      </motion.div>
+    </div>
+  )
+}
+
+// ─── Selected Day Schedule Panel ─────────────────────────────────────────────
+
+function DaySchedulePanel({
   date,
   events,
   onClose,
 }: {
   date: Date
   events: DayEvent[]
-  onClose: () => void
+  onClose?: () => void
 }) {
   const dateStr = date.toLocaleDateString('en-IN', {
     weekday: 'long',
-    day: '2-digit',
-    month: 'long',
+    day: 'numeric',
+    month: 'short',
     year: 'numeric',
   })
 
@@ -171,12 +289,13 @@ function DayDetailPanel({
 
   const { addNotification } = useAppStore()
   const [newNotif, setNewNotif] = useState('')
+  const [isAdding, setIsAdding] = useState(false)
 
   const handleAddNotif = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!newNotif.trim()) return
     
-    // Create a date preserving the year, month, date of `date` but current time or noon
+    setIsAdding(true)
     const d = new Date(date)
     d.setHours(12, 0, 0, 0)
     
@@ -192,188 +311,133 @@ function DayDetailPanel({
       const data = await res.json()
       if (res.ok) {
         addNotification(data)
-        toast.success('Notification saved to database')
+        toast.success('Reminder added to Imperial Calendar!')
         setNewNotif('')
       } else {
-        throw new Error(data.error || 'Failed to save notification')
+        throw new Error(data.error || 'Failed to save reminder')
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err)
-      toast.error('Failed to add notification')
+      toast.error('Failed to add reminder')
+    } finally {
+      setIsAdding(false)
     }
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20, scale: 0.95 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      exit={{ opacity: 0, y: 20, scale: 0.95 }}
-      transition={{ duration: 0.3 }}
-      className="bg-card/95 backdrop-blur-xl border border-border rounded-2xl p-5 shadow-2xl shadow-black/40 max-w-3xl mx-auto w-full"
-    >
-      {/* Header */}
-      <div className="flex items-center justify-between mb-4">
-        <div>
-          <p className="text-primary font-mono text-[10px] uppercase tracking-widest font-semibold">Daily Summary</p>
-          <h3 className="text-foreground text-lg font-bold">{dateStr}</h3>
+    <div className="bg-card border border-border/80 rounded-2xl p-5 shadow-sm flex flex-col justify-between h-full space-y-4">
+      <div>
+        {/* Header */}
+        <div className="flex items-center justify-between pb-3 border-b border-border/60">
+          <div>
+            <span className="text-[10px] font-mono uppercase tracking-widest text-primary font-bold">
+              TIMELINE BRIEFING
+            </span>
+            <h3 className="text-base sm:text-lg font-bold text-foreground font-display">
+              {dateStr}
+            </h3>
+          </div>
+          {onClose && (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={onClose}
+              className="h-8 w-8 text-muted-foreground hover:text-foreground"
+            >
+              <X className="w-4 h-4" />
+            </Button>
+          )}
         </div>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={onClose}
-          className="text-muted-foreground/60 hover:text-foreground/80 hover:bg-secondary/50 h-8 w-8 p-0"
-        >
-          <X className="w-4 h-4" />
-        </Button>
+
+        {/* Daily Financial Mini-Tally */}
+        {(totalIncome > 0 || totalExpense > 0) && (
+          <div className="grid grid-cols-2 gap-2 my-3">
+            <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-2.5">
+              <span className="text-[9px] font-mono text-emerald-700 dark:text-emerald-400 font-bold uppercase tracking-wider block">
+                Day Income
+              </span>
+              <span className="text-sm sm:text-base font-black font-mono text-emerald-700 dark:text-emerald-400">
+                {formatINR(totalIncome)}
+              </span>
+            </div>
+            <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-2.5">
+              <span className="text-[9px] font-mono text-red-700 dark:text-red-400 font-bold uppercase tracking-wider block">
+                Day Expense
+              </span>
+              <span className="text-sm sm:text-base font-black font-mono text-red-700 dark:text-red-400">
+                {formatINR(totalExpense)}
+              </span>
+            </div>
+          </div>
+        )}
+
+        {/* Chronological Event List */}
+        <div className="space-y-2 mt-3 max-h-[380px] overflow-y-auto pr-1">
+          {events.length === 0 ? (
+            <div className="text-center py-10 px-4 border border-dashed border-border/60 rounded-xl bg-secondary/10">
+              <CalendarClock className="w-8 h-8 text-muted-foreground/30 mx-auto mb-2" />
+              <p className="text-xs font-mono font-bold text-foreground">Zero Scheduled Events</p>
+              <p className="text-[10px] text-muted-foreground mt-0.5">Use the prompt below to log a reminder or milestone.</p>
+            </div>
+          ) : (
+            events.map((event) => (
+              <div
+                key={event.id}
+                className="flex items-center gap-3 p-3 bg-secondary/20 hover:bg-secondary/40 border border-border/70 rounded-xl transition-all"
+              >
+                <div className={cn('p-2 rounded-lg flex-shrink-0', event.color)}>
+                  {event.icon}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-foreground text-xs sm:text-sm font-semibold truncate">{event.label}</p>
+                  <p className="text-muted-foreground text-[10px] sm:text-xs truncate">{event.detail}</p>
+                </div>
+                {event.amount !== undefined && event.amount > 0 && (
+                  <span className={cn(
+                    'text-xs sm:text-sm font-mono font-bold flex-shrink-0',
+                    event.type === 'income' ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'
+                  )}>
+                    {formatINR(event.amount)}
+                  </span>
+                )}
+              </div>
+            ))
+          )}
+        </div>
       </div>
 
-      {/* Quick Stats */}
-      {(totalIncome > 0 || totalExpense > 0) && (
-        <div className="grid grid-cols-2 gap-3 mb-4">
-          <div className="bg-emerald-500/5 border border-emerald-500/15 rounded-xl p-3">
-            <p className="text-emerald-400/60 font-mono text-[9px] uppercase tracking-wider">Income</p>
-            <p className="text-emerald-400 text-lg font-bold">{formatINR(totalIncome)}</p>
-          </div>
-          <div className="bg-red-500/5 border border-red-500/15 rounded-xl p-3">
-            <p className="text-red-400/60 font-mono text-[9px] uppercase tracking-wider">Expense</p>
-            <p className="text-red-400 text-lg font-bold">{formatINR(totalExpense)}</p>
-          </div>
-        </div>
-      )}
-
-      {/* Events list */}
-      {events.length === 0 ? (
-        <div className="text-center py-8">
-          <Calendar className="w-8 h-8 text-muted-foreground/20 mx-auto mb-2" />
-          <p className="text-muted-foreground/50 text-sm">No activity on this day</p>
-        </div>
-      ) : (
-        <div className="space-y-2 max-h-[300px] overflow-y-auto pr-1">
-          {events.map((event) => (
-            <div
-              key={event.id}
-              className="flex items-center gap-3 p-3 bg-secondary/30 border border-border rounded-xl hover:bg-secondary/60 transition-all"
-            >
-              <div className={cn('p-2 rounded-lg flex-shrink-0', event.color)}>
-                {event.icon}
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-foreground/80 text-sm font-medium truncate">{event.label}</p>
-                <p className="text-muted-foreground/60 text-xs truncate">{event.detail}</p>
-              </div>
-              {event.amount !== undefined && event.amount > 0 && (
-                <span className={cn(
-                  'text-sm font-bold flex-shrink-0',
-                  event.type === 'income' ? 'text-emerald-400' : event.type === 'expense' ? 'text-red-400' : 'gold-text'
-                )}>
-                  {formatINR(event.amount)}
-                </span>
-              )}
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Add Notification Form */}
-      <div className="mt-4 pt-4 border-t border-border">
+      {/* Add Reminder Form */}
+      <div className="pt-3 border-t border-border/60">
         <form onSubmit={handleAddNotif} className="flex items-center gap-2">
           <Input 
-            placeholder="Add a notification/reminder for this day..."
+            placeholder="Add calendar reminder or action..."
             value={newNotif}
             onChange={(e) => setNewNotif(e.target.value)}
-            className="flex-1 bg-secondary/30 border-border text-foreground placeholder:text-muted-foreground/40 h-9"
+            disabled={isAdding}
+            className="flex-1 bg-secondary/30 border-border text-foreground placeholder:text-muted-foreground/50 h-9 text-xs font-mono"
           />
           <Button 
             type="submit" 
-            disabled={!newNotif.trim()}
-            className="h-9 w-9 p-0 bg-amber-500 hover:bg-amber-400 text-black flex-shrink-0 rounded-lg"
+            disabled={!newNotif.trim() || isAdding}
+            className="h-9 px-3 bg-primary text-primary-foreground font-mono text-xs font-bold flex-shrink-0 rounded-lg gap-1"
           >
-            <Plus className="w-4 h-4" />
+            <Plus className="w-3.5 h-3.5" />
+            <span>Add</span>
           </Button>
         </form>
       </div>
-    </motion.div>
-  )
-}
-
-// ─── Month Summary Stats ────────────────────────────────────────────────────
-
-function MonthSummary({
-  monthIncome,
-  monthExpense,
-  followupCount,
-  outreachCount,
-}: {
-  monthIncome: number
-  monthExpense: number
-  followupCount: number
-  outreachCount: number
-}) {
-  return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-      <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-        className="bg-emerald-500/5 border border-emerald-500/15 rounded-xl p-4"
-      >
-        <div className="flex items-center gap-2 mb-1">
-          <TrendingUp className="w-3.5 h-3.5 text-emerald-400" />
-          <span className="text-emerald-400/60 font-mono text-[9px] uppercase tracking-wider">Income</span>
-        </div>
-        <p className="text-emerald-400 text-xl font-bold">{formatINR(monthIncome)}</p>
-      </motion.div>
-
-      <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.15 }}
-        className="bg-red-500/5 border border-red-500/15 rounded-xl p-4"
-      >
-        <div className="flex items-center gap-2 mb-1">
-          <TrendingDown className="w-3.5 h-3.5 text-red-400" />
-          <span className="text-red-400/60 font-mono text-[9px] uppercase tracking-wider">Expenses</span>
-        </div>
-        <p className="text-red-400 text-xl font-bold">{formatINR(monthExpense)}</p>
-      </motion.div>
-
-      <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-        className="bg-sky-500/5 border border-sky-500/15 rounded-xl p-4"
-      >
-        <div className="flex items-center gap-2 mb-1">
-          <Clock className="w-3.5 h-3.5 text-sky-400" />
-          <span className="text-sky-400/60 font-mono text-[9px] uppercase tracking-wider">Followups</span>
-        </div>
-        <p className="text-sky-400 text-xl font-bold">{followupCount}</p>
-      </motion.div>
-
-      <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.25 }}
-        className="bg-purple-500/5 border border-purple-500/15 rounded-xl p-4"
-      >
-        <div className="flex items-center gap-2 mb-1">
-          <Send className="w-3.5 h-3.5 text-purple-400" />
-          <span className="text-purple-400/60 font-mono text-[9px] uppercase tracking-wider">Outreach</span>
-        </div>
-        <p className="text-purple-400 text-xl font-bold">{outreachCount}</p>
-      </motion.div>
     </div>
   )
 }
 
-// ─── Main Component ─────────────────────────────────────────────────────────
+// ─── Main Imperial Calendar Component ────────────────────────────────────────
 
 export function ImperialCalendar() {
   const { incomes, expenses, followups, outreachRecords, clients, notifications } = useAppStore()
-  const today = new Date()
+  const today = useMemo(() => new Date(), [])
   const [currentYear, setCurrentYear] = useState(today.getFullYear())
   const [currentMonth, setCurrentMonth] = useState(today.getMonth())
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null)
+  const [selectedDate, setSelectedDate] = useState<Date>(today)
 
   const monthLabel = new Date(currentYear, currentMonth).toLocaleDateString('en-IN', {
     month: 'long',
@@ -398,9 +462,9 @@ export function ImperialCalendar() {
         id: `inc-${inc.id}`,
         type: 'income',
         label: inc.source,
-        detail: inc.clientName || inc.description || 'Income',
+        detail: inc.clientName || inc.description || 'Income entry',
         amount: inc.amount,
-        color: 'bg-emerald-400/10 text-emerald-400',
+        color: 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20',
         icon: <TrendingUp className="w-3.5 h-3.5" />,
       })
     })
@@ -412,9 +476,9 @@ export function ImperialCalendar() {
         id: `exp-${exp.id}`,
         type: 'expense',
         label: exp.category,
-        detail: exp.description,
+        detail: exp.description || 'Expense entry',
         amount: exp.amount,
-        color: 'bg-red-400/10 text-red-400',
+        color: 'bg-red-500/15 text-red-700 dark:text-red-400 border border-red-500/20',
         icon: <TrendingDown className="w-3.5 h-3.5" />,
       })
     })
@@ -422,13 +486,15 @@ export function ImperialCalendar() {
     // Followups
     followups.forEach(f => {
       const key = dateKey(f.dueDate)
-      const clientName = f.clientName || clients.find(c => c.id === f.clientId)?.name || 'Unknown'
+      const clientName = f.clientName || clients.find(c => c.id === f.clientId)?.name || 'Client'
       addEvent(key, {
         id: `fol-${f.id}`,
         type: 'followup',
-        label: `${f.type.charAt(0).toUpperCase() + f.type.slice(1)} — ${clientName}`,
-        detail: f.note || `${f.status} followup`,
-        color: f.status === 'completed' ? 'bg-emerald-400/10 text-emerald-400' : 'bg-sky-400/10 text-sky-400',
+        label: `${f.type.toUpperCase()} · ${clientName}`,
+        detail: f.note || `${f.status} status`,
+        color: f.status === 'completed'
+          ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20'
+          : 'bg-sky-500/15 text-sky-700 dark:text-sky-400 border border-sky-500/20',
         icon: f.status === 'completed' ? <CheckCircle2 className="w-3.5 h-3.5" /> : <Clock className="w-3.5 h-3.5" />,
       })
     })
@@ -442,7 +508,7 @@ export function ImperialCalendar() {
         label: `${o.type.toUpperCase()} → ${o.contactName}`,
         detail: `${o.platform} · ${o.status}${o.notes ? ' — ' + o.notes : ''}`,
         amount: o.projectValue || undefined,
-        color: 'bg-purple-400/10 text-purple-400',
+        color: 'bg-purple-500/15 text-purple-700 dark:text-purple-400 border border-purple-500/20',
         icon: o.type === 'call' ? <Phone className="w-3.5 h-3.5" /> : o.type === 'dm' ? <MessageSquare className="w-3.5 h-3.5" /> : <Send className="w-3.5 h-3.5" />,
       })
     })
@@ -454,8 +520,8 @@ export function ImperialCalendar() {
         id: `not-${n.id}`,
         type: 'notification',
         label: n.title,
-        detail: n.message || 'Notification',
-        color: 'bg-amber-50 text-amber-700 border border-amber-200 dark:bg-primary/10 dark:text-amber-400 dark:border-primary/20',
+        detail: n.message || 'Notification alert',
+        color: 'bg-amber-500/15 text-amber-700 dark:text-amber-400 border border-amber-500/20',
         icon: <Bell className="w-3.5 h-3.5" />,
       })
     })
@@ -491,7 +557,6 @@ export function ImperialCalendar() {
   }, [incomes, expenses, followups, outreachRecords, currentMonth, currentYear])
 
   const selectedEvents = useMemo(() => {
-    if (!selectedDate) return []
     return eventsMap[dateKey(selectedDate)] || []
   }, [selectedDate, eventsMap])
 
@@ -502,7 +567,6 @@ export function ImperialCalendar() {
     } else {
       setCurrentMonth(m => m - 1)
     }
-    setSelectedDate(null)
   }, [currentMonth])
 
   const goToNextMonth = useCallback(() => {
@@ -512,7 +576,6 @@ export function ImperialCalendar() {
     } else {
       setCurrentMonth(m => m + 1)
     }
-    setSelectedDate(null)
   }, [currentMonth])
 
   const goToToday = useCallback(() => {
@@ -524,35 +587,69 @@ export function ImperialCalendar() {
   return (
     <div className="space-y-6">
       {/* ═══════════════════════════════════════════════════════════════════════
-          HEADER
+          HEADER: IMPERIAL CALENDAR
           ═══════════════════════════════════════════════════════════════════════ */}
       <motion.div
-        initial={{ opacity: 0, y: 24 }}
+        initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7 }}
-        className="relative overflow-hidden bg-gradient-to-br from-primary/[0.05] via-background/40 to-background/60 border border-primary/10 rounded-2xl p-6 lg:p-8"
+        transition={{ duration: 0.5 }}
+        className="relative overflow-hidden bg-gradient-to-br from-primary/[0.04] via-background/40 to-background/60 border border-primary/10 rounded-2xl p-5 sm:p-6"
       >
-        <div className="absolute inset-0 ambient-gradient pointer-events-none" />
-        <div className="absolute top-6 right-12 w-1 h-1 rounded-full bg-primary/30 particle" />
-        <div className="absolute top-16 right-24 w-0.5 h-0.5 rounded-full bg-primary/20 particle" style={{ animationDelay: '2s' }} />
-
-        <div className="relative z-10">
-          <div className="flex items-center gap-2 mb-2">
-            <div className="p-1.5 rounded-lg bg-primary/10 border border-primary/20">
-              <Crown className="w-4 h-4 text-primary" />
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 relative z-10">
+          <div>
+            <div className="flex items-center gap-2 mb-1.5">
+              <div className="p-1 rounded-md bg-primary/10 border border-primary/20 text-primary">
+                <Crown className="w-3.5 h-3.5" />
+              </div>
+              <span className="text-[10px] font-mono text-primary font-bold uppercase tracking-widest">
+                TIMELINE INTELLIGENCE CHRONICLE
+              </span>
             </div>
-            <span className="text-[11px] text-primary/70 uppercase tracking-widest font-medium">Timeline Intelligence</span>
+            <h1 className="text-2xl sm:text-3xl font-black font-display tracking-tight text-foreground">
+              Imperial Calendar
+            </h1>
+            <p className="text-xs text-muted-foreground mt-0.5">
+              Unified command schedule — monitor cashflow, strategic outreach, and client deadlines across time.
+            </p>
           </div>
-          <h1 className="gold-text text-3xl lg:font-display text-4xl font-bold tracking-tight">
-            Imperial Calendar
-          </h1>
-          <p className="text-muted-foreground/60 text-sm mt-1">
-            Your unified empire timeline — track income, expenses, outreach, and followups across time
-          </p>
+
+          {/* Month Navigator Controls in Header */}
+          <div className="flex items-center gap-2 bg-card border border-border/80 rounded-xl p-1.5 shadow-xs">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={goToPrevMonth}
+              className="h-8 w-8 text-muted-foreground hover:text-foreground"
+              aria-label="Previous Month"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </Button>
+            <span className="text-xs sm:text-sm font-mono font-bold text-foreground px-2 min-w-[120px] text-center">
+              {monthLabel}
+            </span>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={goToNextMonth}
+              className="h-8 w-8 text-muted-foreground hover:text-foreground"
+              aria-label="Next Month"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </Button>
+            <div className="h-4 w-px bg-border mx-1" />
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={goToToday}
+              className="h-8 text-xs font-mono font-bold text-primary border-primary/20 hover:bg-primary/10 px-2.5"
+            >
+              Today
+            </Button>
+          </div>
         </div>
       </motion.div>
 
-      {/* Month Summary Stats */}
+      {/* 4 Month Summary Stat Cards */}
       <MonthSummary
         monthIncome={monthStats.income}
         monthExpense={monthStats.expense}
@@ -561,121 +658,88 @@ export function ImperialCalendar() {
       />
 
       {/* ═══════════════════════════════════════════════════════════════════════
-          CALENDAR GRID
+          EXECUTIVE 2-COLUMN WORKSPACE: CALENDAR GRID + SCHEDULE PANEL
           ═══════════════════════════════════════════════════════════════════════ */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.2 }}
-        className="bg-card lg:bg-card/80 lg:backdrop-blur-xl border border-border rounded-2xl p-5 max-w-3xl mx-auto w-full"
-      >
-        {/* Month Navigation */}
-        <div className="flex items-center justify-between mb-5">
-          <div className="flex items-center gap-3">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={goToPrevMonth}
-              className="text-muted-foreground hover:text-foreground/80 hover:bg-secondary/50 h-8 w-8 p-0"
-            >
-              <ChevronLeft className="w-4 h-4" />
-            </Button>
-            <h2 className="text-foreground text-lg font-bold min-w-[180px] text-center">
-              {monthLabel}
-            </h2>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={goToNextMonth}
-              className="text-muted-foreground hover:text-foreground/80 hover:bg-secondary/50 h-8 w-8 p-0"
-            >
-              <ChevronRight className="w-4 h-4" />
-            </Button>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={goToToday}
-              className="text-primary/70 hover:text-amber-400 hover:bg-primary/10 text-xs h-8 px-3 border border-primary/15"
-            >
-              Today
-            </Button>
-          </div>
-        </div>
-
-        {/* Legend */}
-        <div className="flex flex-wrap items-center gap-4 mb-4 px-1">
-          <div className="flex items-center gap-1.5">
-            <div className="w-2 h-2 rounded-full bg-emerald-400" />
-            <span className="text-muted-foreground/60 text-[10px]">Income</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <div className="w-2 h-2 rounded-full bg-red-400" />
-            <span className="text-muted-foreground/60 text-[10px]">Expense</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <div className="w-2 h-2 rounded-full bg-sky-400" />
-            <span className="text-muted-foreground/60 text-[10px]">Followup</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <div className="w-2 h-2 rounded-full bg-purple-400" />
-            <span className="text-muted-foreground/60 text-[10px]">Outreach</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <div className="w-2 h-2 rounded-full bg-amber-400" />
-            <span className="text-muted-foreground/60 text-[10px]">Notification</span>
-          </div>
-        </div>
-
-        {/* Weekday Headers */}
-        <div className="grid grid-cols-7 gap-1.5 mb-2">
-          {WEEKDAYS.map(day => (
-            <div key={day} className="text-center">
-              <span className="text-muted-foreground/50 font-mono text-[10px] uppercase tracking-wider font-medium">
-                {day}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+        {/* LEFT: Calendar Grid (7 cols on large desktop) */}
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.15 }}
+          className="lg:col-span-7 xl:col-span-8 bg-card border border-border/80 rounded-2xl p-4 sm:p-5 shadow-xs"
+        >
+          {/* Legend indicators bar */}
+          <div className="flex flex-wrap items-center justify-between gap-3 mb-4 pb-3 border-b border-border/60">
+            <div className="flex flex-wrap items-center gap-3 text-[10px] font-mono">
+              <span className="flex items-center gap-1.5 text-foreground/80">
+                <span className="w-2 h-2 rounded-full bg-emerald-500" /> Income
+              </span>
+              <span className="flex items-center gap-1.5 text-foreground/80">
+                <span className="w-2 h-2 rounded-full bg-red-500" /> Expense
+              </span>
+              <span className="flex items-center gap-1.5 text-foreground/80">
+                <span className="w-2 h-2 rounded-full bg-sky-500" /> Followup
+              </span>
+              <span className="flex items-center gap-1.5 text-foreground/80">
+                <span className="w-2 h-2 rounded-full bg-purple-500" /> Outreach
+              </span>
+              <span className="flex items-center gap-1.5 text-foreground/80">
+                <span className="w-2 h-2 rounded-full bg-amber-500" /> Reminder
               </span>
             </div>
-          ))}
-        </div>
+            <span className="text-[10px] font-mono text-muted-foreground hidden sm:inline">
+              Tap any date to inspect
+            </span>
+          </div>
 
-        {/* Calendar Grid */}
-        <div className="grid grid-cols-7 gap-1.5">
-          {days.map((date, idx) => {
-            const key = dateKey(date)
-            const events = eventsMap[key] || []
-            const isCurrentMonth = date.getMonth() === currentMonth
-            const isTodayDate = dateKey(date) === dateKey(today)
-            const isSelected = selectedDate ? dateKey(date) === dateKey(selectedDate) : false
+          {/* Weekday Labels */}
+          <div className="grid grid-cols-7 gap-1.5 mb-2 text-center">
+            {WEEKDAYS.map(day => (
+              <div key={day} className="py-1">
+                <span className="text-[10px] sm:text-xs font-mono font-bold text-muted-foreground uppercase tracking-wider">
+                  {day}
+                </span>
+              </div>
+            ))}
+          </div>
 
-            return (
-              <DayCell
-                key={idx}
-                date={date}
-                events={events}
-                isCurrentMonth={isCurrentMonth}
-                isToday={isTodayDate}
-                isSelected={isSelected}
-                onSelect={() => setSelectedDate(isSelected ? null : date)}
-              />
-            )
-          })}
-        </div>
-      </motion.div>
+          {/* 42 Date Cells Grid */}
+          <div className="grid grid-cols-7 gap-1.5 sm:gap-2">
+            {days.map((date, idx) => {
+              const key = dateKey(date)
+              const events = eventsMap[key] || []
+              const isCurrentMonth = date.getMonth() === currentMonth
+              const isTodayDate = dateKey(date) === dateKey(today)
+              const isSelected = dateKey(date) === dateKey(selectedDate)
 
-      {/* ═══════════════════════════════════════════════════════════════════════
-          SELECTED DAY DETAIL
-          ═══════════════════════════════════════════════════════════════════════ */}
-      <AnimatePresence>
-        {selectedDate && (
-          <DayDetailPanel
+              return (
+                <DayCell
+                  key={idx}
+                  date={date}
+                  events={events}
+                  isCurrentMonth={isCurrentMonth}
+                  isToday={isTodayDate}
+                  isSelected={isSelected}
+                  onSelect={() => setSelectedDate(date)}
+                />
+              )
+            })}
+          </div>
+        </motion.div>
+
+        {/* RIGHT: Selected Day Schedule Panel (5 cols on large desktop) */}
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="lg:col-span-5 xl:col-span-4"
+        >
+          <DaySchedulePanel
             date={selectedDate}
             events={selectedEvents}
-            onClose={() => setSelectedDate(null)}
           />
-        )}
-      </AnimatePresence>
+        </motion.div>
+      </div>
     </div>
   )
 }
