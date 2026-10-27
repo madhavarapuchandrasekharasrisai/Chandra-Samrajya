@@ -752,7 +752,7 @@ export function WarRoom() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.5 }}
-        className="flex items-center justify-center gap-6 py-4 border-t border-white/[0.03]"
+        className="flex items-center justify-center gap-6 py-4 border-t border-border/40"
       >
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 rounded-full bg-red-400 animate-pulse" />

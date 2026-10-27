@@ -196,16 +196,16 @@ function MissionTracker() {
       initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7 }}
-      className="relative overflow-hidden bg-gradient-to-br from-amber-500/[0.08] via-background/40 to-background/60 border border-primary/10 rounded-2xl p-6 lg:p-8"
+      className="relative overflow-hidden bg-gradient-to-br from-primary/[0.05] via-background/40 to-background/60 border border-primary/10 rounded-2xl p-6 lg:p-8"
     >
       {/* Ambient gradient overlay */}
       <div className="absolute inset-0 ambient-gradient pointer-events-none" />
 
       {/* Floating particles */}
-      <div className="absolute top-6 right-12 w-1 h-1 rounded-full bg-amber-400/30 particle" />
-      <div className="absolute top-16 right-24 w-0.5 h-0.5 rounded-full bg-amber-400/20 particle" style={{ animationDelay: '2s' }} />
-      <div className="absolute bottom-10 left-20 w-1 h-1 rounded-full bg-amber-400/20 particle" style={{ animationDelay: '4s' }} />
-      <div className="absolute top-20 left-1/3 w-0.5 h-0.5 rounded-full bg-amber-300/15 particle" style={{ animationDelay: '3s' }} />
+      <div className="absolute top-6 right-12 w-1 h-1 rounded-full bg-primary/30 particle" />
+      <div className="absolute top-16 right-24 w-0.5 h-0.5 rounded-full bg-primary/20 particle" style={{ animationDelay: '2s' }} />
+      <div className="absolute bottom-10 left-20 w-1 h-1 rounded-full bg-primary/20 particle" style={{ animationDelay: '4s' }} />
+      <div className="absolute top-20 left-1/3 w-0.5 h-0.5 rounded-full bg-primary/15 particle" style={{ animationDelay: '3s' }} />
 
       <div className="relative z-10">
         {/* Header */}
@@ -917,11 +917,11 @@ function BusinessRoadmap() {
 
                   {/* Outreach & Systems */}
                   <div className="grid grid-cols-2 gap-3">
-                    <div className="bg-secondary/30 rounded-lg p-2.5 border border-white/[0.03]">
+                    <div className="bg-secondary/30 rounded-lg p-2.5 border border-border/40">
                       <p className="text-muted-foreground/40 font-mono text-[9px] uppercase tracking-wider mb-1">Outreach</p>
                       <p className="text-muted-foreground text-[11px] leading-snug">{month.outreach}</p>
                     </div>
-                    <div className="bg-secondary/30 rounded-lg p-2.5 border border-white/[0.03]">
+                    <div className="bg-secondary/30 rounded-lg p-2.5 border border-border/40">
                       <p className="text-muted-foreground/40 font-mono text-[9px] uppercase tracking-wider mb-1">Systems</p>
                       <p className="text-muted-foreground text-[11px] leading-snug">{month.systems}</p>
                     </div>

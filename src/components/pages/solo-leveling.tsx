@@ -560,7 +560,7 @@ export function SoloLeveling() {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              className="mt-4 border border-red-500/25 rounded-2xl bg-gradient-to-br from-[#1c0808] via-background to-[#0a0202] shadow-[0_0_30px_rgba(239,68,68,0.08)] relative overflow-hidden"
+              className="mt-4 border border-red-500/25 rounded-2xl bg-gradient-to-br from-destructive/10 via-background to-destructive/5 shadow-[0_0_30px_rgba(239,68,68,0.08)] relative overflow-hidden"
             >
               {/* Pulsing warning overlay */}
               <div className="absolute inset-0 bg-red-500/[0.01] pointer-events-none animate-pulse" />
@@ -1069,7 +1069,7 @@ export function SoloLeveling() {
             transition={{ duration: 0.5, delay: 0.15 }}
             className={cn(
               "bg-white dark:bg-card border rounded-2xl p-4 md:p-5 transition-all duration-500 relative overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] dark:shadow-[0_1px_10px_rgba(255,255,255,0.02)] hover:translate-y-[-1px] hover:shadow-[0_10px_30px_rgba(0,0,0,0.04)] dark:hover:shadow-[0_2px_15px_rgba(255,255,255,0.05)]",
-              stats.failureState === 1 ? "border-red-200 dark:border-red-500/15" : "border-slate-100 dark:border-white/12 hover:border-slate-200 dark:hover:border-white/20"
+              stats.failureState === 1 ? "border-red-200 dark:border-red-500/15" : "border-border hover:border-primary/30"
             )}
           >
             <div className="absolute top-0 right-0 w-60 h-40 bg-orange-500/[0.01] rounded-full filter blur-[60px] pointer-events-none" />
@@ -1199,7 +1199,7 @@ export function SoloLeveling() {
             transition={{ duration: 0.5, delay: 0.05 }}
             className={cn(
               "bg-white dark:bg-card border rounded-2xl p-4 md:p-5 space-y-3 md:space-y-4 overflow-y-auto max-h-[280px] lg:max-h-[240px] no-scrollbar transition-all duration-500 flex-shrink-0 shadow-[0_4px_20px_rgba(0,0,0,0.02)] dark:shadow-[0_1px_10px_rgba(255,255,255,0.02)] hover:translate-y-[-1px] hover:shadow-[0_10px_30px_rgba(0,0,0,0.04)] dark:hover:shadow-[0_2px_15px_rgba(255,255,255,0.05)]",
-              stats.failureState === 1 ? "border-red-200 dark:border-red-500/15" : "border-slate-100 dark:border-white/12 hover:border-slate-200 dark:hover:border-white/20"
+              stats.failureState === 1 ? "border-red-200 dark:border-red-500/15" : "border-border hover:border-primary/30"
             )}
           >
             <span className="text-muted-foreground font-mono text-[10px] uppercase tracking-widest font-bold font-mono block">Biometrics Summary</span>
@@ -1240,7 +1240,7 @@ export function SoloLeveling() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className={cn(
               "bg-white dark:bg-card border rounded-2xl p-4 md:p-5 transition-all duration-500 flex-shrink-0 shadow-[0_4px_20px_rgba(0,0,0,0.02)] dark:shadow-[0_1px_10px_rgba(255,255,255,0.02)] hover:translate-y-[-1px] hover:shadow-[0_10px_30px_rgba(0,0,0,0.04)] dark:hover:shadow-[0_2px_15px_rgba(255,255,255,0.05)]",
-              stats.failureState === 1 ? "border-red-200 dark:border-red-500/15" : "border-slate-100 dark:border-white/12 hover:border-slate-200 dark:hover:border-white/20"
+              stats.failureState === 1 ? "border-red-200 dark:border-red-500/15" : "border-border hover:border-primary/30"
             )}
           >
             <div className="flex items-center justify-between mb-4">
@@ -1270,7 +1270,7 @@ export function SoloLeveling() {
                     <div className="flex items-start gap-2.5 min-w-0 pr-1">
                       <div className={cn(
                         "w-4.5 h-4.5 rounded border flex items-center justify-center flex-shrink-0 transition-all mt-0.5",
-                        isDone ? "border-orange-500 bg-orange-500" : "border-gray-300 dark:border-white/20"
+                        isDone ? "border-orange-500 bg-orange-500" : "border-border"
                       )}>
                         {isDone && <CheckCircle className="w-3.5 h-3.5 text-foreground dark:text-black stroke-[3]" />}
                       </div>
@@ -1293,7 +1293,7 @@ export function SoloLeveling() {
             transition={{ duration: 0.5, delay: 0.25 }}
             className={cn(
               "bg-white dark:bg-card border rounded-2xl p-4 md:p-5 transition-all duration-500 flex-shrink-0 shadow-[0_4px_20px_rgba(0,0,0,0.02)] dark:shadow-[0_1px_10px_rgba(255,255,255,0.02)] hover:translate-y-[-1px] hover:shadow-[0_10px_30px_rgba(0,0,0,0.04)] dark:hover:shadow-[0_2px_15px_rgba(255,255,255,0.05)]",
-              stats.failureState === 1 ? "border-red-200 dark:border-red-500/15" : "border-slate-100 dark:border-white/12 hover:border-slate-200 dark:hover:border-white/20"
+              stats.failureState === 1 ? "border-red-200 dark:border-red-500/15" : "border-border hover:border-primary/30"
             )}
           >
             <div className="flex items-center justify-between mb-4">
@@ -1330,7 +1330,7 @@ export function SoloLeveling() {
                       <div className="flex items-start gap-2.5 min-w-0 pr-1">
                         <div className={cn(
                           "w-4.5 h-4.5 rounded border flex items-center justify-center flex-shrink-0 transition-all mt-0.5",
-                          isDone ? "border-orange-500 bg-orange-500" : "border-gray-300 dark:border-white/20"
+                          isDone ? "border-orange-500 bg-orange-500" : "border-border"
                         )}>
                           {isDone && <CheckCircle className="w-3.5 h-3.5 text-foreground dark:text-black stroke-[3]" />}
                         </div>
@@ -1419,7 +1419,7 @@ export function SoloLeveling() {
               key={i}
               className={cn(
                 "bg-white dark:bg-card border rounded-xl p-3 md:p-4 flex flex-col justify-between items-center text-center relative overflow-hidden transition-all duration-300 hover:translate-y-[-2px] shadow-[0_4px_20px_rgba(0,0,0,0.02)] dark:shadow-[0_1px_10px_rgba(255,255,255,0.02)]",
-                stats.failureState === 1 ? "border-red-200 dark:border-red-500/15 shadow-none" : "border-slate-100 dark:border-white/12 hover:border-slate-200 dark:hover:border-white/20"
+                stats.failureState === 1 ? "border-red-200 dark:border-red-500/15 shadow-none" : "border-border hover:border-primary/30"
               )}
             >
               {/* Top info */}
@@ -1476,7 +1476,7 @@ export function SoloLeveling() {
         transition={{ duration: 0.5, delay: 0.18 }}
         className={cn(
           "bg-white dark:bg-card border rounded-2xl p-4 md:p-5 transition-all duration-500 relative overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] dark:shadow-[0_1px_10px_rgba(255,255,255,0.02)] hover:translate-y-[-1px] hover:shadow-[0_10px_30px_rgba(0,0,0,0.04)] dark:hover:shadow-[0_2px_15px_rgba(255,255,255,0.05)]",
-          stats.failureState === 1 ? "border-red-200 dark:border-red-500/15" : "border-slate-100 dark:border-white/12 hover:border-slate-200 dark:hover:border-white/20"
+          stats.failureState === 1 ? "border-red-200 dark:border-red-500/15" : "border-border hover:border-primary/30"
         )}
       >
         <div className="absolute top-0 right-0 w-60 h-60 bg-amber-500/[0.01] rounded-full filter blur-[60px] pointer-events-none" />
@@ -1572,7 +1572,7 @@ export function SoloLeveling() {
         transition={{ duration: 0.5, delay: 0.2 }}
         className={cn(
           "bg-white dark:bg-card border rounded-2xl p-4 md:p-5 transition-all duration-500 shadow-[0_4px_20px_rgba(0,0,0,0.02)] dark:shadow-[0_1px_10px_rgba(255,255,255,0.02)] hover:translate-y-[-1px] hover:shadow-[0_10px_30px_rgba(0,0,0,0.04)] dark:hover:shadow-[0_2px_15px_rgba(255,255,255,0.05)]",
-          stats.failureState === 1 ? "border-red-200 dark:border-red-500/15" : "border-slate-100 dark:border-white/12 hover:border-slate-200 dark:hover:border-white/20"
+          stats.failureState === 1 ? "border-red-200 dark:border-red-500/15" : "border-border hover:border-primary/30"
         )}
       >
         <div className="flex items-center justify-between mb-4">
@@ -1661,7 +1661,7 @@ export function SoloLeveling() {
         transition={{ duration: 0.5, delay: 0.25 }}
         className={cn(
           "bg-white dark:bg-card border rounded-2xl p-4 md:p-5 transition-all duration-500 relative overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] dark:shadow-[0_1px_10px_rgba(255,255,255,0.02)] hover:translate-y-[-1px] hover:shadow-[0_10px_30px_rgba(0,0,0,0.04)] dark:hover:shadow-[0_2px_15px_rgba(255,255,255,0.05)]",
-          stats.failureState === 1 ? "border-red-200 dark:border-red-500/15" : "border-slate-100 dark:border-white/12 hover:border-slate-200 dark:hover:border-white/20"
+          stats.failureState === 1 ? "border-red-200 dark:border-red-500/15" : "border-border hover:border-primary/30"
         )}
       >
         <div className="absolute top-0 right-0 w-72 h-48 bg-purple-500/[0.015] rounded-full filter blur-[80px] pointer-events-none" />

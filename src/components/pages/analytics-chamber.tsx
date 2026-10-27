@@ -375,7 +375,7 @@ export function AnalyticsChamber() {
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="relative overflow-hidden bg-gradient-to-br from-amber-500/[0.06] via-background/40 to-background/60 border border-primary/10 rounded-2xl p-6"
+        className="relative overflow-hidden bg-gradient-to-br from-primary/[0.05] via-background/40 to-background/60 border border-primary/10 rounded-2xl p-6"
       >
         <div className="absolute inset-0 ambient-gradient pointer-events-none" />
         <div className="relative z-10">

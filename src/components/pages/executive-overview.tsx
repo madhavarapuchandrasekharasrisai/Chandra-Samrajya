@@ -887,15 +887,15 @@ export function ExecutiveOverview() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="relative overflow-hidden bg-gradient-to-br from-amber-500/[0.06] via-background/40 to-background/60 border border-primary/10 rounded-2xl p-4 sm:p-6"
+        className="relative overflow-hidden bg-gradient-to-br from-primary/[0.04] via-background/40 to-background/60 border border-primary/10 rounded-2xl p-4 sm:p-6"
       >
         {/* Ambient gradient overlay */}
         <div className="absolute inset-0 ambient-gradient pointer-events-none" />
 
         {/* Floating particles */}
-        <div className="absolute top-6 right-10 w-1 h-1 rounded-full bg-amber-400/30 particle" />
-        <div className="absolute top-12 right-20 w-0.5 h-0.5 rounded-full bg-amber-400/20 particle" style={{ animationDelay: '2s' }} />
-        <div className="absolute bottom-8 left-16 w-1 h-1 rounded-full bg-amber-400/20 particle" style={{ animationDelay: '4s' }} />
+        <div className="absolute top-6 right-10 w-1 h-1 rounded-full bg-primary/30 particle" />
+        <div className="absolute top-12 right-20 w-0.5 h-0.5 rounded-full bg-primary/20 particle" style={{ animationDelay: '2s' }} />
+        <div className="absolute bottom-8 left-16 w-1 h-1 rounded-full bg-primary/20 particle" style={{ animationDelay: '4s' }} />
 
         <div className="relative z-10 grid grid-cols-1 lg:grid-cols-5 gap-6">
           {/* Left panel: Greeting, stats grid, and insights (3 cols out of 5) */}
@@ -919,8 +919,8 @@ export function ExecutiveOverview() {
                   <CalendarClock className="w-4 h-4 text-inherit" />
                   <span>Imperial Calendar</span>
                   <span className="relative flex h-1.5 w-1.5 ml-0.5">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-amber-500"></span>
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-primary"></span>
                   </span>
                 </Button>
               </div>
@@ -1026,7 +1026,7 @@ export function ExecutiveOverview() {
                     todayTodos.map((todo) => (
                       <div
                         key={todo.id}
-                        className="group flex items-center justify-between gap-3 bg-white/[0.01] hover:bg-secondary/50 border border-white/[0.03] hover:border-primary/10 rounded-lg p-2 transition-all duration-200"
+                        className="group flex items-center justify-between gap-3 bg-secondary/20 hover:bg-secondary/50 border border-border/40 hover:border-primary/20 rounded-lg p-2 transition-all duration-200"
                       >
                         <div 
                           onClick={() => handleToggleTodo(todo.id, todo.completed)}
@@ -1713,7 +1713,7 @@ export function ExecutiveOverview() {
                           </p>
                         )}
                         {record.notes && (
-                          <p className="text-xs text-muted-foreground/70 mt-2 bg-secondary/50 p-2 rounded-lg border border-white/[0.02] leading-relaxed">
+                          <p className="text-xs text-muted-foreground/70 mt-2 bg-secondary/50 p-2 rounded-lg border border-border/40 leading-relaxed">
                             {record.notes}
                           </p>
                         )}

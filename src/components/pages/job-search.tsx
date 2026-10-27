@@ -185,7 +185,7 @@ export function JobSearch() {
             </div>
             <div className="h-2 bg-secondary/50 rounded-full overflow-hidden">
               <motion.div 
-                className="h-full bg-gradient-to-r from-amber-500 to-amber-300"
+                className="h-full bg-gradient-to-r from-primary to-cyan-400"
                 initial={{ width: 0 }}
                 animate={{ width: `${progressPercent}%` }}
                 transition={{ duration: 1, ease: "easeOut" }}
@@ -326,10 +326,10 @@ export function JobSearch() {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95 }}
-                    className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 rounded-xl bg-secondary/30 hover:bg-secondary/60 border border-white/[0.02] transition-colors group"
+                    className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 rounded-xl bg-secondary/30 hover:bg-secondary/60 border border-border/40 transition-colors group"
                   >
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-white/10 to-white/5 flex items-center justify-center flex-shrink-0">
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center flex-shrink-0">
                         <Building2 className="w-4 h-4 text-muted-foreground" />
                       </div>
                       <div>

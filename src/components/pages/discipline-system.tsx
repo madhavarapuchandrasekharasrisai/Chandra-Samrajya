@@ -173,8 +173,8 @@ function ScoreComponentBar({
                 <span className="text-muted-foreground/60 uppercase tracking-wider text-[9px] block mb-1">How it's Calculated</span>
                 <p className="text-foreground/80">{explanation}</p>
               </div>
-              <div className="bg-secondary/50 border border-white/[0.03] rounded-lg p-2.5">
-                <span className="text-amber-400/80 font-mono text-[10px] block mb-1">📐 Formula:</span>
+              <div className="bg-secondary/50 border border-border/40 rounded-lg p-2.5">
+                <span className="text-primary/90 font-mono text-[10px] block mb-1">📐 Formula:</span>
                 <code className="text-foreground font-mono text-[10px] break-all">{formula}</code>
               </div>
               <div>
@@ -486,7 +486,7 @@ export function DisciplineSystem() {
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="relative overflow-hidden bg-gradient-to-br from-amber-500/[0.06] via-background/40 to-background/60 border border-primary/10 rounded-2xl p-6"
+        className="relative overflow-hidden bg-gradient-to-br from-primary/[0.05] via-background/40 to-background/60 border border-primary/10 rounded-2xl p-6"
       >
         <div className="absolute inset-0 ambient-gradient pointer-events-none" />
         <div className="relative z-10">
@@ -629,7 +629,7 @@ export function DisciplineSystem() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.25 }}
-        className="bg-gradient-to-br from-amber-500/[0.04] via-background to-background border border-primary/15 rounded-2xl p-6 relative overflow-hidden"
+        className="bg-gradient-to-br from-primary/[0.04] via-background to-background border border-primary/15 rounded-2xl p-6 relative overflow-hidden"
       >
         <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-2xl pointer-events-none" />
         <div className="flex items-center gap-2.5 mb-5 relative z-10">

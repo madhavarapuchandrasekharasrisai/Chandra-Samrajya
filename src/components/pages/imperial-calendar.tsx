@@ -103,18 +103,18 @@ function DayCell({
       className={cn(
         'relative w-full aspect-[1.35] rounded-lg border transition-all duration-200 flex flex-col items-center justify-start pt-1 gap-0.5 overflow-hidden',
         isSelected
-          ? 'bg-primary/15 border-amber-500/40 ring-1 ring-amber-500/30 shadow-lg shadow-amber-500/10'
+          ? 'bg-primary/20 border-primary/50 ring-1 ring-primary/40 shadow-lg shadow-primary/15'
           : isToday
-          ? 'bg-amber-500/[0.06] border-primary/20'
+          ? 'bg-primary/[0.08] border-primary/30'
           : isCurrentMonth
           ? 'bg-secondary/30 border-border hover:bg-secondary/70 hover:border-border'
-          : 'bg-transparent border-white/[0.02] opacity-30'
+          : 'bg-transparent border-border/20 opacity-30'
       )}
     >
       {/* Day number */}
       <span className={cn(
         'text-[10px] sm:text-xs font-semibold z-10',
-        isToday ? 'text-amber-400' : isCurrentMonth ? 'text-foreground/70' : 'text-muted-foreground/40'
+        isToday ? 'text-primary font-bold' : isCurrentMonth ? 'text-foreground/70' : 'text-muted-foreground/40'
       )}>
         {dayNum}
       </span>
@@ -530,16 +530,16 @@ export function ImperialCalendar() {
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7 }}
-        className="relative overflow-hidden bg-gradient-to-br from-amber-500/[0.08] via-background/40 to-background/60 border border-primary/10 rounded-2xl p-6 lg:p-8"
+        className="relative overflow-hidden bg-gradient-to-br from-primary/[0.05] via-background/40 to-background/60 border border-primary/10 rounded-2xl p-6 lg:p-8"
       >
         <div className="absolute inset-0 ambient-gradient pointer-events-none" />
-        <div className="absolute top-6 right-12 w-1 h-1 rounded-full bg-amber-400/30 particle" />
-        <div className="absolute top-16 right-24 w-0.5 h-0.5 rounded-full bg-amber-400/20 particle" style={{ animationDelay: '2s' }} />
+        <div className="absolute top-6 right-12 w-1 h-1 rounded-full bg-primary/30 particle" />
+        <div className="absolute top-16 right-24 w-0.5 h-0.5 rounded-full bg-primary/20 particle" style={{ animationDelay: '2s' }} />
 
         <div className="relative z-10">
           <div className="flex items-center gap-2 mb-2">
             <div className="p-1.5 rounded-lg bg-primary/10 border border-primary/20">
-              <Crown className="w-4 h-4 text-amber-400" />
+              <Crown className="w-4 h-4 text-primary" />
             </div>
             <span className="text-[11px] text-primary/70 uppercase tracking-widest font-medium">Timeline Intelligence</span>
           </div>

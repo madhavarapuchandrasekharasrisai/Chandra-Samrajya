@@ -305,7 +305,7 @@ function ClientDetailDrawer({
           <div>
             <p className="text-muted-foreground/60 font-mono text-[10px] uppercase tracking-wider mb-3">Communication History</p>
             {clientFollowups.length === 0 ? (
-              <div className="text-center py-6 bg-white/[0.01] border border-white/[0.03] rounded-xl">
+              <div className="text-center py-6 bg-secondary/20 border border-border/40 rounded-xl">
                 <MessageSquare className="w-6 h-6 text-muted-foreground/20 mx-auto mb-2" />
                 <p className="text-muted-foreground/50 text-xs">No communications yet</p>
               </div>
@@ -319,7 +319,7 @@ function ClientDetailDrawer({
                       className={cn(
                         'flex items-center gap-3 p-2.5 rounded-lg border transition-all',
                         isCompleted
-                          ? 'bg-white/[0.01] border-white/[0.03] opacity-60'
+                          ? 'bg-secondary/20 border-border/40 opacity-60'
                           : 'bg-secondary/30 border-border'
                       )}
                     >
@@ -461,14 +461,14 @@ function KanbanPipeline({
                 </div>
 
                 {/* Column value */}
-                <div className="px-3 py-1.5 bg-white/[0.01] border-x border-white/[0.03]">
+                <div className="px-3 py-1.5 bg-secondary/20 border-x border-border/40">
                   <span className="text-muted-foreground/40 text-[9px]">
                     {stageValue > 0 ? `₹${stageValue.toLocaleString('en-IN')}` : '—'}
                   </span>
                 </div>
 
                 {/* Client cards */}
-                <div className="bg-white/[0.01] border border-t-0 rounded-b-xl p-2 space-y-2 min-h-[120px] max-h-[400px] overflow-y-auto">
+                <div className="bg-secondary/10 border border-t-0 border-border/40 rounded-b-xl p-2 space-y-2 min-h-[120px] max-h-[400px] overflow-y-auto">
                   {stageClients.length === 0 ? (
                     <div className="flex items-center justify-center h-[80px]">
                       <p className="text-muted-foreground/20 text-[10px]">No clients</p>
@@ -742,20 +742,20 @@ export function ClientEmpire() {
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7 }}
-        className="relative overflow-hidden bg-gradient-to-br from-amber-500/[0.08] via-background/40 to-background/60 border border-primary/10 rounded-2xl p-6 lg:p-8"
+        className="relative overflow-hidden bg-gradient-to-br from-primary/[0.05] via-background/40 to-background/60 border border-primary/10 rounded-2xl p-6 lg:p-8"
       >
         {/* Ambient gradient overlay */}
         <div className="absolute inset-0 ambient-gradient pointer-events-none" />
 
         {/* Floating particles */}
-        <div className="absolute top-6 right-12 w-1 h-1 rounded-full bg-amber-400/30 particle" />
-        <div className="absolute top-16 right-24 w-0.5 h-0.5 rounded-full bg-amber-400/20 particle" style={{ animationDelay: '2s' }} />
-        <div className="absolute bottom-10 left-20 w-1 h-1 rounded-full bg-amber-400/20 particle" style={{ animationDelay: '4s' }} />
+        <div className="absolute top-6 right-12 w-1 h-1 rounded-full bg-primary/30 particle" />
+        <div className="absolute top-16 right-24 w-0.5 h-0.5 rounded-full bg-primary/20 particle" style={{ animationDelay: '2s' }} />
+        <div className="absolute bottom-10 left-20 w-1 h-1 rounded-full bg-primary/20 particle" style={{ animationDelay: '4s' }} />
 
         <div className="relative z-10">
           <div className="flex items-center gap-2 mb-2">
             <div className="p-1.5 rounded-lg bg-primary/10 border border-primary/20">
-              <Crown className="w-4 h-4 text-amber-400" />
+              <Crown className="w-4 h-4 text-primary" />
             </div>
             <span className="text-[11px] text-primary/70 uppercase tracking-widest font-medium">Founder CRM</span>
           </div>

@@ -368,11 +368,11 @@ function SpendingEntryForm({ onAdded }: { onAdded: () => void }) {
         <Button
           type="submit"
           disabled={submitting}
-          className="w-full bg-gradient-to-r from-amber-600 via-amber-500 to-yellow-500 hover:from-amber-500 hover:via-amber-400 hover:to-yellow-400 text-black font-semibold h-11 rounded-xl transition-all duration-300 shadow-lg shadow-amber-500/20"
+          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold h-11 rounded-xl transition-all duration-300 shadow-lg shadow-primary/20"
         >
           {submitting ? (
             <span className="flex items-center gap-2">
-              <span className="w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+              <span className="w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
               Adding...
             </span>
           ) : (
@@ -904,15 +904,15 @@ export function BudgetIntelligence() {
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="relative overflow-hidden bg-gradient-to-br from-amber-500/[0.08] via-background/40 to-background/60 border border-primary/10 rounded-2xl p-6 lg:p-8"
+        className="relative overflow-hidden bg-gradient-to-br from-primary/[0.05] via-background/40 to-background/60 border border-primary/10 rounded-2xl p-6 lg:p-8"
       >
         {/* Ambient gradient overlay */}
         <div className="absolute inset-0 ambient-gradient pointer-events-none" />
 
         {/* Floating particles */}
-        <div className="absolute top-6 right-12 w-1 h-1 rounded-full bg-amber-400/30 particle" />
-        <div className="absolute top-16 right-24 w-0.5 h-0.5 rounded-full bg-amber-400/20 particle" style={{ animationDelay: '2s' }} />
-        <div className="absolute bottom-10 left-20 w-1 h-1 rounded-full bg-amber-400/20 particle" style={{ animationDelay: '4s' }} />
+        <div className="absolute top-6 right-12 w-1 h-1 rounded-full bg-primary/30 particle" />
+        <div className="absolute top-16 right-24 w-0.5 h-0.5 rounded-full bg-primary/20 particle" style={{ animationDelay: '2s' }} />
+        <div className="absolute bottom-10 left-20 w-1 h-1 rounded-full bg-primary/20 particle" style={{ animationDelay: '4s' }} />
 
         <div className="relative z-10">
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
