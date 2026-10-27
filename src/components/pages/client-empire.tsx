@@ -41,22 +41,22 @@ interface PipelineStage {
 }
 
 const pipelineStages: PipelineStage[] = [
-  { key: 'prospect', label: 'Prospect', color: 'text-gray-400', bgColor: 'bg-gray-400/10', borderColor: 'border-gray-400/20', dotColor: 'bg-gray-400' },
-  { key: 'contacted', label: 'Contacted', color: 'text-sky-400', bgColor: 'bg-sky-400/10', borderColor: 'border-sky-400/20', dotColor: 'bg-sky-400' },
-  { key: 'scheduled', label: 'Scheduled', color: 'text-amber-400', bgColor: 'bg-primary/10', borderColor: 'border-primary/20', dotColor: 'bg-amber-400' },
-  { key: 'proposal', label: 'Proposal', color: 'text-purple-400', bgColor: 'bg-purple-400/10', borderColor: 'border-purple-400/20', dotColor: 'bg-purple-400' },
-  { key: 'active', label: 'Active', color: 'text-emerald-400', bgColor: 'bg-emerald-400/10', borderColor: 'border-emerald-400/20', dotColor: 'bg-emerald-400' },
-  { key: 'retainer', label: 'Retainer', color: 'text-amber-500', bgColor: 'bg-primary/10', borderColor: 'border-primary/20', dotColor: 'bg-amber-500' },
-  { key: 'completed', label: 'Completed', color: 'text-green-600', bgColor: 'bg-green-600/10', borderColor: 'border-green-600/20', dotColor: 'bg-green-600' },
+  { key: 'prospect', label: 'Prospect', color: 'text-slate-600 dark:text-gray-400', bgColor: 'bg-slate-100 dark:bg-gray-400/10', borderColor: 'border-slate-200 dark:border-gray-400/20', dotColor: 'bg-slate-500 dark:bg-gray-400' },
+  { key: 'contacted', label: 'Contacted', color: 'text-sky-600 dark:text-sky-400', bgColor: 'bg-sky-50 dark:bg-sky-400/10', borderColor: 'border-sky-200 dark:border-sky-400/20', dotColor: 'bg-sky-500 dark:bg-sky-400' },
+  { key: 'scheduled', label: 'Scheduled', color: 'text-amber-600 dark:text-amber-400', bgColor: 'bg-amber-50 dark:bg-primary/10', borderColor: 'border-amber-200 dark:border-primary/20', dotColor: 'bg-amber-500 dark:bg-amber-400' },
+  { key: 'proposal', label: 'Proposal', color: 'text-purple-600 dark:text-purple-400', bgColor: 'bg-purple-50 dark:bg-purple-400/10', borderColor: 'border-purple-200 dark:border-purple-400/20', dotColor: 'bg-purple-500 dark:bg-purple-400' },
+  { key: 'active', label: 'Active', color: 'text-emerald-600 dark:text-emerald-400', bgColor: 'bg-emerald-50 dark:bg-emerald-400/10', borderColor: 'border-emerald-200 dark:border-emerald-400/20', dotColor: 'bg-emerald-500 dark:bg-emerald-400' },
+  { key: 'retainer', label: 'Retainer', color: 'text-amber-600 dark:text-amber-500', bgColor: 'bg-amber-50 dark:bg-primary/10', borderColor: 'border-amber-200 dark:border-primary/20', dotColor: 'bg-amber-500' },
+  { key: 'completed', label: 'Completed', color: 'text-emerald-700 dark:text-green-600', bgColor: 'bg-emerald-50 dark:bg-green-600/10', borderColor: 'border-emerald-200 dark:border-green-600/20', dotColor: 'bg-emerald-600' },
 ]
 
 // ─── Urgency Config ─────────────────────────────────────────────────────────
 
 const urgencyConfig: Record<string, { color: string; bg: string; border: string; label: string }> = {
-  low: { color: 'text-blue-400', bg: 'bg-blue-400/10', border: 'border-blue-400/20', label: 'Low' },
-  normal: { color: 'text-muted-foreground', bg: 'bg-secondary/50', border: 'border-border', label: 'Normal' },
-  high: { color: 'text-amber-400', bg: 'bg-primary/10', border: 'border-primary/20', label: 'High' },
-  critical: { color: 'text-red-400', bg: 'bg-red-400/10', border: 'border-red-400/20', label: 'Critical' },
+  low: { color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-50 dark:bg-blue-400/10', border: 'border-blue-200 dark:border-blue-400/20', label: 'Low' },
+  normal: { color: 'text-muted-foreground', bg: 'bg-secondary', border: 'border-border', label: 'Normal' },
+  high: { color: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-50 dark:bg-primary/10', border: 'border-amber-200 dark:border-primary/20', label: 'High' },
+  critical: { color: 'text-red-600 dark:text-red-400', bg: 'bg-red-50 dark:bg-red-400/10', border: 'border-red-200 dark:border-red-400/20', label: 'Critical' },
 }
 
 // ─── Followup Type Icons ────────────────────────────────────────────────────
@@ -766,24 +766,24 @@ export function ClientEmpire() {
 
           {/* Quick Stats */}
           <div className="mt-5 grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div className="bg-card lg:bg-card/80 lg:backdrop-blur-sm border border-border rounded-xl p-3">
-              <p className="text-muted-foreground/60 font-mono text-[9px] uppercase tracking-wider">Total Clients</p>
-              <p className="text-foreground/80 text-xl font-bold">{clients.length}</p>
+            <div className="bg-card border border-border/80 rounded-xl p-3 shadow-2xs hover:shadow-xs transition-shadow">
+              <p className="text-muted-foreground/60 font-mono text-[9px] uppercase tracking-wider font-semibold">Total Clients</p>
+              <p className="text-foreground text-xl font-bold">{clients.length}</p>
             </div>
-            <div className="bg-card lg:bg-card/80 lg:backdrop-blur-sm border border-border rounded-xl p-3">
-              <p className="text-muted-foreground/60 font-mono text-[9px] uppercase tracking-wider">Active Pipeline</p>
-              <p className="text-foreground/80 text-xl font-bold">
+            <div className="bg-card border border-border/80 rounded-xl p-3 shadow-2xs hover:shadow-xs transition-shadow">
+              <p className="text-muted-foreground/60 font-mono text-[9px] uppercase tracking-wider font-semibold">Active Pipeline</p>
+              <p className="text-foreground text-xl font-bold">
                 {clients.filter(c => !['completed', 'prospect'].includes(c.pipelineStage)).length}
               </p>
             </div>
-            <div className="bg-card lg:bg-card/80 lg:backdrop-blur-sm border border-border rounded-xl p-3">
-              <p className="text-muted-foreground/60 font-mono text-[9px] uppercase tracking-wider">Retainers</p>
-              <p className="text-amber-400 text-xl font-bold">
+            <div className="bg-card border border-border/80 rounded-xl p-3 shadow-2xs hover:shadow-xs transition-shadow">
+              <p className="text-muted-foreground/60 font-mono text-[9px] uppercase tracking-wider font-semibold">Retainers</p>
+              <p className="text-amber-600 dark:text-amber-400 text-xl font-bold">
                 {clients.filter(c => c.pipelineStage === 'retainer').length}
               </p>
             </div>
-            <div className="bg-card lg:bg-card/80 lg:backdrop-blur-sm border border-border rounded-xl p-3">
-              <p className="text-muted-foreground/60 font-mono text-[9px] uppercase tracking-wider">Pipeline Value</p>
+            <div className="bg-card border border-border/80 rounded-xl p-3 shadow-2xs hover:shadow-xs transition-shadow">
+              <p className="text-muted-foreground/60 font-mono text-[9px] uppercase tracking-wider font-semibold">Pipeline Value</p>
               <p className="gold-text text-xl font-bold">
                 {formatINR(clients.filter(c => c.pipelineStage !== 'completed').reduce((s, c) => s + c.projectValue, 0))}
               </p>

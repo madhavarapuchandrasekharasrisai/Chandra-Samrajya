@@ -163,21 +163,21 @@ export function Sidebar() {
                   isActive
                     ? 'active text-primary font-semibold'
                     : 'text-muted-foreground hover:text-foreground hover:bg-accent border-l-2 border-transparent',
-                  isSoloLeveling && !isActive && 'text-purple-400 dark:text-purple-400'
+                  isSoloLeveling && !isActive && 'text-purple-600 dark:text-purple-400'
                 )}
               >
                 {/* Active indicator glow */}
                 {isActive && (
                   <motion.div
                     layoutId="activeNav"
-                    className="absolute inset-0 bg-primary/[0.06] rounded-lg"
+                    className="absolute inset-0 bg-primary/10 rounded-lg"
                     transition={{ type: "spring", duration: 0.4 }}
                   />
                 )}
                 
                 <span className={cn(
                   'flex-shrink-0 relative z-10 transition-colors',
-                  isActive ? 'text-primary' : isSoloLeveling ? 'text-purple-400' : 'text-muted-foreground group-hover:text-foreground'
+                  isActive ? 'text-primary' : isSoloLeveling ? 'text-purple-600 dark:text-purple-400' : 'text-muted-foreground group-hover:text-foreground'
                 )}>
                   {(sidebarCollapsed && !isMobile) ? (
                     <span className="text-[10px] font-mono font-bold tracking-wider">{item.rank}</span>

@@ -92,7 +92,7 @@ function BudgetRing({
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.5, delay }}
       className={cn(
-        'bg-card lg:bg-card/80 lg:backdrop-blur-xl border rounded-2xl p-5 flex flex-col items-center relative overflow-hidden group hover:border-border transition-all duration-300',
+        'bg-card border rounded-2xl p-5 flex flex-col items-center relative overflow-hidden group hover:border-border transition-all duration-300 shadow-xs hover:shadow-md',
         isDanger
           ? 'border-red-500/30 budget-danger'
           : isWarning
@@ -115,7 +115,8 @@ function BudgetRing({
             cy="50"
             r="45"
             fill="none"
-            stroke="rgba(255,255,255,0.05)"
+            stroke="currentColor"
+            className="text-slate-200 dark:text-white/10"
             strokeWidth="6"
           />
           {/* Progress arc */}
@@ -149,7 +150,7 @@ function BudgetRing({
       </div>
 
       {/* Category label */}
-      <h4 className="text-foreground/80 text-sm font-semibold mb-3">{category.label}</h4>
+      <h4 className="text-foreground text-sm font-semibold mb-3">{category.label}</h4>
 
       {/* Stats */}
       <div className="w-full space-y-2">
@@ -157,7 +158,7 @@ function BudgetRing({
           <span className="text-muted-foreground/60 font-mono text-[10px] uppercase tracking-wider">Remaining</span>
           <span className={cn(
             'text-xs font-semibold',
-            remaining < 0 ? 'text-red-400' : 'text-emerald-400'
+            remaining < 0 ? 'text-red-600 dark:text-red-400' : 'text-emerald-600 dark:text-emerald-400'
           )}>
             {formatINR(Math.abs(remaining))}
             {remaining < 0 && ' over'}
@@ -167,7 +168,7 @@ function BudgetRing({
           <span className="text-muted-foreground/60 font-mono text-[10px] uppercase tracking-wider">Safe Daily</span>
           <span className={cn(
             'text-xs font-semibold',
-            safeDailySpend <= 0 ? 'text-red-400' : 'text-amber-400/80'
+            safeDailySpend <= 0 ? 'text-red-600 dark:text-red-400' : 'text-amber-600 dark:text-amber-400'
           )}>
             {safeDailySpend > 0 ? `${formatINR(Math.round(safeDailySpend))}/day` : 'Over budget'}
           </span>

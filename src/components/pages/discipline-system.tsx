@@ -40,9 +40,9 @@ function getScoreColor(score: number): string {
 }
 
 function getScoreTailwind(score: number): string {
-  if (score > 80) return 'text-amber-400'
-  if (score > 50) return 'text-amber-500'
-  return 'text-red-400'
+  if (score > 80) return 'text-amber-600 dark:text-amber-400'
+  if (score > 50) return 'text-amber-600 dark:text-amber-500'
+  return 'text-red-600 dark:text-red-400'
 }
 
 // ─── Circular Progress Ring ─────────────────────────────────────────────────
@@ -62,7 +62,8 @@ function DisciplineRing({ score, size = 200 }: { score: number; size?: number })
           cy={size / 2}
           r={radius}
           fill="none"
-          stroke="rgba(255,255,255,0.05)"
+          stroke="currentColor"
+          className="text-slate-200 dark:text-white/10"
           strokeWidth="8"
         />
         {/* Progress arc */}
@@ -208,9 +209,9 @@ function InsightCard({
   delay: number
 }) {
   const config = {
-    positive: { icon: CheckCircle2, borderColor: 'border-l-emerald-400', iconColor: 'text-emerald-400', label: 'Strength' },
-    warning: { icon: AlertTriangle, borderColor: 'border-l-amber-400', iconColor: 'text-amber-400', label: 'Pattern' },
-    negative: { icon: XCircle, borderColor: 'border-l-red-400', iconColor: 'text-red-400', label: 'Risk' },
+    positive: { icon: CheckCircle2, borderColor: 'border-l-emerald-500', iconColor: 'text-emerald-600 dark:text-emerald-400', label: 'Strength' },
+    warning: { icon: AlertTriangle, borderColor: 'border-l-amber-500', iconColor: 'text-amber-600 dark:text-amber-400', label: 'Pattern' },
+    negative: { icon: XCircle, borderColor: 'border-l-red-500', iconColor: 'text-red-600 dark:text-red-400', label: 'Risk' },
   }
   const c = config[type]
   const Icon = c.icon
@@ -221,15 +222,15 @@ function InsightCard({
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.3, delay }}
       className={cn(
-        'bg-secondary/30 border border-border border-l-2 rounded-xl p-4 hover:bg-secondary/50 transition-all',
+        'bg-card border border-border border-l-4 rounded-xl p-4 shadow-2xs hover:shadow-xs transition-all',
         c.borderColor
       )}
     >
       <div className="flex items-start gap-3">
         <Icon className={cn('w-4 h-4 mt-0.5 flex-shrink-0', c.iconColor)} />
         <div>
-          <span className="text-muted-foreground/50 font-mono text-[10px] uppercase tracking-wider font-medium">{c.label}</span>
-          <p className="text-foreground/70 text-sm mt-0.5 leading-relaxed">{message}</p>
+          <span className="text-muted-foreground font-mono text-[10px] uppercase tracking-wider font-semibold">{c.label}</span>
+          <p className="text-foreground text-sm mt-0.5 leading-relaxed">{message}</p>
         </div>
       </div>
     </motion.div>
@@ -252,16 +253,16 @@ function DayCell({
   isToday: boolean
 }) {
   const scoreColors = {
-    good: 'bg-emerald-400/20 text-emerald-400',
-    warning: 'bg-amber-400/20 text-amber-400',
-    bad: 'bg-red-400/20 text-red-400',
-    none: 'bg-secondary/50 text-muted-foreground/40',
+    good: 'bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-400/20 dark:text-emerald-400 dark:border-transparent',
+    warning: 'bg-amber-50 text-amber-700 border border-amber-200 dark:bg-amber-400/20 dark:text-amber-400 dark:border-transparent',
+    bad: 'bg-red-50 text-red-700 border border-red-200 dark:bg-red-400/20 dark:text-red-400 dark:border-transparent',
+    none: 'bg-secondary text-muted-foreground/60',
   }
 
   return (
     <div className={cn(
-      'bg-secondary/30 border rounded-xl p-3 text-center transition-all',
-      isToday ? 'border-primary/30 bg-primary/5' : 'border-border'
+      'bg-card border rounded-xl p-3 text-center shadow-2xs transition-all',
+      isToday ? 'border-primary/40 ring-2 ring-primary/20' : 'border-border'
     )}>
       <p className={cn('text-muted-foreground font-mono text-[10px] uppercase tracking-wider mb-2', isToday && 'text-primary/70')}>{day}</p>
       <div className={cn('w-8 h-8 rounded-lg flex items-center justify-center mx-auto mb-2 text-xs font-bold', scoreColors[spendingScore])}>

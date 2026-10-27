@@ -360,10 +360,10 @@ function IncomeStreamCard({
     'purple-400': 'border-t-purple-400/60',
   }
   const iconBgMap: Record<string, string> = {
-    'sky-400': 'bg-sky-400/10 text-sky-400',
-    'amber-400': 'bg-primary/10 text-amber-400',
-    'emerald-400': 'bg-emerald-400/10 text-emerald-400',
-    'purple-400': 'bg-purple-400/10 text-purple-400',
+    'sky-400': 'bg-sky-50 text-sky-600 border border-sky-200 dark:bg-sky-400/10 dark:text-sky-400 dark:border-transparent',
+    'amber-400': 'bg-amber-50 text-amber-600 border border-amber-200 dark:bg-primary/10 dark:text-amber-400 dark:border-transparent',
+    'emerald-400': 'bg-emerald-50 text-emerald-600 border border-emerald-200 dark:bg-emerald-400/10 dark:text-emerald-400 dark:border-transparent',
+    'purple-400': 'bg-purple-50 text-purple-600 border border-purple-200 dark:bg-purple-400/10 dark:text-purple-400 dark:border-purple-transparent',
   }
   const ambientBgMap: Record<string, string> = {
     'sky-400': 'bg-sky-500',
@@ -378,7 +378,7 @@ function IncomeStreamCard({
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.5, delay }}
       className={cn(
-        'bg-card lg:bg-card/80 lg:backdrop-blur-xl border border-border border-t-2 rounded-2xl p-5 relative overflow-hidden group hover:border-border transition-all duration-300',
+        'bg-card border border-border border-t-2 rounded-2xl p-5 relative overflow-hidden group hover:border-border transition-all duration-300 shadow-xs hover:shadow-md',
         borderColorMap[source.color]
       )}
     >
@@ -388,7 +388,7 @@ function IncomeStreamCard({
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2.5 z-10 w-full min-w-0">
-          <div className={cn('p-2 rounded-lg shrink-0', iconBgMap[source.color])}>
+          <div className={cn('p-2 rounded-lg shrink-0 shadow-2xs', iconBgMap[source.color])}>
             <Icon className="w-4 h-4" />
           </div>
           <div className="flex-1 min-w-0 pr-2">
@@ -418,10 +418,10 @@ function IncomeStreamCard({
         </div>
         {growthPercent !== null && (
           <div className={cn(
-            'flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-medium shrink-0',
+            'flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-semibold shrink-0 shadow-2xs',
             growthPercent >= 0
-              ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-              : 'bg-red-500/10 text-red-400 border border-red-500/20'
+              ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20'
+              : 'bg-red-50 text-red-700 border border-red-200 dark:bg-red-500/10 dark:text-red-400 dark:border-red-500/20'
           )}>
             {growthPercent >= 0 ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
             {Math.abs(growthPercent).toFixed(0)}%

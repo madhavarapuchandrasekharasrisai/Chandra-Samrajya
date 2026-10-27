@@ -153,26 +153,26 @@ export function JobSearch() {
 
           {/* Streak + Weekly Stats Row */}
           <div className="grid grid-cols-3 gap-3 mb-5">
-            <div className="bg-secondary/50 border border-border rounded-xl p-3 text-center">
+            <div className="bg-card border border-border/80 rounded-xl p-3 text-center shadow-2xs hover:shadow-xs transition-shadow">
               <div className="flex items-center justify-center gap-1 mb-1">
-                <Flame className="w-4 h-4 text-orange-400" />
+                <Flame className="w-4 h-4 text-orange-600 dark:text-orange-400" />
               </div>
               <p className="text-foreground text-xl font-bold">{streak}</p>
-              <p className="text-muted-foreground/60 font-mono text-[10px] uppercase tracking-wider">Day Streak</p>
+              <p className="text-muted-foreground/70 font-mono text-[10px] uppercase tracking-wider font-semibold">Day Streak</p>
             </div>
-            <div className="bg-secondary/50 border border-border rounded-xl p-3 text-center">
+            <div className="bg-card border border-border/80 rounded-xl p-3 text-center shadow-2xs hover:shadow-xs transition-shadow">
               <div className="flex items-center justify-center gap-1 mb-1">
-                <TrendingUp className="w-4 h-4 text-emerald-400" />
+                <TrendingUp className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
               </div>
               <p className="text-foreground text-xl font-bold">{weeklyStats}</p>
-              <p className="text-muted-foreground/60 font-mono text-[10px] uppercase tracking-wider">This Week</p>
+              <p className="text-muted-foreground/70 font-mono text-[10px] uppercase tracking-wider font-semibold">This Week</p>
             </div>
-            <div className="bg-secondary/50 border border-border rounded-xl p-3 text-center">
+            <div className="bg-card border border-border/80 rounded-xl p-3 text-center shadow-2xs hover:shadow-xs transition-shadow">
               <div className="flex items-center justify-center gap-1 mb-1">
-                <Target className="w-4 h-4 text-amber-400" />
+                <Target className="w-4 h-4 text-amber-600 dark:text-amber-400" />
               </div>
               <p className="text-foreground text-xl font-bold">{jobApplications.length}</p>
-              <p className="text-muted-foreground/60 font-mono text-[10px] uppercase tracking-wider">All Time</p>
+              <p className="text-muted-foreground/70 font-mono text-[10px] uppercase tracking-wider font-semibold">All Time</p>
             </div>
           </div>
           
@@ -183,7 +183,7 @@ export function JobSearch() {
                 {jobsToday} <span className="text-muted-foreground text-sm font-normal">/ {targetDailyJobs}</span>
               </span>
             </div>
-            <div className="h-2 bg-secondary/50 rounded-full overflow-hidden">
+            <div className="h-2 bg-secondary rounded-full overflow-hidden">
               <motion.div 
                 className="h-full bg-gradient-to-r from-primary to-cyan-400"
                 initial={{ width: 0 }}
@@ -192,16 +192,16 @@ export function JobSearch() {
               />
             </div>
             {jobsToday >= targetDailyJobs && (
-              <p className="text-emerald-400 text-xs mt-3 font-medium">🎯 Daily target achieved! Excellent work.</p>
+              <p className="text-emerald-600 dark:text-emerald-400 text-xs mt-3 font-semibold">🎯 Daily target achieved! Excellent work.</p>
             )}
             {streak >= 3 && (
-              <p className="text-orange-400 text-xs mt-2 font-medium">🔥 {streak}-day streak! Keep the momentum going.</p>
+              <p className="text-orange-600 dark:text-orange-400 text-xs mt-2 font-semibold">🔥 {streak}-day streak! Keep the momentum going.</p>
             )}
           </div>
         </div>
 
         {/* Add Job Form */}
-        <div className="bg-secondary/30 border border-border rounded-2xl p-6 backdrop-blur-md">
+        <div className="bg-card border border-border/80 rounded-2xl p-6 shadow-xs">
           <h3 className="text-base font-semibold text-foreground mb-4">Log New Application</h3>
           <form onSubmit={handleAddJob} className="space-y-3">
             <div className="grid grid-cols-2 gap-3">

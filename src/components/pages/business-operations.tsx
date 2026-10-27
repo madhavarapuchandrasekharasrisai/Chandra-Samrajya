@@ -264,12 +264,12 @@ function MissionTracker() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.25 }}
-            className="bg-card lg:bg-card/80 lg:backdrop-blur-sm border border-border rounded-xl p-4"
+            className="bg-card border border-border/80 rounded-xl p-4 shadow-2xs hover:shadow-xs transition-shadow"
           >
-            <p className="text-muted-foreground/60 font-mono text-[10px] uppercase tracking-wider mb-1">Remaining</p>
+            <p className="text-muted-foreground/70 font-mono text-[10px] uppercase tracking-wider font-semibold mb-1">Remaining</p>
             <p className={cn(
               'font-display text-2xl font-bold',
-              remaining > 0 ? 'text-amber-400' : 'text-emerald-400'
+              remaining > 0 ? 'text-amber-600 dark:text-amber-400' : 'text-emerald-600 dark:text-emerald-400'
             )}>
               {remaining > 0 ? formatINR(remaining) : 'Done! ✓'}
             </p>
@@ -279,7 +279,7 @@ function MissionTracker() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="bg-card lg:bg-card/80 lg:backdrop-blur-sm border border-border rounded-xl p-4"
+            className="bg-card border border-border/80 rounded-xl p-4 shadow-2xs hover:shadow-xs transition-shadow"
           >
             <p className="text-muted-foreground/60 font-mono text-[10px] uppercase tracking-wider mb-1">Required / Day</p>
             <p className={cn(
@@ -861,17 +861,17 @@ function BusinessRoadmap() {
                     <div className="flex items-center gap-2">
                       <span className={cn(
                         'text-xs font-bold uppercase tracking-wider',
-                        isCurrentMonth ? 'text-amber-400' : isCompleted ? 'text-emerald-400/70' : 'text-muted-foreground'
+                        isCurrentMonth ? 'text-amber-600 dark:text-amber-400' : isCompleted ? 'text-emerald-600 dark:text-emerald-400/70' : 'text-muted-foreground'
                       )}>
                         Month {month.month}
                       </span>
                       {isCurrentMonth && (
-                        <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-primary/10 text-amber-400 border border-primary/20 font-medium">
+                        <span className="text-[9px] px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200 dark:bg-primary/10 dark:text-amber-400 dark:border-primary/20 font-semibold">
                           CURRENT
                         </span>
                       )}
                       {isCompleted && (
-                        <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium">
+                        <span className="text-[9px] px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20 font-semibold">
                           COMPLETED
                         </span>
                       )}

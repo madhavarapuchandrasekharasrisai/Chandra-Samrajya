@@ -162,23 +162,23 @@ function OpportunityCard({
   closeProbability: number
   index: number
 }) {
-  const probColor = closeProbability >= 60 ? 'text-emerald-400' : closeProbability >= 30 ? 'text-amber-400' : 'text-red-400'
+  const probColor = closeProbability >= 60 ? 'text-emerald-600 dark:text-emerald-400' : closeProbability >= 30 ? 'text-amber-600 dark:text-amber-400' : 'text-red-600 dark:text-red-400'
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: 0.4 + index * 0.06 }}
-      className="bg-card border border-border rounded-xl p-4 hover:border-primary/15 transition-all group"
+      className="bg-card border border-border/80 rounded-xl p-4 hover:border-primary/30 transition-all shadow-2xs hover:shadow-xs group"
     >
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-primary/5 border border-primary/10 flex items-center justify-center">
-            <span className="text-amber-400 text-xs font-bold">{index + 1}</span>
+          <div className="w-8 h-8 rounded-lg bg-amber-50 text-amber-700 border border-amber-200 dark:bg-primary/5 dark:border-primary/10 dark:text-amber-400 flex items-center justify-center">
+            <span className="text-xs font-bold">{index + 1}</span>
           </div>
           <div>
-            <p className="text-foreground/80 text-sm font-semibold">{name}</p>
-            <p className="text-muted-foreground/50 font-mono text-[10px] uppercase tracking-wider">{pipelineStage}</p>
+            <p className="text-foreground text-sm font-semibold">{name}</p>
+            <p className="text-muted-foreground/70 font-mono text-[10px] uppercase tracking-wider">{pipelineStage}</p>
           </div>
         </div>
         <span className="gold-text text-lg font-bold">{formatINR(projectValue)}</span>
@@ -228,9 +228,9 @@ function RiskCard({
   index: number
 }) {
   const severityConfig = {
-    critical: { icon: Skull, color: 'text-red-400', bg: 'bg-red-500/5 border-red-500/15', label: 'CRITICAL' },
-    high: { icon: AlertTriangle, color: 'text-amber-400', bg: 'bg-primary/5 border-primary/15', label: 'HIGH' },
-    medium: { icon: Shield, color: 'text-amber-500/70', bg: 'bg-secondary/30 border-border', label: 'MEDIUM' },
+    critical: { icon: Skull, color: 'text-red-600 dark:text-red-400', bg: 'bg-red-50 text-red-950 border-red-200 dark:bg-red-500/5 dark:text-foreground dark:border-red-500/15 shadow-2xs', label: 'CRITICAL' },
+    high: { icon: AlertTriangle, color: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-50 text-amber-950 border-amber-200 dark:bg-primary/5 dark:text-foreground dark:border-primary/15 shadow-2xs', label: 'HIGH' },
+    medium: { icon: Shield, color: 'text-slate-600 dark:text-amber-500/70', bg: 'bg-card text-foreground border-border dark:bg-secondary/30 dark:border-border shadow-2xs', label: 'MEDIUM' },
   }
   const c = severityConfig[severity]
   const Icon = c.icon

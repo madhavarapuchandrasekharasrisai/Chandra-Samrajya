@@ -90,27 +90,25 @@ const budgetCategories = [
 
 // ─── Micro Sparkline Component ──────────────────────────────────────────────
 
-function MicroSparkline({ data, color = '#f59e0b', height = 32 }: { data: { value: number }[]; color?: string; height?: number }) {
+function MicroSparkline({ data, color = '#2563eb', height = 26, id }: { data: { value: number }[]; color?: string; height?: number; id?: string }) {
+  const gradId = id || `spark-${color.replace(/[^a-zA-Z0-9]/g, '')}`
   return (
     <ResponsiveContainer width="100%" height={height}>
       <AreaChart data={data} margin={{ top: 2, right: 0, left: 0, bottom: 2 }}>
         <defs>
-          <linearGradient id={`spark-${color.replace('#', '')}`} x1="0" y1="0" x2="0" y2="1">
+          <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor={color} stopOpacity={0.3} />
-            <stop offset="100%" stopColor={color} stopOpacity={0} />
+            <stop offset="100%" stopColor={color} stopOpacity={0.02} />
           </linearGradient>
         </defs>
         <XAxis dataKey="index" hide />
-        <Tooltip
-          contentStyle={{ display: 'none' }}
-          cursor={false}
-        />
+        <Tooltip contentStyle={{ display: 'none' }} cursor={false} />
         <Area
           type="monotone"
           dataKey="value"
           stroke={color}
-          strokeWidth={1.5}
-          fill={`url(#spark-${color.replace('#', '')})`}
+          strokeWidth={2}
+          fill={`url(#${gradId})`}
           dot={false}
           isAnimationActive={false}
         />
@@ -129,6 +127,8 @@ function MetricCard({
   sparkData,
   sparkColor,
   icon,
+  badgeBg = 'bg-primary/10 text-primary border-primary/20',
+  accentColor = '#2563eb',
   delay = 0,
 }: {
   label: string
@@ -138,35 +138,52 @@ function MetricCard({
   sparkData: { value: number }[]
   sparkColor: string
   icon: React.ReactNode
+  badgeBg?: string
+  accentColor?: string
   delay?: number
 }) {
+  const cardId = `spark-${label.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase()}`
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay }}
-      className="metric-card bg-card lg:bg-card/80 lg:backdrop-blur-xl border border-border rounded-2xl p-3 sm:p-4 relative overflow-hidden group"
+      className="metric-card bg-card border border-border/80 rounded-2xl p-4 sm:p-5 relative overflow-hidden group shadow-xs hover:shadow-md transition-all duration-300"
     >
-      {/* Subtle top border glow */}
-      <div className="absolute top-0 left-1/4 right-1/4 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+      {/* Subtle top border glow with card's accent color */}
+      <div 
+        className="absolute top-0 left-0 right-0 h-[2px] opacity-75 group-hover:opacity-100 transition-opacity"
+        style={{ background: `linear-gradient(90deg, transparent, ${accentColor}, transparent)` }}
+      />
 
-      <div className="flex items-start justify-between mb-2">
-        <div className="flex items-center gap-1.5 min-w-0">
-          <div className="text-muted-foreground/60 flex-shrink-0">{icon}</div>
-          <span className="text-muted-foreground text-[9px] sm:text-[11px] uppercase tracking-wider font-semibold truncate">{label}</span>
+      <div className="flex items-start justify-between mb-2.5">
+        <div className="flex items-center gap-2.5 min-w-0">
+          <div className={cn('w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 border shadow-2xs', badgeBg)}>
+            {icon}
+          </div>
+          <span className="text-muted-foreground text-[10px] sm:text-xs uppercase tracking-wider font-semibold truncate font-mono">
+            {label}
+          </span>
         </div>
         {trend !== 'neutral' && (
-          <div className={cn('flex items-center gap-0.5 text-[10px] sm:text-xs flex-shrink-0', trend === 'up' ? 'text-emerald-400' : 'text-red-400')}>
-            {trend === 'up' ? <ArrowUpRight className="w-2.5 h-2.5 sm:w-3 sm:h-3" /> : <ArrowDownRight className="w-2.5 h-2.5 sm:w-3 sm:h-3" />}
+          <div className={cn(
+            'flex items-center gap-1 text-[10px] sm:text-xs font-bold px-2 py-0.5 rounded-full border shadow-2xs flex-shrink-0',
+            trend === 'up' 
+              ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20' 
+              : 'bg-red-50 text-red-700 border-red-200 dark:bg-red-500/10 dark:text-red-400 dark:border-red-500/20'
+          )}>
+            {trend === 'up' ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
             {trendLabel && <span className="hidden xs:inline">{trendLabel}</span>}
           </div>
         )}
       </div>
 
-      <div className="text-base sm:font-display text-2xl font-bold text-foreground tracking-tight truncate mb-1 sm:mb-2">{value}</div>
+      <div className="text-xl sm:font-display sm:text-2xl lg:text-3xl font-black text-foreground tracking-tight truncate mb-1">
+        {value}
+      </div>
 
-      <div className="mt-1 opacity-70 group-hover:opacity-100 transition-opacity">
-        <MicroSparkline data={sparkData} color={sparkColor} height={22} />
+      <div className="mt-2 opacity-85 group-hover:opacity-100 transition-opacity">
+        <MicroSparkline data={sparkData} color={sparkColor} height={24} id={cardId} />
       </div>
     </motion.div>
   )
@@ -227,11 +244,11 @@ function BudgetCategoryCard({
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.5, delay }}
       className={cn(
-        'bg-card lg:bg-card/80 lg:backdrop-blur-xl border rounded-2xl p-4 sm:p-5 transition-all duration-300 relative overflow-hidden',
+        'bg-card border rounded-2xl p-4 sm:p-5 transition-all duration-300 relative overflow-hidden shadow-xs hover:shadow-md',
         isDanger
           ? 'border-red-500/30 budget-danger'
           : isWarning
-          ? 'border-primary/20 budget-warning'
+          ? 'border-amber-500/30 dark:border-primary/20 budget-warning'
           : 'border-border',
         isDanger && 'shadow-[0_0_24px_rgba(239,68,68,0.08)]'
       )}
@@ -252,15 +269,15 @@ function BudgetCategoryCard({
           <div className={cn('p-1.5 rounded-lg border flex-shrink-0', bgMap[category.color])}>
             <span className={colorMap[category.color]}>{category.icon}</span>
           </div>
-          <span className="text-foreground/80 text-[10px] sm:text-xs font-semibold uppercase tracking-wider truncate max-w-[120px] xs:max-w-none">{category.label}</span>
+          <span className="text-foreground/90 text-[10px] sm:text-xs font-bold uppercase tracking-wider truncate max-w-[120px] xs:max-w-none">{category.label}</span>
         </div>
         <span className={cn(
-          'text-[9px] sm:text-[11px] font-bold px-2 py-0.5 rounded-full flex-shrink-0',
+          'text-[9px] sm:text-[11px] font-bold px-2 py-0.5 rounded-full flex-shrink-0 border',
           isDanger
-            ? 'bg-red-500/10 text-red-400 border border-red-500/20'
+            ? 'bg-red-50 text-red-700 border-red-200 dark:bg-red-500/10 dark:text-red-400 dark:border-red-500/20'
             : isWarning
-            ? 'bg-primary/10 text-amber-400 border border-primary/20'
-            : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+            ? 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-primary/10 dark:text-amber-400 dark:border-primary/20'
+            : 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20'
         )}>
           {percentUsed.toFixed(0)}%
         </span>
@@ -269,25 +286,25 @@ function BudgetCategoryCard({
       {/* Budget / Spent / Remaining */}
       <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-3 sm:mb-4">
         <div>
-          <p className="text-muted-foreground/60 text-[8px] sm:font-mono text-[10px] uppercase tracking-wider mb-0.5">Budget</p>
-          <p className="text-foreground text-xs sm:text-sm font-semibold truncate">{formatINR(budget)}</p>
+          <p className="text-muted-foreground text-[8px] sm:font-mono text-[10px] uppercase tracking-wider mb-0.5 font-semibold">Budget</p>
+          <p className="text-foreground text-xs sm:text-sm font-bold truncate">{formatINR(budget)}</p>
         </div>
         <div>
-          <p className="text-muted-foreground/60 text-[8px] sm:font-mono text-[10px] uppercase tracking-wider mb-0.5">Spent</p>
-          <p className={cn('text-xs sm:text-sm font-semibold truncate', isDanger ? 'text-red-400' : isWarning ? 'text-amber-400' : 'text-foreground')}>
+          <p className="text-muted-foreground text-[8px] sm:font-mono text-[10px] uppercase tracking-wider mb-0.5 font-semibold">Spent</p>
+          <p className={cn('text-xs sm:text-sm font-bold truncate', isDanger ? 'text-red-500' : isWarning ? 'text-amber-600 dark:text-amber-400' : 'text-foreground')}>
             {formatINR(spent)}
           </p>
         </div>
         <div>
-          <p className="text-muted-foreground/60 text-[8px] sm:font-mono text-[10px] uppercase tracking-wider mb-0.5">Remaining</p>
-          <p className={cn('text-xs sm:text-sm font-semibold truncate', remaining < 0 ? 'text-red-400' : 'text-emerald-400')}>
+          <p className="text-muted-foreground text-[8px] sm:font-mono text-[10px] uppercase tracking-wider mb-0.5 font-semibold">Remaining</p>
+          <p className={cn('text-xs sm:text-sm font-bold truncate', remaining < 0 ? 'text-red-500' : 'text-emerald-600 dark:text-emerald-400')}>
             {formatINR(remaining)}
           </p>
         </div>
       </div>
 
       {/* Progress Bar */}
-      <div className="w-full h-1.5 bg-secondary/50 rounded-full overflow-hidden mb-3">
+      <div className="w-full h-2 bg-secondary/80 rounded-full overflow-hidden mb-3">
         <motion.div
           initial={{ width: 0 }}
           animate={{ width: `${Math.min(100, percentUsed)}%` }}
@@ -295,7 +312,7 @@ function BudgetCategoryCard({
           className={cn(
             'h-full rounded-full budget-progress',
             percentUsed < 70
-              ? 'bg-gradient-to-r from-amber-500 to-amber-300'
+              ? 'bg-gradient-to-r from-emerald-500 to-teal-400'
               : percentUsed < 90
               ? 'bg-gradient-to-r from-amber-500 to-orange-400'
               : 'bg-gradient-to-r from-red-500 to-red-400'
@@ -305,10 +322,10 @@ function BudgetCategoryCard({
 
       {/* Safe Daily Spending */}
       <div className="flex items-center justify-between mb-3 sm:mb-4 text-[10px] sm:text-xs">
-        <span className="text-muted-foreground/60">Safe daily spending</span>
+        <span className="text-muted-foreground font-medium">Safe daily spending</span>
         <span className={cn(
-          'font-semibold',
-          safeDailySpend <= 0 ? 'text-red-400' : 'text-amber-400/85'
+          'font-bold',
+          safeDailySpend <= 0 ? 'text-red-500' : 'text-amber-600 dark:text-amber-400'
         )}>
           {safeDailySpend > 0 ? `${formatINR(Math.round(safeDailySpend))}/day` : 'Over budget'}
         </span>
@@ -350,9 +367,9 @@ function OperationItem({
   delay?: number
 }) {
   const priorityConfig = {
-    critical: { bg: 'bg-red-500/10 text-red-400 border-red-500/20', dot: 'bg-red-400' },
-    high: { bg: 'bg-primary/10 text-amber-400 border-primary/20', dot: 'bg-amber-400' },
-    normal: { bg: 'bg-blue-500/10 text-blue-400 border-blue-500/20', dot: 'bg-blue-400' },
+    critical: { bg: 'bg-red-50 text-red-700 border-red-200 dark:bg-red-500/10 dark:text-red-400 dark:border-red-500/20', dot: 'bg-red-500' },
+    high: { bg: 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-primary/10 dark:text-amber-400 dark:border-primary/20', dot: 'bg-amber-500' },
+    normal: { bg: 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-500/10 dark:text-blue-400 dark:border-blue-500/20', dot: 'bg-blue-500' },
   }
   const config = priorityConfig[priority]
 
@@ -361,29 +378,29 @@ function OperationItem({
       initial={{ opacity: 0, x: -10 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.3, delay }}
-      className="flex items-center justify-between gap-2 p-2.5 sm:p-3 rounded-xl bg-secondary/30 border border-border hover:border-border transition-all group"
+      className="flex items-center justify-between gap-2 p-2.5 sm:p-3 rounded-xl bg-card border border-border hover:border-primary/30 transition-all shadow-2xs group"
     >
       <div className="flex items-center gap-2 min-w-0 flex-1">
         <div className={cn('w-1.5 h-1.5 rounded-full flex-shrink-0', config.dot)} />
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-1.5 flex-wrap">
-            <span className="text-foreground text-xs sm:text-sm font-medium truncate max-w-[100px] xs:max-w-none">{label}</span>
-            <span className={cn('text-[8px] sm:text-[10px] px-1.5 py-0.2 sm:py-0.5 rounded-full border leading-none font-medium', config.bg)}>
+            <span className="text-foreground text-xs sm:text-sm font-semibold truncate max-w-[100px] xs:max-w-none">{label}</span>
+            <span className={cn('text-[8px] sm:text-[10px] px-1.5 py-0.2 sm:py-0.5 rounded-full border leading-none font-semibold uppercase', config.bg)}>
               {priority}
             </span>
             {amount != null && amount > 0 && (
-              <span className="text-amber-400/90 text-[10px] sm:text-sm font-semibold leading-none flex-shrink-0">
+              <span className="text-amber-600 dark:text-amber-400/90 text-[10px] sm:text-sm font-semibold leading-none flex-shrink-0">
                 {formatINR(amount)}
               </span>
             )}
           </div>
-          <p className="text-muted-foreground/70 text-[10px] sm:text-xs truncate mt-0.5">{subtitle}</p>
+          <p className="text-muted-foreground text-[10px] sm:text-xs truncate mt-0.5">{subtitle}</p>
         </div>
       </div>
       <Button
         variant="ghost"
         size="sm"
-        className="text-muted-foreground hover:text-amber-400 text-[10px] sm:text-xs h-6 sm:h-7 px-1.5 sm:px-2 flex-shrink-0 hover:bg-secondary/50"
+        className="text-muted-foreground hover:text-primary text-[10px] sm:text-xs h-6 sm:h-7 px-1.5 sm:px-2 flex-shrink-0 hover:bg-secondary/80"
       >
         <span className="hidden xs:inline">{actionLabel}</span>
         <ChevronRight className="w-3 h-3 sm:ml-0.5" />
@@ -928,34 +945,34 @@ export function ExecutiveOverview() {
               {/* Key Stats Grid - adapted to 2 columns for beautiful spacing inside the split */}
               <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-4">
                 {/* Revenue This Month */}
-                <div className="premium-stats-card rounded-xl p-3 sm:p-4 min-w-0">
-                  <p className="text-muted-foreground/60 text-[9px] sm:font-mono text-[10px] uppercase tracking-wider mb-1 truncate">Revenue This Month</p>
-                  <p className="gold-text text-sm sm:text-xl font-bold truncate">{formatINR(monthlyIncome)}</p>
+                <div className="premium-stats-card rounded-2xl p-3.5 sm:p-4 min-w-0 bg-card border border-border shadow-xs">
+                  <p className="text-muted-foreground text-[9px] sm:font-mono text-[10px] uppercase tracking-wider mb-1 truncate font-semibold">Revenue This Month</p>
+                  <p className="gold-text text-base sm:text-2xl font-bold truncate">{formatINR(monthlyIncome)}</p>
                 </div>
 
                 {/* Remaining to Target */}
-                <div className="premium-stats-card rounded-xl p-3 sm:p-4 min-w-0">
-                  <p className="text-muted-foreground/60 text-[9px] sm:font-mono text-[10px] uppercase tracking-wider mb-1 truncate">Remaining to Target</p>
+                <div className="premium-stats-card rounded-2xl p-3.5 sm:p-4 min-w-0 bg-card border border-border shadow-xs">
+                  <p className="text-muted-foreground text-[9px] sm:font-mono text-[10px] uppercase tracking-wider mb-1 truncate font-semibold">Remaining to Target</p>
                   <p className={cn(
-                    'text-sm sm:text-xl font-bold truncate',
-                    remainingToTarget > 0 ? 'text-amber-400' : 'text-emerald-400'
+                    'text-base sm:text-2xl font-bold truncate',
+                    remainingToTarget > 0 ? 'text-amber-600 dark:text-amber-400' : 'text-emerald-600 dark:text-emerald-400'
                   )}>
                     {remainingToTarget > 0 ? formatINR(remainingToTarget) : 'Target Hit! ✓'}
                   </p>
                 </div>
 
                 {/* Strongest Stream */}
-                <div className="premium-stats-card rounded-xl p-3 sm:p-4 min-w-0">
-                  <p className="text-muted-foreground/60 text-[9px] sm:font-mono text-[10px] uppercase tracking-wider mb-1 truncate">Strongest Stream</p>
-                  <p className="text-emerald-400 text-xs sm:text-sm font-semibold truncate">{strongestStream.source}</p>
-                  <p className="text-muted-foreground text-[10px] sm:text-xs truncate">{formatINR(strongestStream.amount)}</p>
+                <div className="premium-stats-card rounded-2xl p-3.5 sm:p-4 min-w-0 bg-card border border-border shadow-xs">
+                  <p className="text-muted-foreground text-[9px] sm:font-mono text-[10px] uppercase tracking-wider mb-1 truncate font-semibold">Strongest Stream</p>
+                  <p className="text-emerald-600 dark:text-emerald-400 text-xs sm:text-sm font-bold truncate">{strongestStream.source}</p>
+                  <p className="text-muted-foreground text-[10px] sm:text-xs truncate font-medium">{formatINR(strongestStream.amount)}</p>
                 </div>
 
                 {/* Weakest Stream */}
-                <div className="premium-stats-card rounded-xl p-3 sm:p-4 min-w-0">
-                  <p className="text-muted-foreground/60 text-[9px] sm:font-mono text-[10px] uppercase tracking-wider mb-1 truncate">Weakest Stream</p>
-                  <p className="text-primary/70 text-xs sm:text-sm font-semibold truncate">{weakestStream.source}</p>
-                  <p className="text-muted-foreground text-[10px] sm:text-xs truncate">{formatINR(weakestStream.amount)}</p>
+                <div className="premium-stats-card rounded-2xl p-3.5 sm:p-4 min-w-0 bg-card border border-border shadow-xs">
+                  <p className="text-muted-foreground text-[9px] sm:font-mono text-[10px] uppercase tracking-wider mb-1 truncate font-semibold">Weakest Stream</p>
+                  <p className="text-blue-600 dark:text-primary text-xs sm:text-sm font-bold truncate">{weakestStream.source}</p>
+                  <p className="text-muted-foreground text-[10px] sm:text-xs truncate font-medium">{formatINR(weakestStream.amount)}</p>
                 </div>
               </div>
             </div>
@@ -982,51 +999,58 @@ export function ExecutiveOverview() {
 
           {/* Right Daily Focus Checklist Panel (2 columns out of 5) */}
           <div className="lg:col-span-2 flex flex-col h-full">
-            <div className="bg-card lg:bg-card/60 lg:backdrop-blur-md border border-border rounded-xl p-4 flex flex-col h-full justify-between relative overflow-hidden">
+            <div className="bg-card border border-border rounded-2xl p-4 sm:p-5 flex flex-col h-full justify-between relative overflow-hidden shadow-xs hover:shadow-md transition-all duration-300">
               <div>
                 {/* Header */}
-                <div className="flex items-center justify-between mb-3 border-b border-border pb-2">
+                <div className="flex items-center justify-between mb-3 border-b border-border pb-2.5">
                   <div className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-amber-400" />
+                    <div className="w-6 h-6 rounded-lg bg-primary/10 text-primary border border-primary/20 flex items-center justify-center">
+                      <CheckCircle2 className="w-3.5 h-3.5" />
+                    </div>
                     <h3 className="text-foreground text-xs sm:text-sm font-bold tracking-wide">Today&apos;s Focus Checklist</h3>
                   </div>
-                  <span className="text-[10px] text-muted-foreground/60 uppercase tracking-wider font-semibold">
+                  <span className="text-[10px] text-muted-foreground font-mono font-bold px-2 py-0.5 rounded-full bg-secondary border border-border">
                     {todayTodos.filter(t => t.completed === 1).length} / {todayTodos.length} Done
                   </span>
                 </div>
 
                 {/* Form to Add Todo */}
-                <form onSubmit={handleAddTodo} className="flex gap-1.5 mb-3">
+                <form onSubmit={handleAddTodo} className="flex gap-2 mb-3">
                   <input
                     type="text"
                     value={newTodoText}
                     onChange={(e) => setNewTodoText(e.target.value)}
                     placeholder="Add dynamic focus task..."
                     disabled={isAddingTodo}
-                    className="flex-1 min-w-0 bg-secondary/50 border border-border rounded-lg px-2.5 py-1.5 text-xs text-foreground placeholder-muted-foreground/40 focus:outline-none focus:border-amber-500/40 focus:ring-1 focus:ring-amber-500/15 transition-all"
+                    className="flex-1 min-w-0 bg-background border border-border rounded-xl px-3 py-2 text-xs text-foreground placeholder:text-muted-foreground/60 shadow-2xs focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/15 transition-all"
                   />
                   <button
                     type="submit"
                     disabled={isAddingTodo || !newTodoText.trim()}
-                    className="bg-primary/15 hover:bg-amber-500/25 border border-primary/30 text-amber-400/90 hover:text-amber-400 px-3 rounded-lg text-xs font-semibold transition-all flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="bg-primary hover:bg-primary/90 text-primary-foreground px-3.5 rounded-xl text-xs font-semibold shadow-xs transition-all flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    <Plus className="w-3.5 h-3.5" />
+                    <Plus className="w-4 h-4" />
                   </button>
                 </form>
 
                 {/* Checklist Scrollable Container */}
-                <div className="space-y-1.5 max-h-40 overflow-y-auto pr-1 select-none">
+                <div className="space-y-1.5 max-h-48 overflow-y-auto pr-1 select-none">
                   {todayTodos.length === 0 ? (
-                    <div className="text-center py-6 border border-dashed border-border rounded-lg">
-                      <Sparkles className="w-5 h-5 text-muted-foreground/30 mx-auto mb-1.5" />
-                      <p className="text-muted-foreground/60 text-[10px]">No active tasks focus scheduled today.</p>
-                      <p className="text-muted-foreground/30 text-[9px] mt-0.5">Use the input above to add key goals</p>
+                    <div className="text-center py-6 border border-dashed border-border rounded-xl bg-secondary/30">
+                      <Sparkles className="w-5 h-5 text-muted-foreground/40 mx-auto mb-1.5" />
+                      <p className="text-muted-foreground text-[10px] font-medium">No active tasks focus scheduled today.</p>
+                      <p className="text-muted-foreground/50 text-[9px] mt-0.5">Use the input above to add key goals</p>
                     </div>
                   ) : (
                     todayTodos.map((todo) => (
                       <div
                         key={todo.id}
-                        className="group flex items-center justify-between gap-3 bg-secondary/20 hover:bg-secondary/50 border border-border/40 hover:border-primary/20 rounded-lg p-2 transition-all duration-200"
+                        className={cn(
+                          "group flex items-center justify-between gap-3 p-2.5 rounded-xl border transition-all duration-200 select-none",
+                          todo.completed === 1
+                            ? "bg-muted/40 border-border/50 opacity-70"
+                            : "bg-card hover:bg-accent/40 border-border hover:border-primary/40 shadow-2xs hover:shadow-xs"
+                        )}
                       >
                         <div 
                           onClick={() => handleToggleTodo(todo.id, todo.completed)}
@@ -1034,18 +1058,18 @@ export function ExecutiveOverview() {
                         >
                           <div className="mt-0.5 flex-shrink-0">
                             {todo.completed === 1 ? (
-                              <div className="w-3.5 h-3.5 rounded bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center transition-all">
-                                <Check className="w-2.5 h-2.5 text-emerald-400" />
+                              <div className="w-4 h-4 rounded-md bg-emerald-500 text-white flex items-center justify-center shadow-2xs">
+                                <Check className="w-2.5 h-2.5 stroke-[3]" />
                               </div>
                             ) : (
-                              <div className="w-3.5 h-3.5 rounded border border-white/20 hover:border-amber-500/50 flex items-center justify-center transition-all" />
+                              <div className="w-4 h-4 rounded-md border-2 border-slate-300 dark:border-slate-600 group-hover:border-primary transition-colors flex items-center justify-center bg-card" />
                             )}
                           </div>
                           <span className={cn(
-                            'text-xs transition-all leading-tight',
+                            'text-xs transition-all leading-tight font-medium',
                             todo.completed === 1 
                               ? 'text-muted-foreground/60 line-through' 
-                              : 'text-foreground/80 group-hover:text-foreground'
+                              : 'text-foreground'
                           )}>
                             {todo.task}
                           </span>
@@ -1053,7 +1077,7 @@ export function ExecutiveOverview() {
 
                         <button
                           onClick={() => handleDeleteTodo(todo.id)}
-                          className="text-muted-foreground/40 hover:text-red-400 p-0.5 rounded transition-all opacity-0 group-hover:opacity-100 flex-shrink-0"
+                          className="text-muted-foreground/40 hover:text-red-500 p-1 rounded transition-all opacity-0 group-hover:opacity-100 flex-shrink-0"
                           title="Delete task"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
@@ -1078,7 +1102,9 @@ export function ExecutiveOverview() {
           trend={monthlyIncome >= monthlyTarget * 0.5 ? 'up' : 'down'}
           trendLabel={monthlyIncome > 0 ? `${((monthlyIncome / monthlyTarget) * 100).toFixed(0)}%` : undefined}
           sparkData={revenueSpark}
-          sparkColor="#f59e0b"
+          sparkColor="#2563eb"
+          accentColor="#2563eb"
+          badgeBg="bg-blue-50 text-blue-600 border-blue-200 dark:bg-blue-950/40 dark:text-blue-400 dark:border-blue-500/20"
           icon={<IndianRupee className="w-4 h-4" />}
           delay={0.1}
         />
@@ -1088,7 +1114,12 @@ export function ExecutiveOverview() {
           trend={netBalance >= 0 ? 'up' : 'down'}
           trendLabel={netBalance >= 0 ? 'Positive' : 'Negative'}
           sparkData={netSpark}
-          sparkColor={netBalance >= 0 ? '#34d399' : '#f87171'}
+          sparkColor={netBalance >= 0 ? '#10b981' : '#ef4444'}
+          accentColor={netBalance >= 0 ? '#10b981' : '#ef4444'}
+          badgeBg={netBalance >= 0 
+            ? "bg-emerald-50 text-emerald-600 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-400 dark:border-emerald-500/20" 
+            : "bg-red-50 text-red-600 border-red-200 dark:bg-red-950/40 dark:text-red-400 dark:border-red-500/20"
+          }
           icon={<Wallet className="w-4 h-4" />}
           delay={0.15}
         />
@@ -1098,7 +1129,9 @@ export function ExecutiveOverview() {
           trend={savingsRate >= 20 ? 'up' : 'down'}
           trendLabel={savingsRate >= 20 ? 'On track' : 'Below target'}
           sparkData={savingsSpark}
-          sparkColor="#34d399"
+          sparkColor="#8b5cf6"
+          accentColor="#8b5cf6"
+          badgeBg="bg-purple-50 text-purple-600 border-purple-200 dark:bg-purple-950/40 dark:text-purple-400 dark:border-purple-500/20"
           icon={<PiggyBank className="w-4 h-4" />}
           delay={0.2}
         />
@@ -1108,7 +1141,9 @@ export function ExecutiveOverview() {
           trend={disciplineScore >= 70 ? 'up' : 'down'}
           trendLabel={disciplineScore >= 70 ? 'Strong' : 'Needs work'}
           sparkData={disciplineSpark}
-          sparkColor="#d4a849"
+          sparkColor="#d97706"
+          accentColor="#d97706"
+          badgeBg="bg-amber-50 text-amber-600 border-amber-200 dark:bg-amber-950/40 dark:text-amber-400 dark:border-amber-500/20"
           icon={<Shield className="w-4 h-4" />}
           delay={0.25}
         />
@@ -1118,7 +1153,9 @@ export function ExecutiveOverview() {
           trend={revenueVelocity >= monthlyTarget / 30 ? 'up' : 'down'}
           trendLabel="daily avg"
           sparkData={velocitySpark}
-          sparkColor="#f59e0b"
+          sparkColor="#06b6d4"
+          accentColor="#06b6d4"
+          badgeBg="bg-cyan-50 text-cyan-600 border-cyan-200 dark:bg-cyan-950/40 dark:text-cyan-400 dark:border-cyan-500/20"
           icon={<Zap className="w-4 h-4" />}
           delay={0.3}
         />
@@ -1128,7 +1165,9 @@ export function ExecutiveOverview() {
           trend={pipelineValue > 0 ? 'up' : 'neutral'}
           trendLabel={`${clients.filter(c => c.pipelineStage !== 'completed').length} active`}
           sparkData={pipelineSpark}
-          sparkColor="#60a5fa"
+          sparkColor="#6366f1"
+          accentColor="#6366f1"
+          badgeBg="bg-indigo-50 text-indigo-600 border-indigo-200 dark:bg-indigo-950/40 dark:text-indigo-400 dark:border-indigo-500/20"
           icon={<Target className="w-4 h-4" />}
           delay={0.35}
         />
@@ -1154,14 +1193,14 @@ export function ExecutiveOverview() {
           <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
             {/* Monthly Income Input */}
             <div className="flex items-center justify-between sm:justify-start gap-2.5 w-full sm:w-auto">
-              <label className="text-muted-foreground text-[10px] sm:text-xs uppercase tracking-wider whitespace-nowrap">Monthly Income</label>
+              <label className="text-muted-foreground text-[10px] sm:text-xs uppercase tracking-wider whitespace-nowrap font-medium">Monthly Income</label>
               <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-amber-400/60 text-xs sm:text-sm">₹</span>
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-primary font-bold text-xs sm:text-sm">₹</span>
                 <input
                   type="text"
                   value={incomeInput}
                   onChange={(e) => handleIncomeChange(e.target.value)}
-                  className="w-28 sm:w-36 h-9 pl-7 pr-2.5 rounded-xl bg-secondary/60 border border-primary/15 text-foreground text-xs sm:text-sm font-semibold focus:outline-none focus:border-amber-500/40 focus:ring-1 focus:ring-amber-500/20 transition-all placeholder:text-muted-foreground/40"
+                  className="w-28 sm:w-36 h-9 pl-7 pr-2.5 rounded-xl bg-card border border-border text-foreground text-xs sm:text-sm font-semibold shadow-2xs focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/15 transition-all placeholder:text-muted-foreground/40"
                   placeholder="Enter income"
                 />
               </div>
@@ -1169,14 +1208,14 @@ export function ExecutiveOverview() {
 
             {/* Monthly Target Input */}
             <div className="flex items-center justify-between sm:justify-start gap-2.5 w-full sm:w-auto">
-              <label className="text-muted-foreground text-[10px] sm:text-xs uppercase tracking-wider whitespace-nowrap">Monthly Target</label>
+              <label className="text-muted-foreground text-[10px] sm:text-xs uppercase tracking-wider whitespace-nowrap font-medium">Monthly Target</label>
               <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-amber-400/60 text-xs sm:text-sm">₹</span>
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-primary font-bold text-xs sm:text-sm">₹</span>
                 <input
                   type="text"
                   value={targetInput}
                   onChange={(e) => handleTargetChange(e.target.value)}
-                  className="w-28 sm:w-36 h-9 pl-7 pr-2.5 rounded-xl bg-secondary/60 border border-primary/15 text-foreground text-xs sm:text-sm font-semibold focus:outline-none focus:border-amber-500/40 focus:ring-1 focus:ring-amber-500/20 transition-all placeholder:text-muted-foreground/40"
+                  className="w-28 sm:w-36 h-9 pl-7 pr-2.5 rounded-xl bg-card border border-border text-foreground text-xs sm:text-sm font-semibold shadow-2xs focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/15 transition-all placeholder:text-muted-foreground/40"
                   placeholder="Enter target"
                 />
               </div>
@@ -1381,14 +1420,14 @@ export function ExecutiveOverview() {
           </div>
           <div className="flex flex-wrap items-center gap-2">
             {jobStreak > 0 && (
-              <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-xs font-semibold text-amber-400">
-                <Flame className="w-3.5 h-3.5 fill-amber-400" />
+              <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-200 dark:bg-primary/10 dark:border-primary/20 dark:text-amber-400 text-xs font-semibold shadow-2xs">
+                <Flame className="w-3.5 h-3.5 fill-amber-500 text-amber-500 dark:fill-amber-400" />
                 <span>{jobStreak} Day Job Streak</span>
               </div>
             )}
             {weeklyStreak > 0 && (
-              <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-xs font-semibold text-orange-400">
-                <Flame className="w-3.5 h-3.5 fill-orange-400" />
+              <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-orange-50 text-orange-700 border border-orange-200 dark:bg-orange-500/10 dark:border-orange-500/20 dark:text-orange-400 text-xs font-semibold shadow-2xs">
+                <Flame className="w-3.5 h-3.5 fill-orange-500 text-orange-500 dark:fill-orange-400" />
                 <span>{weeklyStreak} Week Outreach Streak</span>
               </div>
             )}
@@ -1398,11 +1437,11 @@ export function ExecutiveOverview() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-3 sm:gap-4">
           {/* Jobs Applied */}
-          <div className="bg-secondary/30 border border-border rounded-2xl p-4 text-center hover:border-primary/20 hover:bg-secondary/60 transition-all flex flex-col justify-between group">
+          <div className="bg-card border border-border/80 rounded-2xl p-4 text-center hover:border-amber-400/40 transition-all duration-300 shadow-xs hover:shadow-md flex flex-col justify-between group">
             <div>
-              <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center mx-auto mb-3 text-amber-400 group-hover:scale-110 transition-transform">
+              <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 border border-amber-200 dark:bg-primary/10 dark:text-amber-400 dark:border-primary/20 flex items-center justify-center mx-auto mb-3 shadow-2xs group-hover:scale-105 transition-transform">
                 <Briefcase className="w-5 h-5" />
               </div>
               <p className="text-foreground font-display text-3xl font-extrabold tracking-tight">
@@ -1416,7 +1455,7 @@ export function ExecutiveOverview() {
                 variant="ghost" 
                 size="sm"
                 onClick={() => setCurrentPage('jobs')}
-                className="w-full text-xs bg-secondary/50 hover:bg-amber-500 hover:text-black transition-colors rounded-lg h-8"
+                className="w-full text-xs font-semibold bg-secondary/80 hover:bg-amber-500 hover:text-white transition-colors rounded-lg h-8"
               >
                 Open Board
               </Button>
@@ -1424,9 +1463,9 @@ export function ExecutiveOverview() {
           </div>
 
           {/* DMs Sent */}
-          <div className="bg-secondary/30 border border-border rounded-2xl p-4 text-center hover:border-blue-500/20 hover:bg-secondary/60 transition-all flex flex-col justify-between group">
+          <div className="bg-card border border-border/80 rounded-2xl p-4 text-center hover:border-blue-400/40 transition-all duration-300 shadow-xs hover:shadow-md flex flex-col justify-between group">
             <div>
-              <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mx-auto mb-3 text-blue-400 group-hover:scale-110 transition-transform">
+              <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 border border-blue-200 dark:bg-blue-500/10 dark:text-blue-400 dark:border-blue-500/20 flex items-center justify-center mx-auto mb-3 shadow-2xs group-hover:scale-105 transition-transform">
                 <MessageSquare className="w-5 h-5" />
               </div>
               <p className="text-foreground font-display text-3xl font-extrabold tracking-tight">{outreachMetrics.dms}</p>
@@ -1436,7 +1475,7 @@ export function ExecutiveOverview() {
             <div className="mt-4 pt-3 border-t border-border flex items-center gap-2">
               <Button 
                 onClick={() => openLogModal('dm')}
-                className="flex-1 text-xs bg-blue-500/10 hover:bg-blue-500 hover:text-foreground text-blue-400 border border-blue-500/20 rounded-lg h-8"
+                className="flex-1 text-xs font-semibold bg-blue-50 hover:bg-blue-600 text-blue-700 hover:text-white border border-blue-200 dark:bg-blue-500/10 dark:hover:bg-blue-500 dark:text-blue-400 dark:border-blue-500/20 rounded-lg h-8 transition-colors"
               >
                 Log
               </Button>
@@ -1444,7 +1483,7 @@ export function ExecutiveOverview() {
                 size="icon" 
                 variant="ghost"
                 onClick={() => setInspectCategory('dm')}
-                className="w-8 h-8 rounded-lg bg-secondary/50 hover:bg-accent text-muted-foreground"
+                className="w-8 h-8 rounded-lg bg-secondary/80 hover:bg-secondary text-muted-foreground hover:text-foreground border border-border/60 transition-colors"
               >
                 <History className="w-3.5 h-3.5" />
               </Button>
@@ -1452,9 +1491,9 @@ export function ExecutiveOverview() {
           </div>
 
           {/* Calls Completed */}
-          <div className="bg-secondary/30 border border-border rounded-2xl p-4 text-center hover:border-emerald-500/20 hover:bg-secondary/60 transition-all flex flex-col justify-between group">
+          <div className="bg-card border border-border/80 rounded-2xl p-4 text-center hover:border-emerald-400/40 transition-all duration-300 shadow-xs hover:shadow-md flex flex-col justify-between group">
             <div>
-              <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mx-auto mb-3 text-emerald-400 group-hover:scale-110 transition-transform">
+              <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20 flex items-center justify-center mx-auto mb-3 shadow-2xs group-hover:scale-105 transition-transform">
                 <Phone className="w-5 h-5" />
               </div>
               <p className="text-foreground font-display text-3xl font-extrabold tracking-tight">{outreachMetrics.calls}</p>
@@ -1464,7 +1503,7 @@ export function ExecutiveOverview() {
             <div className="mt-4 pt-3 border-t border-border flex items-center gap-2">
               <Button 
                 onClick={() => openLogModal('call')}
-                className="flex-1 text-xs bg-emerald-500/10 hover:bg-emerald-500 hover:text-foreground text-emerald-400 border border-emerald-500/20 rounded-lg h-8"
+                className="flex-1 text-xs font-semibold bg-emerald-50 hover:bg-emerald-600 text-emerald-700 hover:text-white border border-emerald-200 dark:bg-emerald-500/10 dark:hover:bg-emerald-500 dark:text-emerald-400 dark:border-emerald-500/20 rounded-lg h-8 transition-colors"
               >
                 Log
               </Button>
@@ -1472,7 +1511,7 @@ export function ExecutiveOverview() {
                 size="icon" 
                 variant="ghost"
                 onClick={() => setInspectCategory('call')}
-                className="w-8 h-8 rounded-lg bg-secondary/50 hover:bg-accent text-muted-foreground"
+                className="w-8 h-8 rounded-lg bg-secondary/80 hover:bg-secondary text-muted-foreground hover:text-foreground border border-border/60 transition-colors"
               >
                 <History className="w-3.5 h-3.5" />
               </Button>
@@ -1480,9 +1519,9 @@ export function ExecutiveOverview() {
           </div>
 
           {/* Meetings */}
-          <div className="bg-secondary/30 border border-border rounded-2xl p-4 text-center hover:border-purple-500/20 hover:bg-secondary/60 transition-all flex flex-col justify-between group">
+          <div className="bg-card border border-border/80 rounded-2xl p-4 text-center hover:border-purple-400/40 transition-all duration-300 shadow-xs hover:shadow-md flex flex-col justify-between group">
             <div>
-              <div className="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center mx-auto mb-3 text-purple-400 group-hover:scale-110 transition-transform">
+              <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 border border-purple-200 dark:bg-purple-500/10 dark:text-purple-400 dark:border-purple-500/20 flex items-center justify-center mx-auto mb-3 shadow-2xs group-hover:scale-105 transition-transform">
                 <Users className="w-5 h-5" />
               </div>
               <p className="text-foreground font-display text-3xl font-extrabold tracking-tight">{outreachMetrics.meetings}</p>
@@ -1492,7 +1531,7 @@ export function ExecutiveOverview() {
             <div className="mt-4 pt-3 border-t border-border flex items-center gap-2">
               <Button 
                 onClick={() => openLogModal('meeting')}
-                className="flex-1 text-xs bg-purple-500/10 hover:bg-purple-500 hover:text-foreground text-purple-400 border border-purple-500/20 rounded-lg h-8"
+                className="flex-1 text-xs font-semibold bg-purple-50 hover:bg-purple-600 text-purple-700 hover:text-white border border-purple-200 dark:bg-purple-500/10 dark:hover:bg-purple-500 dark:text-purple-400 dark:border-purple-500/20 rounded-lg h-8 transition-colors"
               >
                 Log
               </Button>
@@ -1500,7 +1539,7 @@ export function ExecutiveOverview() {
                 size="icon" 
                 variant="ghost"
                 onClick={() => setInspectCategory('meeting')}
-                className="w-8 h-8 rounded-lg bg-secondary/50 hover:bg-accent text-muted-foreground"
+                className="w-8 h-8 rounded-lg bg-secondary/80 hover:bg-secondary text-muted-foreground hover:text-foreground border border-border/60 transition-colors"
               >
                 <History className="w-3.5 h-3.5" />
               </Button>
@@ -1508,9 +1547,9 @@ export function ExecutiveOverview() {
           </div>
 
           {/* Proposals Sent */}
-          <div className="bg-secondary/30 border border-border rounded-2xl p-4 text-center hover:border-primary/20 hover:bg-secondary/60 transition-all flex flex-col justify-between group">
+          <div className="bg-card border border-border/80 rounded-2xl p-4 text-center hover:border-amber-400/40 transition-all duration-300 shadow-xs hover:shadow-md flex flex-col justify-between group">
             <div>
-              <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center mx-auto mb-3 text-amber-400 group-hover:scale-110 transition-transform">
+              <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 border border-amber-200 dark:bg-primary/10 dark:text-amber-400 dark:border-primary/20 flex items-center justify-center mx-auto mb-3 shadow-2xs group-hover:scale-105 transition-transform">
                 <Send className="w-5 h-5" />
               </div>
               <p className="text-foreground font-display text-3xl font-extrabold tracking-tight">{outreachMetrics.proposals}</p>
@@ -1520,7 +1559,7 @@ export function ExecutiveOverview() {
             <div className="mt-4 pt-3 border-t border-border flex items-center gap-2">
               <Button 
                 onClick={() => openLogModal('proposal')}
-                className="flex-1 text-xs bg-primary/10 hover:bg-amber-500 hover:text-foreground text-amber-400 border border-primary/20 rounded-lg h-8"
+                className="flex-1 text-xs font-semibold bg-amber-50 hover:bg-amber-600 text-amber-700 hover:text-white border border-amber-200 dark:bg-primary/10 dark:hover:bg-amber-500 dark:text-amber-400 dark:border-primary/20 rounded-lg h-8 transition-colors"
               >
                 Log
               </Button>
@@ -1528,7 +1567,7 @@ export function ExecutiveOverview() {
                 size="icon" 
                 variant="ghost"
                 onClick={() => setInspectCategory('proposal')}
-                className="w-8 h-8 rounded-lg bg-secondary/50 hover:bg-accent text-muted-foreground"
+                className="w-8 h-8 rounded-lg bg-secondary/80 hover:bg-secondary text-muted-foreground hover:text-foreground border border-border/60 transition-colors"
               >
                 <History className="w-3.5 h-3.5" />
               </Button>
@@ -1536,9 +1575,9 @@ export function ExecutiveOverview() {
           </div>
 
           {/* Closes */}
-          <div className="bg-secondary/30 border border-border rounded-2xl p-4 text-center hover:border-emerald-500/20 hover:bg-secondary/60 transition-all flex flex-col justify-between group">
+          <div className="bg-card border border-border/80 rounded-2xl p-4 text-center hover:border-emerald-400/40 transition-all duration-300 shadow-xs hover:shadow-md flex flex-col justify-between group">
             <div>
-              <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mx-auto mb-3 text-emerald-400 group-hover:scale-110 transition-transform">
+              <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20 flex items-center justify-center mx-auto mb-3 shadow-2xs group-hover:scale-105 transition-transform">
                 <CheckCircle2 className="w-5 h-5" />
               </div>
               <p className="text-foreground font-display text-3xl font-extrabold tracking-tight">{outreachMetrics.closes}</p>
@@ -1548,7 +1587,7 @@ export function ExecutiveOverview() {
             <div className="mt-4 pt-3 border-t border-border flex items-center gap-2">
               <Button 
                 onClick={() => openLogModal('close')}
-                className="flex-1 text-xs bg-emerald-500/10 hover:bg-emerald-500 hover:text-foreground text-emerald-400 border border-emerald-500/20 rounded-lg h-8"
+                className="flex-1 text-xs font-semibold bg-emerald-50 hover:bg-emerald-600 text-emerald-700 hover:text-white border border-emerald-200 dark:bg-emerald-500/10 dark:hover:bg-emerald-500 dark:text-emerald-400 dark:border-emerald-500/20 rounded-lg h-8 transition-colors"
               >
                 Log
               </Button>
@@ -1556,7 +1595,7 @@ export function ExecutiveOverview() {
                 size="icon" 
                 variant="ghost"
                 onClick={() => setInspectCategory('close')}
-                className="w-8 h-8 rounded-lg bg-secondary/50 hover:bg-accent text-muted-foreground"
+                className="w-8 h-8 rounded-lg bg-secondary/80 hover:bg-secondary text-muted-foreground hover:text-foreground border border-border/60 transition-colors"
               >
                 <History className="w-3.5 h-3.5" />
               </Button>
@@ -1564,9 +1603,9 @@ export function ExecutiveOverview() {
           </div>
 
           {/* Conversion Rate */}
-          <div className="bg-secondary/30 border border-primary/10 rounded-2xl p-4 text-center hover:border-primary/25 hover:bg-secondary/60 transition-all flex flex-col justify-between group">
+          <div className="bg-card border border-border/80 rounded-2xl p-4 text-center hover:border-indigo-400/40 transition-all duration-300 shadow-xs hover:shadow-md flex flex-col justify-between group">
             <div>
-              <div className="w-10 h-10 rounded-xl bg-primary/15 border border-primary/30 flex items-center justify-center mx-auto mb-3 text-amber-400 group-hover:scale-110 transition-transform">
+              <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 border border-indigo-200 dark:bg-indigo-500/10 dark:text-indigo-400 dark:border-indigo-500/20 flex items-center justify-center mx-auto mb-3 shadow-2xs group-hover:scale-105 transition-transform">
                 <TrendingUp className="w-5 h-5" />
               </div>
               <p className="text-foreground font-display text-3xl font-extrabold tracking-tight">{conversionRate}%</p>
@@ -1574,7 +1613,7 @@ export function ExecutiveOverview() {
             </div>
 
             <div className="mt-4 pt-3 border-t border-border flex flex-col gap-2">
-              <div className="text-[10px] text-muted-foreground/60 italic py-1.5">Weekly efficiency</div>
+              <div className="text-[10px] text-muted-foreground font-medium italic py-1.5">Weekly efficiency</div>
             </div>
           </div>
         </div>

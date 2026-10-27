@@ -134,7 +134,7 @@ function DayCell({
       {events.length > 0 && (
         <span className={cn(
           'text-[8px] font-bold mt-auto mb-0.5 z-10',
-          isSelected ? 'text-amber-400' : 'text-muted-foreground/40'
+          isSelected ? 'text-amber-600 dark:text-amber-400' : 'text-muted-foreground/60'
         )}>
           {events.length}
         </span>
@@ -214,7 +214,7 @@ function DayDetailPanel({
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div>
-          <p className="text-amber-400/60 font-mono text-[10px] uppercase tracking-widest">Daily Summary</p>
+          <p className="text-primary font-mono text-[10px] uppercase tracking-widest font-semibold">Daily Summary</p>
           <h3 className="text-foreground text-lg font-bold">{dateStr}</h3>
         </div>
         <Button
@@ -455,7 +455,7 @@ export function ImperialCalendar() {
         type: 'notification',
         label: n.title,
         detail: n.message || 'Notification',
-        color: 'bg-primary/10 text-amber-400',
+        color: 'bg-amber-50 text-amber-700 border border-amber-200 dark:bg-primary/10 dark:text-amber-400 dark:border-primary/20',
         icon: <Bell className="w-3.5 h-3.5" />,
       })
     })

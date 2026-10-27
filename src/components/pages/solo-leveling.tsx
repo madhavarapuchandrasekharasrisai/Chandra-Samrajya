@@ -725,38 +725,38 @@ export function SoloLeveling() {
           </div>
 
           {/* HP Gauge */}
-          <div className="bg-secondary/30 border border-border/50 rounded-xl p-3">
+          <div className="bg-card border border-border/80 rounded-xl p-3 shadow-2xs">
             <div className="flex justify-between items-center text-[10px] font-mono mb-1.5">
-              <span className="text-emerald-400 font-bold flex items-center gap-1">
+              <span className="text-emerald-600 dark:text-emerald-400 font-bold flex items-center gap-1">
                 <Shield className="w-3 h-3" /> HP (HEALTH)
               </span>
-              <span className="text-emerald-400/90 font-bold">1,000 / 1,000</span>
+              <span className="text-emerald-600 dark:text-emerald-400/90 font-bold">1,000 / 1,000</span>
             </div>
-            <div className="h-2 w-full bg-secondary/80 rounded-full overflow-hidden border border-emerald-500/30">
+            <div className="h-2 w-full bg-secondary rounded-full overflow-hidden border border-emerald-500/30">
               <div className="h-full bg-gradient-to-r from-emerald-500 to-cyan-400 rounded-full shadow-[0_0_8px_rgba(16,185,129,0.5)] w-full" />
             </div>
-            <p className="text-[9px] text-muted-foreground/60 font-mono mt-1">Physical integrity optimal</p>
+            <p className="text-[9px] text-muted-foreground font-mono mt-1">Physical integrity optimal</p>
           </div>
 
           {/* MP Gauge */}
-          <div className="bg-secondary/30 border border-border/50 rounded-xl p-3">
+          <div className="bg-card border border-border/80 rounded-xl p-3 shadow-2xs">
             <div className="flex justify-between items-center text-[10px] font-mono mb-1.5">
               <span className="text-primary font-bold flex items-center gap-1">
                 <Zap className="w-3 h-3" /> MP (MANA)
               </span>
               <span className="text-primary font-bold">250 / 250</span>
             </div>
-            <div className="h-2 w-full bg-secondary/80 rounded-full overflow-hidden border border-primary/30">
+            <div className="h-2 w-full bg-secondary rounded-full overflow-hidden border border-primary/30">
               <div className="h-full bg-gradient-to-r from-blue-600 via-primary to-purple-500 rounded-full shadow-[0_0_8px_rgba(59,130,246,0.6)] w-full animate-pulse" />
             </div>
-            <p className="text-[9px] text-muted-foreground/60 font-mono mt-1">Shadow power capacity full</p>
+            <p className="text-[9px] text-muted-foreground font-mono mt-1">Shadow power capacity full</p>
           </div>
 
           {/* Fatigue / Condition */}
-          <div className="bg-secondary/30 border border-border/50 rounded-xl p-3 flex items-center justify-between">
+          <div className="bg-card border border-border/80 rounded-xl p-3 flex items-center justify-between shadow-2xs">
             <div>
               <p className="text-[9px] font-mono text-muted-foreground uppercase font-bold">FATIGUE INDEX</p>
-              <p className="text-base font-mono font-black text-emerald-400">
+              <p className="text-base font-mono font-black text-emerald-600 dark:text-emerald-400">
                 {completedCoreCount === totalCore ? '0%' : `${Math.max(0, 100 - Math.round((completedCoreCount / totalCore) * 100))}%`}
               </p>
               <p className="text-[9px] text-muted-foreground/60 font-mono mt-0.5">
@@ -1188,10 +1188,10 @@ export function SoloLeveling() {
           <div className="w-full h-[180px] md:h-[220px] lg:h-[300px] flex items-center justify-center relative z-10">
             <ResponsiveContainer width="100%" height="100%">
               <RadarChart cx="50%" cy="50%" outerRadius="80%" data={radarData}>
-                <PolarGrid stroke={stats.failureState === 1 ? "rgba(239,68,68,0.18)" : "rgba(255,255,255,0.18)"} />
+                <PolarGrid stroke={stats.failureState === 1 ? "#ef4444" : "var(--border)"} strokeOpacity={0.6} />
                 <PolarAngleAxis 
                   dataKey="subject" 
-                  tick={{ fill: 'rgba(255,255,255,0.7)', fontSize: 8.5, fontWeight: 'bold', fontFamily: 'monospace' }} 
+                  tick={{ fill: 'var(--foreground)', fontSize: 9, fontWeight: 'bold', fontFamily: 'monospace' }} 
                 />
                 <PolarRadiusAxis angle={30} domain={[0, 200]} tick={false} axisLine={false} />
                 <Radar

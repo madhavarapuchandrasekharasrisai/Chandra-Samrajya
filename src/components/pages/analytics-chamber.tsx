@@ -120,13 +120,15 @@ function ChartCard({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay }}
-      className="bg-card lg:bg-card/60 lg:backdrop-blur-xl border border-border rounded-2xl p-5 relative overflow-hidden"
+      className="bg-card border border-border/80 rounded-2xl p-5 relative overflow-hidden shadow-xs hover:shadow-md transition-shadow duration-300"
     >
-      <div className="flex items-center gap-2 mb-4">
-        <div className="text-muted-foreground/60">{icon}</div>
+      <div className="flex items-center gap-2.5 mb-4">
+        <div className="w-7 h-7 rounded-lg bg-primary/10 text-primary border border-primary/20 flex items-center justify-center flex-shrink-0 shadow-2xs">
+          {icon}
+        </div>
         <div>
-          <h3 className="text-foreground/80 text-sm font-semibold">{title}</h3>
-          {subtitle && <p className="text-muted-foreground/50 text-[10px]">{subtitle}</p>}
+          <h3 className="text-foreground text-sm font-semibold">{title}</h3>
+          {subtitle && <p className="text-muted-foreground text-[10px]">{subtitle}</p>}
         </div>
       </div>
       {children}
@@ -457,8 +459,8 @@ export function AnalyticsChamber() {
                     <stop offset="100%" stopColor="#ef4444" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fill: 'rgba(255,255,255,0.3)', fontSize: 11 }} />
-                <YAxis axisLine={false} tickLine={false} tick={{ fill: 'rgba(255,255,255,0.2)', fontSize: 10 }} tickFormatter={(v: number) => `${(v / 1000).toFixed(0)}k`} />
+                <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fill: 'var(--muted-foreground)', fontSize: 11 }} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fill: 'var(--muted-foreground)', fontSize: 10 }} tickFormatter={(v: number) => `${(v / 1000).toFixed(0)}k`} />
                 <Tooltip content={<DarkTooltip />} />
                 <Area type="monotone" dataKey="income" stroke="#d4a849" strokeWidth={2} fill="url(#incomeGrad)" name="Income" />
                 <Area type="monotone" dataKey="expenses" stroke="#ef4444" strokeWidth={2} fill="url(#expenseGrad)" name="Expenses" />
@@ -479,10 +481,10 @@ export function AnalyticsChamber() {
                     <stop offset="100%" stopColor="#10b981" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fill: 'rgba(255,255,255,0.3)', fontSize: 11 }} />
-                <YAxis axisLine={false} tickLine={false} tick={{ fill: 'rgba(255,255,255,0.2)', fontSize: 10 }} tickFormatter={(v: number) => `₹${(v / 1000).toFixed(0)}k`} />
+                <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fill: 'var(--muted-foreground)', fontSize: 11 }} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fill: 'var(--muted-foreground)', fontSize: 10 }} tickFormatter={(v: number) => `₹${(v / 1000).toFixed(0)}k`} />
                 <Tooltip content={<DarkTooltip />} />
-                <ReferenceLine y={0} stroke="rgba(255,255,255,0.08)" />
+                <ReferenceLine y={0} stroke="var(--border)" />
                 <Area type="monotone" dataKey="savings" stroke="#10b981" strokeWidth={2} fill="url(#savingsGrad)" name="Savings" />
               </AreaChart>
             </ResponsiveContainer>
@@ -547,10 +549,10 @@ export function AnalyticsChamber() {
             {!hasStreamData && <EmptyStateOverlay message="Awaiting stream revenue..." />}
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={streamData} margin={{ top: 5, right: 5, left: -20, bottom: 0 }} barGap={4}>
-                <XAxis dataKey="source" axisLine={false} tickLine={false} tick={{ fill: 'rgba(255,255,255,0.3)', fontSize: 10 }} />
-                <YAxis axisLine={false} tickLine={false} tick={{ fill: 'rgba(255,255,255,0.2)', fontSize: 10 }} tickFormatter={(v: number) => `${(v / 1000).toFixed(0)}k`} />
+                <XAxis dataKey="source" axisLine={false} tickLine={false} tick={{ fill: 'var(--muted-foreground)', fontSize: 10 }} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fill: 'var(--muted-foreground)', fontSize: 10 }} tickFormatter={(v: number) => `${(v / 1000).toFixed(0)}k`} />
                 <Tooltip content={<DarkTooltip />} />
-                <Bar dataKey="target" fill="rgba(255,255,255,0.08)" radius={[4, 4, 0, 0]} name="Target" />
+                <Bar dataKey="target" fill="var(--muted)" radius={[4, 4, 0, 0]} name="Target" />
                 <Bar dataKey="actual" fill="#d4a849" fillOpacity={0.8} radius={[4, 4, 0, 0]} name="Actual" />
               </BarChart>
             </ResponsiveContainer>
@@ -574,13 +576,13 @@ export function AnalyticsChamber() {
                   <stop offset="100%" stopColor="#d4a849" stopOpacity={0.02} />
                 </linearGradient>
               </defs>
-              <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fill: 'rgba(255,255,255,0.3)', fontSize: 11 }} />
-              <YAxis axisLine={false} tickLine={false} tick={{ fill: 'rgba(255,255,255,0.2)', fontSize: 10 }} tickFormatter={(v: number) => `${(v / 1000).toFixed(0)}k`} />
+              <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fill: 'var(--muted-foreground)', fontSize: 11 }} />
+              <YAxis axisLine={false} tickLine={false} tick={{ fill: 'var(--muted-foreground)', fontSize: 10 }} tickFormatter={(v: number) => `${(v / 1000).toFixed(0)}k`} />
               <Tooltip content={<DarkTooltip />} />
               <Area type="monotone" dataKey="upper" stroke="none" fill="url(#bandGrad)" name="Upper Bound" />
               <Area type="monotone" dataKey="lower" stroke="none" fill="url(#bandGrad)" name="Lower Bound" />
               <Area type="monotone" dataKey="actual" stroke="#d4a849" strokeWidth={2} fill="url(#forecastGrad)" name="Revenue" />
-              <ReferenceLine y={monthlyTarget} stroke="rgba(255,255,255,0.15)" strokeDasharray="6 4" />
+              <ReferenceLine y={monthlyTarget} stroke="var(--border)" strokeDasharray="6 4" />
             </AreaChart>
           </ResponsiveContainer>
         </div>
