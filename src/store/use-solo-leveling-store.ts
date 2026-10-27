@@ -13,11 +13,16 @@ export { DAILY_CORE_PROTOCOLS, WEEKLY_SPECIALIZATIONS };
 
 interface SoloLevelingState {
   stats: SoloLevelingStats | null;
-  baseStats: SoloLevelingStats | null; // Raw baseline before today's completed tasks
+  baseStats: SoloLevelingStats | null;
   completedTasks: Record<string, boolean>;
   isLoading: boolean;
   history: any[];
 
+  setBootstrapData: (data: {
+    stats: SoloLevelingStats | null;
+    baseStats: SoloLevelingStats | null;
+    completedTasks: Record<string, boolean>;
+  }) => void;
   fetchStats: () => Promise<void>;
   completeTask: (taskId: string, isCompleted: boolean) => Promise<void>;
   resetDaily: () => Promise<void>;
@@ -31,15 +36,56 @@ const getHeaders = (extra: Record<string, string> = {}) => ({
   ...extra,
 });
 
+const getInitialCache = () => {
+  if (typeof window === 'undefined') return { stats: null, baseStats: null, completedTasks: {} };
+  try {
+    const raw = localStorage.getItem('solo_leveling_cache_v1');
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      return {
+        stats: parsed.stats || null,
+        baseStats: parsed.baseStats || null,
+        completedTasks: parsed.completedTasks || {},
+      };
+    }
+  } catch {}
+  return { stats: null, baseStats: null, completedTasks: {} };
+};
+
+const saveCache = (data: { stats: any; baseStats: any; completedTasks: any }) => {
+  if (typeof window === 'undefined') return;
+  try {
+    localStorage.setItem('solo_leveling_cache_v1', JSON.stringify(data));
+  } catch {}
+};
+
+const initial = getInitialCache();
+
 export const useSoloLevelingStore = create<SoloLevelingState>((set, get) => ({
-  stats: null,
-  baseStats: null,
-  completedTasks: {},
+  stats: initial.stats,
+  baseStats: initial.baseStats,
+  completedTasks: initial.completedTasks,
   isLoading: false,
   history: [],
 
+  setBootstrapData: (data) => {
+    set({
+      stats: data.stats,
+      baseStats: data.baseStats,
+      completedTasks: data.completedTasks || {},
+    });
+    saveCache({
+      stats: data.stats,
+      baseStats: data.baseStats,
+      completedTasks: data.completedTasks || {},
+    });
+  },
+
   fetchStats: async () => {
-    set({ isLoading: true });
+    // Only set loading if we don't already have stats (prevents flash of empty state)
+    if (!get().stats) {
+      set({ isLoading: true });
+    }
     try {
       const res = await fetch('/api/solo-leveling', {
         headers: getHeaders(),
@@ -47,6 +93,11 @@ export const useSoloLevelingStore = create<SoloLevelingState>((set, get) => ({
       if (res.ok) {
         const data = await res.json();
         set({
+          stats: data.stats,
+          baseStats: data.baseStats,
+          completedTasks: data.completedTasks || {},
+        });
+        saveCache({
           stats: data.stats,
           baseStats: data.baseStats,
           completedTasks: data.completedTasks || {},
@@ -79,6 +130,11 @@ export const useSoloLevelingStore = create<SoloLevelingState>((set, get) => ({
       completedTasks: updatedCompletedTasks,
       stats: optimisticProjectedStats,
     });
+    saveCache({
+      stats: optimisticProjectedStats,
+      baseStats,
+      completedTasks: updatedCompletedTasks,
+    });
 
     try {
       const res = await fetch('/api/solo-leveling/task', {
@@ -91,6 +147,11 @@ export const useSoloLevelingStore = create<SoloLevelingState>((set, get) => ({
         set({
           stats: result.stats,
           baseStats: result.baseStats,
+        });
+        saveCache({
+          stats: result.stats,
+          baseStats: result.baseStats,
+          completedTasks: updatedCompletedTasks,
         });
         if (isCompleted) {
           const successMessages = [
@@ -107,12 +168,13 @@ export const useSoloLevelingStore = create<SoloLevelingState>((set, get) => ({
       } else {
         // Rollback state on error
         set({ completedTasks, stats });
+        saveCache({ stats, baseStats, completedTasks });
         toast.error('Protocol synchronization failed. Reverting biometrics.');
       }
     } catch (error) {
       console.error('Failed to sync complete task state:', error);
-      // Rollback state on error
       set({ completedTasks, stats });
+      saveCache({ stats, baseStats, completedTasks });
       toast.error('Connection drift detected. Rollback active.');
     }
   },
@@ -126,6 +188,11 @@ export const useSoloLevelingStore = create<SoloLevelingState>((set, get) => ({
       if (res.ok) {
         const result = await res.json();
         set({
+          stats: result.stats,
+          baseStats: result.baseStats,
+          completedTasks: result.completedTasks || {},
+        });
+        saveCache({
           stats: result.stats,
           baseStats: result.baseStats,
           completedTasks: result.completedTasks || {},
@@ -160,6 +227,11 @@ export const useSoloLevelingStore = create<SoloLevelingState>((set, get) => ({
       if (res.ok) {
         const data = await res.json();
         set({
+          stats: data.stats,
+          baseStats: data.baseStats,
+          completedTasks: {},
+        });
+        saveCache({
           stats: data.stats,
           baseStats: data.baseStats,
           completedTasks: {},

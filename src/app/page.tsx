@@ -1,6 +1,7 @@
 'use client'
 
-import { useAppStore } from '@/store/use-app-store'
+import { useAppStore, type PageType } from '@/store/use-app-store'
+import { useSoloLevelingStore } from '@/store/use-solo-leveling-store'
 import { Sidebar } from '@/components/layout/sidebar'
 import { Navbar } from '@/components/layout/navbar'
 import { QuickAddDialog } from '@/components/layout/quick-add-dialog'
@@ -17,9 +18,8 @@ import { KarnaAI } from '@/components/pages/karna-ai'
 import { ImperialCalendar } from '@/components/pages/imperial-calendar'
 import { JobSearch } from '@/components/pages/job-search'
 import { SoloLeveling } from '@/components/pages/solo-leveling'
-import { useEffect, useState } from 'react'
-import { Loader2 } from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useEffect, useState, useMemo } from 'react'
+import { cn } from '@/lib/utils'
 
 export default function Home() {
   const {
@@ -51,6 +51,18 @@ export default function Home() {
 
   const [isMobile, setIsMobile] = useState(false)
 
+  // Track visited pages to keep them mounted in memory: 0ms instantaneous page transitions!
+  const [visitedPages, setVisitedPages] = useState<Set<PageType>>(() => new Set(['overview', currentPage]))
+
+  useEffect(() => {
+    setVisitedPages((prev) => {
+      if (prev.has(currentPage)) return prev
+      const next = new Set(prev)
+      next.add(currentPage)
+      return next
+    })
+  }, [currentPage])
+
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 1024)
     checkMobile()
@@ -58,16 +70,16 @@ export default function Home() {
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
 
-  // Centralized scroll restoration
+  // Centralized instant scroll restoration on page shift
   useEffect(() => {
-    window.scrollTo(0, 0)
+    window.scrollTo({ top: 0, behavior: 'instant' as any })
   }, [currentPage])
 
-  // Load initial data with instant cache hydration and non-blocking background sync
+  // Load initial data with instant cache hydration and non-blocking background sync via single /api/bootstrap
   useEffect(() => {
     // 1. Instant hydration from localStorage cache if present (0ms delay)
     try {
-      const cached = localStorage.getItem('god_system_app_cache_v1')
+      const cached = localStorage.getItem('samrajya_app_cache_v2') || localStorage.getItem('god_system_app_cache_v1')
       if (cached) {
         const parsed = JSON.parse(cached)
         if (parsed.incomes) setIncomes(parsed.incomes)
@@ -86,118 +98,73 @@ export default function Home() {
       // Ignore cache parse error
     }
 
-    // 2. Non-blocking fresh data fetch from APIs
+    // 2. High-speed single HTTP fetch to /api/bootstrap (executes all DB queries concurrently in parallel on server)
     const loadData = async () => {
       try {
-        const [
-          incomesRes, expensesRes, clientsRes, followupsRes,
-          settingsRes, todosRes, outreachRecordsRes,
-          warRoomActionsRes, warRoomOpportunitiesRes,
-          jobApplicationsRes, notificationsRes
-        ] = await Promise.allSettled([
-          fetch('/api/income'),
-          fetch('/api/expenses'),
-          fetch('/api/clients'),
-          fetch('/api/followups'),
-          fetch('/api/settings'),
-          fetch('/api/todos'),
-          fetch('/api/outreach-records'),
-          fetch('/api/warroom/actions'),
-          fetch('/api/warroom/opportunities'),
-          fetch('/api/job-applications'),
-          fetch('/api/notifications'),
-        ])
+        const res = await fetch('/api/bootstrap', {
+          headers: {
+            'x-client-date': new Date().toISOString(),
+            'x-timezone-offset': String(new Date().getTimezoneOffset()),
+          },
+        })
 
-        const freshCache: Record<string, any> = {}
+        if (res.ok) {
+          const data = await res.json()
+          if (data.incomes) setIncomes(data.incomes)
+          if (data.expenses) setExpenses(data.expenses)
+          if (data.clients) setClients(data.clients)
+          if (data.followups) setFollowups(data.followups)
+          if (data.todos) setTodos(data.todos)
+          if (data.outreachRecords) setOutreachRecords(data.outreachRecords)
+          if (data.warRoomActions) setWarRoomActions(data.warRoomActions)
+          if (data.warRoomOpportunities) setWarRoomOpportunities(data.warRoomOpportunities)
+          if (data.jobApplications) setJobApplications(data.jobApplications)
+          if (data.notifications) setNotifications(data.notifications)
 
-        if (incomesRes.status === 'fulfilled' && incomesRes.value.ok) {
-          const incomesData = await incomesRes.value.json()
-          setIncomes(incomesData)
-          freshCache.incomes = incomesData
-        }
-        if (expensesRes.status === 'fulfilled' && expensesRes.value.ok) {
-          const expensesData = await expensesRes.value.json()
-          setExpenses(expensesData)
-          freshCache.expenses = expensesData
-        }
-        if (clientsRes.status === 'fulfilled' && clientsRes.value.ok) {
-          const clientsData = await clientsRes.value.json()
-          setClients(clientsData)
-          freshCache.clients = clientsData
-        }
-        if (followupsRes.status === 'fulfilled' && followupsRes.value.ok) {
-          const followupsData = await followupsRes.value.json()
-          setFollowups(followupsData)
-          freshCache.followups = followupsData
-        }
-        if (todosRes.status === 'fulfilled' && todosRes.value.ok) {
-          const todosData = await todosRes.value.json()
-          setTodos(todosData)
-          freshCache.todos = todosData
-        }
-        if (outreachRecordsRes.status === 'fulfilled' && outreachRecordsRes.value.ok) {
-          const outreachData = await outreachRecordsRes.value.json()
-          setOutreachRecords(outreachData)
-          freshCache.outreachRecords = outreachData
-        }
-        if (warRoomActionsRes.status === 'fulfilled' && warRoomActionsRes.value.ok) {
-          const actionsData = await warRoomActionsRes.value.json()
-          setWarRoomActions(actionsData)
-          freshCache.warRoomActions = actionsData
-        }
-        if (warRoomOpportunitiesRes.status === 'fulfilled' && warRoomOpportunitiesRes.value.ok) {
-          const oppsData = await warRoomOpportunitiesRes.value.json()
-          setWarRoomOpportunities(oppsData)
-          freshCache.warRoomOpportunities = oppsData
-        }
-        if (jobApplicationsRes.status === 'fulfilled' && jobApplicationsRes.value.ok) {
-          const jobsData = await jobApplicationsRes.value.json()
-          setJobApplications(jobsData)
-          freshCache.jobApplications = jobsData
-        }
-        if (notificationsRes.status === 'fulfilled' && notificationsRes.value.ok) {
-          const notifsData = await notificationsRes.value.json()
-          setNotifications(notifsData)
-          freshCache.notifications = notifsData
-        }
-        if (settingsRes.status === 'fulfilled' && settingsRes.value.ok) {
-          const settingsData = await settingsRes.value.json()
-          if (settingsData.monthlyTarget) {
-            setMonthlyTarget(settingsData.monthlyTarget.income)
-            if (settingsData.monthlyTarget.targetSocialMedia !== undefined) setTargetSocialMedia(settingsData.monthlyTarget.targetSocialMedia)
-            if (settingsData.monthlyTarget.targetAIAutomation !== undefined) setTargetAIAutomation(settingsData.monthlyTarget.targetAIAutomation)
-            if (settingsData.monthlyTarget.targetRetainer !== undefined) setTargetRetainer(settingsData.monthlyTarget.targetRetainer)
-            if (settingsData.monthlyTarget.targetFreelance !== undefined) setTargetFreelance(settingsData.monthlyTarget.targetFreelance)
-            if (settingsData.monthlyTarget.nameSocialMedia !== undefined) setNameSocialMedia(settingsData.monthlyTarget.nameSocialMedia)
-            if (settingsData.monthlyTarget.nameAIAutomation !== undefined) setNameAIAutomation(settingsData.monthlyTarget.nameAIAutomation)
-            if (settingsData.monthlyTarget.nameRetainer !== undefined) setNameRetainer(settingsData.monthlyTarget.nameRetainer)
-            if (settingsData.monthlyTarget.nameFreelance !== undefined) setNameFreelance(settingsData.monthlyTarget.nameFreelance)
+          if (data.settings?.monthlyTarget) {
+            const mt = data.settings.monthlyTarget
+            setMonthlyTarget(mt.income)
+            if (mt.targetSocialMedia !== undefined) setTargetSocialMedia(mt.targetSocialMedia)
+            if (mt.targetAIAutomation !== undefined) setTargetAIAutomation(mt.targetAIAutomation)
+            if (mt.targetRetainer !== undefined) setTargetRetainer(mt.targetRetainer)
+            if (mt.targetFreelance !== undefined) setTargetFreelance(mt.targetFreelance)
+            if (mt.nameSocialMedia !== undefined) setNameSocialMedia(mt.nameSocialMedia)
+            if (mt.nameAIAutomation !== undefined) setNameAIAutomation(mt.nameAIAutomation)
+            if (mt.nameRetainer !== undefined) setNameRetainer(mt.nameRetainer)
+            if (mt.nameFreelance !== undefined) setNameFreelance(mt.nameFreelance)
+          }
+
+          // Hydrate Solo Leveling store with zero extra network round-trips!
+          if (data.soloLeveling) {
+            useSoloLevelingStore.getState().setBootstrapData(data.soloLeveling)
+          }
+
+          // Recalculate monthly income
+          const now = new Date()
+          const monthIncomes = (data.incomes || []).filter((i: any) => {
+            const d = new Date(i.date)
+            return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear()
+          })
+          const totalMonthly = monthIncomes.reduce((s: number, i: any) => s + i.amount, 0)
+          setMonthlyIncome(totalMonthly)
+
+          // Save fresh compressed bundle to local cache
+          try {
+            localStorage.setItem('samrajya_app_cache_v2', JSON.stringify({
+              ...data,
+              monthlyIncome: totalMonthly,
+            }))
+          } catch {
+            // Ignore quota errors
           }
         }
-
-        // Recalculate monthly income
-        const state = useAppStore.getState()
-        const now = new Date()
-        const monthIncomes = state.incomes.filter((i: any) => {
-          const d = new Date(i.date)
-          return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear()
-        })
-        const totalMonthly = monthIncomes.reduce((s: number, i: any) => s + i.amount, 0)
-        setMonthlyIncome(totalMonthly)
-        freshCache.monthlyIncome = totalMonthly
-
-        // Save fresh cache
-        try {
-          localStorage.setItem('god_system_app_cache_v1', JSON.stringify(freshCache))
-        } catch {
-          // Ignore quota errors
-        }
       } catch (error) {
-        console.error('Failed to load data:', error)
+        console.error('Failed to bootstrap app data:', error)
       } finally {
         setIsLoading(false)
       }
     }
+
     loadData()
   }, [
     setIncomes,
@@ -223,23 +190,21 @@ export default function Home() {
     setNameFreelance
   ])
 
-  const renderPage = () => {
-    switch (currentPage) {
-      case 'overview': return <ExecutiveOverview />
-      case 'wealth': return <WealthEngine />
-      case 'budget': return <BudgetIntelligence />
-      case 'business': return <BusinessOperations />
-      case 'clients': return <ClientEmpire />
-      case 'analytics': return <AnalyticsChamber />
-      case 'discipline': return <DisciplineSystem />
-      case 'warroom': return <WarRoom />
-      case 'karna': return <KarnaAI />
-      case 'calendar': return <ImperialCalendar />
-      case 'jobs': return <JobSearch />
-      case 'sololeveling': return <SoloLeveling />
-      default: return <ExecutiveOverview />
-    }
-  }
+  // Component lookup map for clean rendering
+  const pageComponents: Record<PageType, React.ReactNode> = useMemo(() => ({
+    overview: <ExecutiveOverview />,
+    sololeveling: <SoloLeveling />,
+    wealth: <WealthEngine />,
+    budget: <BudgetIntelligence />,
+    business: <BusinessOperations />,
+    clients: <ClientEmpire />,
+    analytics: <AnalyticsChamber />,
+    discipline: <DisciplineSystem />,
+    warroom: <WarRoom />,
+    karna: <KarnaAI />,
+    calendar: <ImperialCalendar />,
+    jobs: <JobSearch />,
+  }), [])
 
   return (
     <div className="min-h-screen bg-background relative">
@@ -252,21 +217,27 @@ export default function Home() {
         style={{ marginLeft: isMobile ? 0 : (sidebarCollapsed ? 72 : 260) }}
       >
         <Navbar />
-        <main className="p-3 pb-28 lg:p-5">
+        <main className="p-3 pb-28 lg:p-5 relative">
           {isLoading && (
             <div className="fixed top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-cyan-500 via-primary to-purple-500 z-50 animate-pulse pointer-events-none" />
           )}
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentPage}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
-            >
-              {renderPage()}
-            </motion.div>
-          </AnimatePresence>
+
+          {/* Kept-Alive Views: 0ms Instant Page Shifting without Unmounting or Stutter */}
+          {Array.from(visitedPages).map((pageId) => {
+            const isCurrent = currentPage === pageId
+            return (
+              <div
+                key={pageId}
+                className={cn(
+                  "w-full",
+                  isCurrent ? "block" : "hidden"
+                )}
+                style={{ display: isCurrent ? 'block' : 'none' }}
+              >
+                {pageComponents[pageId]}
+              </div>
+            )
+          })}
         </main>
       </div>
       <QuickAddDialog />

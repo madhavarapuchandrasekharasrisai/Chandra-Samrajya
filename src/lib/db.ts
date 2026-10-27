@@ -13,11 +13,15 @@ const connectionString =
 
 const postgresClient =
   globalForDrizzle.postgresClient ??
-  postgres(connectionString, { prepare: false });
+  postgres(connectionString, {
+    prepare: false,
+    max: 10,
+    idle_timeout: 20,
+    connect_timeout: 10,
+  });
 
-if (process.env.NODE_ENV !== 'production') {
-  globalForDrizzle.postgresClient = postgresClient;
-}
+// Always cache client on globalThis to reuse connections across warm serverless lambdas
+globalForDrizzle.postgresClient = postgresClient;
 
 export const db = drizzle(postgresClient, { schema });
 export type DbClient = typeof db;

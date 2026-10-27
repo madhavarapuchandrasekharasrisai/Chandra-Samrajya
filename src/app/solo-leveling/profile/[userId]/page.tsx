@@ -211,7 +211,7 @@ export default function PublicHunterProfile({ params }: { params: Promise<{ user
       <div className="max-w-4xl w-full mx-auto flex items-center justify-between mb-8 relative z-10">
         <div className="flex items-center gap-2">
           <Flame className="w-6 h-6 text-orange-500 animate-pulse" />
-          <span className="font-mono text-sm font-black tracking-widest text-slate-900 dark:text-white">GOD SYSTEM HUD</span>
+          <span className="font-mono text-sm font-black tracking-widest text-slate-900 dark:text-white">SAMRAJYA OS HUD</span>
         </div>
         <a
           href="/"
@@ -458,7 +458,7 @@ export default function PublicHunterProfile({ params }: { params: Promise<{ user
       {/* Footer System Standing */}
       <div className="max-w-4xl w-full mx-auto text-center border-t border-border/40 pt-6 mt-8 relative z-10 font-mono text-[9px] dark:text-white/20 text-slate-500 uppercase tracking-widest space-y-1">
         <p>AWAKENED POWER REGISTERED SYSTEM INDEPENDENT NODE</p>
-        <p>GOD SYSTEM SOVEREIGN SYSTEM VER 2.2.0 • DATE RECORDED: {new Date(stats.lastUpdated || Date.now()).toLocaleDateString()}</p>
+        <p>SAMRAJYA SOVEREIGN SYSTEM VER 2.2.0 • DATE RECORDED: {new Date(stats.lastUpdated || Date.now()).toLocaleDateString()}</p>
       </div>
     </div>
   )

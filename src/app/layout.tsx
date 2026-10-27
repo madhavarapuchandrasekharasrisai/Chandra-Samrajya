@@ -24,11 +24,14 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "God System — Sovereign Wealth Operating System",
+  title: "Samrajya — Sovereign Wealth Operating System",
   description: "The Sovereign Wealth & Business Operating System. Powered by Karna AI. Financial sovereignty through disciplined execution and intelligent systems.",
-  keywords: ["God System", "Wealth", "Business", "AI", "Karna", "Financial Operating System"],
+  keywords: ["Samrajya", "Chandra Shekhar", "Wealth", "Business", "Solo Leveling", "AI", "Karna"],
   icons: {
-    icon: "/icon.jpg",
+    icon: [
+      { url: "/favicon.ico", sizes: "32x32" },
+      { url: "/icon.png", sizes: "192x192" },
+    ],
     apple: "/apple-icon.jpg",
   },
   manifest: "/manifest.json",

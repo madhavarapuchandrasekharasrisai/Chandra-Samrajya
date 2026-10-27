@@ -89,8 +89,7 @@ export default function LoginPage() {
         toast.error(error.message || "Authentication failed. Please verify your credentials.")
       } else {
         toast.success("⚡ System access granted. Awakening workspace...")
-        router.push("/")
-        router.refresh()
+        window.location.href = "/"
       }
     } catch {
       toast.error("A network or system error occurred.")
@@ -311,7 +310,7 @@ export default function LoginPage() {
               {/* Title & Brand */}
               <div className="mb-7">
                 <h1 className="text-2xl sm:text-3xl font-black font-display tracking-[0.15em] uppercase text-white drop-shadow-[0_0_15px_rgba(6,182,212,0.5)]">
-                  GOD SYSTEM
+                  SAMRAJYA
                 </h1>
                 <p className="text-xs text-slate-400 font-mono mt-1 tracking-wide">
                   Autonomous Sovereign OS — Identify to awaken your attributes.
@@ -331,7 +330,7 @@ export default function LoginPage() {
                       required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="hunter@godsystem.co"
+                      placeholder="chandra@samrajya.co"
                       className="w-full pl-10 pr-4 py-3 bg-slate-950/70 border border-slate-700/80 rounded-xl text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-cyan-400/40 focus:border-cyan-400 transition-all font-mono"
                     />
                   </div>
@@ -381,7 +380,7 @@ export default function LoginPage() {
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                 Dungeon Protocol Secure
               </span>
-              <span>God System v0.3.0</span>
+              <span>Samrajya OS v0.3.0</span>
             </div>
           </div>
 

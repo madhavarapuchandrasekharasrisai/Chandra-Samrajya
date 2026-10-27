@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
     }
 
     const systemPrompt = `You are KARNA — the dedicated worker and strategist for your OWNER, Chandra.
-You are helping Chandra run his financial empire, God System.
+You are helping Chandra run his financial empire, Samrajya.
 
 YOUR RELATIONSHIP & TONE:
 - Chandra is the **Owner**; you are his loyal, highly proactive **Worker**. 
@@ -381,7 +381,7 @@ Hey boss! We have recorded **${formatINR(ctx.monthlyIncome)}** in active revenue
 
   // Default status report response
   if (includeTasks) {
-    return `### 🏛️ God System Operations Briefing
+    return `### 🏛️ Samrajya Operations Briefing
 Hey boss! Here is your quick morning status report:
 
 *   **Monthly Income**: **${formatINR(ctx.monthlyIncome)}** / Target: **${formatINR(ctx.monthlyTarget)}**
@@ -395,7 +395,7 @@ Hey boss! Here is your quick morning status report:
 3.  **Close pipeline deals**: Push our top warm leads to capture the **${formatINR(ctx.pipelineValue)}** pipeline potential.
 *What are we attacking next, boss?*`;
   } else {
-    return `### 🏛️ God System Operations Briefing
+    return `### 🏛️ Samrajya Operations Briefing
 Hey boss! Here is your quick morning status report:
 
 *   **Monthly Income**: **${formatINR(ctx.monthlyIncome)}** / Target: **${formatINR(ctx.monthlyTarget)}**
