@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/providers/auth-provider";
 import { ThemeProvider } from "@/providers/theme-provider";
+import { PWARegister } from "@/components/pwa-register";
 
 const rajdhani = Rajdhani({
   variable: "--font-rajdhani",
@@ -30,11 +31,17 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "32x32" },
-      { url: "/icon.png", sizes: "192x192" },
+      { url: "/icon-192.png", sizes: "192x192" },
+      { url: "/icon-512.png", sizes: "512x512" },
     ],
     apple: "/apple-icon.jpg",
   },
   manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Samrajya",
+  },
 };
 
 export default function RootLayout({
@@ -56,6 +63,7 @@ export default function RootLayout({
           <AuthProvider>
             {children}
           </AuthProvider>
+          <PWARegister />
         </ThemeProvider>
         <Toaster
           position="bottom-right"

@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
     // 4. Counts
     const completedCoreTasks = taskIdsArray.filter(id => DAILY_CORE_PROTOCOLS.some(ct => ct.id === id)).length;
     const completedSpecialTasks = taskIdsArray.length - completedCoreTasks;
-    const perfectDay = completedCoreTasks === DAILY_CORE_PROTOCOLS.length ? 1 : 0;
+    const perfectDay = completedCoreTasks >= (DAILY_CORE_PROTOCOLS.length - 1) ? 1 : 0;
 
     // 5. Update only the daily log in database (do not mutate base stats table during daily checks)
     await db

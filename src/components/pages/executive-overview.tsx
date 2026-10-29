@@ -984,7 +984,14 @@ export function ExecutiveOverview() {
                     'text-base sm:text-2xl font-bold truncate',
                     remainingToTarget > 0 ? 'text-amber-600 dark:text-amber-400' : 'text-emerald-600 dark:text-emerald-400'
                   )}>
-                    {remainingToTarget > 0 ? formatINR(remainingToTarget) : 'Target Hit! ✓'}
+                    {remainingToTarget > 0 ? (
+                      formatINR(remainingToTarget)
+                    ) : (
+                      <span className="flex items-baseline gap-1.5 flex-wrap">
+                        <span>{formatINR(monthlyTarget)}</span>
+                        <span className="text-xs sm:text-sm font-semibold opacity-90">Target Hit! ✓</span>
+                      </span>
+                    )}
                   </p>
                 </div>
 
@@ -1134,13 +1141,13 @@ export function ExecutiveOverview() {
       >
         <div className="grid grid-cols-1 md:grid-cols-12 items-stretch min-h-[160px]">
           {/* Contemplation artwork still */}
-          <div className="md:col-span-4 lg:col-span-3 relative h-44 md:h-auto min-h-[160px] overflow-hidden bg-black flex-shrink-0">
+          <div className="md:col-span-4 lg:col-span-3 relative h-44 md:h-auto min-h-[160px] overflow-hidden bg-black flex-shrink-0 border-b md:border-b-0 md:border-r border-border/60">
             <img
               src="/images/solo-leveling/se7en-reflection.jpg"
               alt="Work Hard, Enjoy Life"
               className="w-full h-full object-cover filter grayscale contrast-125 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
             />
-            <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-transparent via-transparent to-card/90" />
+            <div className="absolute inset-0 hidden dark:block bg-gradient-to-t md:bg-gradient-to-r from-transparent via-transparent to-card/80" />
             <div className="absolute bottom-2.5 left-3">
               <span className="text-[9px] font-mono font-bold tracking-widest text-amber-300 uppercase bg-black/80 px-2 py-0.5 rounded border border-amber-400/30">
                 DAILY REMINDER

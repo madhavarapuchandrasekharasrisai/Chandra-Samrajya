@@ -467,7 +467,7 @@ export function calculateCurrentStats(baseStats: SoloLevelingStats, completedTas
 
   // Dynamic streak and failure state projection when all core tasks are completed today
   const completedCoreTasks = sortedTaskIds.filter(id => DAILY_CORE_PROTOCOLS.some(ct => ct.id === id)).length;
-  const isPerfectToday = completedCoreTasks === DAILY_CORE_PROTOCOLS.length;
+  const isPerfectToday = completedCoreTasks >= (DAILY_CORE_PROTOCOLS.length - 1);
 
   let perfectStreak = baseStats.perfectStreak;
   let weeklyStreak = baseStats.weeklyStreak;

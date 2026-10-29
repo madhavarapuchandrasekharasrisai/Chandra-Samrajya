@@ -138,7 +138,6 @@ export function Sidebar() {
                   <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping flex-shrink-0" />
                   <p className="text-[10px] text-cyan-600 dark:text-cyan-400 font-mono font-bold uppercase tracking-wider truncate">Awakened Sovereign</p>
                 </div>
-                <p className="text-[9px] text-muted-foreground font-mono mt-0.5">PLAYER ID: #0001</p>
               </div>
             )}
           </div>
