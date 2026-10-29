@@ -1,6 +1,13 @@
 /** Routes that do not require an authenticated Supabase session. */
 
-const PUBLIC_PAGE_PATHS = ['/login'] as const
+const PUBLIC_PAGE_PATHS = [
+  '/login',
+  '/manifest.json',
+  '/sw.js',
+  '/favicon.ico',
+  '/robots.txt',
+  '/sitemap.xml',
+] as const
 
 const PUBLIC_PAGE_PREFIXES = ['/solo-leveling/profile/'] as const
 
